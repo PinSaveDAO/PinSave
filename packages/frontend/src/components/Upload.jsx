@@ -2,20 +2,11 @@ import { useState, useRef } from "react";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { SpinnerGap } from "phosphor-react";
-import Big from "big.js";
 
-import { useStore } from "../store";
-
-
-const BOATLOAD_OF_GAS = Big(3)
-  .times(10 ** 13)
-  .toFixed();
 
 function Upload() {
   ///TODO: Switch to nft.storage lib
 
-  const currentUser = useStore((state) => state.currentUser);
-  const contract = useStore((state) => state.contract);
   const [selectedImage, setSelectedImage] = useState(null);
   const [state, setState] = useState(false);
   const [postId, setPostId] = useState("");
@@ -23,14 +14,15 @@ function Upload() {
   const [postTitle, setPostTitle] = useState("");
   const [uploading, setUploading] = useState();
   const hiddenFileInput = useRef();
-
-  if (!currentUser){
+  //TODO: get ETH User
+  let currentUser = false;
+  if (!currentUser) {
     return (
       <div className="text-center mt-24">
-         <h1 className="text-8xl md:text-9xl font-black text-transparent bg-clip-text bg-gradient-to-r from-green-300 via-blue-500 to-purple-600">
-            420
-         </h1>
-         <h2 className="text-2xl md:text-4xl font-bold">Please Log In</h2>
+        <h1 className="text-8xl md:text-9xl font-black text-transparent bg-clip-text bg-gradient-to-r from-green-300 via-blue-500 to-purple-600">
+          420
+        </h1>
+        <h2 className="text-2xl md:text-4xl font-bold">Please Log In</h2>
       </div>
     )
   }
@@ -41,46 +33,32 @@ function Upload() {
 
   async function str() {
     const filled = filledFields();
-
-    if (!uploading && currentUser && contract && filled) {
+    if (filled)
       setUploading(true);
-      await axios({
-        method: "post",
-        url: process.env.REACT_APP_UPLOAD,
-        headers: {
-          Authorization: process.env.REACT_APP_API,
-          "Content-Type": "image/*",
-        },
-        data: selectedImage,
-      }).then(async (r) => {
-        await contract
-          .nft_mint(
-            {
-              token_id: postId,
-              metadata: {
-                title: postTitle,
-                description: postDesc,
-                media: `https://${r.data.value.cid}.ipfs.dweb.link/`,
-              },
-              receiver_id: `${currentUser.accountId}`,
+    await axios({
+      method: "post",
+      url: process.env.REACT_APP_UPLOAD,
+      headers: {
+        Authorization: process.env.REACT_APP_API,
+        "Content-Type": "image/*",
+      },
+      data: selectedImage,
+    }).then(async (r) => {
+      //TODO: Update upload method
+      /*
+      await console.log("Link:", `https://${r.data.value.cid}.ipfs.dweb.link/`)
+        .then(() => {
+          toast.success("Image Uploaded Successfully", {
+            style: {
+              borderRadius: "10px",
+              background: "#222",
+              color: "#fff",
             },
-            BOATLOAD_OF_GAS,
-            Big("1")
-              .times(10 ** 22)
-              .toFixed()
-          )
-          .then(() => {
-            toast.success("Image Uploaded Successfully", {
-              style: {
-                borderRadius: "10px",
-                background: "#222",
-                color: "#fff",
-              },
-            });
-            setUploading(false);
           });
-      });
-    }
+          setUploading(false);
+        });
+        */
+    });
   }
 
   return (

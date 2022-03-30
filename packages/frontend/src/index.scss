@@ -19,20 +19,20 @@ h4 {
 }
 @layer utilities {
   @variants responsive {
-      .masonry-4-col {
-        column-count: 4;
-        column-gap: 1em;
-      }
-      .masonry-3-col {
-          column-count: 3;
-          column-gap: 1em;
-      }
-      .masonry-2-col {
-          column-count: 2;
-          column-gap: 1em;
-      }
-      .break-inside {
-          break-inside:avoid;
-      }
+    .masonry-4-col {
+      column-count: 4;
+      column-gap: 1em;
+    }
+    .masonry-3-col {
+      column-count: 3;
+      column-gap: 1em;
+    }
+    .masonry-2-col {
+      column-count: 2;
+      column-gap: 1em;
+    }
+    .break-inside {
+      break-inside: avoid;
+    }
   }
 }

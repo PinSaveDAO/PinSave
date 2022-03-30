@@ -1,27 +1,26 @@
 pragma solidity >=0.8.0 <0.9.0;
 //SPDX-License-Identifier: MIT
 
-import "hardhat/console.sol";
-// import "@openzeppelin/contracts/access/Ownable.sol"; 
-// https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/access/Ownable.sol
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/utils/Counters.sol";
 
-contract YourContract {
+contract YourContract is ERC721URIStorage {
+    using Counters for Counters.Counter;
+    Counters.Counter private _tokenIds;
 
-  event SetPurpose(address sender, string purpose);
+    constructor() public ERC721("PinSave", "PNS") {}
 
-  string public purpose = "Building Unstoppable Apps!!!";
+    function awardItem(address player, string memory tokenURI)
+        public
+        returns (uint256)
+    {
+        _tokenIds.increment();
 
-  constructor() payable {
-    // what should we do on deploy?
-  }
+        uint256 newItemId = _tokenIds.current();
+        _mint(player, newItemId);
+        _setTokenURI(newItemId, tokenURI);
 
-  function setPurpose(string memory newPurpose) public {
-      purpose = newPurpose;
-      console.log(msg.sender,"set purpose to",purpose);
-      emit SetPurpose(msg.sender, purpose);
-  }
-
-  // to support receiving ETH by default
-  receive() external payable {}
-  fallback() external payable {}
+        return newItemId;
+    }
 }
