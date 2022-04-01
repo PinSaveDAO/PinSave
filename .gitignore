@@ -9,11 +9,11 @@ packages/hardhat/*.txt
 
 packages/hardhat/artifacts*
 packages/hardhat/deployments
-packages/frontend/src/contracts/*
-!packages/frontend/src/contracts/external_contracts.js
+packages/frontend/contracts/*
+!packages/frontend/contracts/external_contracts.js
 packages/hardhat/cache*
 packages/**/data
-!packages/frontend/src/contracts/contracts.js
+!packages/frontend/contracts/contracts.js
 
 
 # ts

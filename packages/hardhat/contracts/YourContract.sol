@@ -11,16 +11,20 @@ contract YourContract is ERC721URIStorage {
 
     constructor() public ERC721("PinSave", "PNS") {}
 
-    function awardItem(address player, string memory tokenURI)
+    function mintPost(address user, string memory tokenURI)
         public
         returns (uint256)
     {
         _tokenIds.increment();
 
         uint256 newItemId = _tokenIds.current();
-        _mint(player, newItemId);
+        _mint(user, newItemId);
         _setTokenURI(newItemId, tokenURI);
 
         return newItemId;
+    }
+
+    function totalSupply() public view returns (uint256) {
+        return _tokenIds.current();
     }
 }

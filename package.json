@@ -11,7 +11,7 @@
   "scripts": {
     "frontend:build": "yarn workspace @dspyt-nfts/frontend build --max-old-space-size=12288",
     "frontend:eject": "yarn workspace @dspyt-nfts/frontend eject",
-    "frontend:start": "yarn workspace @dspyt-nfts/frontend start",
+    "frontend:dev": "yarn workspace @dspyt-nfts/frontend dev",
     "frontend:test": "yarn workspace @dspyt-nfts/frontend test",
     "build": "yarn workspace @dspyt-nfts/frontend build --max-old-space-size=12288",
     "prettier": "yarn workspace @dspyt-nfts/frontend prettier",
@@ -19,7 +19,7 @@
     "fork": "yarn workspace @dspyt-nfts/hardhat fork",
     "node": "yarn workspace @dspyt-nfts/hardhat chain",
     "test": "yarn workspace @dspyt-nfts/hardhat test",
-    "start": "yarn workspace @dspyt-nfts/frontend start",
+    "start": "yarn workspace @dspyt-nfts/frontend dev",
     "compile": "yarn workspace @dspyt-nfts/hardhat compile",
     "deploy": "yarn workspace @dspyt-nfts/hardhat deploy",
     "verify": "yarn workspace @dspyt-nfts/hardhat verify",

@@ -1,13 +1,14 @@
 import { Toaster } from "react-hot-toast";
 import { Provider, chain, defaultChains } from "wagmi";
 import { InjectedConnector } from "wagmi/connectors/injected";
+import Navigation from "../components/Navigation";
 import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
 import { WalletLinkConnector } from "wagmi/connectors/walletLink";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { Navigation, Home, Upload, Post } from "./components";
+import AppLayout from "../components/AppLayout";
+import "../styles/globals.scss";
 
 const chains = defaultChains;
-const infuraId = process.env.REACT_APP_INFURA_ID;
+const infuraId = process.env.NEXT_PUBLIC_INFURA_ID;
 
 const connectors = ({ chainId }) => {
   const rpcUrl =
@@ -19,7 +20,7 @@ const connectors = ({ chainId }) => {
       options: {
         infuraId,
         qrcode: true,
-      }
+      },
     }),
     new WalletLinkConnector({
       options: {
@@ -29,21 +30,17 @@ const connectors = ({ chainId }) => {
     }),
   ];
 };
-const App = () => {
 
+function MyApp({ Component, pageProps }) {
   return (
     <Provider autoConnect connectors={connectors}>
-      <Router>
+      <AppLayout>
         <Navigation />
         <Toaster />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/upload" element={<Upload />} />
-          <Route path="/post/:token_id" element={<Post />} />
-        </Routes>
-      </Router>
+        <Component {...pageProps} />
+      </AppLayout>
     </Provider>
   );
-};
+}
 
-export default App;
+export default MyApp;

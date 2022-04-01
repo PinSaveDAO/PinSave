@@ -4,9 +4,8 @@ const { solidity } = require("ethereum-waffle");
 
 use(solidity);
 
-describe("My Dapp", function () {
+describe("PinSave", function () {
   let myContract;
-
   // quick fix to let gas reporter fetch data from gas station & coinmarketcap
   before((done) => {
     setTimeout(done, 2000);
@@ -19,22 +18,30 @@ describe("My Dapp", function () {
       myContract = await YourContract.deploy();
     });
 
-    describe("setPurpose()", function () {
-      it("Should be able to set a new purpose", async function () {
-        const newPurpose = "Test Purpose";
+    describe("mint()", function () {
+      it("Mint New NFT", async function () {
+        const [owner] = await ethers.getSigners();
+        const sampleLink = "https://google.com/";
 
-        await myContract.setPurpose(newPurpose);
-        expect(await myContract.purpose()).to.equal(newPurpose);
+        await myContract.mintPost(owner.address, sampleLink);
+        expect(await myContract.tokenURI(1)).to.equal(sampleLink);
       });
 
-      it("Should emit a SetPurpose event ", async function () {
+      it("Minting should emit a Transfer event ", async function () {
         const [owner] = await ethers.getSigners();
 
-        const newPurpose = "Another Test Purpose";
+        const altLink = "https://dsfasdaa.com/ss";
 
-        expect(await myContract.setPurpose(newPurpose))
-          .to.emit(myContract, "SetPurpose")
-          .withArgs(owner.address, newPurpose);
+        expect(await myContract.mintPost(owner.address, altLink))
+          .to.emit(myContract, "Transfer")
+          .withArgs(
+            "0x0000000000000000000000000000000000000000",
+            owner.address,
+            2
+          );
+      });
+      it("check totalSupply", async () => {
+        expect(await myContract.totalSupply()).to.equal(2);
       });
     });
   });
