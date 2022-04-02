@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "synpress:open": "synpress open --configFile synpress.json",
+    "synpress:run": "synpress run --configFile synpress.json"
   },
   "dependencies": {
     "@headlessui/react": "^1.5.0",
@@ -25,6 +27,7 @@
     "zustand": "^3.7.1"
   },
   "devDependencies": {
+    "@synthetixio/synpress": "^1.1.1",
     "autoprefixer": "^10.4.4",
     "eslint": "8.12.0",
     "eslint-config-next": "12.1.4",

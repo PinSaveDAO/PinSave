@@ -13,6 +13,8 @@
     "frontend:eject": "yarn workspace @dspyt-nfts/frontend eject",
     "frontend:dev": "yarn workspace @dspyt-nfts/frontend dev",
     "frontend:test": "yarn workspace @dspyt-nfts/frontend test",
+    "synpress:open": "yarn workspace @dspyt-nfts/frontend synpress:open",
+    "synpress:run": "yarn workspace @dspyt-nfts/frontend synpress:run",
     "build": "yarn workspace @dspyt-nfts/frontend build --max-old-space-size=12288",
     "prettier": "yarn workspace @dspyt-nfts/frontend prettier",
     "chain": "yarn workspace @dspyt-nfts/hardhat chain",
