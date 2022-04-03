@@ -14,7 +14,7 @@
     "frontend:dev": "yarn workspace @dspyt-nfts/frontend dev",
     "frontend:test": "yarn workspace @dspyt-nfts/frontend test",
     "cypress:open": "dotenv -e .env -- synpress open --configFile cypress.json",
-    "cypress:run": "dotenv -e .env -- synpress run -b electron --configFile cypress.json",
+    "cypress:run": "dotenv -e .env -- synpress run -b chromium --configFile cypress.json",
     "build": "yarn workspace @dspyt-nfts/frontend build --max-old-space-size=12288",
     "prettier": "yarn workspace @dspyt-nfts/frontend prettier",
     "chain": "yarn workspace @dspyt-nfts/hardhat chain",
@@ -65,6 +65,7 @@
   "dependencies": {},
   "devDependencies": {
     "husky": "^7.0.2",
-    "@synthetixio/synpress": "^1.1.1"
+    "@synthetixio/synpress": "^1.1.1",
+    "cypress-file-upload": "^5.0.8"
   }
 }

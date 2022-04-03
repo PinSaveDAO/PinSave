@@ -1,22 +1,16 @@
 describe("Check Upload Page", () => {
-  beforeEach(() => {
+  before(() => {
     cy.viewport(1280, 720);
   });
-  it(`setupMetamask should finish metamask setup using secret words`, () => {
-    cy.setupMetamask(
-      "shuffle stay hair student wagon senior problem drama parrot creek enact pluck",
-      "kovan",
-      "Tester@1234"
-    ).then((setupFinished) => {
-      expect(setupFinished).to.be.true;
-    });
-  });
-  it("Should navigate to Upload page", () => {
-    cy.visit("/upload");
+  it("should go to upload page", () => {
+    cy.visit("upload/");
   });
   describe("auth", () => {
-    it("gets 420 error when not connected", () => {
-      cy.contains("420").should("exist");
+    it("Should find title", () => {
+      cy.findByText("Connect").click();
+      cy.findByText("MetaMask").click();
+      cy.task("acceptMetamaskAccess");
+      cy.contains("Upload new Posting");
     });
   });
 });
