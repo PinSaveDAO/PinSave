@@ -6,11 +6,15 @@ describe("Check Upload Page", () => {
     cy.visit("upload/");
   });
   describe("auth", () => {
-    it("Should find title", () => {
-      cy.findByText("Connect").click();
-      cy.findByText("MetaMask").click();
-      cy.task("acceptMetamaskAccess");
-      cy.contains("Upload new Posting");
+    it("Should find Upload new post title", () => {
+      cy.get("body").then((body) => {
+        if (body.text().includes("Please Log In")) {
+          cy.findByText("Connect").click();
+          cy.findByText("MetaMask").click();
+          cy.task("acceptMetamaskAccess");
+        }
+        cy.contains("Upload new Post");
+      });
     });
   });
 });

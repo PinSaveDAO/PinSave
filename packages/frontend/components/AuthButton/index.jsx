@@ -15,7 +15,6 @@ const AuthButton = () => {
   });
   const [{ data: balanceData }] = useBalance({
     addressOrName: accountData?.address,
-    watch: true,
   });
   if (accountLoading)
     return (
