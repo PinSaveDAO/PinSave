@@ -20,7 +20,7 @@
     "react": "18.0.0",
     "react-dom": "18.0.0",
     "react-hot-toast": "^2.2.0",
-    "react-spinners": "^0.11.0",
+    "react-spinners": "^0.13.3",
     "sass": "^1.49.9",
     "wagmi": "^0.2.24",
     "zustand": "^3.7.2"
