@@ -1,7 +1,7 @@
 {
-  "name": "@dspyt-nfts/frontend",
-  "version": "0.1.0",
+  "name": "@pinsav3/frontend",
   "private": true,
+  "version": "0.1.0",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -9,27 +9,21 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@headlessui/react": "^1.6.6",
-    "axios": "^0.27.2",
-    "dotenv-cli": "^5.1.0",
-    "ethers": "^5.6.2",
-    "fs": "^0.0.1-security",
-    "next": "12.1.4",
-    "nth-check": "^2.0.1",
-    "phosphor-react": "^1.4.0",
-    "react": "18.0.0",
-    "react-dom": "18.0.0",
-    "react-hot-toast": "^2.2.0",
-    "react-spinners": "^0.13.3",
-    "sass": "^1.49.9",
-    "wagmi": "^0.2.24",
-    "zustand": "^3.7.2"
+    "@mantine/core": "^4.2.12",
+    "@mantine/hooks": "^4.2.12",
+    "@mantine/next": "^4.2.12",
+    "@rainbow-me/rainbowkit": "^0.4.4",
+    "ethers": "^5.0.0",
+    "next": "^12.1.6",
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0",
+    "wagmi": "^0.5.3"
   },
   "devDependencies": {
-    "autoprefixer": "^10.4.7",
-    "eslint": "8.12.0",
-    "eslint-config-next": "12.1.4",
-    "postcss": "^8.4.12",
-    "tailwindcss": "^3.0.23"
+    "@types/node": "^17.0.35",
+    "@types/react": "^18.0.9",
+    "eslint": "^8.15.0",
+    "eslint-config-next": "^12.1.6",
+    "typescript": "^4.7.2"
   }
 }
