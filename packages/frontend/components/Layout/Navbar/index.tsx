@@ -133,16 +133,13 @@ export function Navbar({ links }: NavbarProps) {
           />
         </Group>
 
-        <Transition
-          transition="pop-top-right"
-          duration={200}
-          mounted={opened}
-          children={(styles) => (
+        <Transition transition="pop-top-right" duration={200} mounted={opened}>
+          {(styles) => (
             <Paper className={classes.dropdown} withBorder style={styles}>
               {items}
             </Paper>
           )}
-        />
+        </Transition>
       </Container>
     </Header>
   );
