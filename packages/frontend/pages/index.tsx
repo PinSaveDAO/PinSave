@@ -46,7 +46,7 @@ const Home: NextPage = () => {
                   radius="lg"
                   alt={post.name}
                   src={`https://${x}`}
-                  sx={{ maxWidth: "300px" }}
+                  sx={{ maxWidth: "500px" }}
                 />
                 <Text align="center" mt="sm">
                   {post.name}
