@@ -1,58 +1,61 @@
+import { Grid, Title, Text, Image, Paper } from "@mantine/core";
 import type { NextPage } from "next";
-
+import { useEffect, useState } from "react";
+import { getContractInfo } from "../utils/contracts";
+import { useSigner } from "wagmi";
+import { ethers } from "ethers";
+import { Post } from "../services/upload";
 const Home: NextPage = () => {
+  const [posts, setPosts] = useState<Array<Post>>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const { data: signer } = useSigner();
+  const fetchPosts = async () => {
+    if (signer) {
+      const { address, abi } = getContractInfo();
+      const contract = new ethers.Contract(address, abi, signer);
+      const currentCount = Number(await contract.totalSupply());
+      let items: Array<Post> = [];
+      for (let i = currentCount; i >= currentCount - 40 && i > 0; i--) {
+        const res: string = await contract.tokenURI(i);
+        let x = res.replace("ipfs://", "https://");
+        let resURL = x.replace(
+          "/metadata.json",
+          ".ipfs.dweb.link/metadata.json"
+        );
+        const item = await fetch(resURL).then((x) => x.json());
+        items.push({ token_id: i, ...item });
+      }
+      setPosts([...items]);
+      setIsLoading(false);
+    }
+  };
+  useEffect(() => {
+    if (signer && !posts.length) fetchPosts();
+  }, [signer]);
+  if (isLoading) return <Title>Loading...</Title>;
   return (
     <div>
-      <main>
-        <h1>
-          Welcome to <a href="">RainbowKit</a> + <a href="">wagmi</a> +{" "}
-          <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <p>
-          Get started by editing <code>pages/index.tsx</code>
-        </p>
-
-        <div>
-          <a href="https://rainbowkit.com">
-            <h2>RainbowKit Documentation &rarr;</h2>
-            <p>Learn how to customize your wallet connection flow.</p>
-          </a>
-
-          <a href="https://wagmi.sh">
-            <h2>wagmi Documentation &rarr;</h2>
-            <p>Learn how to interact with Ethereum.</p>
-          </a>
-
-          <a href="https://github.com/rainbow-me/rainbowkit/tree/main/examples">
-            <h2>RainbowKit Examples &rarr;</h2>
-            <p>Discover boilerplate example RainbowKit projects.</p>
-          </a>
-
-          <a href="https://nextjs.org/docs">
-            <h2>Next.js Documentation &rarr;</h2>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://github.com/vercel/next.js/tree/canary/examples">
-            <h2>Next.js Examples &rarr;</h2>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app">
-            <h2>Deploy &rarr;</h2>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer>
-        <a href="https://rainbow.me" target="_blank" rel="noopener noreferrer">
-          Made with ❤️ by your frens at 🌈
-        </a>
-      </footer>
+      <Grid>
+        {posts.map((post, i) => {
+          let y = post.image.replace("ipfs://", "");
+          const x = y.replace("/", ".ipfs.dweb.link/");
+          return (
+            <Grid.Col xs={4} key={i} mx="auto">
+              <Paper withBorder radius="lg" shadow="md" p="md">
+                <Image
+                  radius="lg"
+                  alt={post.name}
+                  src={`https://${x}`}
+                  sx={{ maxWidth: "300px" }}
+                />
+                <Text align="center" mt="sm">
+                  {post.name}
+                </Text>
+              </Paper>
+            </Grid.Col>
+          );
+        })}
+      </Grid>
     </div>
   );
 };

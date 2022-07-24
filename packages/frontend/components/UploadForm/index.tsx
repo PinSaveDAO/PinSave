@@ -13,6 +13,9 @@ import {
 import React, { useState } from "react";
 import { Upload, Replace } from "tabler-icons-react";
 import { Dropzone, DropzoneStatus, IMAGE_MIME_TYPE } from "@mantine/dropzone";
+import { showNotification, updateNotification } from "@mantine/notifications";
+import { useAccount, useSigner } from "wagmi";
+import { uploadPost } from "../../services/upload";
 export const dropzoneChildren = (
   status: DropzoneStatus,
   image: File | undefined
@@ -66,8 +69,41 @@ export const dropzoneChildren = (
     </Group>
   );
 };
+
 const UploadForm = () => {
   const [image, setImage] = useState<File | undefined>();
+  const accountData = useAccount();
+  const { data: signer } = useSigner();
+  const [title, setTitle] = useState("");
+  const [desc, setDesc] = useState("");
+  function filled() {
+    return desc !== "" && title !== "";
+  }
+  const startUpload = async () => {
+    showNotification({
+      id: "upload-post",
+      loading: true,
+      title: "Uploading post",
+      message: "Data will be loaded in a couple of seconds",
+      autoClose: false,
+      disallowClose: true,
+    });
+    if (filled() && accountData.address && image && signer) {
+      uploadPost(signer, accountData.address, {
+        name: title,
+        description: desc,
+        image: image,
+      });
+    } else {
+      updateNotification({
+        id: "upload-post",
+        color: "red",
+        title: "Failed to upload post",
+        message:
+          "Check if you've connected the wallet and you've filled the fields in properly",
+      });
+    }
+  };
   return (
     <Paper
       withBorder
@@ -78,10 +114,18 @@ const UploadForm = () => {
       mx="auto"
     >
       <Title my="lg">Upload a new Post</Title>
-      <TextInput required label="Title" placeholder="Post Title" />
+      <TextInput
+        required
+        label="Title"
+        placeholder="Post Title"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+      />
       <Textarea
         my="lg"
         required
+        onChange={(e) => setDesc(e.target.value)}
+        value={desc}
         label="Description"
         placeholder="Describe your post here"
       />
@@ -96,7 +140,7 @@ const UploadForm = () => {
       </Dropzone>
 
       <Center>
-        <Button radius="lg" mt="md">
+        <Button radius="lg" mt="md" onClick={() => startUpload()}>
           Upload Post
         </Button>
       </Center>

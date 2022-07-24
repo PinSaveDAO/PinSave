@@ -7,6 +7,7 @@ import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 import Head from "next/head";
 import LayoutApp from "../components/Layout";
+import { NotificationsProvider } from "@mantine/notifications";
 const { chains, provider, webSocketProvider } = configureChains(
   [chain.hardhat, chain.polygonMumbai],
   [
@@ -39,11 +40,13 @@ function MyApp({ Component, pageProps }: AppProps) {
         <meta name="description" content="Platform made for posting images" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <RainbowKitProvider chains={chains}>
-        <LayoutApp>
-          <Component {...pageProps} />
-        </LayoutApp>
-      </RainbowKitProvider>
+      <NotificationsProvider>
+        <RainbowKitProvider chains={chains}>
+          <LayoutApp>
+            <Component {...pageProps} />
+          </LayoutApp>
+        </RainbowKitProvider>
+      </NotificationsProvider>
     </WagmiConfig>
   );
 }
