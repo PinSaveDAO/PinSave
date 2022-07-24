@@ -1,10 +1,11 @@
-import { Grid, Title, Text, Image, Paper } from "@mantine/core";
+import { Grid, Title, Text, Image, Paper, Popover } from "@mantine/core";
 import type { NextPage } from "next";
 import { useEffect, useState } from "react";
 import { getContractInfo } from "../utils/contracts";
 import { useSigner } from "wagmi";
 import { ethers } from "ethers";
 import { Post } from "../services/upload";
+import PostCard from "../components/Posts/PostCard";
 const Home: NextPage = () => {
   const [posts, setPosts] = useState<Array<Post>>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -32,26 +33,15 @@ const Home: NextPage = () => {
   useEffect(() => {
     if (signer && !posts.length) fetchPosts();
   }, [signer]);
+
   if (isLoading) return <Title>Loading...</Title>;
   return (
     <div>
       <Grid>
         {posts.map((post, i) => {
-          let y = post.image.replace("ipfs://", "");
-          const x = y.replace("/", ".ipfs.dweb.link/");
           return (
             <Grid.Col xs={4} key={i} mx="auto">
-              <Paper withBorder radius="lg" shadow="md" p="md">
-                <Image
-                  radius="lg"
-                  alt={post.name}
-                  src={`https://${x}`}
-                  sx={{ maxWidth: "500px" }}
-                />
-                <Text align="center" mt="sm">
-                  {post.name}
-                </Text>
-              </Paper>
+              <PostCard {...post} />
             </Grid.Col>
           );
         })}
