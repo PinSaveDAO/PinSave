@@ -117,7 +117,7 @@ export function Navbar({ links }: NavbarProps) {
   ));
 
   return (
-    <Header height={HEADER_HEIGHT} mb={120} className={classes.root}>
+    <Header height={HEADER_HEIGHT} mb={40} className={classes.root}>
       <Container className={classes.header}>
         <Title>PinSave</Title>
         <Group spacing={5} className={classes.links}>
