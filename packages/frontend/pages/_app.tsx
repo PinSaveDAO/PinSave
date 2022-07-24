@@ -8,12 +8,12 @@ import { publicProvider } from "wagmi/providers/public";
 import Head from "next/head";
 import LayoutApp from "../components/Layout";
 const { chains, provider, webSocketProvider } = configureChains(
-  [chain.hardhat, chain.polygonMumbai],
+  [chain.polygonMumbai],
   [
     alchemyProvider({
       // This is Alchemy's default API key.
       // You can get your own at https://dashboard.alchemyapi.io
-      alchemyId: "_gg7wSSi0KMBsdKnGVfHDueq6xMB9EkC",
+      alchemyId: "WmSjTjlKqH-UP69pveZ8zrwJljFXJChZ",
     }),
     publicProvider(),
   ]
