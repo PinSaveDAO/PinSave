@@ -9,7 +9,10 @@ import Head from "next/head";
 import LayoutApp from "../components/Layout";
 import { NotificationsProvider } from "@mantine/notifications";
 const { chains, provider, webSocketProvider } = configureChains(
-  [chain.hardhat, chain.polygonMumbai],
+  [
+    ...(process.env.NEXT_PUBLIC_DEV === "true" ? [chain.hardhat] : []),
+    chain.polygonMumbai,
+  ],
   [
     alchemyProvider({
       // This is Alchemy's default API key.
@@ -21,7 +24,7 @@ const { chains, provider, webSocketProvider } = configureChains(
 );
 
 const { connectors } = getDefaultWallets({
-  appName: "RainbowKit App",
+  appName: "PinSave",
   chains,
 });
 
