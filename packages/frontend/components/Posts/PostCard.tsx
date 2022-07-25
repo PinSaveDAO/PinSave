@@ -1,4 +1,12 @@
-import { Paper, Text, Title, Popover, Image, Container } from "@mantine/core";
+import {
+  Paper,
+  Text,
+  Title,
+  Popover,
+  Image,
+  Container,
+  Loader,
+} from "@mantine/core";
 import React, { useState } from "react";
 import { Post } from "../../services/upload";
 
@@ -10,11 +18,11 @@ const PostCard = (post: Post) => {
     <Popover
       opened={opened}
       onClose={() => setOpened(false)}
-      position="bottom"
+      position="top"
       placement="center"
       trapFocus={false}
       closeOnEscape={false}
-      transition="pop-top-left"
+      transition="pop-bottom-left"
       styles={{ body: { pointerEvents: "none" } }}
       target={
         <Paper
@@ -28,8 +36,10 @@ const PostCard = (post: Post) => {
           <Image
             radius="lg"
             alt={post.name}
+            withPlaceholder
+            placeholder={<Loader size="lg" />}
             src={`https://${x}`}
-            sx={{ maxWidth: "500px" }}
+            sx={{ maxWidth: 300 }}
           />
           <Text align="center" mt="sm">
             {post.name}

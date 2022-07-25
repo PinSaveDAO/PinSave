@@ -1,4 +1,4 @@
-import { Grid, Title, Text, Image, Paper, Popover } from "@mantine/core";
+import { Grid, Title } from "@mantine/core";
 import type { NextPage } from "next";
 import { useEffect, useState } from "react";
 import { getContractInfo } from "../utils/contracts";
@@ -6,6 +6,7 @@ import { useSigner } from "wagmi";
 import { ethers } from "ethers";
 import { Post } from "../services/upload";
 import PostCard from "../components/Posts/PostCard";
+import Masonry from "@mui/lab/Masonry";
 const Home: NextPage = () => {
   const [posts, setPosts] = useState<Array<Post>>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -32,20 +33,26 @@ const Home: NextPage = () => {
   };
   useEffect(() => {
     if (signer && !posts.length) fetchPosts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [signer]);
-
+  if (!signer) return <Title>Please Connect your wallet</Title>;
   if (isLoading) return <Title>Loading...</Title>;
   return (
     <div>
-      <Grid>
+      <Masonry
+        columns={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }}
+        spacing={2}
+        defaultHeight={450}
+        defaultSpacing={1}
+      >
         {posts.map((post, i) => {
           return (
-            <Grid.Col xs={4} key={i} mx="auto">
+            <div key={i}>
               <PostCard {...post} />
-            </Grid.Col>
+            </div>
           );
         })}
-      </Grid>
+      </Masonry>
     </div>
   );
 };
