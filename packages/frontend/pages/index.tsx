@@ -1,4 +1,4 @@
-import { Grid, Title } from "@mantine/core";
+import { Box, Title } from "@mantine/core";
 import type { NextPage } from "next";
 import { useEffect, useState } from "react";
 import { getContractInfo } from "../utils/contracts";
@@ -6,7 +6,6 @@ import { useSigner } from "wagmi";
 import { ethers } from "ethers";
 import { Post } from "../services/upload";
 import PostCard from "../components/Posts/PostCard";
-import Masonry from "@mui/lab/Masonry";
 const Home: NextPage = () => {
   const [posts, setPosts] = useState<Array<Post>>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -39,11 +38,15 @@ const Home: NextPage = () => {
   if (isLoading) return <Title>Loading...</Title>;
   return (
     <div>
-      <Masonry
-        columns={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }}
-        spacing={2}
-        defaultHeight={450}
-        defaultSpacing={1}
+      <Box
+        mx="auto"
+        sx={{
+          maxWidth: 1500,
+          gap: 20,
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fill, minmax(200px, 5fr))",
+          gridTemplateRows: "masonry",
+        }}
       >
         {posts.map((post, i) => {
           return (
@@ -52,7 +55,7 @@ const Home: NextPage = () => {
             </div>
           );
         })}
-      </Masonry>
+      </Box>
     </div>
   );
 };
