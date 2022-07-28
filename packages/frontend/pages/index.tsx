@@ -5,8 +5,11 @@ import { getContractInfo } from "../utils/contracts";
 import { useSigner } from "wagmi";
 import { ethers } from "ethers";
 import { Post } from "../services/upload";
+
 import PostCard from "../components/Posts/PostCard";
+import Landing from "../components/Landing";
 import Masonry from "@mui/lab/Masonry";
+
 const Home: NextPage = () => {
   const [posts, setPosts] = useState<Array<Post>>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -19,7 +22,10 @@ const Home: NextPage = () => {
       let items: Array<Post> = [];
       for (let i = currentCount; i >= currentCount - 40 && i > 0; i--) {
         const res: string = await contract.tokenURI(i);
-        let x = res.replace("ipfs://", "https://");
+        let x = res
+          .replace("ipfs://", "https://")
+          .replace("sia://", "https://siasky.net/");
+
         let resURL = x.replace(
           "/metadata.json",
           ".ipfs.dweb.link/metadata.json"
@@ -35,8 +41,8 @@ const Home: NextPage = () => {
     if (signer && !posts.length) fetchPosts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [signer]);
-  if (!signer) return <Title>Please Connect your wallet</Title>;
-  if (isLoading) return <Title>Loading...</Title>;
+  if (!signer) return <Landing />;
+  if (isLoading) return <Title align="center">Loading...</Title>;
   return (
     <div>
       <Masonry

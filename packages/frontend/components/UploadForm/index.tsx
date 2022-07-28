@@ -15,7 +15,7 @@ import { Upload, Replace } from "tabler-icons-react";
 import { Dropzone, DropzoneStatus, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { showNotification, updateNotification } from "@mantine/notifications";
 import { useAccount, useSigner } from "wagmi";
-import { uploadPost } from "../../services/upload";
+import { uploadPost, uploadPostSkynet } from "../../services/upload";
 
 export const dropzoneChildren = (
   status: DropzoneStatus,
@@ -77,10 +77,10 @@ const UploadForm = () => {
   const { data: signer } = useSigner();
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
-  function filled() {
+  function filledPost() {
     return desc !== "" && title !== "";
   }
-  const startUpload = async () => {
+  const startUpload = async (storageProvider: string) => {
     showNotification({
       id: "upload-post",
       loading: true,
@@ -89,13 +89,36 @@ const UploadForm = () => {
       autoClose: false,
       disallowClose: true,
     });
-    if (filled() && accountData.address && image && signer) {
+
+    if (
+      filledPost() &&
+      accountData.address &&
+      image &&
+      signer &&
+      storageProvider == "ipfs"
+    ) {
       uploadPost(signer, accountData.address, {
         name: title,
         description: desc,
         image: image,
       });
-    } else {
+    }
+
+    if (
+      filledPost() &&
+      accountData.address &&
+      image &&
+      signer &&
+      storageProvider == "skynet"
+    ) {
+      uploadPostSkynet(signer, accountData.address, {
+        name: title,
+        description: desc,
+        image: image,
+      });
+    }
+
+    if (!filledPost()) {
       updateNotification({
         id: "upload-post",
         color: "red",
@@ -114,7 +137,9 @@ const UploadForm = () => {
       sx={{ maxWidth: "900px" }}
       mx="auto"
     >
-      <Title my="lg">Upload a new Post</Title>
+      <Title my="lg" align="center">
+        Upload a new Post
+      </Title>
       <TextInput
         required
         label="Title"
@@ -141,9 +166,24 @@ const UploadForm = () => {
       </Dropzone>
 
       <Center>
-        <Button radius="lg" mt="md" onClick={() => startUpload()}>
-          Upload Post
-        </Button>
+        <Group position="center" sx={{ padding: 15 }}>
+          <Button
+            component="a"
+            radius="lg"
+            mt="md"
+            onClick={() => startUpload("ipfs")}
+          >
+            Upload Post
+          </Button>
+          <Button
+            component="a"
+            radius="lg"
+            mt="md"
+            onClick={() => startUpload("skynet")}
+          >
+            Upload to Skynet
+          </Button>
+        </Group>
       </Center>
     </Paper>
   );

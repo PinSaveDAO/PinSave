@@ -12,8 +12,18 @@ import { Post } from "../../services/upload";
 
 const PostCard = (post: Post) => {
   const [opened, setOpened] = useState(false);
-  let y = post.image.replace("ipfs://", "");
-  const x = y.replace("/", ".ipfs.dweb.link/");
+
+  let y;
+  let x;
+  if (post._data) {
+    y = String(post._data?.image).replace("sia://", "");
+    x = "siasky.net/" + y;
+  }
+  if (post.image) {
+    y = post.image?.replace("ipfs://", "");
+    x = y?.replace("/", ".ipfs.dweb.link/");
+  }
+
   return (
     <Popover
       opened={opened}
@@ -35,21 +45,23 @@ const PostCard = (post: Post) => {
         >
           <Image
             radius="lg"
-            alt={post.name}
+            alt={post.name ? post.name : post._data.name}
             withPlaceholder
             placeholder={<Loader size="lg" />}
             src={`https://${x}`}
             sx={{ maxWidth: 300 }}
           />
           <Text align="center" mt="sm">
-            {post.name}
+            {post.name ? post.name : post._data.name}
           </Text>
         </Paper>
       }
     >
       <Container sx={{ maxWidth: "400px" }}>
-        <Title align="center">{post.name}</Title>
-        <Text>{post.description}</Text>
+        <Title align="center">{post.name ? post.name : post._data.name}</Title>
+        <Text>
+          {post.description ? post.description : post._data.description}
+        </Text>
       </Container>
     </Popover>
   );
