@@ -18,7 +18,7 @@
     "@nomiclabs/hardhat-etherscan": "^3.0.1",
     "chai": "^4.2.0",
     "chalk": "^4.1.0",
-    "dotenv": "^8.2.0",
+    "dotenv": "^16.0.1",
     "ethereum-waffle": "^3.4.4",
     "ethers": "^5.4.4",
     "hardhat": "2.10.1",
