@@ -7,12 +7,10 @@ import { ethers } from "ethers";
 import { Post } from "../services/upload";
 
 import PostCard from "../components/Posts/PostCard";
-<<<<<<< HEAD
 import Landing from "../components/Landing";
+
 import Masonry from "@mui/lab/Masonry";
 
-=======
->>>>>>> 3d4c9d61b4b460781a82023db6012b506dbac27d
 const Home: NextPage = () => {
   const [posts, setPosts] = useState<Array<Post>>([]);
   const [isLoading, setIsLoading] = useState(true);

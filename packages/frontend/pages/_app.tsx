@@ -22,11 +22,7 @@ const { chains, provider, webSocketProvider } = configureChains(
       // This is Alchemy's default API key.
       // You can get your own at https://dashboard.alchemyapi.io
       alchemyId:
-<<<<<<< HEAD
         process.env.NEXT_ALCHEMY_ID ?? "WmSjTjlKqH-UP69pveZ8zrwJljFXJChZ",
-=======
-        process.env.NEXT_PUBLIC_ALCHEMY ?? "WmSjTjlKqH-UP69pveZ8zrwJljFXJChZ",
->>>>>>> 3d4c9d61b4b460781a82023db6012b506dbac27d
     }),
     publicProvider(),
   ]
