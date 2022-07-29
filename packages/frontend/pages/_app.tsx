@@ -46,7 +46,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Head>
         <title>PinSave</title>
         <meta name="description" content="Platform made for posting images" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/favicon.svg" />
       </Head>
       <NotificationsProvider>
         <RainbowKitProvider chains={chains}>
