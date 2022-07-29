@@ -9,12 +9,11 @@ export type PostData = {
   name: string;
   description: string;
   image: File;
-};
-
-export type skylinkData = {
-  name: string;
-  description: string;
-  image: string;
+  _data?: {
+    name: string;
+    description: string;
+    image: string;
+  };
 };
 
 export type Post = PostData & {

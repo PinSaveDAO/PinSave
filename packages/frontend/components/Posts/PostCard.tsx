@@ -15,6 +15,12 @@ const PostCard = (post: Post) => {
 
   let y;
   let x;
+
+  if (post as Post) {
+    y = post.image?.replace("ipfs://", "");
+    x = y?.replace("/", ".ipfs.dweb.link/");
+  }
+
   if (post._data) {
     y = String(post._data?.image).replace("sia://", "");
     x = "siasky.net/" + y;
@@ -45,22 +51,22 @@ const PostCard = (post: Post) => {
         >
           <Image
             radius="lg"
-            alt={post.name ? post.name : post._data.name}
+            alt={post.name ? post.name : post._data?.name}
             withPlaceholder
             placeholder={<Loader size="lg" />}
             src={`https://${x}`}
             sx={{ maxWidth: 300 }}
           />
           <Text align="center" mt="sm">
-            {post.name ? post.name : post._data.name}
+            {post.name ? post.name : post._data?.name}
           </Text>
         </Paper>
       }
     >
       <Container sx={{ maxWidth: "400px" }}>
-        <Title align="center">{post.name ? post.name : post._data.name}</Title>
+        <Title align="center">{post.name ? post.name : post._data?.name}</Title>
         <Text>
-          {post.description ? post.description : post._data.description}
+          {post.description ? post.description : post._data?.description}
         </Text>
       </Container>
     </Popover>
