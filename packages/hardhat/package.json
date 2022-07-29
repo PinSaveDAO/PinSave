@@ -1,5 +1,5 @@
 {
-  "name": "@dspyt-nfts/hardhat",
+  "name": "@pinsav3/hardhat",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
@@ -18,7 +18,11 @@
     "@nomiclabs/hardhat-etherscan": "^3.1.0",
     "chai": "^4.2.0",
     "chalk": "^4.1.0",
+<<<<<<< HEAD
     "dotenv": "^16.0.1",
+=======
+    "dotenv": "^8.2.0",
+>>>>>>> GregTrifan-master
     "ethereum-waffle": "^3.4.4",
     "ethers": "^5.4.4",
     "hardhat": "2.10.1",

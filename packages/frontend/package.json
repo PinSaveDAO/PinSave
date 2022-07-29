@@ -1,7 +1,6 @@
 {
-  "name": "@dspyt-nfts/frontend",
+  "name": "@pinsav3/frontend",
   "version": "0.1.0",
-  "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -9,6 +8,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+<<<<<<< HEAD
     "@headlessui/react": "^1.6.6",
     "axios": "^0.27.2",
     "dotenv-cli": "^5.1.0",
@@ -31,5 +31,29 @@
     "eslint-config-next": "12.1.4",
     "postcss": "^8.4.14",
     "tailwindcss": "^3.0.23"
+=======
+    "@mantine/core": "^4.2.12",
+    "@mantine/dropzone": "^4.2.12",
+    "@mantine/hooks": "^4.2.12",
+    "@mantine/next": "^4.2.12",
+    "@mantine/notifications": "^4.2.12",
+    "@rainbow-me/rainbowkit": "^0.4.4",
+    "ethers": "^5.0.0",
+    "next": "^12.1.6",
+    "postcss": "^8.4.14",
+    "nft.storage": "^6.4.1",
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0",
+    "skynet-js": "^4.3.0",
+    "tabler-icons-react": "^1.53.0",
+    "wagmi": "^0.5.11"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.35",
+    "@types/react": "^18.0.9",
+    "eslint": "^8.15.0",
+    "eslint-config-next": "^12.1.6",
+    "typescript": "^4.7.2"
+>>>>>>> GregTrifan-master
   }
 }
