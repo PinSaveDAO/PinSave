@@ -1,6 +1,5 @@
 {
   "name": "@pinsav3/frontend",
-  "private": true,
   "version": "0.1.0",
   "scripts": {
     "dev": "next dev",
@@ -13,27 +12,23 @@
     "@mantine/dropzone": "^4.2.12",
     "@mantine/hooks": "^4.2.12",
     "@mantine/next": "^4.2.12",
+    "@mantine/notifications": "^4.2.12",
     "@rainbow-me/rainbowkit": "^0.4.4",
-    "autoprefixer": "^10.4.7",
-    "axios": "^0.27.2",
     "ethers": "^5.0.0",
-    "framer-motion": "^6.5.1",
     "next": "^12.1.6",
     "postcss": "^8.4.14",
+    "nft.storage": "^6.4.1",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
+    "skynet-js": "^4.3.0",
     "tabler-icons-react": "^1.53.0",
-    "tailwindcss": "^3.1.6",
-    "wagmi": "^0.5.3"
+    "wagmi": "^0.5.11"
   },
   "devDependencies": {
     "@types/node": "^17.0.35",
     "@types/react": "^18.0.9",
-    "autoprefixer": "^10.4.7",
     "eslint": "^8.15.0",
     "eslint-config-next": "^12.1.6",
-    "postcss": "^8.4.14",
-    "tailwindcss": "^3.1.6",
     "typescript": "^4.7.2"
   }
 }

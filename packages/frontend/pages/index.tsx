@@ -1,63 +1,69 @@
+import { Box, Title } from "@mantine/core";
 import type { NextPage } from "next";
+import { useEffect, useState } from "react";
+import { getContractInfo } from "../utils/contracts";
+import { useSigner } from "wagmi";
+import { ethers } from "ethers";
+import { Post } from "../services/upload";
 
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import PostCard from "../components/Posts/PostCard";
+import Landing from "../components/Landing";
 
 const Home: NextPage = () => {
-  const [comments, setComments] = useState<any[]>([]);
+  const [posts, setPosts] = useState<Array<Post>>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const { data: signer } = useSigner();
 
-  useEffect(() => {
-    fetchComments();
-  }, []);
+  const fetchPosts = async () => {
+    if (signer) {
+      const { address, abi } = getContractInfo();
+      const contract = new ethers.Contract(address, abi, signer);
+      const currentCount = Number(await contract.totalSupply());
+      let items: Array<Post> = [];
+      for (let i = currentCount; i >= currentCount - 40 && i > 0; i--) {
+        const res: string = await contract.tokenURI(i);
+        let x = res
+          .replace("ipfs://", "https://")
+          .replace("sia://", "https://siasky.net/");
 
-  const fetchComments = async () => {
-    const response: any = await axios({
-      method: "get",
-      url: "https://api.nft.storage/?limit=100",
-      headers: {
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDRiMzFEODU1NTQ5MmE0NTY3NGI2NTU5OTREQTA1ZmYyNWJmMDUxRjYiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTYzNDQwNjY1NDYwOSwibmFtZSI6IlRlc3QifQ.TXFSoyO34m789bYtdXCNjMWbQlRfGQvLII7MQixUqwk",
-      },
-    });
-    setComments(response.data.value);
-    setIsLoading(false);
+        let resURL = x.replace(
+          "/metadata.json",
+          ".ipfs.dweb.link/metadata.json"
+        );
+        const item = await fetch(resURL).then((x) => x.json());
+        items.push({ token_id: i, ...item });
+      }
+      setPosts([...items]);
+      setIsLoading(false);
+    }
   };
-
-  if (isLoading) {
-    return <div className="text-center mt-5">Loading...</div>;
-  }
-
+  useEffect(() => {
+    if (signer && !posts.length) fetchPosts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [signer]);
+  if (!signer) return <Landing />;
+  if (isLoading) return <Title align="center">Loading...</Title>;
   return (
-    <section
-      aria-labelledby="products-heading"
-      className="max-w-7xl mx-auto overflow-hidden sm:px-6 lg:px-8"
-    >
-      <div className="-mx-px border-l border-teal-100 grid grid-cols-2 sm:mx-0 md:grid-cols-3 lg:grid-cols-4">
-        {comments.map((x) => (
-          <div
-            className="group relative p-4 border-r border-b border-teal-100 sm:p-6"
-            key={x}
-          >
-            <div className="rounded-lg overflow-hidden  aspect-w-1 aspect-h-1 group-hover:opacity-75">
-              <img
-                className="w-full h-full object-center object-cover group-hover:opacity-75 aspect-[4/3]"
-                src={`https://${x.cid}.ipfs.dweb.link`}
-                alt=""
-              />
-              <div className="pt-10 pb-4 text-center">
-                <h3 className="text-sm font-medium text-gray-900">
-                  <a href={`https://${x.cid}.ipfs.dweb.link`}>
-                    <span aria-hidden="true" className="absolute inset-0" />
-                    {x.cid}
-                  </a>
-                </h3>
-              </div>
+    <div>
+      <Box
+        mx="auto"
+        sx={{
+          maxWidth: 1500,
+          gap: 20,
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fill, minmax(200px, 5fr))",
+          gridTemplateRows: "masonry",
+        }}
+      >
+        {posts.map((post, i) => {
+          return (
+            <div key={i}>
+              <PostCard {...post} />
             </div>
-          </div>
-        ))}
-      </div>
-    </section>
+          );
+        })}
+      </Box>
+    </div>
   );
 };
 

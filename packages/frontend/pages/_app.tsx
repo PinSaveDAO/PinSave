@@ -1,26 +1,36 @@
 import "../styles/globals.css";
 import "@rainbow-me/rainbowkit/styles.css";
+
+import Head from "next/head";
 import type { AppProps } from "next/app";
+
 import { RainbowKitProvider, getDefaultWallets } from "@rainbow-me/rainbowkit";
 import { chain, configureChains, createClient, WagmiConfig } from "wagmi";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
-import Head from "next/head";
+
 import LayoutApp from "../components/Layout";
+
+import { NotificationsProvider } from "@mantine/notifications";
+
 const { chains, provider, webSocketProvider } = configureChains(
-  [chain.polygonMumbai],
+  [
+    ...(process.env.NEXT_PUBLIC_DEV === "true" ? [chain.hardhat] : []),
+    chain.polygonMumbai,
+  ],
   [
     alchemyProvider({
       // This is Alchemy's default API key.
       // You can get your own at https://dashboard.alchemyapi.io
-      alchemyId: "WmSjTjlKqH-UP69pveZ8zrwJljFXJChZ",
+      alchemyId:
+        process.env.NEXT_ALCHEMY_ID ?? "WmSjTjlKqH-UP69pveZ8zrwJljFXJChZ",
     }),
     publicProvider(),
   ]
 );
 
 const { connectors } = getDefaultWallets({
-  appName: "RainbowKit App",
+  appName: "PinSave",
   chains,
 });
 
@@ -37,13 +47,15 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Head>
         <title>PinSave</title>
         <meta name="description" content="Platform made for posting images" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/favicon.svg" />
       </Head>
-      <RainbowKitProvider chains={chains}>
-        <LayoutApp>
-          <Component {...pageProps} />
-        </LayoutApp>
-      </RainbowKitProvider>
+      <NotificationsProvider>
+        <RainbowKitProvider chains={chains}>
+          <LayoutApp>
+            <Component {...pageProps} />
+          </LayoutApp>
+        </RainbowKitProvider>
+      </NotificationsProvider>
     </WagmiConfig>
   );
 }
