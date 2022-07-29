@@ -9,7 +9,7 @@ import { Post } from "../services/upload";
 import PostCard from "../components/Posts/PostCard";
 import Landing from "../components/Landing";
 
-import Masonry from "@mui/lab/Masonry";
+//import Masonry from "@mui/lab/Masonry";
 
 const Home: NextPage = () => {
   const [posts, setPosts] = useState<Array<Post>>([]);
