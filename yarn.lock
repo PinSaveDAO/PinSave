@@ -2727,11 +2727,12 @@
   dependencies:
     defer-to-connect "^1.0.1"
 
-"@tenderly/hardhat-tenderly@^1.0.10":
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/@tenderly/hardhat-tenderly/-/hardhat-tenderly-1.1.4.tgz#cb84ebf05eaf75c6fffae4cee52d132b3eed986a"
-  integrity sha512-HqtJSaX/EVxUcNqoHSBtZzrwAF93hPXBV4buPU2UWCuL36na6wImqzjSVhrxghgrxP6MQv5BbU5THxOkKQ0gdw==
+"@tenderly/hardhat-tenderly@^1.1.5":
+  version "1.1.5"
+  resolved "https://registry.yarnpkg.com/@tenderly/hardhat-tenderly/-/hardhat-tenderly-1.1.5.tgz#355bc0025339ef4c3e94ace4bf6786b578f74244"
+  integrity sha512-bOrgzmP3zvpn7/+CtVLMFAmnq7Sf8T5+B+bEeFvEMVrOTvGIFH1G4l1zajb10caAZ18+yXHTGethVmberV45Hw==
   dependencies:
+    "@ethersproject/bignumber" "^5.6.2"
     "@nomiclabs/hardhat-ethers" "^2.0.6"
     axios "^0.21.1"
     ethers "^5.6.8"
@@ -7210,10 +7211,10 @@ dot-case@^2.1.0:
   dependencies:
     no-case "^2.2.0"
 
-dotenv@^8.2.0:
-  version "8.6.0"
-  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-8.6.0.tgz#061af664d19f7f4d8fc6e4ff9b584ce237adcb8b"
-  integrity sha512-IrPdXQsk2BbzvCBGBOTmmSH5SodmqZNt4ERAZDmW4CT+tL8VtvinqywuANaFu4bOMWki16nqf0e4oC0QIaDr/g==
+dotenv@^16.0.1:
+  version "16.0.1"
+  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-16.0.1.tgz#8f8f9d94876c35dac989876a5d3a82a267fdce1d"
+  integrity sha512-1K6hR6wtk2FviQ4kEiSjFiH5rpzEVi8WW0x96aztHVMhEspNpc4DVOUTEHtEva5VThQ8IaBX1Pe4gSzpVVUsKQ==
 
 dotignore@~0.1.2:
   version "0.1.2"
