@@ -22,7 +22,7 @@
     "react-dom": "^18.1.0",
     "skynet-js": "^4.3.0",
     "tabler-icons-react": "^1.53.0",
-    "wagmi": "^0.5.11"
+    "wagmi": "^0.6.0"
   },
   "devDependencies": {
     "@types/node": "^18.6.4",
