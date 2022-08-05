@@ -15,7 +15,7 @@
     "@mantine/notifications": "^4.2.12",
     "@rainbow-me/rainbowkit": "^0.4.4",
     "ethers": "^5.0.0",
-    "next": "^12.1.6",
+    "next": "^12.2.4",
     "nft.storage": "^7.0.0",
     "postcss": "^8.4.14",
     "react": "^18.1.0",
