@@ -2732,11 +2732,12 @@
   dependencies:
     defer-to-connect "^1.0.1"
 
-"@tenderly/hardhat-tenderly@^1.0.10":
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/@tenderly/hardhat-tenderly/-/hardhat-tenderly-1.1.4.tgz#cb84ebf05eaf75c6fffae4cee52d132b3eed986a"
-  integrity sha512-HqtJSaX/EVxUcNqoHSBtZzrwAF93hPXBV4buPU2UWCuL36na6wImqzjSVhrxghgrxP6MQv5BbU5THxOkKQ0gdw==
+"@tenderly/hardhat-tenderly@^1.1.5":
+  version "1.1.5"
+  resolved "https://registry.yarnpkg.com/@tenderly/hardhat-tenderly/-/hardhat-tenderly-1.1.5.tgz#355bc0025339ef4c3e94ace4bf6786b578f74244"
+  integrity sha512-bOrgzmP3zvpn7/+CtVLMFAmnq7Sf8T5+B+bEeFvEMVrOTvGIFH1G4l1zajb10caAZ18+yXHTGethVmberV45Hw==
   dependencies:
+    "@ethersproject/bignumber" "^5.6.2"
     "@nomiclabs/hardhat-ethers" "^2.0.6"
     axios "^0.21.1"
     ethers "^5.6.8"
