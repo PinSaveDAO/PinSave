@@ -17,7 +17,7 @@
     "ethers": "^5.0.0",
     "next": "^12.2.4",
     "nft.storage": "^7.0.0",
-    "postcss": "^8.4.14",
+    "postcss": "^8.4.16",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "skynet-js": "^4.3.0",
