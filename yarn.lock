@@ -3345,10 +3345,10 @@
   resolved "https://registry.yarnpkg.com/@vanilla-extract/sprinkles/-/sprinkles-1.4.1.tgz#8c8703ddedaac355c1187db909119816c0fc771c"
   integrity sha512-aW6CfMMToX4a+baLuVxwcT0FSACjX3xrNt8wdi/3LLRlLAfhyue8OK7kJxhcYNZfydBeWTP59aRy8p5FUTIeew==
 
-"@wagmi/core@^0.5.0":
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/@wagmi/core/-/core-0.5.0.tgz#6a1420a192f4a05fe0efa3ca3ef8976331ae234e"
-  integrity sha512-bh4cI7WaBDtEM8E7KPCLnK5PfmBPg5iIUydTw5DTX2yo6BiRhcFIflRn/Bg9IJCFq3SGhW6Zmpu+jHHeH9ZELQ==
+"@wagmi/core@^0.5.2":
+  version "0.5.2"
+  resolved "https://registry.yarnpkg.com/@wagmi/core/-/core-0.5.2.tgz#38ce1c23907fafe8311185b2f0ea0a915661908d"
+  integrity sha512-Mbwq+ZMkxgPnEMXE+ldwseqRtryeeHokMMEMOGVuvUyrjJyn2mta2d6Yt2mMdfeqLVD6FfcSeKU4Pq8IscbaCw==
   dependencies:
     eventemitter3 "^4.0.7"
     zustand "^4.0.0-rc.1"
@@ -17686,13 +17686,13 @@ vm-browserify@^1.0.0:
   resolved "https://registry.yarnpkg.com/vm-browserify/-/vm-browserify-1.1.2.tgz#78641c488b8e6ca91a75f511e7a3b32a86e5dda0"
   integrity sha512-2ham8XPWTONajOR0ohOKOHXkm3+gaBmGut3SRuu75xLd/RRaY6vqgh8NBYYk7+RW3u5AtzPQZG8F10LHkl0lAQ==
 
-wagmi@^0.6.0:
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/wagmi/-/wagmi-0.6.0.tgz#1356402e0717ec6b3a5bc268e64bc9a63ef4dafb"
-  integrity sha512-Jyj22eQNoNcs9DoLDhD+foF5skEc7XPAZjqZ7GK+rVzxWVlA6Vx+qrcAALNGnxayE6H+CYVKWGtTK8PPN/WHOw==
+wagmi@^0.6.2:
+  version "0.6.2"
+  resolved "https://registry.yarnpkg.com/wagmi/-/wagmi-0.6.2.tgz#c399a0bea5fdb64551aa0410b1f18685dccca93a"
+  integrity sha512-P+zeCzUCEgojvG5RjwNDOIBf3AlHUZ5pE6r6dNy7mBh1E80fZSmOq4gPohgSZkTNPh+iqB4q6xcMlwSRbBfcmA==
   dependencies:
     "@coinbase/wallet-sdk" "^3.3.0"
-    "@wagmi/core" "^0.5.0"
+    "@wagmi/core" "^0.5.2"
     "@walletconnect/ethereum-provider" "^1.7.8"
     react-query "4.0.0-beta.23"
     use-sync-external-store "^1.2.0"
