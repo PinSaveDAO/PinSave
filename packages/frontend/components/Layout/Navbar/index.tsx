@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import {
   createStyles,
   Title,
@@ -119,7 +118,12 @@ export function Navbar({ links }: NavbarProps) {
   return (
     <Header height={HEADER_HEIGHT} mb={40} className={classes.root}>
       <Container className={classes.header}>
-        <Title>PinSave</Title>
+        <img
+          src="PinSaveL.png"
+          width={140}
+          height={35}
+          className="block lg:hidden h-8 w-auto"
+        />
         <Group spacing={5} className={classes.links}>
           {items}
         </Group>

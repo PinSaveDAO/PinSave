@@ -88,7 +88,7 @@ const Landing: NextPage = () => {
         <Text className={classes.description} size="xl" mt="xl">
           Share Your Ideas as NFTs on Decentralized Storage
         </Text>
-        <Link href="https://siasky.net/_AmbSHoeR902SS0DhSaBEiGvkjzoJVJLa3_HBWXJBnDjgg/">
+        <Link href="https://pinsave.app">
           <Button
             variant="gradient"
             size="xl"
