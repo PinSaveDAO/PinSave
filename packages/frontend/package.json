@@ -13,7 +13,7 @@
     "@mantine/hooks": "^4.2.12",
     "@mantine/next": "^5.1.1",
     "@mantine/notifications": "^4.2.12",
-    "@rainbow-me/rainbowkit": "^0.4.4",
+    "@rainbow-me/rainbowkit": "^0.4.6",
     "ethers": "^5.0.0",
     "next": "^12.2.4",
     "nft.storage": "^7.0.0",
