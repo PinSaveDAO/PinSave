@@ -17,11 +17,13 @@ const Home: NextPage = () => {
   const fetchPosts = async () => {
     if (signer) {
       const { address, abi } = getContractInfo();
+
       const contract = new ethers.Contract(address, abi, signer);
       const currentCount = Number(await contract.totalSupply());
       let items: Array<Post> = [];
       for (let i = currentCount; i >= currentCount - 40 && i > 0; i--) {
         const res: string = await contract.tokenURI(i);
+        //console.log(res);
         let x = res
           .replace("ipfs://", "https://")
           .replace("sia://", "https://siasky.net/");
@@ -30,8 +32,10 @@ const Home: NextPage = () => {
           "/metadata.json",
           ".ipfs.dweb.link/metadata.json"
         );
-        const item = await fetch(resURL).then((x) => x.json());
-        items.push({ token_id: i, ...item });
+        try {
+          const item = await fetch(resURL).then((x) => x.json());
+          items.push({ token_id: i, ...item });
+        } catch {}
       }
       setPosts([...items]);
       setIsLoading(false);
@@ -44,7 +48,7 @@ const Home: NextPage = () => {
   if (!signer) return <Landing />;
   if (isLoading) return <Title align="center">Loading...</Title>;
   return (
-    <div>
+    <>
       <Box
         mx="auto"
         sx={{
@@ -63,7 +67,7 @@ const Home: NextPage = () => {
           );
         })}
       </Box>
-    </div>
+    </>
   );
 };
 
