@@ -16,18 +16,20 @@ const PostCard = (post: Post) => {
   let y;
   let x;
 
-  if (post as Post) {
-    y = post.image?.replace("ipfs://", "");
-    x = y?.replace("/", ".ipfs.dweb.link/");
-  }
-
   if (post._data) {
     y = String(post._data?.image).replace("sia://", "");
     x = "siasky.net/" + y;
   }
   if (post.image) {
-    y = post.image?.replace("ipfs://", "");
-    x = y?.replace("/", ".ipfs.dweb.link/");
+    if (post.image.charAt(0) === "i") {
+      y = post.image.replace("ipfs://", "");
+      x = y.replace("/", ".ipfs.dweb.link/");
+    }
+    if (post.image.charAt(0) === "s") {
+      y = post.image?.replace("sia://", "");
+      x = "siasky.net/" + y;
+    }
+    //console.log(post.image);
   }
 
   return (

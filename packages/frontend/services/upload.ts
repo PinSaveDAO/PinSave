@@ -32,16 +32,6 @@ export async function uploadPostSkynet(
     const portal = "https://siasky.net";
     const client = new SkynetClient(portal);
 
-    const { privateKey } = genKeyPairFromSeed(
-      "this seed should be fairly long for security"
-    );
-
-    const { publicKey } = genKeyPairFromSeed(
-      "this seed should be fairly long for security"
-    );
-
-    const dataKey = "myApp";
-
     const metadata = { ...data };
 
     const { skylink } = await client.uploadFile(metadata.image);
@@ -53,11 +43,16 @@ export async function uploadPostSkynet(
       image: skylink,
     };
 
-    await client.db.setJSON(privateKey, dataKey, skData);
+    const blob = new Blob([JSON.stringify(skData)], {
+      type: "application/json",
+    });
+    console.log(blob);
+    const file = new File([blob], "metadata.json");
 
-    const { dataLink } = await client.db.getJSON(publicKey, dataKey);
+    const completedSkylink = await client.uploadFile(file);
+    console.log(completedSkylink.skylink);
 
-    await contract.mintPost(accAddress, dataLink);
+    await contract.mintPost(accAddress, completedSkylink.skylink);
 
     updateNotification({
       id: "upload-post",
@@ -91,6 +86,7 @@ export async function uploadPost(
     const metadata = await client.store({
       ...data,
     });
+
     await contract.mintPost(accAddress, metadata.url);
 
     updateNotification({
