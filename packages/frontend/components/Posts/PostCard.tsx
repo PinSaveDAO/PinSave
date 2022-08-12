@@ -17,8 +17,13 @@ const PostCard = (post: Post) => {
   let x;
 
   if (post._data) {
-    y = String(post._data?.image).replace("sia://", "");
-    x = "siasky.net/" + y;
+    console.log(typeof post._data?.image);
+    if (typeof post._data?.image === "string") {
+      y = String(post._data?.image).replace("sia://", "");
+      x = "siasky.net/" + y;
+    } else {
+      x = "siasky.net/bABrwXB_uKp6AYEuBk_yxEfSMP7QFKfHQe9KB8AF2nTL2w";
+    }
   }
   if (post.image) {
     if (post.image.charAt(0) === "i") {
