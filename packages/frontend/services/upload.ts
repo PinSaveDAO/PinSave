@@ -3,7 +3,7 @@ import { NFTStorage } from "nft.storage";
 import { getContractInfo } from "../utils/contracts";
 import { updateNotification } from "@mantine/notifications";
 
-import { SkynetClient, genKeyPairFromSeed } from "skynet-js";
+import { SkynetClient } from "skynet-js";
 
 export type PostData = {
   name: string;

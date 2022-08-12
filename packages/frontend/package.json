@@ -8,6 +8,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@lukso/lsp-factory.js": "^2.3.3",
     "@mantine/core": "^4.2.12",
     "@mantine/dropzone": "^4.2.12",
     "@mantine/hooks": "^4.2.12",
@@ -22,7 +23,8 @@
     "react-dom": "^18.1.0",
     "skynet-js": "^4.3.0",
     "tabler-icons-react": "^1.53.0",
-    "wagmi": "^0.6.2"
+    "wagmi": "^0.6.2",
+    "web3": "^1.7.5"
   },
   "devDependencies": {
     "@types/node": "^18.6.5",
