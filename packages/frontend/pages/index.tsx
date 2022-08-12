@@ -16,7 +16,6 @@ const Home: NextPage = () => {
   const { data: signer } = useSigner();
   const { chain } = useNetwork();
   const { chains, error, pendingChainId, switchNetwork } = useSwitchNetwork();
-  console.log(chain);
 
   useEffect(() => {
     const fetchPosts = async () => {
