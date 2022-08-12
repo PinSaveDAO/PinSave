@@ -12,9 +12,9 @@
     "@mantine/core": "^4.2.12",
     "@mantine/dropzone": "^4.2.12",
     "@mantine/hooks": "^4.2.12",
-    "@mantine/next": "^5.1.1",
+    "@mantine/next": "^5.1.3",
     "@mantine/notifications": "^4.2.12",
-    "@rainbow-me/rainbowkit": "^0.4.4",
+    "@rainbow-me/rainbowkit": "^0.4.6",
     "ethers": "^5.0.0",
     "next": "^12.2.4",
     "nft.storage": "^7.0.0",
@@ -27,7 +27,7 @@
     "web3": "^1.7.5"
   },
   "devDependencies": {
-    "@types/node": "^18.6.5",
+    "@types/node": "^18.7.1",
     "@types/react": "^18.0.17",
     "eslint": "^8.21.0",
     "eslint-config-next": "^12.2.4",
