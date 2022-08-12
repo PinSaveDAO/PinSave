@@ -1263,6 +1263,15 @@
     web3-eth-abi "^1.7.3"
     web3-utils "^1.7.3"
 
+"@erc725/erc725.js@^0.14.4":
+  version "0.14.4"
+  resolved "https://registry.yarnpkg.com/@erc725/erc725.js/-/erc725.js-0.14.4.tgz#65dd664c9252d19830eb0e28532ebb3a818b9855"
+  integrity sha512-cS93wPo7vbJ3PC5LwWFLodnM78WpWnsgqCgOUCx/LpR863TxULkbpn1sdJz3LobXtSaZBUf5p8fbpxLk2WWaMA==
+  dependencies:
+    ethereumjs-util "^7.1.4"
+    web3-eth-abi "^1.7.3"
+    web3-utils "^1.7.3"
+
 "@erc725/smart-contracts@^3.1.0":
   version "3.1.2"
   resolved "https://registry.yarnpkg.com/@erc725/smart-contracts/-/smart-contracts-3.1.2.tgz#7158db178c9787b7ec5c74c8f7d0152e9e11f17f"
