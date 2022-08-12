@@ -17,6 +17,7 @@
     "@mantine/notifications": "^4.2.12",
     "@rainbow-me/rainbowkit": "^0.4.6",
     "ethers": "^5.0.0",
+    "isomorphic-fetch": "^3.0.0",
     "next": "^12.2.4",
     "nft.storage": "^7.0.0",
     "postcss": "^8.4.16",
@@ -28,6 +29,7 @@
     "web3": "^1.7.5"
   },
   "devDependencies": {
+    "@types/isomorphic-fetch": "^0.0.36",
     "@types/node": "^18.7.2",
     "@types/react": "^18.0.17",
     "eslint": "^8.21.0",
