@@ -1,17 +1,10 @@
-import {
-  Paper,
-  Text,
-  Title,
-  Popover,
-  Image,
-  Container,
-  Loader,
-} from "@mantine/core";
-import React, { useState } from "react";
+import { Paper, Text, Image, Loader } from "@mantine/core";
+import { useRouter } from "next/router";
+import React from "react";
 import { Post } from "../../services/upload";
 
-const PostCard = (post: Post) => {
-  const [opened, setOpened] = useState(false);
+const PostCard = (post: Post & { i: number }) => {
+  const router = useRouter();
 
   let y;
   let x;
@@ -38,45 +31,25 @@ const PostCard = (post: Post) => {
   }
 
   return (
-    <Popover
-      opened={opened}
-      onClose={() => setOpened(false)}
-      position="top"
-      placement="center"
-      trapFocus={false}
-      closeOnEscape={false}
-      transition="pop-bottom-left"
-      styles={{ body: { pointerEvents: "none" } }}
-      target={
-        <Paper
-          onMouseEnter={() => setOpened(true)}
-          onMouseLeave={() => setOpened(false)}
-          withBorder
-          radius="lg"
-          shadow="md"
-          p="md"
-        >
-          <Image
-            radius="lg"
-            alt={post.name ? post.name : post._data?.name}
-            withPlaceholder
-            placeholder={<Loader size="lg" />}
-            src={`https://${x}`}
-            sx={{ maxWidth: 300 }}
-          />
-          <Text align="center" mt="sm">
-            {post.name ? post.name : post._data?.name}
-          </Text>
-        </Paper>
-      }
+    <Paper
+      onClick={() => router.push(`/posts/${post.i}`)}
+      withBorder
+      radius="lg"
+      shadow="md"
+      p="md"
     >
-      <Container sx={{ maxWidth: "400px" }}>
-        <Title align="center">{post.name ? post.name : post._data?.name}</Title>
-        <Text>
-          {post.description ? post.description : post._data?.description}
-        </Text>
-      </Container>
-    </Popover>
+      <Image
+        radius="lg"
+        alt={post.name ? post.name : post._data?.name}
+        withPlaceholder
+        placeholder={<Loader size="lg" />}
+        src={`https://${x}`}
+        sx={{ maxWidth: 300 }}
+      />
+      <Text align="center" mt="sm">
+        {post.name ? post.name : post._data?.name}
+      </Text>
+    </Paper>
   );
 };
 

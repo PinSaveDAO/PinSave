@@ -9,6 +9,7 @@ import {
   Paper,
   Transition,
 } from "@mantine/core";
+import Image from "next/image";
 import { useBooleanToggle } from "@mantine/hooks";
 import Link from "next/link";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
@@ -46,13 +47,13 @@ const useStyles = createStyles((theme) => ({
   },
 
   links: {
-    [theme.fn.smallerThan("sm")]: {
+    [theme.fn.smallerThan("md")]: {
       display: "none",
     },
   },
 
   burger: {
-    [theme.fn.largerThan("sm")]: {
+    [theme.fn.largerThan("md")]: {
       display: "none",
     },
   },
@@ -118,8 +119,9 @@ export function Navbar({ links }: NavbarProps) {
   return (
     <Header height={HEADER_HEIGHT} mb={40} className={classes.root}>
       <Container className={classes.header}>
-        <img
-          src="PinSaveL.png"
+        <Image
+          src="/PinSaveL.png"
+          alt="PinSave"
           width={140}
           height={35}
           className="block lg:hidden h-8 w-auto"

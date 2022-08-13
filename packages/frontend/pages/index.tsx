@@ -83,11 +83,8 @@ const Home: NextPage = () => {
         }}
       >
         {posts.map((post, i) => {
-          return (
-            <div key={i}>
-              <PostCard {...post} />
-            </div>
-          );
+          let postItem = { ...post, i: posts.length - i };
+          return <PostCard {...postItem} key={i} />;
         })}
       </Box>
     </>
