@@ -3,14 +3,14 @@ import { useRouter } from "next/router";
 import React from "react";
 import { Post } from "../../services/upload";
 
-const PostCard = (post: Post & { i: number }) => {
+const PostCard = (post: Post) => {
   const router = useRouter();
 
   let y;
   let x;
 
   if (post._data) {
-    console.log(typeof post._data?.image);
+    //console.log(typeof post._data?.image);
     if (typeof post._data?.image === "string") {
       y = String(post._data?.image).replace("sia://", "");
       x = "siasky.net/" + y;
@@ -32,7 +32,7 @@ const PostCard = (post: Post & { i: number }) => {
 
   return (
     <Paper
-      onClick={() => router.push(`/posts/${post.i}`)}
+      onClick={() => router.push(`/posts/${post.token_id}`)}
       withBorder
       radius="lg"
       shadow="md"

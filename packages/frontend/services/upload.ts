@@ -6,6 +6,7 @@ import { updateNotification } from "@mantine/notifications";
 import { SkynetClient } from "skynet-js";
 
 export type PostData = {
+  token_id: number;
   name: string;
   description: string;
   image: File;
