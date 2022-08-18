@@ -2,12 +2,13 @@ import { ActionIcon, Loader, Paper, SimpleGrid } from "@mantine/core";
 import { ethers } from "ethers";
 import { useRouter } from "next/router";
 import React, { useState, useEffect } from "react";
-import { useSigner, useNetwork, useSwitchNetwork } from "wagmi";
+import { useSigner, useNetwork } from "wagmi";
 import { Post } from "../../services/upload";
 import { getContractInfo } from "../../utils/contracts";
 import { Image } from "@mantine/core";
 import { ArrowLeft } from "tabler-icons-react";
 import NotFoundPage from "../404";
+
 const PostPage = () => {
   const router = useRouter();
   const { id } = router.query;
@@ -24,9 +25,11 @@ const PostPage = () => {
 
         const contract = new ethers.Contract(address, abi, signer);
         try {
+          //console.log(id);
           const res = await contract.tokenURI(id);
           const owner = await contract.ownerOf(id);
           setOwner(owner);
+          //console.log(res);
           let x = res
             .replace("ipfs://", "https://")
             .replace("sia://", "https://siasky.net/");
@@ -35,11 +38,12 @@ const PostPage = () => {
             "/metadata.json",
             ".ipfs.dweb.link/metadata.json"
           );
-
+          //console.log(resURL);
           const item: Post = await fetch(resURL).then((x) => x.json());
+          //console.log(item);
           let z, y;
           if (item._data) {
-            console.log(typeof item._data?.image);
+            //console.log(typeof item._data?.image);
             if (typeof item._data?.image === "string") {
               y = String(item._data?.image).replace("sia://", "");
               z = "siasky.net/" + y;
@@ -59,8 +63,9 @@ const PostPage = () => {
           }
           setPost(item);
           setImg(`https://${z}`);
-        } catch {
-          setIsLoading(false);
+        } catch (e) {
+          console.log(e);
+          //setIsLoading(false);
         }
       }
       setIsLoading(false);

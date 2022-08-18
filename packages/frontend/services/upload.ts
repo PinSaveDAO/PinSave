@@ -18,6 +18,7 @@ export type PostData = {
 
 export type Post = PostData & {
   image: string;
+  token_id: number;
 };
 
 export async function uploadPostSkynet(
