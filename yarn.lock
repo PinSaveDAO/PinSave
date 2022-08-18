@@ -3168,10 +3168,10 @@
     "@types/use-sync-external-store" "^0.0.3"
     use-sync-external-store "^1.2.0"
 
-"@tenderly/hardhat-tenderly@^1.1.5":
-  version "1.1.5"
-  resolved "https://registry.yarnpkg.com/@tenderly/hardhat-tenderly/-/hardhat-tenderly-1.1.5.tgz#355bc0025339ef4c3e94ace4bf6786b578f74244"
-  integrity sha512-bOrgzmP3zvpn7/+CtVLMFAmnq7Sf8T5+B+bEeFvEMVrOTvGIFH1G4l1zajb10caAZ18+yXHTGethVmberV45Hw==
+"@tenderly/hardhat-tenderly@^1.1.6":
+  version "1.1.6"
+  resolved "https://registry.yarnpkg.com/@tenderly/hardhat-tenderly/-/hardhat-tenderly-1.1.6.tgz#b706c7c337ebae7ecd314df3e8ee3d244ed1de08"
+  integrity sha512-B6vVdDAxQwjahrvsxjNirJW2ynDENLBD8LLFy8sYVJ+RCb4B8HXT1IGSceqpySNPr2iLYcD5cKC/YCHX+/O48Q==
   dependencies:
     "@ethersproject/bignumber" "^5.6.2"
     "@nomiclabs/hardhat-ethers" "^2.0.6"
