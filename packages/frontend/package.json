@@ -13,7 +13,7 @@
     "@mantine/core": "^4.2.12",
     "@mantine/dropzone": "^4.2.12",
     "@mantine/hooks": "^4.2.12",
-    "@mantine/next": "^5.1.4",
+    "@mantine/next": "^5.1.6",
     "@mantine/notifications": "^4.2.12",
     "@rainbow-me/rainbowkit": "^0.4.6",
     "ethers": "^5.0.0",
@@ -25,14 +25,14 @@
     "react-dom": "^18.1.0",
     "skynet-js": "^4.3.0",
     "tabler-icons-react": "^1.53.0",
-    "wagmi": "^0.6.2",
+    "wagmi": "^0.6.3",
     "web3": "^1.7.5"
   },
   "devDependencies": {
     "@types/isomorphic-fetch": "^0.0.36",
-    "@types/node": "^18.7.2",
+    "@types/node": "^18.7.6",
     "@types/react": "^18.0.17",
-    "eslint": "^8.21.0",
+    "eslint": "^8.22.0",
     "eslint-config-next": "^12.2.5",
     "typescript": "^4.7.2"
   }
