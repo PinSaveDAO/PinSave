@@ -16,7 +16,7 @@
     "@mantine/next": "^5.2.3",
     "@mantine/notifications": "^4.2.12",
     "@rainbow-me/rainbowkit": "^0.5.0",
-    "ethers": "^5.0.0",
+    "ethers": "^5.7.0",
     "isomorphic-fetch": "^3.0.0",
     "next": "^12.2.5",
     "nft.storage": "^7.0.0",
