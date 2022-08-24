@@ -1,5 +1,5 @@
 // const fs = require("fs");
-const chalk = require("chalk");
+
 /* const { config, ethers, tenderly } = require("hardhat");
 const { utils } = require("ethers");
 const R = require("ramda"); */
@@ -49,12 +49,6 @@ const main = async () => {
      contractAddress: yourContract.address
   })
   */
-
-  console.log(
-    " 💾  Artifacts (address, abi, and args) saved to: ",
-    chalk.blue("packages/hardhat/artifacts/"),
-    "\n\n"
-  );
 };
 
 /* const deploy = async (
