@@ -9,7 +9,7 @@ contract YourContract is ERC721URIStorage {
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
 
-    constructor() public ERC721("PinSave", "PNS") {}
+    constructor() ERC721("PinSave", "PNS") {}
 
     function mintPost(address user, string memory tokenURI)
         public

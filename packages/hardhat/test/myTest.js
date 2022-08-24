@@ -1,50 +1,51 @@
 const { ethers } = require("hardhat");
-const { use, expect } = require("chai");
-const { solidity } = require("ethereum-waffle");
+const { expect } = require("chai");
 
-use(solidity);
+describe("PinSave Contract", function () {
+  let nfToken;
+  // let owner;
+  let bob;
+  // let jane;
+  // let sara;
 
-describe("PinSave", function () {
-  let myContract;
-  // quick fix to let gas reporter fetch data from gas station & coinmarketcap
-  before((done) => {
-    setTimeout(done, 2000);
+  const sampleLink =
+    "https://bafkreiblu6yf35thyjzjhblimxiynxbewgn4dtjjozgjveuhrdmrfgx53a.ipfs.dweb.link/";
+
+  // const altLink =
+  // ("https://bafkreic5yqlwax3w46ugurxbbn2qlvqgdhkaiykqgxgrv2ozrqzjdzmipq.ipfs.dweb.link/");
+
+  beforeEach(async () => {
+    const nftContract = await ethers.getContractFactory("YourContract");
+    nfToken = await nftContract.deploy();
+    [bob] = await ethers.getSigners();
+    // console.log(bob.address);
+    await nfToken.deployed();
   });
 
-  describe("YourContract", function () {
-    it("Should deploy YourContract", async function () {
-      const YourContract = await ethers.getContractFactory("YourContract");
+  it("correctly checks all the supported interfaces", async function () {
+    expect(await nfToken.supportsInterface("0x80ac58cd")).to.equal(true);
+    expect(await nfToken.supportsInterface("0x5b5e139f")).to.equal(true);
+  });
 
-      myContract = await YourContract.deploy();
-    });
+  it("returns the correct NFT id 1 url", async function () {
+    await nfToken.mintPost(bob.address, sampleLink);
+    expect(await nfToken.tokenURI(1)).to.equal(sampleLink);
+  });
 
-    describe("mint()", function () {
-      it("Mint New NFT", async function () {
-        const [owner] = await ethers.getSigners();
-        const sampleLink =
-          "https://bafkreiblu6yf35thyjzjhblimxiynxbewgn4dtjjozgjveuhrdmrfgx53a.ipfs.dweb.link/";
+  it("correctly mints a NFT", async function () {
+    expect(await nfToken.mintPost(bob.address, sampleLink)).to.emit(
+      nfToken,
+      "Transfer"
+    );
+    expect(await nfToken.balanceOf(bob.address)).to.equal(1);
+    expect(await nfToken.totalSupply()).to.equal(1);
+  });
 
-        await myContract.mintPost(owner.address, sampleLink);
-        expect(await myContract.tokenURI(1)).to.equal(sampleLink);
-      });
+  it("returns the correct contract name", async function () {
+    expect(await nfToken.name()).to.equal("PinSave");
+  });
 
-      it("Minting should emit a Transfer event ", async function () {
-        const [owner] = await ethers.getSigners();
-
-        const altLink =
-          "https://bafkreic5yqlwax3w46ugurxbbn2qlvqgdhkaiykqgxgrv2ozrqzjdzmipq.ipfs.dweb.link/";
-
-        expect(await myContract.mintPost(owner.address, altLink))
-          .to.emit(myContract, "Transfer")
-          .withArgs(
-            "0x0000000000000000000000000000000000000000",
-            owner.address,
-            2
-          );
-      });
-      it("check totalSupply", async () => {
-        expect(await myContract.totalSupply()).to.equal(2);
-      });
-    });
+  it("returns the correct contract symbol", async function () {
+    expect(await nfToken.symbol()).to.equal("PNS");
   });
 });
