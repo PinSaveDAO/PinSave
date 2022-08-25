@@ -22,7 +22,7 @@ import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
 
 import LayoutApp from "../components/Layout";
 
-const LuksoChain: Chain = {
+const LuksoL16Chain: Chain = {
   id: 2828,
   name: "L16",
   network: "lukso",
@@ -43,11 +43,33 @@ const LuksoChain: Chain = {
   testnet: true,
 };
 
+const LuksoL14Chain: Chain = {
+  id: 22,
+  name: "L14",
+  network: "lukso",
+  nativeCurrency: {
+    decimals: 18,
+    name: "Lukso",
+    symbol: "LYXt",
+  },
+  rpcUrls: {
+    default: "https://rpc.l14.lukso.network",
+  },
+  blockExplorers: {
+    default: {
+      name: "Explorer",
+      url: "https://blockscout.com/lukso/l14",
+    },
+  },
+  testnet: true,
+};
+
 const { chains, provider, webSocketProvider } = configureChains(
   [
     ...(process.env.NEXT_PUBLIC_DEV === "true" ? [chain.hardhat] : []),
     chain.polygonMumbai,
-    LuksoChain,
+    LuksoL16Chain,
+    LuksoL14Chain,
   ],
   [
     alchemyProvider({
@@ -56,7 +78,8 @@ const { chains, provider, webSocketProvider } = configureChains(
     publicProvider(),
     jsonRpcProvider({
       rpc: (chain) => {
-        if (chain.id !== LuksoChain.id) return null;
+        if (chain.id !== LuksoL16Chain.id && chain.id !== LuksoL14Chain.id)
+          return null;
         return { http: chain.rpcUrls.default };
       },
     }),
@@ -73,9 +96,9 @@ const connectors = connectorsForWallets([
   {
     groupName: "Recommended",
     wallets: [
+      wallet.metaMask({ chains }),
       wallet.rainbow({ chains }),
       wallet.walletConnect({ chains }),
-      wallet.metaMask({ chains }),
       wallet.trust({ chains }),
       wallet.coinbase({ appName: "PinSave", chains }),
       wallet.injected({ chains }),
