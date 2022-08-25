@@ -10,7 +10,6 @@ const PostCard = (post: Post) => {
   let x;
 
   if (post._data) {
-    //console.log(typeof post._data?.image);
     if (typeof post._data?.image === "string") {
       y = String(post._data?.image).replace("sia://", "");
       x = "siasky.net/" + y;
@@ -27,7 +26,6 @@ const PostCard = (post: Post) => {
       y = post.image?.replace("sia://", "");
       x = "siasky.net/" + y;
     }
-    //console.log(post.image);
   }
 
   return (

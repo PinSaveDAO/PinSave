@@ -19,37 +19,8 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      if (signer && chain?.id === 80001) {
-        const { address, abi } = getContractInfo();
-
-        const contract = new ethers.Contract(address, abi, signer);
-        const currentCount = Number(await contract.totalSupply());
-        let items: Array<Post> = [];
-
-        for (let i = currentCount; i >= currentCount - 40 && i > 0; i--) {
-          const res: string = await contract.tokenURI(i);
-          //console.log(res);
-          let x = res
-            .replace("ipfs://", "https://")
-            .replace("sia://", "https://siasky.net/");
-
-          let resURL = x.replace(
-            "/metadata.json",
-            ".ipfs.dweb.link/metadata.json"
-          );
-          try {
-            const item = await fetch(resURL).then((x) => x.json());
-            //console.log(items);
-            items.push({ token_id: i, ...item });
-          } catch (e) {
-            console.log(e);
-          }
-        }
-        setPosts([...items]);
-        setIsLoading(false);
-      }
-      if (signer && chain?.id === 22) {
-        const { address, abi } = getContractInfo(22);
+      if (signer && (chain?.id === 80001 || chain?.id === 22)) {
+        const { address, abi } = getContractInfo(chain.id);
 
         const contract = new ethers.Contract(address, abi, signer);
         const currentCount = Number(await contract.totalSupply());
@@ -117,7 +88,7 @@ const Home: NextPage = () => {
       >
         {posts.map((post, i) => {
           let postItem = { ...post, i: posts.length - i };
-          //console.log(post.token_id);
+          // console.log({ ...postItem });
           return <PostCard {...postItem} key={i} />;
         })}
       </Box>

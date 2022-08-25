@@ -20,8 +20,8 @@ const PostPage = () => {
   const [owner, setOwner] = useState<string>();
   useEffect(() => {
     const fetchPost = async () => {
-      if (signer && chain?.id === 80001) {
-        const { address, abi } = getContractInfo();
+      if (signer && (chain?.id === 80001 || chain?.id === 22)) {
+        const { address, abi } = getContractInfo(chain?.id);
 
         const contract = new ethers.Contract(address, abi, signer);
         try {
