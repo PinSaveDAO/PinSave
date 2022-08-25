@@ -3,8 +3,12 @@ import "@rainbow-me/rainbowkit/styles.css";
 
 import Head from "next/head";
 import type { AppProps } from "next/app";
-
-import { RainbowKitProvider, getDefaultWallets } from "@rainbow-me/rainbowkit";
+import { NotificationsProvider } from "@mantine/notifications";
+import {
+  connectorsForWallets,
+  RainbowKitProvider,
+  wallet,
+} from "@rainbow-me/rainbowkit";
 import {
   Chain,
   chain,
@@ -17,8 +21,6 @@ import { publicProvider } from "wagmi/providers/public";
 import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
 
 import LayoutApp from "../components/Layout";
-
-import { NotificationsProvider } from "@mantine/notifications";
 
 const LuksoChain: Chain = {
   id: 2828,
@@ -49,8 +51,6 @@ const { chains, provider, webSocketProvider } = configureChains(
   ],
   [
     alchemyProvider({
-      // This is Alchemy's default API key.
-      // You can get your own at https://dashboard.alchemyapi.io
       apiKey: process.env.NEXT_ALCHEMY_ID,
     }),
     publicProvider(),
@@ -63,10 +63,26 @@ const { chains, provider, webSocketProvider } = configureChains(
   ]
 );
 
-const { connectors } = getDefaultWallets({
-  appName: "PinSave",
-  chains,
-});
+/* const needsInjectedWalletFallback =
+  typeof window !== "undefined" &&
+  window.ethereum &&
+  !window.ethereum.isMetaMask &&
+  !window.ethereum.isCoinbaseWallet; */
+
+const connectors = connectorsForWallets([
+  {
+    groupName: "Recommended",
+    wallets: [
+      wallet.rainbow({ chains }),
+      wallet.walletConnect({ chains }),
+      wallet.metaMask({ chains }),
+      wallet.trust({ chains }),
+      wallet.coinbase({ appName: "PinSave", chains }),
+      wallet.injected({ chains }),
+      //...(needsInjectedWalletFallback ? [wallet.injected({ chains })] : []),
+    ],
+  },
+]);
 
 const wagmiClient = createClient({
   autoConnect: true,

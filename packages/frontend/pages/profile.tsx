@@ -1,17 +1,18 @@
 import type { NextPage } from "next";
 import { useState } from "react";
-import { LSPFactory } from "@lukso/lsp-factory.js";
-import { useAccount } from "wagmi";
-import LSP3UniversalProfileMetadata from "@erc725/erc725.js/schemas/LSP3UniversalProfileMetadata.json";
-import Web3 from "web3";
 import "isomorphic-fetch";
+import { useAccount } from "wagmi";
+
+import Web3 from "web3";
+import { LSPFactory } from "@lukso/lsp-factory.js";
+import LSP3UniversalProfileMetadata from "@erc725/erc725.js/schemas/LSP3UniversalProfileMetadata.json";
 import { ERC725, ERC725JSONSchema } from "@erc725/erc725.js";
 
 const Upload: NextPage = () => {
   const { address } = useAccount();
   const [hasUP, setUP] = useState<undefined | string>("");
   const [value, setValue] = useState("");
-  const [prData, setPrData] = useState("");
+  const [profileData, setProfileData] = useState("");
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
@@ -19,6 +20,7 @@ const Upload: NextPage = () => {
     console.log(`Form submitted, ${value}`);
     fetchProfile(value);
   };
+
   async function fetchProfile(address: string) {
     try {
       const provider = new Web3.providers.HttpProvider(
@@ -37,9 +39,9 @@ const Upload: NextPage = () => {
 
       const profileData = await erc725.fetchData();
 
-      const strPrData = JSON.stringify(profileData, undefined, 2);
-      //"0x79c5b2a5369872A4d5102022318ED62Fe7c0d065"
-      setPrData(strPrData);
+      const strprofileData = JSON.stringify(profileData, undefined, 2);
+      // "0x79c5b2a5369872A4d5102022318ED62Fe7c0d065"
+      setProfileData(strprofileData);
     } catch (error) {
       return console.log("This is not an ERC725 Contract", error);
     }
@@ -47,7 +49,7 @@ const Upload: NextPage = () => {
 
   async function createUniversalProfile(publicAddress: string) {
     const lspFactory = new LSPFactory("https://rpc.l16.lukso.network", {
-      deployKey: process.env.NEXT_PUBLIC_KEY,
+      deployKey: process.env.NEXT_PRIVATE_KEY,
       chainId: 2828,
     });
     console.log("deploying");
@@ -84,7 +86,7 @@ const Upload: NextPage = () => {
         <input onChange={(e) => setValue(e.target.value)} value={value}></input>
         <button type="submit">Inspect the Address</button>
       </form>
-      <p>{prData}</p>
+      <p>{profileData}</p>
     </>
   );
 };
