@@ -7,7 +7,11 @@ module.exports = {
   networks: {
     mumbai: {
       url: `https://polygon-mumbai.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY}`,
-      accounts: [process.env.MUMBAI_PRIVATE_KEY],
+      accounts: [process.env.PRIVATE_KEY],
+    },
+    l16: {
+      url: "https://rpc.l16.lukso.network",
+      accounts: [process.env.PRIVATE_KEY],
     },
   },
 };
