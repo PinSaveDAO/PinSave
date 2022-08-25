@@ -14,7 +14,7 @@ import React, { useState } from "react";
 import { Upload, Replace } from "tabler-icons-react";
 import { Dropzone, DropzoneStatus, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { showNotification, updateNotification } from "@mantine/notifications";
-import { useAccount, useSigner } from "wagmi";
+import { useAccount, useSigner, useNetwork } from "wagmi";
 import { uploadPost, uploadPostSkynet } from "../../services/upload";
 
 export const dropzoneChildren = (
@@ -74,6 +74,7 @@ export const dropzoneChildren = (
 const UploadForm = () => {
   const [image, setImage] = useState<File | undefined>();
   const accountData = useAccount();
+  const { chain } = useNetwork();
   const { data: signer } = useSigner();
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
@@ -97,11 +98,16 @@ const UploadForm = () => {
       signer &&
       storageProvider == "ipfs"
     ) {
-      uploadPost(signer, accountData.address, {
-        name: title,
-        description: desc,
-        image: image,
-      });
+      uploadPost(
+        signer,
+        accountData.address,
+        {
+          name: title,
+          description: desc,
+          image: image,
+        },
+        chain?.id
+      );
     }
 
     if (
@@ -111,11 +117,16 @@ const UploadForm = () => {
       signer &&
       storageProvider == "skynet"
     ) {
-      uploadPostSkynet(signer, accountData.address, {
-        name: title,
-        description: desc,
-        image: image,
-      });
+      uploadPostSkynet(
+        signer,
+        accountData.address,
+        {
+          name: title,
+          description: desc,
+          image: image,
+        },
+        chain?.id
+      );
     }
 
     if (!filledPost()) {

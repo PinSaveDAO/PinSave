@@ -24,10 +24,11 @@ export type Post = PostData & {
 export async function uploadPostSkynet(
   signer: Signer,
   accAddress: string,
-  data: PostData
+  data: PostData,
+  chain?: number
 ) {
   try {
-    const { address, abi } = getContractInfo();
+    const { address, abi } = getContractInfo(chain);
     const contract = new ethers.Contract(address, abi, signer);
 
     const portal = "https://siasky.net";
@@ -74,10 +75,11 @@ export async function uploadPostSkynet(
 export async function uploadPost(
   signer: Signer,
   accAddress: string,
-  data: PostData
+  data: PostData,
+  chain?: number
 ) {
   try {
-    const { address, abi } = getContractInfo();
+    const { address, abi } = getContractInfo(chain);
     const contract = new ethers.Contract(address, abi, signer);
 
     const client = new NFTStorage({

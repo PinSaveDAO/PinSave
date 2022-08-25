@@ -13,5 +13,9 @@ module.exports = {
       url: "https://rpc.l16.lukso.network",
       accounts: [process.env.PRIVATE_KEY],
     },
+    l14: {
+      url: "https://rpc.l14.lukso.network",
+      accounts: [process.env.PRIVATE_KEY],
+    },
   },
 };

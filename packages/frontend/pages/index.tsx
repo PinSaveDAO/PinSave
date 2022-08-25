@@ -48,15 +48,44 @@ const Home: NextPage = () => {
         setPosts([...items]);
         setIsLoading(false);
       }
+      if (signer && chain?.id === 22) {
+        const { address, abi } = getContractInfo(22);
+
+        const contract = new ethers.Contract(address, abi, signer);
+        const currentCount = Number(await contract.totalSupply());
+        let items: Array<Post> = [];
+
+        for (let i = currentCount; i >= currentCount - 40 && i > 0; i--) {
+          const res: string = await contract.tokenURI(i);
+          //console.log(res);
+          let x = res
+            .replace("ipfs://", "https://")
+            .replace("sia://", "https://siasky.net/");
+
+          let resURL = x.replace(
+            "/metadata.json",
+            ".ipfs.dweb.link/metadata.json"
+          );
+          try {
+            const item = await fetch(resURL).then((x) => x.json());
+            //console.log(items);
+            items.push({ token_id: i, ...item });
+          } catch (e) {
+            console.log(e);
+          }
+        }
+        setPosts([...items]);
+        setIsLoading(false);
+      }
     };
     if (signer && !posts.length) fetchPosts();
   }, [signer, posts.length, chain]);
   if (!signer) return <Landing />;
-  if (signer && chain?.id !== 80001)
+  if (signer && chain?.id !== 80001 && chain?.id !== 22)
     return (
       <>
         {chain && (
-          <div>Connected to {chain.name}; Please, switch to Mumbai</div>
+          <div>Connected to {chain.name}; Please, switch to Mumbai or L14</div>
         )}
 
         {chains.map((x) => (
