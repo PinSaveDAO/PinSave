@@ -1,6 +1,6 @@
 import HardhatDeployments from "../contracts/hardhat_contracts.json";
 
-import ERC721 from "../contracts/YourContract.json";
+const { ERC721 } = require("../contracts/erc721.json");
 
 export function getContractInfo(chain?: number) {
   if (process.env.NEXT_PUBLIC_DEV === "true")
