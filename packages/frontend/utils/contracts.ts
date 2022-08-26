@@ -1,6 +1,6 @@
 import HardhatDeployments from "../contracts/hardhat_contracts.json";
 
-import abi from "../contracts/YourContract.json";
+import ERC721 from "../contracts/YourContract.json";
 
 export function getContractInfo(chain?: number) {
   if (process.env.NEXT_PUBLIC_DEV === "true")
@@ -18,7 +18,7 @@ export function getContractInfo(chain?: number) {
   if (chain && chain === 22)
     return {
       address: "0x18587c47ce8eb3a2ee11bb19b6abc92d6531d285",
-      abi: abi.abi,
+      abi: ERC721.abi,
     };
 
   return {
