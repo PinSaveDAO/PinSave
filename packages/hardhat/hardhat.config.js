@@ -3,7 +3,7 @@ require("dotenv").config();
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
-  solidity: "0.8.9",
+  solidity: "0.8.15",
   networks: {
     mumbai: {
       url: `https://polygon-mumbai.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY}`,
@@ -12,10 +12,13 @@ module.exports = {
     l16: {
       url: "https://rpc.l16.lukso.network",
       accounts: [process.env.PRIVATE_KEY],
+      chainId: 2828,
+      live: true,
     },
     l14: {
       url: "https://rpc.l14.lukso.network",
       accounts: [process.env.PRIVATE_KEY],
+      chainId: 22,
     },
   },
 };
