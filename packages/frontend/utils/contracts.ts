@@ -1,6 +1,6 @@
 import HardhatDeployments from "../contracts/hardhat_contracts.json";
 
-const abi = require("../contracts/YourContract.json");
+import abi from "../contracts/YourContract.json";
 
 export function getContractInfo(chain?: number) {
   if (process.env.NEXT_PUBLIC_DEV === "true")

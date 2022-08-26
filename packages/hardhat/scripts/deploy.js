@@ -9,8 +9,10 @@ async function main() {
 
   // We get the contract to deploy
   const MyERC721NFT = await ethers.getContractFactory("YourContract");
-  const contract = await MyERC721NFT.deploy();
-
+  const contract = await MyERC721NFT.deploy({
+    gasPrice: ethers.BigNumber.from(20000000000),
+  });
+  console.log("deploying to:", contract.address);
   await contract.deployed();
 
   console.log("deployed to:", contract.address);
