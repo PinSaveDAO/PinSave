@@ -9,7 +9,6 @@ fe/
 
 packages/hardhat/artifacts*
 packages/hardhat/deployments
-packages/frontend/contracts/*
 !packages/frontend/contracts/external_contracts.js
 packages/hardhat/cache*
 packages/**/data
