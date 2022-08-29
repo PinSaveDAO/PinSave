@@ -1,8 +1,6 @@
 import HardhatDeployments from "../contracts/hardhat_contracts.json";
-
 import ERC721 from "../contracts/erc721.json";
 
-console.log(ERC721.abi);
 export function getContractInfo(chain?: number) {
   if (process.env.NEXT_PUBLIC_DEV === "true")
     return {

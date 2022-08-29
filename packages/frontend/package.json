@@ -10,6 +10,7 @@
   "dependencies": {
     "@erc725/erc725.js": "^0.14.4",
     "@lukso/lsp-factory.js": "^2.3.3",
+    "@lukso/universalprofile-smart-contracts": "^0.4.1",
     "@mantine/core": "^4.2.12",
     "@mantine/dropzone": "^4.2.12",
     "@mantine/hooks": "^4.2.12",
@@ -26,7 +27,8 @@
     "skynet-js": "^4.3.0",
     "tabler-icons-react": "^1.53.0",
     "wagmi": "^0.6.4",
-    "web3": "^1.7.5"
+    "web3": "^1.7.5",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@types/isomorphic-fetch": "^0.0.36",
