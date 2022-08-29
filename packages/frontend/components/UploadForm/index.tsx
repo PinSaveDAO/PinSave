@@ -78,9 +78,11 @@ const UploadForm = () => {
   const { data: signer } = useSigner();
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
+
   function filledPost() {
     return desc !== "" && title !== "";
   }
+
   const startUpload = async (storageProvider: string) => {
     showNotification({
       id: "upload-post",
