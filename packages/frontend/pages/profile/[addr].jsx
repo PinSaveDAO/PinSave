@@ -14,7 +14,7 @@ const ProfilePage = ({ user }) => {
 
 export async function getServerSideProps(context) {
   const { addr } = context.params;
-  const user = await fetch(`http://evm.pinsave.app/api/lukso/l14/${addr}`);
+  const user = await fetch(`https://evm.pinsave.app/api/lukso/l14/${addr}`);
   const data = await user.json();
 
   if (!data) {
