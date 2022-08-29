@@ -3,9 +3,9 @@ const { expect } = require("chai");
 
 describe("PinSave Contract", function () {
   let nfToken;
-  // let owner;
+
   let bob;
-  // let jane;
+  let jane;
   // let sara;
 
   const sampleLink =
@@ -17,7 +17,7 @@ describe("PinSave Contract", function () {
   beforeEach(async () => {
     const nftContract = await ethers.getContractFactory("YourContract");
     nfToken = await nftContract.deploy();
-    [bob] = await ethers.getSigners();
+    [bob, jane] = await ethers.getSigners();
     // console.log(bob.address);
     await nfToken.deployed();
   });
@@ -47,5 +47,12 @@ describe("PinSave Contract", function () {
 
   it("returns the correct contract symbol", async function () {
     expect(await nfToken.symbol()).to.equal("PNS");
+  });
+
+  it("transfer", async function () {
+    await nfToken.mintPost(bob.address, sampleLink);
+    await nfToken.transferFrom(bob.address, jane.address, 1);
+    expect(await nfToken.balanceOf(bob.address)).to.equal(0);
+    expect(await nfToken.balanceOf(jane.address)).to.equal(1);
   });
 });

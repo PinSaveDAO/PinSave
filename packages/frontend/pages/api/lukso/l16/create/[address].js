@@ -5,7 +5,6 @@ export default function handler(request, response) {
 
   if (method === "GET") {
     try {
-      response.send("ad");
       const { address } = request.query;
 
       const lspFactory = new LSPFactory("https://rpc.l16.lukso.network", {

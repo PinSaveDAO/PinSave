@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useRouter } from "next/router";
+// import React, { useState, useEffect } from "react";
+//import { useRouter } from "next/router";
 
 const ProfilePage = ({ user }) => {
   //const router = useRouter();
@@ -14,7 +14,7 @@ const ProfilePage = ({ user }) => {
 
 export async function getServerSideProps(context) {
   const { addr } = context.params;
-  const user = await fetch(`http://localhost:3000/api/lukso/l16/${addr}`);
+  const user = await fetch(`http://evm.pinsave.app/api/lukso/l14/${addr}`);
   const data = await user.json();
 
   if (!data) {
