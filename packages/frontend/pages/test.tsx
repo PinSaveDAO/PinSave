@@ -3,7 +3,8 @@ import { useState } from "react";
 import "isomorphic-fetch";
 import Web3 from "web3";
 import { useAccount } from "wagmi";
-
+import LSP7Mintable from "@lukso/lsp-smart-contracts/artifacts/LSP7Mintable.json";
+import { LSPFactory } from "@lukso/lsp-factory.js";
 import { transferLXY } from "../utils/lukso/KeyManager";
 
 const Upload: NextPage = () => {
@@ -11,16 +12,15 @@ const Upload: NextPage = () => {
   const [profileData, setProfileData] = useState("");
 
   const { address } = useAccount();
-  const web3 = new Web3("https://rpc.l14.lukso.network");
 
-  async function Bla(address: string) {
+  /*   async function Bla(address: string) {
     const balance = await web3.eth.getBalance(address);
     console.log(web3.utils.fromWei(balance));
   }
 
   if (address) {
     Bla(address);
-  }
+  } */
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
@@ -29,15 +29,71 @@ const Upload: NextPage = () => {
 
   const transfer = async () => {
     try {
-      const transaction = await transferLXY(
-        "0xcC4E089687849a02Eb2D9Ec2da55BE394137CCc7",
-        "0xC5092FDd9E95297bF74F767Ad40f60D70b308A3b",
-        "3",
-        web3
-      );
-      console.log(transaction);
+      const { ethereum } = window;
+      console.log(ethereum);
+      if (ethereum) {
+        const web3 = new Web3(ethereum);
+
+        const accounts = await web3.eth.getAccounts();
+        console.log(accounts[0]);
+        const myContract = new web3.eth.Contract(
+          LSP7Mintable.abi,
+          "0x83125DB65B0Aa349cac28fdAE34A68D399ebbdac",
+          {
+            gas: 5_000_000,
+            gasPrice: "1000000000",
+          }
+        );
+        console.log(await myContract.methods.totalSupply().call());
+
+        console.log(
+          await myContract.methods
+            .mint("0xcC4E089687849a02Eb2D9Ec2da55BE394137CCc7", 100, true, "0x")
+            .send({ from: accounts[0] })
+        );
+      }
     } catch (error: any) {
       console.error(error);
+    }
+  };
+
+  const deploy = async () => {
+    const { ethereum } = window;
+
+    if (ethereum) {
+      const web3 = new Web3(ethereum);
+      const accounts = await web3.eth.getAccounts();
+      console.log("deploy", accounts[0]);
+
+      await ethereum.request({ method: "eth_requestAccounts", params: [] });
+
+      const lspFactory = new LSPFactory(ethereum, {
+        chainId: 22,
+      });
+
+      const bla = await lspFactory.LSP7DigitalAsset.deploy(
+        {
+          isNFT: true,
+          controllerAddress: "0x56fE4E7dc2bc0b6397E4609B07b4293482E3F72B",
+          name: "MYTOKEN",
+          symbol: "DEMO",
+        },
+        {
+          onDeployEvents: {
+            next: (deploymentEvent) => {
+              console.log(deploymentEvent);
+            },
+            error: (error) => {
+              console.error(error);
+            },
+            complete: (contracts) => {
+              console.log("Universal Profile deployment completed");
+              console.log(contracts);
+            },
+          },
+        }
+      );
+      console.log(bla);
     }
   };
 
@@ -78,6 +134,13 @@ const Upload: NextPage = () => {
           onClick={transfer}
         >
           Transfer
+        </a>
+        <a
+          type="button"
+          className="inline-flex justify-center w-full px-4 py-2 sm:col-start-2 sm:text-sm"
+          onClick={deploy}
+        >
+          Deploy
         </a>
       </div>
     </>
