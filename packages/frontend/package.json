@@ -10,6 +10,7 @@
   "dependencies": {
     "@erc725/erc725.js": "^0.14.4",
     "@lukso/lsp-factory.js": "^2.3.3",
+    "@lukso/lsp-smart-contracts": "^0.6.2",
     "@lukso/universalprofile-smart-contracts": "^0.4.1",
     "@mantine/core": "^4.2.12",
     "@mantine/dropzone": "^4.2.12",

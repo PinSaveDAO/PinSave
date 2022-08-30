@@ -1314,7 +1314,7 @@
     "@openzeppelin/contracts" "^4.3.1"
     solidity-bytes-utils "0.8.0"
 
-"@erc725/smart-contracts@^3.1.0":
+"@erc725/smart-contracts@^3.1.0", "@erc725/smart-contracts@^3.1.2":
   version "3.1.2"
   resolved "https://registry.yarnpkg.com/@erc725/smart-contracts/-/smart-contracts-3.1.2.tgz#7158db178c9787b7ec5c74c8f7d0152e9e11f17f"
   integrity sha512-PvRYl6keiPyqKDEj8hku6FbNBQd0B7YJt6+O6TFIDgEQx0rJvSR5KYf5AoTeihPLOv8zMQPCXfGYvwkma41wug==
@@ -2501,6 +2501,15 @@
   integrity sha512-/p2nP0jJlCgTeBlp0KYDLOU2JieIh1IWs74AbFcjV6MRl6gqnXw1adzWgfK4x0t4nho++1lPqBKrLtcp7SA0lA==
   dependencies:
     "@erc725/smart-contracts" "^3.1.0"
+    "@openzeppelin/contracts" "^4.6.0"
+    solidity-bytes-utils "0.8.0"
+
+"@lukso/lsp-smart-contracts@^0.6.2":
+  version "0.6.2"
+  resolved "https://registry.yarnpkg.com/@lukso/lsp-smart-contracts/-/lsp-smart-contracts-0.6.2.tgz#f19730c4fd8f4c1927e93d1dcb1d2ed275f2fc85"
+  integrity sha512-yEeYJxzpFWI//gl2SFX0fhhRp1Z7jAT/4HWYgaQcROBdjolCTMgRMmGBuSmdPaKBtbYz9qTOAx14LWcMJ5BbFQ==
+  dependencies:
+    "@erc725/smart-contracts" "^3.1.2"
     "@openzeppelin/contracts" "^4.6.0"
     solidity-bytes-utils "0.8.0"
 
@@ -10700,9 +10709,9 @@ globby@^6.1.0:
     pify "^2.0.0"
     pinkie-promise "^2.0.0"
 
-"gluegun@git+https://github.com/edgeandnode/gluegun.git#v4.3.1-pin-colors-dep":
+"gluegun@https://github.com/edgeandnode/gluegun#v4.3.1-pin-colors-dep":
   version "4.3.1"
-  resolved "git+https://github.com/edgeandnode/gluegun.git#b34b9003d7bf556836da41b57ef36eb21570620a"
+  resolved "https://github.com/edgeandnode/gluegun#b34b9003d7bf556836da41b57ef36eb21570620a"
   dependencies:
     apisauce "^1.0.1"
     app-module-path "^2.2.0"
@@ -14563,7 +14572,6 @@ node-fetch@2.6.1:
 
 "node-fetch@https://registry.npmjs.org/@achingbrain/node-fetch/-/node-fetch-2.6.7.tgz":
   version "2.6.7"
-  uid "1b5d62978f2ed07b99444f64f0df39f960a6d34d"
   resolved "https://registry.npmjs.org/@achingbrain/node-fetch/-/node-fetch-2.6.7.tgz#1b5d62978f2ed07b99444f64f0df39f960a6d34d"
 
 node-fetch@~1.7.1:

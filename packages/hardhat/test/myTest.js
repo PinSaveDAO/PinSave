@@ -6,13 +6,9 @@ describe("PinSave Contract", function () {
 
   let bob;
   let jane;
-  // let sara;
 
   const sampleLink =
     "https://bafkreiblu6yf35thyjzjhblimxiynxbewgn4dtjjozgjveuhrdmrfgx53a.ipfs.dweb.link/";
-
-  // const altLink =
-  // ("https://bafkreic5yqlwax3w46ugurxbbn2qlvqgdhkaiykqgxgrv2ozrqzjdzmipq.ipfs.dweb.link/");
 
   beforeEach(async () => {
     const nftContract = await ethers.getContractFactory("YourContract");
