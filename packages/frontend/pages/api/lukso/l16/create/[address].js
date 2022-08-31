@@ -30,7 +30,7 @@ export default function handler(request, response) {
     try {
       const lspFactory = new LSPFactory("https://rpc.l16.lukso.network", {
         deployKey: process.env.NEXT_PRIVATE_KEY,
-        chainId: 22,
+        chainId: 2828,
       });
 
       const deployedContracts = lspFactory.UniversalProfile.deploy({
