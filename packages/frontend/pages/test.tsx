@@ -1,116 +1,29 @@
 import type { NextPage } from "next";
 import { useState } from "react";
 import "isomorphic-fetch";
-import Web3 from "web3";
-import { useAccount } from "wagmi";
-import LSP7Mintable from "@lukso/lsp-smart-contracts/artifacts/LSP7Mintable.json";
-import { LSPFactory } from "@lukso/lsp-factory.js";
-import { transferLXY } from "../utils/lukso/KeyManager";
 
 const Upload: NextPage = () => {
   const [value, setValue] = useState("");
   const [profileData, setProfileData] = useState("");
-
-  const { address } = useAccount();
-
-  /*   async function Bla(address: string) {
-    const balance = await web3.eth.getBalance(address);
-    console.log(web3.utils.fromWei(balance));
-  }
-
-  if (address) {
-    Bla(address);
-  } */
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
     fetchProfile(value);
   };
 
-  const transfer = async () => {
-    try {
-      const { ethereum } = window;
-      console.log(ethereum);
-      if (ethereum) {
-        const web3 = new Web3(ethereum);
-
-        const accounts = await web3.eth.getAccounts();
-        console.log(accounts[0]);
-        const myContract = new web3.eth.Contract(
-          LSP7Mintable.abi,
-          "0x83125DB65B0Aa349cac28fdAE34A68D399ebbdac",
-          {
-            gas: 5_000_000,
-            gasPrice: "1000000000",
-          }
-        );
-        console.log(await myContract.methods.totalSupply().call());
-
-        console.log(
-          await myContract.methods
-            .mint("0xcC4E089687849a02Eb2D9Ec2da55BE394137CCc7", 100, true, "0x")
-            .send({ from: accounts[0] })
-        );
-      }
-    } catch (error: any) {
-      console.error(error);
-    }
-  };
-
-  const deploy = async () => {
-    const { ethereum } = window;
-
-    if (ethereum) {
-      const web3 = new Web3(ethereum);
-      const accounts = await web3.eth.getAccounts();
-      console.log("deploy", accounts[0]);
-
-      await ethereum.request({ method: "eth_requestAccounts", params: [] });
-
-      const lspFactory = new LSPFactory(ethereum, {
-        chainId: 22,
-      });
-
-      const bla = await lspFactory.LSP7DigitalAsset.deploy(
-        {
-          isNFT: true,
-          controllerAddress: "0x56fE4E7dc2bc0b6397E4609B07b4293482E3F72B",
-          name: "MYTOKEN",
-          symbol: "DEMO",
-        },
-        {
-          onDeployEvents: {
-            next: (deploymentEvent) => {
-              console.log(deploymentEvent);
-            },
-            error: (error) => {
-              console.error(error);
-            },
-            complete: (contracts) => {
-              console.log("Universal Profile deployment completed");
-              console.log(contracts);
-            },
-          },
-        }
-      );
-      console.log(bla);
-    }
-  };
-
   async function fetchProfile(address: string) {
     try {
-      const profileData = await fetch(`/api/lukso/l16/${address}`);
-      console.log(await profileData.json());
       const initialState = {
-        firstName: "Name",
+        name: "Name",
       };
-      const profileData1 = await fetch("/api/test", {
+      const profileData1 = await fetch(`/api/lukso/l14/create/${address}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(initialState),
       });
+
       console.log(await profileData1.json());
 
       const strprofileData = JSON.stringify(profileData, undefined, 2);
@@ -127,22 +40,6 @@ const Upload: NextPage = () => {
         <button type="submit">Inspect the Address</button>
       </form>
       <p>{profileData}</p>
-      <div className="mt-5">
-        <a
-          type="button"
-          className="inline-flex justify-center w-full px-4 py-2 sm:col-start-2 sm:text-sm"
-          onClick={transfer}
-        >
-          Transfer
-        </a>
-        <a
-          type="button"
-          className="inline-flex justify-center w-full px-4 py-2 sm:col-start-2 sm:text-sm"
-          onClick={deploy}
-        >
-          Deploy
-        </a>
-      </div>
     </>
   );
 };
