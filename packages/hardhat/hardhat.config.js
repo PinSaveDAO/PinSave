@@ -13,7 +13,8 @@ module.exports = {
       url: "https://rpc.l16.lukso.network",
       accounts: [process.env.PRIVATE_KEY, process.env.UP_PK],
       chainId: 2828,
-      live: true,
+      gas: 500000000000000,
+      gasPrice: 300000000000,
     },
     l14: {
       url: "https://rpc.l14.lukso.network",

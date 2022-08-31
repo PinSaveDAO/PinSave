@@ -29,7 +29,7 @@ const PostPage = () => {
           let owner;
           if (chain.id === 22) {
             res = await contract.getPost(id);
-            owner = await contract.getCreator(id);
+            owner = await contract.getPostOwner(id);
           }
           if (chain.id === 80001) {
             res = await contract.tokenURI(id);

@@ -34,15 +34,6 @@ describe("LSP8", function () {
     expect(await nfToken.totalSupply()).to.equal(1);
   });
 
-  it("transfers", async function () {
-    await nfToken.connect(bob).createPost(sampleLink, Id);
-    await nfToken
-      .connect(bob)
-      .transfer(bob.address, jane.address, Id, true, "0x00");
-    expect(await nfToken.balanceOf(bob.address)).to.equal(0);
-    expect(await nfToken.totalSupply()).to.equal(1);
-  });
-
   it("tokenIdsOf", async function () {
     await nfToken.connect(bob).createPost(sampleLink, Id);
     const eId = await nfToken.tokenIdsOf(bob.address);
@@ -57,5 +48,27 @@ describe("LSP8", function () {
   it("check cid", async function () {
     await nfToken.connect(bob).createPost(sampleLink, Id);
     expect(await nfToken.getPost(1)).to.equal(sampleLink);
+  });
+
+  it("checks post owner", async function () {
+    await nfToken.connect(bob).createPost(sampleLink, Id);
+    expect(await nfToken.getPostOwner(1)).to.equal(bob.address);
+  });
+
+  it("transfers", async function () {
+    await nfToken.connect(bob).createPost(sampleLink, Id);
+    await nfToken
+      .connect(bob)
+      .transfer(bob.address, jane.address, Id, true, "0x00");
+    expect(await nfToken.balanceOf(bob.address)).to.equal(0);
+    expect(await nfToken.totalSupply()).to.equal(1);
+  });
+
+  it("checks post creator", async function () {
+    await nfToken.connect(bob).createPost(sampleLink, Id);
+    await nfToken
+      .connect(bob)
+      .transfer(bob.address, jane.address, Id, true, "0x00");
+    expect(await nfToken.getCreator(1)).to.equal(bob.address);
   });
 });
