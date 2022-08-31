@@ -58,7 +58,7 @@ export async function uploadPostSkynet(
       await contract.mintPost(accAddress, completedSkylink.skylink);
     }
     if (chain === 22) {
-      const id = Math.random().toString(36).slice(2, 7);
+      const id = ethers.BigNumber.from(ethers.utils.randomBytes(32));
       const Id = ethers.utils.hexZeroPad(
         ethers.BigNumber.from(id).toHexString(),
         32
@@ -106,7 +106,7 @@ export async function uploadPost(
 
     if (chain === 22) {
       try {
-        const id = Math.random().toString(36).slice(2, 7);
+        const id = ethers.BigNumber.from(ethers.utils.randomBytes(32));
         const Id = ethers.utils.hexZeroPad(
           ethers.BigNumber.from(id).toHexString(),
           32
