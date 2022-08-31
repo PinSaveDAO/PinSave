@@ -9,7 +9,7 @@ contract PinSaveL8 is LSP8IdentifiableDigitalAsset {
 
     struct Post {
       string cid;
-      // address author;
+      address author;
       uint256 id;
     }
 
@@ -28,7 +28,7 @@ contract PinSaveL8 is LSP8IdentifiableDigitalAsset {
     function createPost(string memory _cid, bytes32 tokenId) public {
 
       latestPost.cid = _cid;
-      //latestPost.author = msg.sender;
+      latestPost.author = msg.sender;
       latestPost.id = ++postsCounter;
 
       postByTokenId[postsCounter] = latestPost;
@@ -39,6 +39,10 @@ contract PinSaveL8 is LSP8IdentifiableDigitalAsset {
 
     function getPost(uint id) public view returns(string memory){
       return postByTokenId[id].cid;
+    }
+
+    function getCreator(uint id) public view returns(address){
+      return postByTokenId[id].author;
     }
 
 }

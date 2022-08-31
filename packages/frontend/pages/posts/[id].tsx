@@ -25,11 +25,19 @@ const PostPage = () => {
 
         const contract = new ethers.Contract(address, abi, signer);
         try {
-          //console.log(id);
-          const res = await contract.tokenURI(id);
-          const owner = await contract.ownerOf(id);
+          let res;
+          let owner;
+          if (chain.id === 22) {
+            res = await contract.getPost(id);
+            owner = await contract.getCreator(id);
+          }
+          if (chain.id === 80001) {
+            res = await contract.tokenURI(id);
+            owner = await contract.ownerOf(id);
+          }
+
           setOwner(owner);
-          //console.log(res);
+
           let x = res
             .replace("ipfs://", "https://")
             .replace("sia://", "https://siasky.net/");

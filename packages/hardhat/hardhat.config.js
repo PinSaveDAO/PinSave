@@ -19,6 +19,8 @@ module.exports = {
       url: "https://rpc.l14.lukso.network",
       accounts: [process.env.PRIVATE_KEY, process.env.UP_PK],
       chainId: 22,
+      gas: 50000000,
+      gasPrice: 1000000000000,
     },
   },
 };

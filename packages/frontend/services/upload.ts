@@ -54,7 +54,17 @@ export async function uploadPostSkynet(
     const completedSkylink = await client.uploadFile(file);
     console.log(completedSkylink.skylink);
 
-    await contract.mintPost(accAddress, completedSkylink.skylink);
+    if (chain != 22) {
+      await contract.mintPost(accAddress, completedSkylink.skylink);
+    }
+    if (chain === 22) {
+      const id = Math.random().toString(36).slice(2, 7);
+      const Id = ethers.utils.hexZeroPad(
+        ethers.BigNumber.from(id).toHexString(),
+        32
+      );
+      await contract.createPost(completedSkylink.skylink, Id);
+    }
 
     updateNotification({
       id: "upload-post",
@@ -90,7 +100,25 @@ export async function uploadPost(
       ...data,
     });
 
-    await contract.mintPost(accAddress, metadata.url);
+    if (chain != 22) {
+      await contract.mintPost(accAddress, metadata.url);
+    }
+
+    if (chain === 22) {
+      try {
+        const id = Math.random().toString(36).slice(2, 7);
+        const Id = ethers.utils.hexZeroPad(
+          ethers.BigNumber.from(id).toHexString(),
+          32
+        );
+        const token = await contract.createPost(metadata.url, Id);
+        token.wait();
+        console.log(token);
+        console.log(await contract.totalSupply());
+      } catch (e) {
+        console.log(e);
+      }
+    }
 
     updateNotification({
       id: "upload-post",
