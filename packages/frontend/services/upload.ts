@@ -72,12 +72,12 @@ export async function uploadPostSkynet(
       title: "Post uploaded successfully!!",
       message: "",
     });
-  } catch {
+  } catch (error) {
     updateNotification({
       id: "upload-post",
       color: "red",
       title: "Failed to upload post",
-      message: "",
+      message: `${error}`,
     });
   }
 }
@@ -114,7 +114,6 @@ export async function uploadPost(
         const token = await contract.createPost(metadata.url, Id);
         token.wait();
         console.log(token);
-        console.log(await contract.totalSupply());
       } catch (e) {
         console.log(e);
       }
@@ -126,12 +125,12 @@ export async function uploadPost(
       title: "Post uploaded successfully!!",
       message: "",
     });
-  } catch {
+  } catch (error) {
     updateNotification({
       id: "upload-post",
       color: "red",
       title: "Failed to upload post",
-      message: "",
+      message: `${error}`,
     });
   }
 }
