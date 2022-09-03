@@ -32,7 +32,6 @@ const Home: NextPage = () => {
           }
           if (chain.id === 22) {
             res = await contract.getPost(i);
-            console.log(res);
           }
 
           let x = res

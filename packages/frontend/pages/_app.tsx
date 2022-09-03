@@ -86,12 +86,6 @@ const { chains, provider, webSocketProvider } = configureChains(
   ]
 );
 
-/* const needsInjectedWalletFallback =
-  typeof window !== "undefined" &&
-  window.ethereum &&
-  !window.ethereum.isMetaMask &&
-  !window.ethereum.isCoinbaseWallet; */
-
 const connectors = connectorsForWallets([
   {
     groupName: "Recommended",
@@ -102,7 +96,6 @@ const connectors = connectorsForWallets([
       wallet.trust({ chains }),
       wallet.coinbase({ appName: "PinSave", chains }),
       wallet.injected({ chains }),
-      //...(needsInjectedWalletFallback ? [wallet.injected({ chains })] : []),
     ],
   },
 ]);

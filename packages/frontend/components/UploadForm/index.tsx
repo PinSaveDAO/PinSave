@@ -15,6 +15,7 @@ import { Upload, Replace } from "tabler-icons-react";
 import { Dropzone, DropzoneStatus, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { showNotification, updateNotification } from "@mantine/notifications";
 import { useAccount, useSigner, useNetwork } from "wagmi";
+
 import { uploadPost, uploadPostSkynet } from "../../services/upload";
 
 export const dropzoneChildren = (
@@ -104,30 +105,60 @@ const UploadForm = () => {
     });
 
     const check = isValidUpload();
-    if (check === true && storageProvider == "ipfs") {
-      uploadPost(
-        signer!,
-        address!,
-        {
-          name: title,
-          description: desc,
-          image: image!,
-        },
-        chain?.id
-      );
+    if (check && storageProvider == "ipfs") {
+      if (postReceiver !== "") {
+        uploadPost(
+          signer!,
+          postReceiver,
+          {
+            name: title,
+            description: desc,
+            image: image!,
+          },
+          chain?.id
+        );
+      }
+
+      if (postReceiver === "") {
+        uploadPost(
+          signer!,
+          address!,
+          {
+            name: title,
+            description: desc,
+            image: image!,
+          },
+          chain?.id
+        );
+      }
     }
 
-    if (check === true && storageProvider == "skynet") {
-      uploadPostSkynet(
-        signer!,
-        address!,
-        {
-          name: title,
-          description: desc,
-          image: image!,
-        },
-        chain?.id
-      );
+    if (check && storageProvider == "skynet") {
+      if (postReceiver !== "") {
+        uploadPostSkynet(
+          signer!,
+          postReceiver,
+          {
+            name: title,
+            description: desc,
+            image: image!,
+          },
+          chain?.id
+        );
+      }
+
+      if (postReceiver === "") {
+        uploadPostSkynet(
+          signer!,
+          address!,
+          {
+            name: title,
+            description: desc,
+            image: image!,
+          },
+          chain?.id
+        );
+      }
     }
 
     if (!isValidUpload()) {
