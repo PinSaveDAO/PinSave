@@ -10,7 +10,7 @@ export function getContractInfo(chain?: number) {
 
   if (chain === 22)
     return {
-      address: "0x5787604E0E4F7710C4c34c8B40371549C63D2dFF",
+      address: "0x9c49Ebc7F0da23F71D7d0e73c0885694EA05492A",
       abi: PinSaveL8.abi,
     };
 

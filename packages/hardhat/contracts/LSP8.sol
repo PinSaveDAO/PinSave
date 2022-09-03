@@ -26,7 +26,7 @@ contract PinSaveL8 is LSP8IdentifiableDigitalAsset {
     ) LSP8IdentifiableDigitalAsset(name_, symbol_, newOwner_) {}
 
 
-    function createPost(string memory _cid, bytes32 tokenId) public {
+    function createPost(address receiver, string memory _cid, bytes32 tokenId) public {
 
       latestPost.cid = _cid;
       latestPost.author = msg.sender;
@@ -35,7 +35,7 @@ contract PinSaveL8 is LSP8IdentifiableDigitalAsset {
 
       postByTokenId[postsCounter] = latestPost;
 
-      _mint(msg.sender, tokenId , true, "");
+      _mint(receiver, tokenId , true, "");
     }
 
     function getPostOwner(uint id) public view returns(address){

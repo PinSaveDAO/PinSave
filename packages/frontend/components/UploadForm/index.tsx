@@ -15,6 +15,7 @@ import { Upload, Replace } from "tabler-icons-react";
 import { Dropzone, DropzoneStatus, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { showNotification, updateNotification } from "@mantine/notifications";
 import { useAccount, useSigner, useNetwork } from "wagmi";
+
 import { uploadPost, uploadPostSkynet } from "../../services/upload";
 
 export const dropzoneChildren = (
@@ -73,14 +74,24 @@ export const dropzoneChildren = (
 
 const UploadForm = () => {
   const [image, setImage] = useState<File | undefined>();
-  const accountData = useAccount();
+  const { address } = useAccount();
   const { chain } = useNetwork();
   const { data: signer } = useSigner();
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
+  const [postReceiver, setPostReceiver] = useState("");
 
   function filledPost() {
     return desc !== "" && title !== "";
+  }
+
+  function isValidUpload() {
+    return (
+      filledPost() &&
+      address !== undefined &&
+      image !== undefined &&
+      signer !== undefined
+    );
   }
 
   const startUpload = async (storageProvider: string) => {
@@ -93,45 +104,64 @@ const UploadForm = () => {
       disallowClose: true,
     });
 
-    if (
-      filledPost() &&
-      accountData.address &&
-      image &&
-      signer &&
-      storageProvider == "ipfs"
-    ) {
-      uploadPost(
-        signer,
-        accountData.address,
-        {
-          name: title,
-          description: desc,
-          image: image,
-        },
-        chain?.id
-      );
+    const check = isValidUpload();
+    if (check && storageProvider == "ipfs") {
+      if (postReceiver !== "") {
+        uploadPost(
+          signer!,
+          postReceiver,
+          {
+            name: title,
+            description: desc,
+            image: image!,
+          },
+          chain?.id
+        );
+      }
+
+      if (postReceiver === "") {
+        uploadPost(
+          signer!,
+          address!,
+          {
+            name: title,
+            description: desc,
+            image: image!,
+          },
+          chain?.id
+        );
+      }
     }
 
-    if (
-      filledPost() &&
-      accountData.address &&
-      image &&
-      signer &&
-      storageProvider == "skynet"
-    ) {
-      uploadPostSkynet(
-        signer,
-        accountData.address,
-        {
-          name: title,
-          description: desc,
-          image: image,
-        },
-        chain?.id
-      );
+    if (check && storageProvider == "skynet") {
+      if (postReceiver !== "") {
+        uploadPostSkynet(
+          signer!,
+          postReceiver,
+          {
+            name: title,
+            description: desc,
+            image: image!,
+          },
+          chain?.id
+        );
+      }
+
+      if (postReceiver === "") {
+        uploadPostSkynet(
+          signer!,
+          address!,
+          {
+            name: title,
+            description: desc,
+            image: image!,
+          },
+          chain?.id
+        );
+      }
     }
 
-    if (!filledPost()) {
+    if (!isValidUpload()) {
       updateNotification({
         id: "upload-post",
         color: "red",
@@ -167,6 +197,13 @@ const UploadForm = () => {
         value={desc}
         label="Description"
         placeholder="Describe your post here"
+      />
+      <Textarea
+        my="lg"
+        onChange={(e) => setPostReceiver(e.target.value)}
+        value={postReceiver}
+        label="Post Receiver"
+        placeholder="Enter Address You Want To Receive The NFT"
       />
       <Dropzone
         mt="md"

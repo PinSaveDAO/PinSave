@@ -29,34 +29,34 @@ describe("LSP8", function () {
   });
 
   it("mints", async function () {
-    await nfToken.connect(bob).createPost(sampleLink, Id);
+    await nfToken.connect(bob).createPost(bob.address, sampleLink, Id);
     expect(await nfToken.balanceOf(bob.address)).to.equal(1);
     expect(await nfToken.totalSupply()).to.equal(1);
   });
 
   it("tokenIdsOf", async function () {
-    await nfToken.connect(bob).createPost(sampleLink, Id);
+    await nfToken.connect(bob).createPost(bob.address, sampleLink, Id);
     const eId = await nfToken.tokenIdsOf(bob.address);
     expect(eId[0]).to.equal(Id);
   });
 
   it("token owner", async function () {
-    await nfToken.connect(bob).createPost(sampleLink, Id);
+    await nfToken.connect(bob).createPost(bob.address, sampleLink, Id);
     expect(await nfToken.tokenOwnerOf(Id)).to.equal(bob.address);
   });
 
   it("check cid", async function () {
-    await nfToken.connect(bob).createPost(sampleLink, Id);
+    await nfToken.connect(bob).createPost(bob.address, sampleLink, Id);
     expect(await nfToken.getPost(1)).to.equal(sampleLink);
   });
 
   it("checks post owner", async function () {
-    await nfToken.connect(bob).createPost(sampleLink, Id);
+    await nfToken.connect(bob).createPost(bob.address, sampleLink, Id);
     expect(await nfToken.getPostOwner(1)).to.equal(bob.address);
   });
 
   it("transfers", async function () {
-    await nfToken.connect(bob).createPost(sampleLink, Id);
+    await nfToken.connect(bob).createPost(bob.address, sampleLink, Id);
     await nfToken
       .connect(bob)
       .transfer(bob.address, jane.address, Id, true, "0x00");
@@ -65,7 +65,7 @@ describe("LSP8", function () {
   });
 
   it("checks post creator", async function () {
-    await nfToken.connect(bob).createPost(sampleLink, Id);
+    await nfToken.connect(bob).createPost(bob.address, sampleLink, Id);
     await nfToken
       .connect(bob)
       .transfer(bob.address, jane.address, Id, true, "0x00");
