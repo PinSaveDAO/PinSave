@@ -1,12 +1,12 @@
-import { ActionIcon, Loader, Paper, SimpleGrid } from "@mantine/core";
+import { ActionIcon, Loader, Paper, SimpleGrid, Image } from "@mantine/core";
+import { ArrowLeft } from "tabler-icons-react";
 import { ethers } from "ethers";
 import { useRouter } from "next/router";
 import React, { useState, useEffect } from "react";
 import { useSigner, useNetwork } from "wagmi";
+
 import { Post } from "../../services/upload";
 import { getContractInfo } from "../../utils/contracts";
-import { Image } from "@mantine/core";
-import { ArrowLeft } from "tabler-icons-react";
 import NotFoundPage from "../404";
 
 const PostPage = () => {
@@ -46,12 +46,9 @@ const PostPage = () => {
             "/metadata.json",
             ".ipfs.dweb.link/metadata.json"
           );
-          //console.log(resURL);
           const item: Post = await fetch(resURL).then((x) => x.json());
-          //console.log(item);
           let z, y;
           if (item._data) {
-            //console.log(typeof item._data?.image);
             if (typeof item._data?.image === "string") {
               y = String(item._data?.image).replace("sia://", "");
               z = "siasky.net/" + y;
@@ -73,7 +70,7 @@ const PostPage = () => {
           setImg(`https://${z}`);
         } catch (e) {
           console.log(e);
-          //setIsLoading(false);
+          setIsLoading(false);
         }
       }
       setIsLoading(false);
@@ -127,12 +124,21 @@ const PostPage = () => {
           </Paper>
           <p style={{ fontSize: "small", color: "#0000008d" }}>
             Owned by:{" "}
-            <a
-              style={{ color: "#198b6eb9" }}
-              href={`https://etherscan.io/address/${owner}`}
-            >
-              {owner}
-            </a>
+            {chain?.id === 22 ? (
+              <a
+                style={{ color: "#198b6eb9" }}
+                onClick={() => router.push(`/profile/${owner}`)}
+              >
+                {owner}
+              </a>
+            ) : (
+              <a
+                style={{ color: "#198b6eb9" }}
+                href={`https://etherscan.io/address/${owner}`}
+              >
+                {owner}
+              </a>
+            )}
           </p>
         </Paper>
       </SimpleGrid>
