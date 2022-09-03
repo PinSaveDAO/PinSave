@@ -24,7 +24,6 @@ const Home: NextPage = () => {
 
         const contract = new ethers.Contract(address, abi, signer);
         const currentCount = Number(await contract.totalSupply());
-        console.log(currentCount);
         let items: Array<Post> = [];
         let res;
         for (let i = currentCount; i >= currentCount - 40 && i > 0; i--) {
@@ -46,7 +45,7 @@ const Home: NextPage = () => {
           );
           try {
             const item = await fetch(resURL).then((x) => x.json());
-            console.log(items);
+
             items.push({ token_id: i, ...item });
           } catch (e) {
             console.log(e);
@@ -95,7 +94,6 @@ const Home: NextPage = () => {
       >
         {posts.map((post, i) => {
           let postItem = { ...post, i: posts.length - i };
-          // console.log({ ...postItem });
           return <PostCard {...postItem} key={i} />;
         })}
       </Box>

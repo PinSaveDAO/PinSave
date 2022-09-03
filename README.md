@@ -26,7 +26,7 @@ Pin Save 4 key features:
 
 ## Setup
 
-To run this project and start the project in development mode, install it locally using yarn:
+To run this project and start the project in development mode, install it locally using yarn and run yarn frontend:dev:
 
 ```
 $ yarn

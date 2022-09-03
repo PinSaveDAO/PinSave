@@ -37,7 +37,7 @@ export async function uploadPostSkynet(
     const metadata = { ...data };
 
     const { skylink } = await client.uploadFile(metadata.image);
-    console.log(skylink);
+    //console.log(skylink);
 
     const skData = {
       name: metadata.name,
@@ -48,11 +48,11 @@ export async function uploadPostSkynet(
     const blob = new Blob([JSON.stringify(skData)], {
       type: "application/json",
     });
-    console.log(blob);
+    //console.log(blob);
     const file = new File([blob], "metadata.json");
 
     const completedSkylink = await client.uploadFile(file);
-    console.log(completedSkylink.skylink);
+    //console.log(completedSkylink.skylink);
 
     if (chain != 22) {
       await contract.mintPost(accAddress, completedSkylink.skylink);

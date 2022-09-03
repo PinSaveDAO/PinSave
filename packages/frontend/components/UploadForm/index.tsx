@@ -73,14 +73,24 @@ export const dropzoneChildren = (
 
 const UploadForm = () => {
   const [image, setImage] = useState<File | undefined>();
-  const accountData = useAccount();
+  const { address } = useAccount();
   const { chain } = useNetwork();
   const { data: signer } = useSigner();
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
+  const [postReceiver, setPostReceiver] = useState("");
 
   function filledPost() {
     return desc !== "" && title !== "";
+  }
+
+  function isValidUpload() {
+    return (
+      filledPost() &&
+      address !== undefined &&
+      image !== undefined &&
+      signer !== undefined
+    );
   }
 
   const startUpload = async (storageProvider: string) => {
@@ -93,45 +103,34 @@ const UploadForm = () => {
       disallowClose: true,
     });
 
-    if (
-      filledPost() &&
-      accountData.address &&
-      image &&
-      signer &&
-      storageProvider == "ipfs"
-    ) {
+    const check = isValidUpload();
+    if (check === true && storageProvider == "ipfs") {
       uploadPost(
-        signer,
-        accountData.address,
+        signer!,
+        address!,
         {
           name: title,
           description: desc,
-          image: image,
+          image: image!,
         },
         chain?.id
       );
     }
 
-    if (
-      filledPost() &&
-      accountData.address &&
-      image &&
-      signer &&
-      storageProvider == "skynet"
-    ) {
+    if (check === true && storageProvider == "skynet") {
       uploadPostSkynet(
-        signer,
-        accountData.address,
+        signer!,
+        address!,
         {
           name: title,
           description: desc,
-          image: image,
+          image: image!,
         },
         chain?.id
       );
     }
 
-    if (!filledPost()) {
+    if (!isValidUpload()) {
       updateNotification({
         id: "upload-post",
         color: "red",
@@ -167,6 +166,13 @@ const UploadForm = () => {
         value={desc}
         label="Description"
         placeholder="Describe your post here"
+      />
+      <Textarea
+        my="lg"
+        onChange={(e) => setPostReceiver(e.target.value)}
+        value={postReceiver}
+        label="Post Receiver"
+        placeholder="Enter Address You Want To Receive The NFT"
       />
       <Dropzone
         mt="md"
