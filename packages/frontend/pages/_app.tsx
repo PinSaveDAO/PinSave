@@ -94,7 +94,7 @@ const connectors = connectorsForWallets([
       wallet.rainbow({ chains }),
       wallet.walletConnect({ chains }),
       wallet.trust({ chains }),
-      wallet.coinbase({ appName: "PinSave", chains }),
+      //wallet.coinbase({ appName: "PinSave", chains }),
       wallet.injected({ chains }),
     ],
   },
