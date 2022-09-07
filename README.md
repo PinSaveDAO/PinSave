@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/Pfed-prog/Dspyt-NFTs-EVM/blob/master/packages/frontend/public/PinSaveL.png?raw=true" alt="Size Limit CLI" width="738" >
+  <img src="https://github.com/Pfed-prog/evm.pinsave-apps-EVM/blob/master/packages/frontend/public/PinSaveL.png?raw=true" alt="Size Limit CLI" width="738" >
 </p>
 
 <p align="center">
@@ -23,7 +23,7 @@ Pin Save 4 key features:
 ## Table of contents
 
 - [Setup](#Setup)
-- [Lukso Api](#Lukso)
+- [Lukso Api](#Lukso%20Api)
 
 ## Setup
 
@@ -36,14 +36,30 @@ $ yarn frontend:dev
 
 ## Lukso Api
 
-- Endpoint to Dsiplay controllers and permissions:
-  https://dspyt.com/api/lukso/{chain}/controllers/{address}
+The API support both l14 and l16 testnet Lukso Chains.
+
+- Endpoint to Display controllers and permissions for the Universal Profile:
+
+  https://evm.pinsave.app/api/lukso/{chain}/controllers/{address}
+
+  chain takes arguments: l14 or l16
 
 Example:
-https://dspyt.com/api/lukso/l14/controllers/0xcC4E089687849a02Eb2D9Ec2da55BE394137CCc7
+https://evm.pinsave.app/api/lukso/l14/controllers/0xcC4E089687849a02Eb2D9Ec2da55BE394137CCc7
 
-Output:
+Response:
 
 ```
 {"data":[{"CHANGEOWNER":true,"CHANGEPERMISSIONS":true,"ADDPERMISSIONS":true,"SETDATA":true,"CALL":true,"STATICCALL":true,"DELEGATECALL":false,"DEPLOY":true,"TRANSFERVALUE":true,"SIGN":true,"SUPER_SETDATA":true,"SUPER_TRANSFERVALUE":true,"SUPER_CALL":true,"SUPER_STATICCALL":true,"SUPER_DELEGATECALL":false,"address":"0x2679bbb9233016c7cAAcB480FBc77dEeDDf8c006"},{"CHANGEOWNER":false,"CHANGEPERMISSIONS":false,"ADDPERMISSIONS":false,"SETDATA":true,"CALL":false,"STATICCALL":false,"DELEGATECALL":false,"DEPLOY":false,"TRANSFERVALUE":false,"SIGN":false,"SUPER_SETDATA":false,"SUPER_TRANSFERVALUE":false,"SUPER_CALL":false,"SUPER_STATICCALL":false,"SUPER_DELEGATECALL":false,"address":"0xe5089Aaa677501BeC72d5418d476850d83e5b750"}]}
 ```
+
+- Endpoint to create Universal profile.
+
+  https://evm.pinsave.app/api/lukso/{chain}/controllers/{address}
+
+Example:
+
+- Query Profile
+
+Example:
+https://evm.pinsave.app/api/lukso/l14/0xcC4E089687849a02Eb2D9Ec2da55BE394137CCc7
