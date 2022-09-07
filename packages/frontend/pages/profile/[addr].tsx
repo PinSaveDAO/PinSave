@@ -7,7 +7,13 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 
-const ProfilePage = ({ user }: { user: any }) => {
+const ProfilePage = ({
+  user,
+  controllers,
+}: {
+  user: any;
+  controllers: Array<string>;
+}) => {
   const theme = useMantineTheme();
   return (
     <Box
@@ -61,17 +67,9 @@ const ProfilePage = ({ user }: { user: any }) => {
             alt="Random unsplash image"
           />
         </div>
-        <Text
-          component="span"
-          align="center"
-          variant="gradient"
-          gradient={{ from: "indigo", to: "cyan", deg: 45 }}
-          size="xl"
-          weight={800}
-          style={{ fontFamily: "Greycliff CF, sans-serif" }}
-        >
+        <Title sx={{ color: "aqua", padding: theme.spacing.lg }} order={2}>
           {user.description}
-        </Text>
+        </Title>
         <Title
           align="center"
           sx={{ color: theme.colors.grape[5], padding: theme.spacing.xl }}
@@ -79,6 +77,18 @@ const ProfilePage = ({ user }: { user: any }) => {
           [{user.tags}]
         </Title>
       </BackgroundImage>
+      <Text
+        component="span"
+        align="center"
+        variant="gradient"
+        gradient={{ from: "indigo", to: "cyan", deg: 45 }}
+        size="xl"
+        weight={800}
+        style={{ fontFamily: "Greycliff CF, sans-serif" }}
+      >
+        Address that can Change owner of the Profile:
+        {controllers}
+      </Text>
     </Box>
   );
 };
@@ -92,6 +102,21 @@ export async function getServerSideProps(context: { params: { addr: any } }) {
   );
   const data = await user.json();
 
+  const controllers = await fetch(
+    `${
+      process.env.NEXT_PUBLIC_API_ENDPOINT ?? "https://evm.pinsave.app/"
+    }api/lukso/l14/controllers/${addr}`
+  );
+  const dataControllers = await controllers.json();
+  const nControllers = dataControllers.data.length;
+
+  let controllerArray: Array<string> = [];
+  for (var num = 0; num < nControllers; num++) {
+    if (dataControllers.data[num]["CHANGEOWNER"] === true) {
+      controllerArray.push(dataControllers.data[num]["address"]);
+    }
+  }
+
   if (!data) {
     return {
       notFound: true,
@@ -101,12 +126,12 @@ export async function getServerSideProps(context: { params: { addr: any } }) {
   if (data.ProfileData[1].name === "LSP3Profile") {
     const profile = data.ProfileData[1].value.LSP3Profile;
     return {
-      props: { user: profile },
+      props: { user: profile, controllers: controllerArray },
     };
   }
 
   return {
-    props: { user: data },
+    notFound: true,
   };
 }
 
