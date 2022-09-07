@@ -31,7 +31,7 @@
     "dotenv": "^16.0.2",
     "ethers": "^5.7.0",
     "hardhat": "2.10.2",
-    "hardhat-deploy": "^0.11.11",
+    "hardhat-deploy": "^0.11.13",
     "hardhat-gas-reporter": "^1.0.4",
     "node-watch": "^0.7.3",
     "qrcode-terminal": "^0.12.0",
