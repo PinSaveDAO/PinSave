@@ -22,8 +22,8 @@ Pin Save 4 key features:
 
 ## Table of contents
 
-- [Setup](#setup)
-- [Api](#api)
+- [Setup](#Setup)
+- [Lukso Api](#Lukso)
 
 ## Setup
 
@@ -34,4 +34,16 @@ $ yarn
 $ yarn frontend:dev
 ```
 
-## Api
+## Lukso Api
+
+- Endpoint to Dsiplay controllers and permissions:
+  https://dspyt.com/api/lukso/{chain}/controllers/{address}
+
+Example:
+https://dspyt.com/api/lukso/l14/controllers/0xcC4E089687849a02Eb2D9Ec2da55BE394137CCc7
+
+Output:
+
+```
+{"data":[{"CHANGEOWNER":true,"CHANGEPERMISSIONS":true,"ADDPERMISSIONS":true,"SETDATA":true,"CALL":true,"STATICCALL":true,"DELEGATECALL":false,"DEPLOY":true,"TRANSFERVALUE":true,"SIGN":true,"SUPER_SETDATA":true,"SUPER_TRANSFERVALUE":true,"SUPER_CALL":true,"SUPER_STATICCALL":true,"SUPER_DELEGATECALL":false,"address":"0x2679bbb9233016c7cAAcB480FBc77dEeDDf8c006"},{"CHANGEOWNER":false,"CHANGEPERMISSIONS":false,"ADDPERMISSIONS":false,"SETDATA":true,"CALL":false,"STATICCALL":false,"DELEGATECALL":false,"DEPLOY":false,"TRANSFERVALUE":false,"SIGN":false,"SUPER_SETDATA":false,"SUPER_TRANSFERVALUE":false,"SUPER_CALL":false,"SUPER_STATICCALL":false,"SUPER_DELEGATECALL":false,"address":"0xe5089Aaa677501BeC72d5418d476850d83e5b750"}]}
+```
