@@ -100,8 +100,16 @@ export async function getServerSideProps(context: { params: { addr: any } }) {
       process.env.NEXT_PUBLIC_API_ENDPOINT ?? "https://evm.pinsave.app/"
     }api/lukso/l14/${addr}`
   );
-  const data = await user.json();
 
+  let data;
+  try {
+    data = await user.json();
+  } catch (e) {
+    console.log(e);
+    return {
+      notFound: true,
+    };
+  }
   const controllers = await fetch(
     `${
       process.env.NEXT_PUBLIC_API_ENDPOINT ?? "https://evm.pinsave.app/"
@@ -115,12 +123,6 @@ export async function getServerSideProps(context: { params: { addr: any } }) {
     if (dataControllers.data[num]["CHANGEOWNER"] === true) {
       controllerArray.push(dataControllers.data[num]["address"]);
     }
-  }
-
-  if (!data) {
-    return {
-      notFound: true,
-    };
   }
 
   if (data.ProfileData[1].name === "LSP3Profile") {
