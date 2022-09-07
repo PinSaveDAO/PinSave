@@ -94,7 +94,7 @@ Response:
 
 - Endpoint to create Universal profile with a provided controller address.
 
-  https://evm.pinsave.app/api/lukso/{chain}/create/{controller}
+  http://localhost:3000/api/lukso/{chain}/create/{controller}
 
 Currently Vercel Times Out the Request. [StackOverflow](https://stackoverflow.com/questions/68276674/vercel-serverless-function-has-timed-out-error)
 
