@@ -5,7 +5,7 @@
   "license": "MIT",
   "devDependencies": {
     "@nomicfoundation/hardhat-chai-matchers": "^1.0.3",
-    "@nomicfoundation/hardhat-network-helpers": "^1.0.5",
+    "@nomicfoundation/hardhat-network-helpers": "^1.0.6",
     "@typechain/ethers-v5": "^10.1.0",
     "@typechain/hardhat": "^6.1.2",
     "@types/mocha": "^9.1.1",
@@ -31,7 +31,7 @@
     "dotenv": "^16.0.2",
     "ethers": "^5.7.0",
     "hardhat": "2.10.2",
-    "hardhat-deploy": "^0.11.13",
+    "hardhat-deploy": "^0.11.14",
     "hardhat-gas-reporter": "^1.0.9",
     "node-watch": "^0.7.3",
     "qrcode-terminal": "^0.12.0",

@@ -1916,10 +1916,10 @@
     deep-eql "^4.0.1"
     ordinal "^1.0.3"
 
-"@nomicfoundation/hardhat-network-helpers@^1.0.5":
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/@nomicfoundation/hardhat-network-helpers/-/hardhat-network-helpers-1.0.5.tgz#99eb035c26b3f92711e58f3603a359b2e2bd9ba3"
-  integrity sha512-3QzbfPqGMp86ItoK1Ss4YKCDrWsTiUWd2OtKejxK58cVqZqfIq8EIlBfwW5qEtKK51iBV3j4RE6XmgCYK77Flw==
+"@nomicfoundation/hardhat-network-helpers@^1.0.6":
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/@nomicfoundation/hardhat-network-helpers/-/hardhat-network-helpers-1.0.6.tgz#5e2026ddde5ca539f70a2bf498528afd08bd0827"
+  integrity sha512-a35iVD4ycF6AoTfllAnKm96IPIzzHpgKX/ep4oKc2bsUKFfMlacWdyntgC/7d5blyCTXfFssgNAvXDZfzNWVGQ==
   dependencies:
     ethereumjs-util "^7.1.4"
 
@@ -9404,10 +9404,10 @@ hard-rejection@^2.1.0:
   resolved "https://registry.yarnpkg.com/hard-rejection/-/hard-rejection-2.1.0.tgz#1c6eda5c1685c63942766d79bb40ae773cecd883"
   integrity sha512-VIZB+ibDhx7ObhAe7OVtoEbuP4h/MuOTHJ+J8h/eBXotJYl0fBgR72xDFCKgIh22OJZIOVNxBMWuhAr10r8HdA==
 
-hardhat-deploy@^0.11.10, hardhat-deploy@^0.11.13:
-  version "0.11.13"
-  resolved "https://registry.yarnpkg.com/hardhat-deploy/-/hardhat-deploy-0.11.13.tgz#598cabcc4574403189ee2f09c3d65baaed90e1f9"
-  integrity sha512-2kcNce74b4cNALx6I76IZCGSqhxvg2wOLSa3N988o4jYGEMFnQuwSTwJQ/RkZAqIZ5IvWo2jpBS/KUzEt+Igdw==
+hardhat-deploy@^0.11.10, hardhat-deploy@^0.11.14:
+  version "0.11.14"
+  resolved "https://registry.yarnpkg.com/hardhat-deploy/-/hardhat-deploy-0.11.14.tgz#8be2dcb0fa3560e59abba2ca33212d98f201b904"
+  integrity sha512-QL/ETKUj8a5QNZujXJCYFf7vwSvtKFmQhrSFe2S6x2TCHqhYt7heiR0H3YCxFGO8d1iF2QNL2wYtwvL+i5VvLQ==
   dependencies:
     "@types/qs" "^6.9.7"
     axios "^0.21.1"
