@@ -20,7 +20,7 @@ export default function handler(request, response) {
 
       deployedContracts.then((v) => response.status(200).json({ v }));
     } catch (err) {
-      response.status(500).send({ error: "failed to fetch data" });
+      response.status(500).send({ error: "failed to fetch data" + err });
     }
   }
 
