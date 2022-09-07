@@ -1,6 +1,6 @@
 import { LSPFactory } from "@lukso/lsp-factory.js";
 
-export default function handler(request, response) {
+export default async function handler(request, response) {
   const { address } = request.query;
   const { method } = request;
 
@@ -11,16 +11,18 @@ export default function handler(request, response) {
         chainId: 22,
       });
 
-      const deployedContracts = lspFactory.UniversalProfile.deploy({
+      const deployedContracts = await lspFactory.UniversalProfile.deploy({
         controllerAddresses: [address],
         lsp3Profile: {
           name: "My Universal Profile",
         },
       });
 
-      deployedContracts.then((v) => response.status(200).json({ v }));
+      response.status(200).json({ Deployed: deployedContracts });
     } catch (err) {
-      response.status(500).send({ error: "failed to fetch data" + err });
+      response
+        .status(500)
+        .send({ error: `failed to fetch data for ${address}` + err });
     }
   }
 
@@ -33,14 +35,14 @@ export default function handler(request, response) {
         chainId: 22,
       });
 
-      const deployedContracts = lspFactory.UniversalProfile.deploy({
+      const deployedContracts = await lspFactory.UniversalProfile.deploy({
         controllerAddresses: [address],
         lsp3Profile: {
           ...body,
         },
       });
 
-      deployedContracts.then((v) => response.status(200).json({ v }));
+      response.status(200).json({ Deployed: deployedContracts });
     } catch (err) {
       response.status(500).send({ error: "failed to fetch data" });
     }
