@@ -553,12 +553,14 @@
     "@openzeppelin/contracts" "^4.3.1"
     solidity-bytes-utils "0.8.0"
 
-"@erc725/smart-contracts@^3.1.0", "@erc725/smart-contracts@^3.1.2":
-  version "3.1.2"
-  resolved "https://registry.yarnpkg.com/@erc725/smart-contracts/-/smart-contracts-3.1.2.tgz#7158db178c9787b7ec5c74c8f7d0152e9e11f17f"
-  integrity sha512-PvRYl6keiPyqKDEj8hku6FbNBQd0B7YJt6+O6TFIDgEQx0rJvSR5KYf5AoTeihPLOv8zMQPCXfGYvwkma41wug==
+"@erc725/smart-contracts@^3.1.0", "@erc725/smart-contracts@^3.2.0":
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/@erc725/smart-contracts/-/smart-contracts-3.2.0.tgz#39e7aa7e407a7a4d549716b2ab6871af015c4ea9"
+  integrity sha512-fkI82lFnHVMGGorp27Hr1/flK9Hhl+P07ZjEK6S0NWVadtZgJJzn97nimNrwybAta+tgPFFXNme1iWEjwni1hQ==
   dependencies:
-    "@openzeppelin/contracts" "^4.6.0"
+    "@openzeppelin/contracts" "^4.7.3"
+    "@openzeppelin/contracts-upgradeable" "^4.7.3"
+    "@types/chai" "^4.3.1"
     solidity-bytes-utils "0.8.0"
 
 "@eslint/eslintrc@^0.4.3":
@@ -1635,13 +1637,14 @@
     "@openzeppelin/contracts" "^4.6.0"
     solidity-bytes-utils "0.8.0"
 
-"@lukso/lsp-smart-contracts@^0.6.2":
-  version "0.6.2"
-  resolved "https://registry.yarnpkg.com/@lukso/lsp-smart-contracts/-/lsp-smart-contracts-0.6.2.tgz#f19730c4fd8f4c1927e93d1dcb1d2ed275f2fc85"
-  integrity sha512-yEeYJxzpFWI//gl2SFX0fhhRp1Z7jAT/4HWYgaQcROBdjolCTMgRMmGBuSmdPaKBtbYz9qTOAx14LWcMJ5BbFQ==
+"@lukso/lsp-smart-contracts@^0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@lukso/lsp-smart-contracts/-/lsp-smart-contracts-0.7.0.tgz#1c54fa19e49f06d4349bdc3e1d3a482f61a43d3b"
+  integrity sha512-kHIbKUjvs1aeHB76omnsYuaTLp2j4yGUNxMxNneVFifya/ct21eI5NtSWoGkgzAr8+0kmeMvZ+XlwEe8/YCczQ==
   dependencies:
-    "@erc725/smart-contracts" "^3.1.2"
-    "@openzeppelin/contracts" "^4.6.0"
+    "@erc725/smart-contracts" "^3.2.0"
+    "@openzeppelin/contracts" "^4.7.3"
+    "@openzeppelin/contracts-upgradeable" "^4.7.3"
     solidity-bytes-utils "0.8.0"
 
 "@lukso/universalprofile-smart-contracts@^0.4.1":
@@ -2098,6 +2101,11 @@
     semver "^6.3.0"
     table "^6.8.0"
     undici "^5.4.0"
+
+"@openzeppelin/contracts-upgradeable@^4.7.3":
+  version "4.7.3"
+  resolved "https://registry.yarnpkg.com/@openzeppelin/contracts-upgradeable/-/contracts-upgradeable-4.7.3.tgz#f1d606e2827d409053f3e908ba4eb8adb1dd6995"
+  integrity sha512-+wuegAMaLcZnLCJIvrVUDzA9z/Wp93f0Dla/4jJvIhijRrPabjQbZe6fWiECLaJyfn5ci9fqf9vTw3xpQOad2A==
 
 "@openzeppelin/contracts@^4.3.0", "@openzeppelin/contracts@^4.3.1", "@openzeppelin/contracts@^4.6.0", "@openzeppelin/contracts@^4.7.3":
   version "4.7.3"
@@ -2861,7 +2869,7 @@
   dependencies:
     "@types/chai" "*"
 
-"@types/chai@*":
+"@types/chai@*", "@types/chai@^4.3.1":
   version "4.3.3"
   resolved "https://registry.yarnpkg.com/@types/chai/-/chai-4.3.3.tgz#3c90752792660c4b562ad73b3fbd68bf3bc7ae07"
   integrity sha512-hC7OMnszpxhZPduX+m+nrx+uFoLkWOMiR4oa/AZF3MuSETYTZmFfJAHqZEM8MVlvfG7BEUcgvtwoCTxBp6hm3g==
