@@ -15,7 +15,7 @@
     "@mantine/core": "^4.2.12",
     "@mantine/dropzone": "^4.2.12",
     "@mantine/hooks": "^4.2.12",
-    "@mantine/next": "^5.2.6",
+    "@mantine/next": "^5.2.7",
     "@mantine/notifications": "^4.2.12",
     "@rainbow-me/rainbowkit": "^0.5.1",
     "ethers": "^5.7.0",
