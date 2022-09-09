@@ -20,7 +20,7 @@
     "@rainbow-me/rainbowkit": "^0.5.1",
     "ethers": "^5.7.0",
     "isomorphic-fetch": "^3.0.0",
-    "next": "^12.2.5",
+    "next": "^12.3.0",
     "nft.storage": "^7.0.0",
     "postcss": "^8.4.16",
     "react": "^18.1.0",
