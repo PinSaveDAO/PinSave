@@ -23,7 +23,7 @@ Pin Save 4 key features:
 ## Table of contents
 
 - [Setup](#Setup)
-- [Lukso Api](#Lukso%20Api)
+- [Lukso Api](#lukso-api)
 
 ## Setup
 
