@@ -3,6 +3,7 @@ import { ethers } from "ethers";
 
 export default async function handler(req, res) {
   try {
+    const { number } = req.query;
     const { address, abi } = getContractInfo(80001);
 
     let provider = new ethers.providers.AlchemyProvider(
@@ -15,7 +16,7 @@ export default async function handler(req, res) {
 
     let items = [];
     let result;
-    for (let i = currentCount; i >= currentCount - 40 && i > 0; i--) {
+    for (let i = currentCount; i >= number; i--) {
       result = await contract.tokenURI(i);
 
       let x = result
