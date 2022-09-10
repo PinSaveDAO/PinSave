@@ -16,7 +16,7 @@ export default async function handler(req, res) {
 
     let items = [];
     let result;
-    for (let i = currentCount; i >= number; i--) {
+    for (let i = currentCount; i >= number && i > 0; i--) {
       result = await contract.tokenURI(i);
 
       let x = result
