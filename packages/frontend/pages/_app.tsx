@@ -22,7 +22,7 @@ import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
 
 import LayoutApp from "../components/Layout";
 
-const LuksoL16Chain: Chain = {
+/* const LuksoL16Chain: Chain = {
   id: 2828,
   name: "L16",
   network: "lukso",
@@ -41,7 +41,7 @@ const LuksoL16Chain: Chain = {
     },
   },
   testnet: true,
-};
+}; */
 
 const LuksoL14Chain: Chain = {
   id: 22,
@@ -68,7 +68,6 @@ const { chains, provider, webSocketProvider } = configureChains(
   [
     ...(process.env.NEXT_PUBLIC_DEV === "true" ? [chain.hardhat] : []),
     chain.polygonMumbai,
-    LuksoL16Chain,
     LuksoL14Chain,
   ],
   [
@@ -78,8 +77,7 @@ const { chains, provider, webSocketProvider } = configureChains(
     publicProvider(),
     jsonRpcProvider({
       rpc: (chain) => {
-        if (chain.id !== LuksoL16Chain.id && chain.id !== LuksoL14Chain.id)
-          return null;
+        if (chain.id !== LuksoL14Chain.id) return null;
         return { http: chain.rpcUrls.default };
       },
     }),
@@ -94,7 +92,6 @@ const connectors = connectorsForWallets([
       wallet.rainbow({ chains }),
       wallet.walletConnect({ chains }),
       wallet.trust({ chains }),
-      //wallet.coinbase({ appName: "PinSave", chains }),
       wallet.injected({ chains }),
     ],
   },
