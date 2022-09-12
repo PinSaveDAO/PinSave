@@ -34,7 +34,7 @@
   "devDependencies": {
     "@types/isomorphic-fetch": "^0.0.36",
     "@types/node": "^18.7.16",
-    "@types/react": "^18.0.18",
+    "@types/react": "^18.0.19",
     "eslint": "^8.22.0",
     "eslint-config-next": "^12.3.0",
     "typescript": "^4.8.3"
