@@ -1,4 +1,4 @@
-import { getContractInfo } from "../../../../utils/contracts";
+import { getContractInfo } from "utils/contracts";
 import { ethers } from "ethers";
 
 export default async function handler(req, res) {
@@ -32,6 +32,7 @@ export default async function handler(req, res) {
         console.log(e);
       }
     }
+
     res.status(200).json(items);
   } catch (err) {
     res.status(500).send({ error: "failed to fetch data" + err });
