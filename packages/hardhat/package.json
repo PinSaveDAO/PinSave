@@ -29,7 +29,7 @@
     "chai": "^4.2.0",
     "chalk": "^5.0.1",
     "dotenv": "^16.0.2",
-    "ethers": "^5.7.0",
+    "ethers": "^5.7.1",
     "hardhat": "2.11.1",
     "hardhat-deploy": "^0.11.14",
     "hardhat-gas-reporter": "^1.0.9",
