@@ -2519,10 +2519,10 @@
     synthetix "2.41.0"
     web3-utils "1.2.11"
 
-"@synthetixio/synpress@^2.3.0":
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/@synthetixio/synpress/-/synpress-2.3.0.tgz#2b5820d93a6fa8ce1ccc2aba85325cf515dda04b"
-  integrity sha512-zE8wnO+lOaAffonRFX/pYnTFGb60FoM0RkLtn4RIxqA/NcG4w+wOR8fZy2Wy7+dlF9ths2vz9rABaTVK3BEDGg==
+"@synthetixio/synpress@^2.3.2":
+  version "2.3.2"
+  resolved "https://registry.yarnpkg.com/@synthetixio/synpress/-/synpress-2.3.2.tgz#b26af3935d57494b75985c383130131af8b6a3b2"
+  integrity sha512-FvObKt1zzlNchX5rat5Vxxa/bm601UjXQpDDGfDSsVXtE8c3e4dhBmFvWn6KSd574CG88SfIRSuJmX5V7kkqyw==
   dependencies:
     "@cypress/code-coverage" "^3.10.0"
     "@cypress/react" "^6.2.0"
