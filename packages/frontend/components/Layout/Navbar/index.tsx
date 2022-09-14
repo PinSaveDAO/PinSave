@@ -130,7 +130,12 @@ export function Navbar({ links }: NavbarProps) {
           {items}
         </Group>
         <Group spacing={5}>
-          <ConnectButton />
+          <ConnectButton
+            accountStatus={{
+              smallScreen: "avatar",
+              largeScreen: "full",
+            }}
+          />
           <Burger
             opened={opened}
             onClick={() => toggleOpened()}
