@@ -17,6 +17,10 @@ export default async function handler(req, res) {
     let items = [];
     let result;
     for (let i = currentCount; i >= number && i > 0; i--) {
+      if (i === 21 || i === 22) {
+        continue;
+      }
+
       result = await contract.tokenURI(i);
 
       let x = result

@@ -30,7 +30,13 @@ const PostPage = ({ post }: InferGetStaticPropsType<typeof getStaticProps>) => {
           { maxWidth: "md", cols: 1, spacing: "md" },
         ]}
       >
-        <Image src={post.image} alt="" />
+        <Image
+          src={
+            post.image ??
+            "https://siasky.net/bABrwXB_uKp6AYEuBk_yxEfSMP7QFKfHQe9KB8AF2nTL2w"
+          }
+          alt=""
+        />
         <Paper shadow="sm" p="md" withBorder>
           <h2 style={{ marginBottom: "1.4rem" }}>
             {post.name ?? post._data.name}
@@ -60,14 +66,14 @@ const PostPage = ({ post }: InferGetStaticPropsType<typeof getStaticProps>) => {
 };
 
 export const getStaticPaths = async () => {
-  const res = await fetch("https://evm.pinsave.app/api/polygon/posts/1");
+  const res = await fetch("https://evm.pinsave.app/api/polygon/posts/27");
   const posts: Array<Post> = await res.json();
   const paths = posts.map((post) => ({
     params: { id: String(post.token_id) },
   }));
   return {
     paths,
-    fallback: false,
+    fallback: "blocking",
   };
 };
 

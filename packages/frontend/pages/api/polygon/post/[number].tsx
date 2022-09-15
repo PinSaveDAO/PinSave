@@ -52,6 +52,9 @@ export default async function handler(
       }
     }
 
+    if (!z) {
+      z = "https://siasky.net/bABrwXB_uKp6AYEuBk_yxEfSMP7QFKfHQe9KB8AF2nTL2w";
+    }
     const output = { ...item, owner: owner, image: z };
 
     res.status(200).json(output);
