@@ -34,9 +34,9 @@ export default async function handler(
     if (item._data) {
       if (typeof item._data?.image === "string") {
         y = String(item._data?.image).replace("sia://", "");
-        z = "siasky.net/" + y;
+        z = "https://siasky.net/" + y;
       } else {
-        z = "siasky.net/bABrwXB_uKp6AYEuBk_yxEfSMP7QFKfHQe9KB8AF2nTL2w";
+        z = "https://siasky.net/bABrwXB_uKp6AYEuBk_yxEfSMP7QFKfHQe9KB8AF2nTL2w";
       }
     }
     if (item.image) {
