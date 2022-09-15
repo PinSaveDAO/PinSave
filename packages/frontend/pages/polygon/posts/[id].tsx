@@ -1,4 +1,5 @@
 import { ActionIcon, Paper, SimpleGrid, Image } from "@mantine/core";
+/* 
 import { ArrowLeft } from "tabler-icons-react";
 import { useRouter } from "next/router";
 import { ParsedUrlQuery } from "querystring";
@@ -88,3 +89,4 @@ export const getStaticProps: GetStaticProps = async (context) => {
 };
 
 export default PostPage;
+ */
