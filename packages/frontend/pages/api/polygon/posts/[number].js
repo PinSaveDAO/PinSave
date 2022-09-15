@@ -17,20 +17,23 @@ export default async function handler(req, res) {
     let items = [];
     let result;
     for (let i = currentCount; i >= number && i > 0; i--) {
+      if (i === 21 || i === 22) {
+        continue;
+      }
+
       result = await contract.tokenURI(i);
 
       let x = result
         .replace("ipfs://", "https://")
         .replace("sia://", "https://siasky.net/");
 
-      let resURL = x.replace("/metadata.json", ".ipfs.dweb.link/metadata.json");
-      try {
-        const item = await fetch(resURL).then((x) => x.json());
+      let resURL = x
+        .join("/metadata.json")
+        .split(".ipfs.dweb.link/metadata.json");
 
-        items.push({ ...item, token_id: i });
-      } catch (e) {
-        console.log(e);
-      }
+      const item = await fetch(resURL).then((x) => x.json());
+
+      items.push({ ...item, token_id: i });
     }
 
     res.status(200).json(items);

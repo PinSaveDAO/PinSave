@@ -1,9 +1,9 @@
 import { Box } from "@mantine/core";
 import type { NextPage } from "next";
+import { GetStaticProps, InferGetStaticPropsType } from "next";
 
 import { Post } from "services/upload";
 import PostCard from "components/Posts/PostCard";
-import { GetStaticProps, InferGetStaticPropsType } from "next";
 
 const Home: NextPage = ({
   posts,

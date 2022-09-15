@@ -16,7 +16,7 @@ import { Dropzone, DropzoneStatus, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { showNotification, updateNotification } from "@mantine/notifications";
 import { useAccount, useSigner, useNetwork } from "wagmi";
 
-import { uploadPost, uploadPostSkynet } from "../../services/upload";
+import { uploadPost, uploadPostSkynet } from "@/services/upload";
 
 export const dropzoneChildren = (
   status: DropzoneStatus,
