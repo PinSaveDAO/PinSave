@@ -8,7 +8,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@erc725/erc725.js": "^0.14.4",
+    "@erc725/erc725.js": "^0.15.0",
     "@lukso/lsp-factory.js": "^2.3.3",
     "@lukso/lsp-smart-contracts": "^0.7.0",
     "@lukso/universalprofile-smart-contracts": "^0.4.1",
