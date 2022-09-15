@@ -26,15 +26,16 @@ export default async function handler(
       .replace("ipfs://", "https://")
       .replace("sia://", "https://siasky.net/");
 
-    let resURL = x.replace("/metadata.json", ".ipfs.dweb.link/metadata.json");
+    let resURL = x
+      .split("/metadata.json")
+      .join(".ipfs.dweb.link/metadata.json");
 
     const item: Post = await fetch(resURL).then((x) => x.json());
 
     let z, y;
     if (item._data) {
       if (typeof item._data?.image === "string") {
-        y = String(item._data?.image).replace("sia://", "");
-        z = "https://siasky.net/" + y;
+        z = item._data?.image.replace("sia://", "https://siasky.net/");
       } else {
         z = "https://siasky.net/bABrwXB_uKp6AYEuBk_yxEfSMP7QFKfHQe9KB8AF2nTL2w";
       }
@@ -46,9 +47,7 @@ export default async function handler(
         z = `https://${z}`;
       }
       if (item.image.charAt(0) === "s") {
-        y = item.image?.replace("sia://", "");
-        z = "siasky.net/" + y;
-        z = `https://${z}`;
+        z = item.image.split("sia://").join("https://siasky.net/");
       }
     }
 

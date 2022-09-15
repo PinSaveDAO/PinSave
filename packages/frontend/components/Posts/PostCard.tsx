@@ -1,7 +1,8 @@
 import { Paper, Text, Image, Loader } from "@mantine/core";
 import { useRouter } from "next/router";
 import React from "react";
-import { Post } from "../../services/upload";
+
+import { Post } from "@/services/upload";
 
 const PostCard = (post: Post) => {
   const router = useRouter();
@@ -30,7 +31,7 @@ const PostCard = (post: Post) => {
 
   return (
     <Paper
-      onClick={() => router.push(`/posts/${post.token_id}`)}
+      onClick={() => router.push(`/polygon/posts/${post.token_id}`)}
       withBorder
       radius="lg"
       shadow="md"
