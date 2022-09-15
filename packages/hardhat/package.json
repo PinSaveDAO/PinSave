@@ -36,7 +36,7 @@
     "node-watch": "^0.7.3",
     "qrcode-terminal": "^0.12.0",
     "ramda": "^0.28.0",
-    "web3": "^1.7.5"
+    "web3": "^1.8.0"
   },
   "scripts": {
     "chain": "hardhat node --network hardhat --no-deploy",
