@@ -6,7 +6,7 @@ export default async function handler(request, response) {
     //const { number } = req.query;
     const { address, abi } = getContractInfo(22);
 
-    let provider = new ethers.providers.JsonRpcProvider(
+    const provider = new ethers.providers.JsonRpcProvider(
       "https://rpc.l14.lukso.network"
     );
 
