@@ -28,8 +28,8 @@ export default async function handler(req, res) {
         .replace("sia://", "https://siasky.net/");
 
       let resURL = x
-        .join("/metadata.json")
-        .split(".ipfs.dweb.link/metadata.json");
+        .split(".ipfs.dweb.link/metadata.json")
+        .join("/metadata.json");
 
       const item = await fetch(resURL).then((x) => x.json());
 

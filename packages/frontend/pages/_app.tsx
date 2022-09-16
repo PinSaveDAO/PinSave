@@ -22,27 +22,6 @@ import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
 
 import LayoutApp from "../components/Layout";
 
-/* const LuksoL16Chain: Chain = {
-  id: 2828,
-  name: "L16",
-  network: "lukso",
-  nativeCurrency: {
-    decimals: 18,
-    name: "Lukso",
-    symbol: "LYXt",
-  },
-  rpcUrls: {
-    default: "https://rpc.l16.lukso.network",
-  },
-  blockExplorers: {
-    default: {
-      name: "Explorer",
-      url: "https://explorer.execution.l16.lukso.network",
-    },
-  },
-  testnet: true,
-}; */
-
 const LuksoL14Chain: Chain = {
   id: 22,
   name: "L14",
