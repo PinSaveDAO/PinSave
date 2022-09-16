@@ -66,9 +66,7 @@ const PostPage = ({ post }: InferGetStaticPropsType<typeof getStaticProps>) => {
 };
 
 export const getStaticPaths = async () => {
-  const res = await fetch(
-    "https://pinsave-6hiqt5e61-pfed-prog.vercel.app/api/polygon/posts/1"
-  );
+  const res = await fetch("https://evm.pinsave.app/api/polygon/posts/1");
   const posts: Array<Post> = await res.json();
   const paths = posts.map((post) => ({
     params: { id: String(post.token_id) },

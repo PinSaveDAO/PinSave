@@ -79,7 +79,7 @@ export const getStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async (context) => {
   const { id } = context.params as IParams;
-  const res = await fetch(`https://evm.pinsave.app/api/polygon/post/${id}`);
+  const res = await fetch(`https://evm.pinsave.app/api/lukso/l14/post/${id}`);
   const post: Array<Post> = await res.json();
   return {
     props: {
