@@ -5,8 +5,8 @@ import { useRouter } from "next/router";
 import React, { useState, useEffect } from "react";
 import { useSigner, useNetwork } from "wagmi";
 
-import { Post } from "../../services/upload";
-import { getContractInfo } from "../../utils/contracts";
+import { Post } from "@/services/upload";
+import { getContractInfo } from "@/utils/contracts";
 import NotFoundPage from "../404";
 
 const PostPage = () => {
