@@ -20,7 +20,7 @@ import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
 
-import LayoutApp from "../components/Layout";
+import LayoutApp from "@/components/Layout";
 
 const LuksoL14Chain: Chain = {
   id: 22,

@@ -2,8 +2,8 @@ import { Box } from "@mantine/core";
 import type { NextPage } from "next";
 import { GetStaticProps, InferGetStaticPropsType } from "next";
 
-import { Post } from "services/upload";
-import PostCard from "components/Posts/PostCard";
+import { Post } from "@/services/upload";
+import PostCard from "@/components/Posts/PostCard";
 
 const Home: NextPage = ({
   posts,
@@ -29,9 +29,7 @@ const Home: NextPage = ({
 };
 
 export const getStaticProps: GetStaticProps = async () => {
-  const res = await fetch(
-    "https://pinsave-6hiqt5e61-pfed-prog.vercel.app/api/polygon/posts/1"
-  );
+  const res = await fetch("https://evm.pinsave.app/api/polygon/posts/");
   const posts: Array<Post> = await res.json();
 
   return {

@@ -54,7 +54,7 @@ const PostPage = ({ post }: InferGetStaticPropsType<typeof getStaticProps>) => {
             Owned by:{" "}
             <a
               style={{ color: "#198b6eb9" }}
-              href={`https://etherscan.io/address/${post.owner}`}
+              onClick={() => router.push(`/lukso/profile/${post.owner}`)}
             >
               {post.owner}
             </a>
@@ -66,7 +66,7 @@ const PostPage = ({ post }: InferGetStaticPropsType<typeof getStaticProps>) => {
 };
 
 export const getStaticPaths = async () => {
-  const res = await fetch("https://evm.pinsave.app/api/polygon/posts/1");
+  const res = await fetch("https://evm.pinsave.app/api/lukso/l14/posts/");
   const posts: Array<Post> = await res.json();
   const paths = posts.map((post) => ({
     params: { id: String(post.token_id) },
@@ -79,7 +79,7 @@ export const getStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async (context) => {
   const { id } = context.params as IParams;
-  const res = await fetch(`https://evm.pinsave.app/api/polygon/post/${id}`);
+  const res = await fetch(`https://evm.pinsave.app/api/lukso/l14/post/${id}`);
   const post: Array<Post> = await res.json();
   return {
     props: {
