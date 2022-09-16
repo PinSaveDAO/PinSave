@@ -29,7 +29,9 @@ const Home: NextPage = ({
 };
 
 export const getStaticProps: GetStaticProps = async () => {
-  const res = await fetch("https://evm.pinsave.app/api/polygon/posts/1");
+  const res = await fetch(
+    "https://pinsave-6hiqt5e61-pfed-prog.vercel.app/api/polygon/posts/1"
+  );
   const posts: Array<Post> = await res.json();
 
   return {
