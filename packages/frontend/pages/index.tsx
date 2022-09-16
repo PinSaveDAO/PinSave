@@ -1,29 +1,15 @@
-import { useEffect, useState } from "react";
-
-import { Box } from "@mantine/core";
+import { Box, LoadingOverlay } from "@mantine/core";
 import type { NextPage } from "next";
 
-import { Post } from "@/services/upload";
+import { usePolygonPosts } from "@/hooks/api";
 import PostCard from "@/components/Posts/PostCard";
 
 const Home: NextPage = () => {
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const res = await fetch("/api/polygon/posts/5");
-        const posts: Array<Post> = await res.json();
-        setPosts(posts);
-      } catch (error: any) {
-        setError(error.message);
-      }
-    })();
-  }, []);
+  const { data: polygonPosts, isLoading } = usePolygonPosts();
 
   return (
     <div>
+      <LoadingOverlay visible={isLoading} />
       <Box
         mx="auto"
         sx={{
@@ -34,10 +20,9 @@ const Home: NextPage = () => {
           gridTemplateRows: "masonry",
         }}
       >
-        {error ||
-          posts?.map((post: any, i: any) => {
-            return <PostCard {...post} key={i} />;
-          })}
+        {polygonPosts?.map((post: any, i: any) => {
+          return <PostCard {...post} key={i} />;
+        })}
       </Box>
     </div>
   );

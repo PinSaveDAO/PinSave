@@ -5,5 +5,5 @@ export const polygonKeys = {
 };
 
 export const fetchPolygonPosts = async () => {
-  return await fetcher("/api/polygon/posts");
+  return await fetcher("/api/polygon/posts/5");
 };
