@@ -54,7 +54,7 @@ const PostPage = ({ post }: InferGetStaticPropsType<typeof getStaticProps>) => {
             Owned by:{" "}
             <a
               style={{ color: "#198b6eb9" }}
-              href={`https://etherscan.io/address/${post.owner}`}
+              onClick={() => router.push(`/lukso/profile/${post.owner}`)}
             >
               {post.owner}
             </a>
