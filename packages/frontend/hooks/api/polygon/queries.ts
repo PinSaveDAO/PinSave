@@ -1,4 +1,4 @@
-import { fetcher } from "utils";
+import fetcher from "@/utils/fetcher";
 
 export const polygonKeys = {
   all: ["polygonPosts"] as const,
