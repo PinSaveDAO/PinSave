@@ -29,7 +29,7 @@ const Home: NextPage = ({
 };
 
 export const getStaticProps: GetStaticProps = async () => {
-  const res = await fetch("https://evm.pinsave.app/api/polygon/posts/");
+  const res = await fetch("https://evm.pinsave.app/api/polygon/posts/5");
   const posts: Array<Post> = await res.json();
 
   return {
