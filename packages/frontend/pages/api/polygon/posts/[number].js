@@ -36,6 +36,6 @@ export default async function handler(req, res) {
 
     res.status(200).json(items);
   } catch (err) {
-    res.status(500).send({ error: "failed to fetch data" + err });
+    res.status(500).json({ error: "failed to fetch data" + err });
   }
 }

@@ -1,13 +1,27 @@
+import { useEffect, useState } from "react";
+
 import { Box } from "@mantine/core";
 import type { NextPage } from "next";
-import { GetStaticProps, InferGetStaticPropsType } from "next";
 
 import { Post } from "@/services/upload";
 import PostCard from "@/components/Posts/PostCard";
 
-const Home: NextPage = ({
-  posts,
-}: InferGetStaticPropsType<typeof getStaticProps>) => {
+const Home: NextPage = () => {
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetch("/api/polygon/posts/5");
+        const posts: Array<Post> = await res.json();
+        setPosts(posts);
+      } catch (error: any) {
+        setError(error.message);
+      }
+    })();
+  }, []);
+
   return (
     <div>
       <Box
@@ -20,24 +34,13 @@ const Home: NextPage = ({
           gridTemplateRows: "masonry",
         }}
       >
-        {posts.map((post: any, i: any) => {
-          return <PostCard {...post} key={i} />;
-        })}
+        {error ||
+          posts?.map((post: any, i: any) => {
+            return <PostCard {...post} key={i} />;
+          })}
       </Box>
     </div>
   );
-};
-
-export const getStaticProps: GetStaticProps = async () => {
-  const res = await fetch("https://evm.pinsave.app/api/polygon/posts/5");
-  const posts: Array<Post> = await res.json();
-
-  return {
-    props: {
-      posts,
-    },
-    revalidate: 10, // In seconds
-  };
 };
 
 export default Home;
