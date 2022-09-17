@@ -1,8 +1,10 @@
 import "../styles/globals.css";
 import "@rainbow-me/rainbowkit/styles.css";
 
+import { useState } from "react";
 import Head from "next/head";
-import type { AppProps } from "next/app";
+import type { AppProps as NextAppProps } from "next/app";
+import type { NextComponentType } from "next";
 import { NotificationsProvider } from "@mantine/notifications";
 import {
   connectorsForWallets,
@@ -20,7 +22,21 @@ import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
 
+import {
+  Hydrate,
+  QueryClient,
+  QueryClientProvider,
+} from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+
 import LayoutApp from "@/components/Layout";
+
+type AppProps<P = any> = NextAppProps & {
+  pageProps: P;
+  Component: NextComponentType & {
+    getLayout?: (page: React.ReactElement) => React.ReactNode;
+  };
+} & Omit<NextAppProps<P>, "pageProps">;
 
 const LuksoL14Chain: Chain = {
   id: 22,
@@ -84,21 +100,27 @@ const wagmiClient = createClient({
 });
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const [queryClient] = useState(() => new QueryClient());
+
   return (
-    <WagmiConfig client={wagmiClient}>
-      <Head>
-        <title>PinSave</title>
-        <meta name="description" content="Platform made for posting images" />
-        <link rel="icon" href="/favicon.svg" />
-      </Head>
-      <NotificationsProvider>
-        <RainbowKitProvider chains={chains}>
-          <LayoutApp>
-            <Component {...pageProps} />
-          </LayoutApp>
-        </RainbowKitProvider>
-      </NotificationsProvider>
-    </WagmiConfig>
+    <QueryClientProvider client={queryClient}>
+      <Hydrate state={pageProps.dehydratedState}></Hydrate>
+      <WagmiConfig client={wagmiClient}>
+        <Head>
+          <title>PinSave</title>
+          <meta name="description" content="Platform made for posting images" />
+          <link rel="icon" href="/favicon.svg" />
+        </Head>
+        <NotificationsProvider>
+          <RainbowKitProvider chains={chains}>
+            <LayoutApp>
+              <Component {...pageProps} />
+            </LayoutApp>
+          </RainbowKitProvider>
+        </NotificationsProvider>
+      </WagmiConfig>
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
   );
 }
 

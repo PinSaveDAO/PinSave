@@ -1,12 +1,10 @@
-import { Paper, Text, Image, Loader } from "@mantine/core";
-import { useRouter } from "next/router";
-import React from "react";
+import Image from "next/future/image";
+import Link from "next/link";
+import { Paper, Text } from "@mantine/core";
 
-import { Post } from "@/services/upload";
+import type { Post } from "@/services/upload";
 
 const PostCard = (post: Post) => {
-  const router = useRouter();
-
   let y;
   let x;
 
@@ -29,26 +27,40 @@ const PostCard = (post: Post) => {
     }
   }
 
+  const imgSrc = `https://${x}`;
+
   return (
-    <Paper
-      onClick={() => router.push(`/polygon/posts/${post.token_id}`)}
-      withBorder
-      radius="lg"
-      shadow="md"
-      p="md"
-    >
-      <Image
+    <Link href={`/polygon/posts/${post.token_id}`} passHref>
+      <Paper
+        component="a"
+        withBorder
         radius="lg"
-        alt={post.name ? post.name : post._data?.name}
-        withPlaceholder
-        placeholder={<Loader size="lg" />}
-        src={`https://${x}`}
-        sx={{ maxWidth: 300 }}
-      />
-      <Text align="center" mt="sm">
-        {post.name ? post.name : post._data?.name}
-      </Text>
-    </Paper>
+        shadow="md"
+        p="md"
+        sx={{ cursor: "pointer" }}
+      >
+        <div
+          style={{
+            position: "relative",
+            width: 200,
+            height: 200,
+          }}
+        >
+          <Image
+            src={imgSrc}
+            alt={post.name ? post.name : post._data?.name ?? "Image"}
+            placeholder="blur"
+            blurDataURL={imgSrc}
+            fill
+            sizes="200px"
+            style={{ objectFit: "cover" }}
+          />
+        </div>
+        <Text align="center" mt="sm">
+          {post.name ? post.name : post._data?.name}
+        </Text>
+      </Paper>
+    </Link>
   );
 };
 
