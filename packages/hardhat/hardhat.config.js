@@ -23,5 +23,10 @@ module.exports = {
       gas: 50000000,
       gasPrice: 1000000000000,
     },
+    evmos: {
+      url: "https://eth.bd.evmos.dev:8545",
+      accounts: [process.env.PRIVATE_KEY, process.env.UP_PK],
+      chainId: 9000,
+    },
   },
 };

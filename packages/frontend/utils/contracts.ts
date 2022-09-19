@@ -14,6 +14,12 @@ export function getContractInfo(chain?: number) {
       abi: PinSaveL8.abi,
     };
 
+  if (chain === 9000)
+    return {
+      address: "0x18587c47CE8eb3a2EE11bb19B6AbC92d6531d285",
+      abi: PinSaveL8.abi,
+    };
+
   return {
     address: HardhatDeployments[80001][0].contracts.YourContract.address,
     abi: HardhatDeployments[80001][0].contracts.YourContract.abi,
