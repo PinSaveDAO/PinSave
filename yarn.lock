@@ -534,16 +534,7 @@
   resolved "https://registry.yarnpkg.com/@ensdomains/resolver/-/resolver-0.2.4.tgz#c10fe28bf5efbf49bff4666d909aed0265efbc89"
   integrity sha512-bvaTH34PMCbv6anRa9I/0zjLJgY4EuznbEMgbV77JBCQ9KNC46rzi0avuxpOfu+xDjPEtSFGqVEOr5GlUSGudA==
 
-"@erc725/erc725.js@0.14.1":
-  version "0.14.1"
-  resolved "https://registry.yarnpkg.com/@erc725/erc725.js/-/erc725.js-0.14.1.tgz#460f313c990098bb2bde39cc03cb4b3789588d25"
-  integrity sha512-Ao0aJ5O3P0nYtG1vFZD394r19dt8muXyQ0YOvZgCqLMQ7FNoMQPx2mZnDC+ihXFmSm+SHESZoqsi9J6OK209uw==
-  dependencies:
-    ethereumjs-util "^7.1.4"
-    web3-eth-abi "^1.7.3"
-    web3-utils "^1.7.3"
-
-"@erc725/erc725.js@^0.15.0":
+"@erc725/erc725.js@0.15.0", "@erc725/erc725.js@^0.15.0":
   version "0.15.0"
   resolved "https://registry.yarnpkg.com/@erc725/erc725.js/-/erc725.js-0.15.0.tgz#e8d4738c51251a7587fc088507d1546ab9ed1a7c"
   integrity sha512-nO9mgqucahouvBX6LN25JjkmNKgZLxrhJksueJnbnLQGUILOT/cHiU3qDOZLodSTkSpK5y4C3f6qEx6Atdn+/w==
@@ -560,7 +551,7 @@
     "@openzeppelin/contracts" "^4.3.1"
     solidity-bytes-utils "0.8.0"
 
-"@erc725/smart-contracts@^3.1.0", "@erc725/smart-contracts@^3.2.0":
+"@erc725/smart-contracts@^3.2.0":
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/@erc725/smart-contracts/-/smart-contracts-3.2.0.tgz#39e7aa7e407a7a4d549716b2ab6871af015c4ea9"
   integrity sha512-fkI82lFnHVMGGorp27Hr1/flK9Hhl+P07ZjEK6S0NWVadtZgJJzn97nimNrwybAta+tgPFFXNme1iWEjwni1hQ==
@@ -1619,15 +1610,15 @@
   resolved "https://registry.yarnpkg.com/@leichtgewicht/ip-codec/-/ip-codec-2.0.4.tgz#b2ac626d6cb9c8718ab459166d4bb405b8ffa78b"
   integrity sha512-Hcv+nVC0kZnQ3tD9GVu5xSMR4VVYOteQIr/hwFPVEvPdlXqgGEuRjiheChHgdM+JyqdgNcmzZOX/tnl0JOiI7A==
 
-"@lukso/lsp-factory.js@^2.3.3":
-  version "2.3.3"
-  resolved "https://registry.yarnpkg.com/@lukso/lsp-factory.js/-/lsp-factory.js-2.3.3.tgz#0d7f55ad56380b92478360fd6a1158a8dd4b7464"
-  integrity sha512-2KErArIqLNwU6A+WGWnUvZPF72mKcnJeBmqoOWx7SqUCehpkUM5H/DZ/ruWfDTUFUQCKyekJtI85fllPmQzxuA==
+"@lukso/lsp-factory.js@^2.4.0":
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/@lukso/lsp-factory.js/-/lsp-factory.js-2.4.0.tgz#abf29b7572997c8c0e0bd01519a6b66cad793ae3"
+  integrity sha512-HFW/I/U1XLiux/4Wg5HOrOZv5U39UO95hZOWoyxCK8g9RtEnMVfgXig7G6fku0aOBF/SaB0m6KG5xsAw0vUHuw==
   dependencies:
-    "@erc725/erc725.js" "0.14.1"
+    "@erc725/erc725.js" "0.15.0"
     "@ethersproject/abi" "5.5.0"
     "@ethersproject/experimental" "5.5.0"
-    "@lukso/lsp-smart-contracts" "0.6.0"
+    "@lukso/lsp-smart-contracts" "0.7.0"
     axios "^0.23.0"
     browser-image-compression "^1.0.15"
     ethers "5.5.0"
@@ -1635,16 +1626,7 @@
     ipfs-utils "8.1.6"
     rxjs "^7.3.0"
 
-"@lukso/lsp-smart-contracts@0.6.0":
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/@lukso/lsp-smart-contracts/-/lsp-smart-contracts-0.6.0.tgz#5096c9acdfe6d63fbc5cc60d228d0c633f3d4168"
-  integrity sha512-/p2nP0jJlCgTeBlp0KYDLOU2JieIh1IWs74AbFcjV6MRl6gqnXw1adzWgfK4x0t4nho++1lPqBKrLtcp7SA0lA==
-  dependencies:
-    "@erc725/smart-contracts" "^3.1.0"
-    "@openzeppelin/contracts" "^4.6.0"
-    solidity-bytes-utils "0.8.0"
-
-"@lukso/lsp-smart-contracts@^0.7.0":
+"@lukso/lsp-smart-contracts@0.7.0", "@lukso/lsp-smart-contracts@^0.7.0":
   version "0.7.0"
   resolved "https://registry.yarnpkg.com/@lukso/lsp-smart-contracts/-/lsp-smart-contracts-0.7.0.tgz#1c54fa19e49f06d4349bdc3e1d3a482f61a43d3b"
   integrity sha512-kHIbKUjvs1aeHB76omnsYuaTLp2j4yGUNxMxNneVFifya/ct21eI5NtSWoGkgzAr8+0kmeMvZ+XlwEe8/YCczQ==
@@ -2114,7 +2096,7 @@
   resolved "https://registry.yarnpkg.com/@openzeppelin/contracts-upgradeable/-/contracts-upgradeable-4.7.3.tgz#f1d606e2827d409053f3e908ba4eb8adb1dd6995"
   integrity sha512-+wuegAMaLcZnLCJIvrVUDzA9z/Wp93f0Dla/4jJvIhijRrPabjQbZe6fWiECLaJyfn5ci9fqf9vTw3xpQOad2A==
 
-"@openzeppelin/contracts@^4.3.0", "@openzeppelin/contracts@^4.3.1", "@openzeppelin/contracts@^4.6.0", "@openzeppelin/contracts@^4.7.3":
+"@openzeppelin/contracts@^4.3.0", "@openzeppelin/contracts@^4.3.1", "@openzeppelin/contracts@^4.7.3":
   version "4.7.3"
   resolved "https://registry.yarnpkg.com/@openzeppelin/contracts/-/contracts-4.7.3.tgz#939534757a81f8d69cc854c7692805684ff3111e"
   integrity sha512-dGRS0agJzu8ybo44pCIf3xBaPQN/65AIXNgK8+4gzKd5kbvlqyxryUYVLJv7fK98Seyd2hDZzVEHSWAh0Bt1Yw==
