@@ -6,7 +6,7 @@ export const polygonKeys = {
 };
 
 export const fetchPolygonPosts = async () => {
-  return await fetcher("/api/polygon/posts/5");
+  return await fetcher("/api/polygon/posts/");
 };
 
 export const fetchPolygonPost = async (id: string) => {
