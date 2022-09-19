@@ -1,16 +1,16 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { ethers } from "ethers";
 import { getContractInfo } from "@/utils/contracts";
+import { ethers } from "ethers";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   try {
-    const { address, abi } = getContractInfo(22);
+    const { address, abi } = getContractInfo(9000);
 
     const provider = new ethers.providers.JsonRpcProvider(
-      "https://rpc.l14.lukso.network"
+      "https://eth.bd.evmos.dev:8545"
     );
 
     const contract = new ethers.Contract(address, abi, provider);
@@ -20,7 +20,6 @@ export default async function handler(
     let result;
     for (let i = currentCount; i > 0; i--) {
       result = await contract.getPost(i);
-
       let x = result
         .replace("ipfs://", "https://")
         .replace("sia://", "https://siasky.net/");

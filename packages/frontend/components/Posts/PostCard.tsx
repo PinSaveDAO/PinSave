@@ -1,10 +1,12 @@
 import Image from "next/future/image";
 import Link from "next/link";
 import { Paper, Text } from "@mantine/core";
+import { useNetwork } from "wagmi";
 
 import type { Post } from "@/services/upload";
 
 const PostCard = (post: Post) => {
+  const { chain } = useNetwork();
   let y;
   let x;
 
@@ -30,7 +32,10 @@ const PostCard = (post: Post) => {
   const imgSrc = `https://${x}`;
 
   return (
-    <Link href={`/polygon/posts/${post.token_id}`} passHref>
+    <Link
+      href={`/${chain?.network ?? "maticmum"}/posts/${post.token_id}`}
+      passHref
+    >
       <Paper
         component="a"
         withBorder
