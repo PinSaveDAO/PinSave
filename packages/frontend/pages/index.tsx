@@ -2,12 +2,13 @@ import { Box, LoadingOverlay } from "@mantine/core";
 import type { NextPage } from "next";
 import { useNetwork } from "wagmi";
 
-import { usePolygonPosts, useLuksoPosts } from "@/hooks/api";
+import { usePolygonPosts, useLuksoPosts, useEvmosPosts } from "@/hooks/api";
 import PostCard from "@/components/Posts/PostCard";
 
 const Home: NextPage = () => {
   const { data: polygonPosts, isLoading } = usePolygonPosts();
   const { data: luksoPosts } = useLuksoPosts();
+  const { data: evmosPosts } = useEvmosPosts();
   const { chain } = useNetwork();
 
   let posts;
@@ -21,7 +22,13 @@ const Home: NextPage = () => {
       return <PostCard {...post} key={i} />;
     });
   }
-  if (chain?.id !== 22 && chain?.id !== 80001) {
+  if (chain?.id === 9000) {
+    posts = evmosPosts?.map((post: any, i: any) => {
+      return <PostCard {...post} key={i} />;
+    });
+  }
+
+  if (chain?.id !== 22 && chain?.id !== 80001 && chain?.id !== 9000) {
     posts = polygonPosts?.map((post: any, i: any) => {
       return <PostCard {...post} key={i} />;
     });
