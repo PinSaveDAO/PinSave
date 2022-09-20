@@ -52,7 +52,7 @@ const PostPage = () => {
               <h2 style={{ marginBottom: "1.4rem" }}>
                 {post.name ?? post?._data?.name}
               </h2>
-              <h4>Descripton</h4>
+              <h4>Description</h4>
               <Paper
                 shadow="xs"
                 withBorder
