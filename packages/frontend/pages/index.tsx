@@ -10,6 +10,7 @@ const Home: NextPage = () => {
   const { data: luksoPosts } = useLuksoPosts();
   const { data: evmosPosts } = useEvmosPosts();
   const { chain } = useNetwork();
+  console.log(chain);
 
   let posts;
   if (chain?.id === 80001) {
