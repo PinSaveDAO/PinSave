@@ -22,8 +22,9 @@ Pin Save 4 key features:
 
 ## Table of contents
 
-- [Setup](#Setup)
+- [Setup](#setup)
 - [Lukso Api](#lukso-api)
+- [Resources](#resources)
 
 ## Setup
 
@@ -200,3 +201,10 @@ Response:
   ]
 }
 ```
+
+## Resources
+
+- [Practical React Query](https://tkdodo.eu/blog/practical-react-query)
+- [next/image](https://nextjs.org/docs/api-reference/next/image)
+- [ISG](https://nextjs.org/docs/basic-features/data-fetching/incremental-static-regeneration)
+- [Universal Profiles](https://docs.lukso.tech/standards/universal-profile/introduction)
