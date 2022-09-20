@@ -6,7 +6,7 @@ import type { Chain } from "@/constants/chains";
 
 type IndividualPost = Post & { owner: string };
 
-export const usePosts = (chain: Chain) => {
+export const usePosts = (chain: Chain = "polygon") => {
   return useQuery<Post[]>(postKeys.byChain(chain), () => fetchPosts(chain));
 };
 
