@@ -8,9 +8,11 @@ export const postKeys = {
 };
 
 export const fetchPosts = async (chain: Chain) => {
-  return await fetcher(`/api/${chain}/posts`);
+  return await fetcher(`/api/${chain}/${chain === "lukso" ? "l14/" : ""}posts`);
 };
 
 export const fetchPost = async (chain: Chain, id: string) => {
-  return await fetcher(`/api/${chain}/posts/${id}`);
+  return await fetcher(
+    `/api/${chain}/${chain === "lukso" ? "l14/" : ""}posts/${id}`
+  );
 };
