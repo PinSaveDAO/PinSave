@@ -2,49 +2,14 @@ import { Box, LoadingOverlay } from "@mantine/core";
 import type { NextPage } from "next";
 import { useNetwork } from "wagmi";
 
-import {
-  usePosts,
-  usePolygonPosts,
-  useLuksoPosts,
-  useEvmosPosts,
-} from "@/hooks/api";
+import { usePosts } from "@/hooks/api";
 import PostCard from "@/components/Posts/PostCard";
-import { CHAINS, Chain } from "@/constants/chains";
+import { getCurrentChain } from "@/utils/chains";
 
 const Home: NextPage = () => {
   const { chain } = useNetwork();
-  const currentChain = Object.keys(CHAINS).find(
-    (key) => CHAINS[key as keyof typeof CHAINS] === chain?.id
-  ) as Chain;
-  const { data: postsByChain, isLoading: allPostsLoading } =
-    usePosts(currentChain);
-
-  const { data: polygonPosts, isLoading } = usePolygonPosts();
-  const { data: luksoPosts } = useLuksoPosts();
-  const { data: evmosPosts } = useEvmosPosts();
-
-  let posts;
-  if (chain?.id === 80001) {
-    posts = polygonPosts?.map((post: any, i: any) => {
-      return <PostCard {...post} key={i} />;
-    });
-  }
-  if (chain?.id === 22) {
-    posts = luksoPosts?.map((post: any, i: any) => {
-      return <PostCard {...post} key={i} />;
-    });
-  }
-  if (chain?.id === 9000) {
-    posts = evmosPosts?.map((post: any, i: any) => {
-      return <PostCard {...post} key={i} />;
-    });
-  }
-
-  if (chain?.id !== 22 && chain?.id !== 80001 && chain?.id !== 9000) {
-    posts = polygonPosts?.map((post: any, i: any) => {
-      return <PostCard {...post} key={i} />;
-    });
-  }
+  const currentChain = getCurrentChain(chain!.id);
+  const { data: posts, isLoading } = usePosts(currentChain);
 
   return (
     <div>
@@ -59,7 +24,7 @@ const Home: NextPage = () => {
           gridTemplateRows: "masonry",
         }}
       >
-        {postsByChain?.map((post: any, i: any) => {
+        {posts?.map((post: any, i: any) => {
           return <PostCard {...post} key={i} />;
         })}
       </Box>
