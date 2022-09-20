@@ -7,12 +7,18 @@ import {
 } from "@mantine/core";
 import { ArrowLeft } from "tabler-icons-react";
 import { useRouter } from "next/router";
-import { usePolygonPost } from "@/hooks/api";
+import { usePost } from "@/hooks/api";
+import { useNetwork } from "wagmi";
+import { getCurrentChain } from "@/utils/chains";
 
 const PostPage = () => {
   const router = useRouter();
-
-  const { data: post, isLoading } = usePolygonPost(router.query.id as string);
+  const { chain } = useNetwork();
+  const currentChain = getCurrentChain(chain?.id as number);
+  const { data: post, isLoading } = usePost(
+    currentChain,
+    router.query.id as string
+  );
 
   return (
     <div>
@@ -46,7 +52,7 @@ const PostPage = () => {
               <h2 style={{ marginBottom: "1.4rem" }}>
                 {post.name ?? post?._data?.name}
               </h2>
-              <h4>Descripton</h4>
+              <h4>Description</h4>
               <Paper
                 shadow="xs"
                 withBorder

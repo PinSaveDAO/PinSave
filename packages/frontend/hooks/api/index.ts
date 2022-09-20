@@ -1,3 +1,1 @@
-export * from "./polygon";
-export * from "./lukso";
-export * from "./evmos";
+export * from "./posts";
