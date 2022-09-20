@@ -4,4 +4,3 @@ export const CHAINS = {
   lukso: 22,
 };
 export type Chain = keyof typeof CHAINS;
-export type ChainId = typeof CHAINS[Chain];

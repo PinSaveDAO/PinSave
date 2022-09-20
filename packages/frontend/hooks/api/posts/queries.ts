@@ -1,10 +1,10 @@
 import fetcher from "@/utils/fetcher";
 
-import type { Chain } from "@/constants/constants";
+import type { Chain } from "@/constants/chains";
 
 export const postKeys = {
-  byChain: (chain: Chain) => ["posts", chain] as const,
-  single: (chain: Chain, id: string) => ["post", chain, id] as const,
+  byChain: (chain: Chain) => [chain] as const,
+  single: (chain: Chain, id: string) => [chain, id] as const,
 };
 
 export const fetchPosts = async (chain: Chain) => {

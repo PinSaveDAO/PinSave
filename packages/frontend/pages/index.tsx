@@ -8,7 +8,7 @@ import { getCurrentChain } from "@/utils/chains";
 
 const Home: NextPage = () => {
   const { chain } = useNetwork();
-  const currentChain = getCurrentChain(chain!.id);
+  const currentChain = getCurrentChain(chain?.id as number);
   const { data: posts, isLoading } = usePosts(currentChain);
 
   return (
