@@ -2,15 +2,26 @@ import { Box, LoadingOverlay } from "@mantine/core";
 import type { NextPage } from "next";
 import { useNetwork } from "wagmi";
 
-import { usePolygonPosts, useLuksoPosts, useEvmosPosts } from "@/hooks/api";
+import {
+  usePosts,
+  usePolygonPosts,
+  useLuksoPosts,
+  useEvmosPosts,
+} from "@/hooks/api";
 import PostCard from "@/components/Posts/PostCard";
+import { CHAINS, Chain } from "@/constants/chains";
 
 const Home: NextPage = () => {
+  const { chain } = useNetwork();
+  const currentChain = Object.keys(CHAINS).find(
+    (key) => CHAINS[key as keyof typeof CHAINS] === chain?.id
+  ) as Chain;
+  const { data: postsByChain, isLoading: allPostsLoading } =
+    usePosts(currentChain);
+
   const { data: polygonPosts, isLoading } = usePolygonPosts();
   const { data: luksoPosts } = useLuksoPosts();
   const { data: evmosPosts } = useEvmosPosts();
-  const { chain } = useNetwork();
-  console.log(chain);
 
   let posts;
   if (chain?.id === 80001) {
@@ -48,7 +59,9 @@ const Home: NextPage = () => {
           gridTemplateRows: "masonry",
         }}
       >
-        {posts}
+        {postsByChain?.map((post: any, i: any) => {
+          return <PostCard {...post} key={i} />;
+        })}
       </Box>
     </div>
   );
