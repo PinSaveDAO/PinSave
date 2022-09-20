@@ -9,7 +9,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   try {
-    const { number } = req.query;
+    const { id } = req.query;
     const { address, abi } = getContractInfo(80001);
 
     let provider = new ethers.providers.AlchemyProvider(
@@ -19,8 +19,8 @@ export default async function handler(
 
     const contract = new ethers.Contract(address, abi, provider);
 
-    const result = await contract.tokenURI(number);
-    const owner = await contract.ownerOf(number);
+    const result = await contract.tokenURI(id);
+    const owner = await contract.ownerOf(id);
 
     let x = result
       .replace("ipfs://", "https://")

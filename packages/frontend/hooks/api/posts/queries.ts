@@ -12,5 +12,5 @@ export const fetchPosts = async (chain: Chain) => {
 };
 
 export const fetchPost = async (chain: Chain, id: string) => {
-  return await fetcher(`/api/${chain}/post/${id}`);
+  return await fetcher(`/api/${chain}/posts/${id}`);
 };
