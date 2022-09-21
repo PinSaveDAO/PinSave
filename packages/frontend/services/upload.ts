@@ -1,6 +1,6 @@
 import { ethers, Signer } from "ethers";
 import { NFTStorage } from "nft.storage";
-import { getContractInfo } from "../utils/contracts";
+import { getContractInfo } from "@/utils/contracts";
 import { updateNotification } from "@mantine/notifications";
 
 import { SkynetClient } from "skynet-js";

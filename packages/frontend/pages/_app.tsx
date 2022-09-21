@@ -1,4 +1,4 @@
-import "../styles/globals.css";
+import "@/styles/globals.css";
 import "@rainbow-me/rainbowkit/styles.css";
 
 import { useState } from "react";
@@ -21,7 +21,6 @@ import {
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
-
 import {
   Hydrate,
   QueryClient,
