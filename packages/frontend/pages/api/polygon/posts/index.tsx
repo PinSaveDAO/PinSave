@@ -30,10 +30,12 @@ export default async function handler(
         .replace("ipfs://", "https://")
         .replace("sia://", "https://siasky.net/");
 
-      let resURL = x.replace("/metadata.json", ".ipfs.dweb.link/metadata.json");
+      let resURL = x.replace(
+        "/metadata.json",
+        ".ipfs.nftstorage.link/metadata.json"
+      );
 
       const item = await fetch(resURL).then((x) => x.json());
-
       items.push({ ...item, token_id: i });
     }
 

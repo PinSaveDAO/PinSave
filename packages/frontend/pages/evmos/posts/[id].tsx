@@ -7,12 +7,19 @@ import {
 } from "@mantine/core";
 import { ArrowLeft } from "tabler-icons-react";
 import { useRouter } from "next/router";
-import { useEvmosPost } from "@/hooks/api";
+import { useNetwork } from "wagmi";
+
+import { usePost } from "@/hooks/api";
+import { getCurrentChain } from "@/utils/chains";
 
 const PostPage = () => {
   const router = useRouter();
-
-  const { data: post, isLoading } = useEvmosPost(router.query.id as string);
+  const { chain } = useNetwork();
+  const currentChain = getCurrentChain(chain?.id as number);
+  const { data: post, isLoading } = usePost(
+    currentChain,
+    router.query.id as string
+  );
 
   return (
     <div>

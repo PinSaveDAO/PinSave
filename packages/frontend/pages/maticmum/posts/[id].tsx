@@ -7,8 +7,9 @@ import {
 } from "@mantine/core";
 import { ArrowLeft } from "tabler-icons-react";
 import { useRouter } from "next/router";
-import { usePost } from "@/hooks/api";
 import { useNetwork } from "wagmi";
+
+import { usePost } from "@/hooks/api";
 import { getCurrentChain } from "@/utils/chains";
 
 const PostPage = () => {
