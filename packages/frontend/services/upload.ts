@@ -98,7 +98,7 @@ export async function uploadPost(
       ...data,
     });
 
-    if (chain === 8001) {
+    if (chain === 80001) {
       await contract.mintPost(accAddress, metadata.url);
     }
 
