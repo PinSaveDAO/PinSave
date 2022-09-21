@@ -118,9 +118,25 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Hydrate state={pageProps.dehydratedState}></Hydrate>
       <WagmiConfig client={wagmiClient}>
         <Head>
-          <title>PinSave</title>
-          <meta name="description" content="Platform made for posting images" />
+          <title>Pin Save - decentralized Pinterest</title>
+          <meta
+            name="description"
+            content="Pin Save is a platform for decentralized content aggregation and image sharing where users have content ownership."
+          />
           <link rel="icon" href="/favicon.svg" />
+          <meta
+            property="og:image"
+            content="https://evm.pinsave.app/PinSaveCard.png"
+          />
+          <meta property="og:url" content="https://evm.pinsave.app/" />
+          <meta
+            property="og:title"
+            content="Pin Save - decentralized Pinterest"
+          />
+          <meta property="og:type" content="website" />
+          <meta name="twitter:card" content="summary" />
+          <meta name="twitter:site" content="@pinsav3" />
+          <meta name="twitter:creator" content="@pfedprog" />
         </Head>
         <NotificationsProvider>
           <RainbowKitProvider chains={chains}>
