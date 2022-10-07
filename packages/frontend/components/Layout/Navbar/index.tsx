@@ -34,7 +34,7 @@ const useStyles = createStyles((theme) => ({
     borderTopWidth: 0,
     overflow: "hidden",
 
-    [theme.fn.largerThan("sm")]: {
+    [theme.fn.largerThan("md")]: {
       display: "none",
     },
   },
