@@ -29,6 +29,7 @@ import {
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 import LayoutApp from "@/components/Layout";
+import { MantineProvider } from "@mantine/core";
 
 type AppProps<P = any> = NextAppProps & {
   pageProps: P;
@@ -114,7 +115,11 @@ function MyApp({ Component, pageProps }: AppProps) {
   const [queryClient] = useState(() => new QueryClient());
 
   return (
-    <QueryClientProvider client={queryClient}>
+    <MantineProvider theme={{
+      colorScheme: "light",
+      primaryColor:"green"
+        }}>
+      <QueryClientProvider client={queryClient}>
       <Hydrate state={pageProps.dehydratedState}></Hydrate>
       <WagmiConfig client={wagmiClient}>
         <Head>
@@ -148,6 +153,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       </WagmiConfig>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
+    </MantineProvider>
   );
 }
 
