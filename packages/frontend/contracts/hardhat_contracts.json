@@ -1,10 +1,11 @@
-{"80001": [
+{
+  "80001": [
     {
       "name": "mumbai",
       "chainId": "80001",
       "contracts": {
         "YourContract": {
-          "address": "0xb998294928815B3984431DE59D19B905918844cd",
+          "address": "0x042E56d9729dD6215ad58EB726c6347948BB9518",
           "abi": [
             {
               "inputs": [],
