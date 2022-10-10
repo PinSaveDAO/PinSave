@@ -31,7 +31,7 @@ export default async function handler(
 
     const item: Post = await fetch(resURL).then((x) => x.json());
 
-    let z, y;
+    let y, z;
     if (item.image) {
       if (item.image.charAt(0) === "i") {
         y = item.image.replace("ipfs://", "");

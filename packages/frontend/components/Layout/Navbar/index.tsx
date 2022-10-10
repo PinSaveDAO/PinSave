@@ -121,7 +121,7 @@ export function Navbar({ links }: NavbarProps) {
         <Link href="/">
           <Image
             src="/PinSaveL.png"
-            alt="PinSave"
+            alt="Pin Save EVM"
             width={140}
             height={35}
             className="block lg:hidden h-8 w-auto"
