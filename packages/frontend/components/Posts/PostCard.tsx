@@ -10,14 +10,6 @@ const PostCard = (post: Post) => {
   let y;
   let x;
 
-  if (post._data) {
-    if (typeof post._data?.image === "string") {
-      y = String(post._data?.image).replace("sia://", "");
-      x = "siasky.net/" + y;
-    } else {
-      x = "siasky.net/bABrwXB_uKp6AYEuBk_yxEfSMP7QFKfHQe9KB8AF2nTL2w";
-    }
-  }
   if (post.image) {
     if (post.image.charAt(0) === "i") {
       y = post.image.replace("ipfs://", "");
@@ -29,13 +21,9 @@ const PostCard = (post: Post) => {
     }
   }
 
-  const imgSrc = `https://${x}`;
-
+  const imgSrc = `https://${x ?? "dspyt.com/PinSaveL.png"}`;
   return (
-    <Link
-      href={`/${chain?.network ?? "maticmum"}/posts/${post.token_id}`}
-      passHref
-    >
+    <Link href={`/${chain?.network ?? "maticmum"}/posts/${post.token_id}`}>
       <Paper
         component="a"
         withBorder
@@ -53,16 +41,16 @@ const PostCard = (post: Post) => {
         >
           <Image
             src={imgSrc}
-            alt={post.name ? post.name : post._data?.name ?? "Image"}
+            alt={post.name}
             placeholder="blur"
-            blurDataURL={imgSrc}
             fill
+            blurDataURL={imgSrc}
             sizes="200px"
             style={{ objectFit: "cover" }}
           />
         </div>
         <Text align="center" mt="sm">
-          {post.name ? post.name : post._data?.name}
+          {post.name}
         </Text>
       </Paper>
     </Link>
