@@ -7,21 +7,18 @@ import type { Post } from "@/services/upload";
 
 const PostCard = (post: Post) => {
   const { chain } = useNetwork();
-  let y;
-  let x;
+  let y, x;
 
-  if (post.image) {
-    if (post.image.charAt(0) === "i") {
-      y = post.image.replace("ipfs://", "");
-      x = y.replace("/", ".ipfs.dweb.link/");
-    }
-    if (post.image.charAt(0) === "s") {
-      y = post.image.replace("sia://", "");
-      x = "siasky.net/" + y;
-    }
+  if (post.image?.charAt(0) === "i") {
+    y = post.image.replace("ipfs://", "");
+    x = y.replace("/", ".ipfs.dweb.link/");
+  }
+  if (post.image?.charAt(0) === "s") {
+    y = post.image.replace("sia://", "");
+    x = "siasky.net/" + y;
   }
 
-  const imgSrc = `https://${x ?? "dspyt.com/PinSaveL.png"}`;
+  const imgSrc = `https://${x ?? "evm.pinsave.app/PinSaveCard.png"}`;
   return (
     <Link href={`/${chain?.network ?? "maticmum"}/posts/${post.token_id}`}>
       <Paper

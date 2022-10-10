@@ -7,6 +7,7 @@ import {
 } from "@mantine/core";
 import { ArrowLeft } from "tabler-icons-react";
 import { useRouter } from "next/router";
+import Link from "next/link";
 import { useNetwork } from "wagmi";
 
 import { usePost } from "@/hooks/api";
@@ -54,15 +55,14 @@ const PostPage = () => {
               >
                 <p>{post.description}</p>
               </Paper>
-              <p style={{ fontSize: "small", color: "#0000008d" }}>
+              <div style={{ fontSize: "small", color: "#0000008d" }}>
                 Owned by:{" "}
-                <a
-                  style={{ color: "#198b6eb9" }}
+                <Link
                   href={`https://evm.evmos.dev/address/${post.owner}/transactions#address-tabs`}
                 >
-                  {post.owner}
-                </a>
-              </p>
+                  <a style={{ color: "#198b6eb9" }}>{post.owner}</a>
+                </Link>
+              </div>
             </Paper>
           </SimpleGrid>
         </>
