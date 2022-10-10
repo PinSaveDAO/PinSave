@@ -1,6 +1,5 @@
 import {
   createStyles,
-  Title,
   Text,
   Header,
   Container,
@@ -105,7 +104,7 @@ export function Navbar({ links }: NavbarProps) {
   const { classes, cx } = useStyles();
   const router = useRouter();
   const items = links.map((link) => (
-    <Link key={link.label} passHref href={link.link}>
+    <Link key={link.label} href={link.link} passHref>
       <Text
         className={cx(classes.link, {
           [classes.linkActive]: router.asPath === link.link,
@@ -119,13 +118,15 @@ export function Navbar({ links }: NavbarProps) {
   return (
     <Header height={HEADER_HEIGHT} mb={40} className={classes.root}>
       <Container className={classes.header}>
-        <Image
-          src="/PinSaveL.png"
-          alt="PinSave"
-          width={140}
-          height={35}
-          className="block lg:hidden h-8 w-auto"
-        />
+        <Link href="/">
+          <Image
+            src="/PinSaveL.png"
+            alt="PinSave"
+            width={140}
+            height={35}
+            className="block lg:hidden h-8 w-auto"
+          />
+        </Link>
         <Group spacing={5} className={classes.links}>
           {items}
         </Group>
