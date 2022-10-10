@@ -1327,10 +1327,10 @@
     "@ethersproject/properties" "^5.7.0"
     "@ethersproject/strings" "^5.7.0"
 
-"@graphprotocol/graph-cli@^0.33.1":
-  version "0.33.1"
-  resolved "https://registry.yarnpkg.com/@graphprotocol/graph-cli/-/graph-cli-0.33.1.tgz#09c10f59005702fc4b3075dcfd80f4c96394bcf5"
-  integrity sha512-wv8PuDA1xrnRz52bkvo4R1XDj+5F0Oin879ogd7obOCSniXurkzHa4SjaomjHz7yyHQduorYarnXCZ+MVHuSGg==
+"@graphprotocol/graph-cli@^0.35.0":
+  version "0.35.0"
+  resolved "https://registry.yarnpkg.com/@graphprotocol/graph-cli/-/graph-cli-0.35.0.tgz#2f3c688f47ce763c2e8c6d8b86817fb21b3a367d"
+  integrity sha512-50tjeLZg3425fwueH8ORTZbPRSn4uICL0NK9XsJVriDPKCNnhyAIgJgOWaYyPAFgxR8LuyXYkoxIxZ5nduKbiw==
   dependencies:
     assemblyscript "0.19.10"
     binary-install-raw "0.0.13"
@@ -1341,7 +1341,7 @@
     dockerode "2.5.8"
     fs-extra "9.0.0"
     glob "7.1.6"
-    gluegun "https://github.com/edgeandnode/gluegun#v4.3.1-pin-colors-dep"
+    gluegun "git+https://github.com/edgeandnode/gluegun.git#v4.3.1-pin-colors-dep"
     graphql "15.5.0"
     immutable "3.8.2"
     ipfs-http-client "34.0.0"
@@ -9603,9 +9603,10 @@ globby@^6.1.0:
     pify "^2.0.0"
     pinkie-promise "^2.0.0"
 
-"gluegun@https://github.com/edgeandnode/gluegun#v4.3.1-pin-colors-dep":
+"gluegun@git+https://github.com/edgeandnode/gluegun.git#v4.3.1-pin-colors-dep":
   version "4.3.1"
-  resolved "https://github.com/edgeandnode/gluegun#b34b9003d7bf556836da41b57ef36eb21570620a"
+  uid b34b9003d7bf556836da41b57ef36eb21570620a
+  resolved "git+https://github.com/edgeandnode/gluegun.git#b34b9003d7bf556836da41b57ef36eb21570620a"
   dependencies:
     apisauce "^1.0.1"
     app-module-path "^2.2.0"
@@ -17532,21 +17533,13 @@ web3-eth-abi@1.7.4:
     "@ethersproject/abi" "^5.6.3"
     web3-utils "1.7.4"
 
-web3-eth-abi@1.8.0:
+web3-eth-abi@1.8.0, web3-eth-abi@^1.2.1, web3-eth-abi@^1.7.3:
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/web3-eth-abi/-/web3-eth-abi-1.8.0.tgz#47fdff00bfdfa72064c9c612ff6369986598196d"
   integrity sha512-xPeMb2hS9YLQK/Q5YZpkcmzoRGM+/R8bogSrYHhNC3hjZSSU0YRH+1ZKK0f9YF4qDZaPMI8tKWIMSCDIpjG6fg==
   dependencies:
     "@ethersproject/abi" "^5.6.3"
     web3-utils "1.8.0"
-
-web3-eth-abi@^1.2.1, web3-eth-abi@^1.7.3:
-  version "1.7.5"
-  resolved "https://registry.yarnpkg.com/web3-eth-abi/-/web3-eth-abi-1.7.5.tgz#db9d6dbcc043a6e922252f3228686e9bbd50d7c9"
-  integrity sha512-qWHvF7sayxql9BD1yqK9sZRLBQ66eJzGeaU53Y1PRq2iFPrhY6NUWxQ3c3ps0rg+dyObvRbloviWpKXcS4RE/A==
-  dependencies:
-    "@ethersproject/abi" "^5.6.3"
-    web3-utils "1.7.5"
 
 web3-eth-accounts@1.7.4:
   version "1.7.4"
@@ -17905,19 +17898,6 @@ web3-utils@1.7.4:
   version "1.7.4"
   resolved "https://registry.yarnpkg.com/web3-utils/-/web3-utils-1.7.4.tgz#eb6fa3706b058602747228234453811bbee017f5"
   integrity sha512-acBdm6Evd0TEZRnChM/MCvGsMwYKmSh7OaUfNf5OKG0CIeGWD/6gqLOWIwmwSnre/2WrA1nKGId5uW2e5EfluA==
-  dependencies:
-    bn.js "^5.2.1"
-    ethereum-bloom-filters "^1.0.6"
-    ethereumjs-util "^7.1.0"
-    ethjs-unit "0.1.6"
-    number-to-bn "1.7.0"
-    randombytes "^2.1.0"
-    utf8 "3.0.0"
-
-web3-utils@1.7.5:
-  version "1.7.5"
-  resolved "https://registry.yarnpkg.com/web3-utils/-/web3-utils-1.7.5.tgz#081a952ac6e0322e25ac97b37358a43c7372ef6a"
-  integrity sha512-9AqNOziQky4wNQadEwEfHiBdOZqopIHzQQVzmvvv6fJwDSMhP+khqmAZC7YTiGjs0MboyZ8tWNivqSO1699XQw==
   dependencies:
     bn.js "^5.2.1"
     ethereum-bloom-filters "^1.0.6"
