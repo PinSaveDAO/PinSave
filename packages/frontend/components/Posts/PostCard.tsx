@@ -16,7 +16,7 @@ const PostCard = (post: Post) => {
       x = y.replace("/", ".ipfs.dweb.link/");
     }
     if (post.image.charAt(0) === "s") {
-      y = post.image?.replace("sia://", "");
+      y = post.image.replace("sia://", "");
       x = "siasky.net/" + y;
     }
   }
