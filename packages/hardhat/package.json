@@ -27,7 +27,7 @@
     "@openzeppelin/contracts": "^4.7.3",
     "@tenderly/hardhat-tenderly": "^1.1.6",
     "chai": "^4.2.0",
-    "chalk": "^5.0.1",
+    "chalk": "^5.1.0",
     "dotenv": "^16.0.3",
     "ethers": "^5.7.1",
     "hardhat": "2.12.0",
