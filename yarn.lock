@@ -1975,10 +1975,10 @@
     mcl-wasm "^0.7.1"
     rustbn.js "~0.2.0"
 
-"@nomicfoundation/hardhat-chai-matchers@^1.0.3":
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/@nomicfoundation/hardhat-chai-matchers/-/hardhat-chai-matchers-1.0.3.tgz#a48ed0a3a58de616e4f553368d79c13a8850ebd5"
-  integrity sha512-qEE7Drs2HSY+krH09TXm6P9LFogs0BqbUq6wPD7nQRhmJ+p5zoDaIZjM5WL1pHqU5MpGqya3y+BdwmTYBfU5UA==
+"@nomicfoundation/hardhat-chai-matchers@^1.0.4":
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/@nomicfoundation/hardhat-chai-matchers/-/hardhat-chai-matchers-1.0.4.tgz#4b5c0d6eba637aabb49342272ae15ee6877a462e"
+  integrity sha512-n/5UMwGaUK2zM8ALuMChVwB1lEPeDTb5oBjQ1g7hVsUdS8x+XG9JIEp4Ze6Bwy98tghA7Y1+PCH4SNE2P3UQ2g==
   dependencies:
     "@ethersproject/abi" "^5.1.2"
     "@types/chai-as-promised" "^7.1.3"
