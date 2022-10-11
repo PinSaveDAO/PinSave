@@ -15,7 +15,7 @@
     "@mantine/core": "^4.2.12",
     "@mantine/dropzone": "^4.2.12",
     "@mantine/hooks": "^4.2.12",
-    "@mantine/next": "^5.5.4",
+    "@mantine/next": "^5.5.5",
     "@mantine/notifications": "^4.2.12",
     "@rainbow-me/rainbowkit": "^0.7.1",
     "@tanstack/react-query": "^4.3.9",
@@ -34,7 +34,7 @@
   },
   "devDependencies": {
     "@types/isomorphic-fetch": "^0.0.36",
-    "@types/node": "^18.8.3",
+    "@types/node": "^18.8.4",
     "@types/react": "^18.0.21",
     "eslint": "^8.25.0",
     "eslint-config-next": "^12.3.1",
