@@ -11,9 +11,11 @@ export default async function handler(
     const { number } = req.query;
     const pageNumber = Number(number) + 1;
 
-    const { address, abi } = getContractInfo(9000);
-    const provider = new ethers.providers.JsonRpcProvider(
-      "https://eth.bd.evmos.dev:8545"
+    const { address, abi } = getContractInfo(80001);
+
+    let provider = new ethers.providers.AlchemyProvider(
+      "maticmum",
+      process.env.NEXT_ALCHEMY_ID
     );
 
     const contract = new ethers.Contract(address, abi, provider);
@@ -24,7 +26,7 @@ export default async function handler(
     const lowerLimit = 6 * pageNumber - 5;
     try {
       for (let i = lowerLimit; upperLimit > i; i++) {
-        result = await contract.getPost(i);
+        result = await contract.tokenURI(i);
 
         let x = result
           .replace("ipfs://", "https://")

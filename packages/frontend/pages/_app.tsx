@@ -10,8 +10,14 @@ import { NotificationsProvider } from "@mantine/notifications";
 import {
   connectorsForWallets,
   RainbowKitProvider,
-  wallet,
 } from "@rainbow-me/rainbowkit";
+import {
+  injectedWallet,
+  rainbowWallet,
+  metaMaskWallet,
+  coinbaseWallet,
+  walletConnectWallet,
+} from "@rainbow-me/rainbowkit/wallets";
 import {
   Chain,
   chain,
@@ -95,11 +101,16 @@ const connectors = connectorsForWallets([
   {
     groupName: "Recommended",
     wallets: [
-      wallet.metaMask({ chains }),
-      wallet.rainbow({ chains }),
-      wallet.walletConnect({ chains }),
-      wallet.trust({ chains }),
-      wallet.injected({ chains }),
+      injectedWallet({ chains }),
+      rainbowWallet({ chains }),
+      metaMaskWallet({ chains }),
+    ],
+  },
+  {
+    groupName: "Others",
+    wallets: [
+      coinbaseWallet({ chains, appName: "My RainbowKit App" }),
+      walletConnectWallet({ chains }),
     ],
   },
 ]);

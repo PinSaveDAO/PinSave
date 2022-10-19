@@ -20,10 +20,6 @@ export default async function handler(
     let items = [];
     let result;
     for (let i = currentCount; i > 0; i--) {
-      if (i === 21 || i === 22) {
-        continue;
-      }
-
       result = await contract.tokenURI(i);
 
       let x = result

@@ -11,9 +11,10 @@ export default async function handler(
     const { number } = req.query;
     const pageNumber = Number(number) + 1;
 
-    const { address, abi } = getContractInfo(9000);
+    const { address, abi } = getContractInfo(22);
+
     const provider = new ethers.providers.JsonRpcProvider(
-      "https://eth.bd.evmos.dev:8545"
+      "https://rpc.l14.lukso.network"
     );
 
     const contract = new ethers.Contract(address, abi, provider);

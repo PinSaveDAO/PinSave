@@ -33,13 +33,7 @@ export default async function handler(
     const item: Post = await fetch(resURL).then((x) => x.json());
 
     let z, y;
-    if (item._data) {
-      if (typeof item._data?.image === "string") {
-        z = item._data?.image.replace("sia://", "https://siasky.net/");
-      } else {
-        z = "https://siasky.net/bABrwXB_uKp6AYEuBk_yxEfSMP7QFKfHQe9KB8AF2nTL2w";
-      }
-    }
+
     if (item.image) {
       if (item.image.charAt(0) === "i") {
         y = item.image.replace("ipfs://", "");
