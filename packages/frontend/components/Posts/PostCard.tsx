@@ -18,9 +18,17 @@ const PostCard = (post: Post) => {
     x = "siasky.net/" + y;
   }
 
+  function loadPosts(chain: any) {
+    if ([22, 9000, 80001, 31337].includes(chain.id)) {
+      return chain.network;
+    } else {
+      return "maticmum";
+    }
+  }
   const imgSrc = `https://${x ?? "evm.pinsave.app/PinSaveCard.png"}`;
+
   return (
-    <Link href={`/${chain?.network ?? "maticmum"}/posts/${post.token_id}`}>
+    <Link href={`/${loadPosts(chain)}/posts/${post.token_id}`}>
       <Paper
         component="a"
         withBorder
