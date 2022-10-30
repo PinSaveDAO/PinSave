@@ -8,9 +8,12 @@ import { getCurrentChain } from "@/utils/chains";
 
 const Home: NextPage = () => {
   const { chain } = useNetwork();
-  const currentChain = getCurrentChain(chain?.id as number);
+  let initialChain = 80001;
+  if (chain) {
+    initialChain = chain?.id;
+  }
+  const currentChain = getCurrentChain(initialChain);
   const { data: posts, isLoading } = usePosts(currentChain);
-
   return (
     <div>
       <LoadingOverlay visible={isLoading} />
