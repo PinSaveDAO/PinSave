@@ -534,13 +534,23 @@
   resolved "https://registry.yarnpkg.com/@ensdomains/resolver/-/resolver-0.2.4.tgz#c10fe28bf5efbf49bff4666d909aed0265efbc89"
   integrity sha512-bvaTH34PMCbv6anRa9I/0zjLJgY4EuznbEMgbV77JBCQ9KNC46rzi0avuxpOfu+xDjPEtSFGqVEOr5GlUSGudA==
 
-"@erc725/erc725.js@0.15.0", "@erc725/erc725.js@^0.15.0":
+"@erc725/erc725.js@0.15.0":
   version "0.15.0"
   resolved "https://registry.yarnpkg.com/@erc725/erc725.js/-/erc725.js-0.15.0.tgz#e8d4738c51251a7587fc088507d1546ab9ed1a7c"
   integrity sha512-nO9mgqucahouvBX6LN25JjkmNKgZLxrhJksueJnbnLQGUILOT/cHiU3qDOZLodSTkSpK5y4C3f6qEx6Atdn+/w==
   dependencies:
     ethereumjs-util "^7.1.4"
     web3-eth-abi "^1.7.3"
+    web3-utils "^1.7.3"
+
+"@erc725/erc725.js@^0.16.0":
+  version "0.16.0"
+  resolved "https://registry.yarnpkg.com/@erc725/erc725.js/-/erc725.js-0.16.0.tgz#df392c29d4fc3eb9043d92a9eac31801b7547c0a"
+  integrity sha512-3PdCCyq3CbLTxCVIWrcSLOWLS7gcE9O1wfmpw9wZU+0uvbI92ILxT/BJMGsFs0JUVNvwjUzU9/v/EERTjKjGag==
+  dependencies:
+    ethereumjs-util "^7.1.4"
+    web3-eth-abi "^1.7.3"
+    web3-providers-http "^1.8.0"
     web3-utils "^1.7.3"
 
 "@erc725/smart-contracts@^2.1.6":
@@ -17837,7 +17847,7 @@ web3-providers-http@1.7.4:
     web3-core-helpers "1.7.4"
     xhr2-cookies "1.1.0"
 
-web3-providers-http@1.8.0:
+web3-providers-http@1.8.0, web3-providers-http@^1.8.0:
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/web3-providers-http/-/web3-providers-http-1.8.0.tgz#3fd1e569ead2095343fac17d53160a3bae674c23"
   integrity sha512-/MqxwRzExohBWW97mqlCSW/+NHydGRyoEDUS1bAIF2YjfKFwyRtHgrEzOojzkC9JvB+8LofMvbXk9CcltpZapw==
