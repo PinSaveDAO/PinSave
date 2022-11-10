@@ -30,7 +30,7 @@
     "skynet-js": "^4.3.0",
     "tabler-icons-react": "^1.55.0",
     "wagmi": "^0.7.9",
-    "web3": "^1.8.0"
+    "web3": "^1.8.1"
   },
   "devDependencies": {
     "@types/isomorphic-fetch": "^0.0.36",
