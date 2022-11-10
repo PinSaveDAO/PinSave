@@ -17010,10 +17010,10 @@ type@^2.5.0:
   resolved "https://registry.yarnpkg.com/type/-/type-2.7.2.tgz#2376a15a3a28b1efa0f5350dcf72d24df6ef98d0"
   integrity sha512-dzlvlNlt6AXU7EBSfpAscydQ7gXB+pPGsPnfJnZpiNJBDj7IaJzQlBZYGdEi4R9HmPdBv2XmWJ6YUtoTa7lmCw==
 
-typechain@^8.1.0:
-  version "8.1.0"
-  resolved "https://registry.yarnpkg.com/typechain/-/typechain-8.1.0.tgz#fc4902ce596519cb2ccfd012e4ddf92a9945b569"
-  integrity sha512-5jToLgKTjHdI1VKqs/K8BLYy42Sr3o8bV5ojh4MnR9ExHO83cyyUdw+7+vMJCpKXUiVUvARM4qmHTFuyaCMAZQ==
+typechain@^8.1.1:
+  version "8.1.1"
+  resolved "https://registry.yarnpkg.com/typechain/-/typechain-8.1.1.tgz#9c2e8012c2c4c586536fc18402dcd7034c4ff0bd"
+  integrity sha512-uF/sUvnXTOVF2FHKhQYnxHk4su4JjZR8vr4mA2mBaRwHTbwh0jIlqARz9XJr1tA0l7afJGvEa1dTSi4zt039LQ==
   dependencies:
     "@types/prettier" "^2.1.1"
     debug "^4.3.1"
