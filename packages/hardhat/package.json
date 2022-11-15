@@ -16,7 +16,7 @@
     "eslint-plugin-prettier": "^4.2.1",
     "solidity-coverage": "^0.7.22",
     "ts-node": "^10.9.1",
-    "typechain": "^8.1.0"
+    "typechain": "^8.1.1"
   },
   "dependencies": {
     "@lukso/lsp-factory.js": "^2.4.0",
