@@ -1353,11 +1353,22 @@
     "@ethersproject/properties" "^5.7.0"
     "@ethersproject/strings" "^5.7.0"
 
-"@graphprotocol/graph-cli@^0.35.0":
-  version "0.35.0"
-  resolved "https://registry.yarnpkg.com/@graphprotocol/graph-cli/-/graph-cli-0.35.0.tgz#2f3c688f47ce763c2e8c6d8b86817fb21b3a367d"
-  integrity sha512-50tjeLZg3425fwueH8ORTZbPRSn4uICL0NK9XsJVriDPKCNnhyAIgJgOWaYyPAFgxR8LuyXYkoxIxZ5nduKbiw==
+"@float-capital/float-subgraph-uncrashable@^0.0.0-alpha.4":
+  version "0.0.0-alpha.4"
+  resolved "https://registry.yarnpkg.com/@float-capital/float-subgraph-uncrashable/-/float-subgraph-uncrashable-0.0.0-alpha.4.tgz#0605d10aa97e1ba7d26cc095afb23eda9ffdfb37"
+  integrity sha512-3DPy66rMvGAFDDv7craf/Vgz1fLfuU0QSJ16HB1CRZyFQFqICFHbDL7h04zqG8i255z8cfBcgYq+zSxVzeEyLw==
   dependencies:
+    graphql "^16.6.0"
+    graphql-import-node "^0.0.5"
+    js-yaml "^4.1.0"
+    rescript "^9.1.4"
+
+"@graphprotocol/graph-cli@^0.36.0":
+  version "0.36.0"
+  resolved "https://registry.yarnpkg.com/@graphprotocol/graph-cli/-/graph-cli-0.36.0.tgz#919f409275fec961d98da6125f51d50453c9feeb"
+  integrity sha512-OcU2yyDs1chOi3dn4Ztldk+GGxCuFjDTMjOfJ0l3HQ2NlPZ69/AsPwKo72V8BSQ0pITxHJ93soIHUO+w5pG+MQ==
+  dependencies:
+    "@float-capital/float-subgraph-uncrashable" "^0.0.0-alpha.4"
     assemblyscript "0.19.10"
     binary-install-raw "0.0.13"
     chalk "3.0.0"
@@ -9789,10 +9800,20 @@ grapheme-splitter@^1.0.4:
   resolved "https://registry.yarnpkg.com/grapheme-splitter/-/grapheme-splitter-1.0.4.tgz#9cf3a665c6247479896834af35cf1dbb4400767e"
   integrity sha512-bzh50DW9kTPM00T8y4o8vQg89Di9oLJVLW/KaOGIXJWP/iqCN6WKYkbNOF04vFLJhwcpYUh9ydh/+5vpOqV4YQ==
 
+graphql-import-node@^0.0.5:
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/graphql-import-node/-/graphql-import-node-0.0.5.tgz#caf76a6cece10858b14f27cce935655398fc1bf0"
+  integrity sha512-OXbou9fqh9/Lm7vwXT0XoRN9J5+WCYKnbiTalgFDvkQERITRmcfncZs6aVABedd5B85yQU5EULS4a5pnbpuI0Q==
+
 graphql@15.5.0:
   version "15.5.0"
   resolved "https://registry.yarnpkg.com/graphql/-/graphql-15.5.0.tgz#39d19494dbe69d1ea719915b578bf920344a69d5"
   integrity sha512-OmaM7y0kaK31NKG31q4YbD2beNYa6jBBKtMFT6gLYJljHLJr42IqJ8KX08u3Li/0ifzTU5HjmoOOrwa5BRLeDA==
+
+graphql@^16.6.0:
+  version "16.6.0"
+  resolved "https://registry.yarnpkg.com/graphql/-/graphql-16.6.0.tgz#c2dcffa4649db149f6282af726c8c83f1c7c5fdb"
+  integrity sha512-KPIBPDlW7NxrbT/eh4qPXz5FiFdL5UbaA0XUNz2Rp3Z3hqBSkbj0GVjwFDztsWVauZUWsbKHgMg++sk8UX0bkw==
 
 growl@1.10.5:
   version "1.10.5"
@@ -15143,6 +15164,11 @@ requires-port@^1.0.0:
   resolved "https://registry.yarnpkg.com/requires-port/-/requires-port-1.0.0.tgz#925d2601d39ac485e091cf0da5c6e694dc3dcaff"
   integrity sha512-KigOCHcocU3XODJxsu8i/j8T9tzT4adHiecwORRQ0ZZFcp7ahwXuRU1m+yuO90C5ZUyGeGfocHDI14M3L3yDAQ==
 
+rescript@^9.1.4:
+  version "9.1.4"
+  resolved "https://registry.yarnpkg.com/rescript/-/rescript-9.1.4.tgz#1eb126f98d6c16942c0bf0df67c050198e580515"
+  integrity sha512-aXANK4IqecJzdnDpJUsU6pxMViCR5ogAxzuqS0mOr8TloMnzAjJFu63fjD6LCkWrKAhlMkFFzQvVQYaAaVkFXw==
+
 resolve-alpn@^1.2.0:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/resolve-alpn/-/resolve-alpn-1.2.1.tgz#b7adbdac3546aaaec20b45e7d8265927072726f9"
@@ -17614,21 +17640,13 @@ web3-eth-abi@1.7.4:
     "@ethersproject/abi" "^5.6.3"
     web3-utils "1.7.4"
 
-web3-eth-abi@1.8.1:
+web3-eth-abi@1.8.1, web3-eth-abi@^1.2.1, web3-eth-abi@^1.7.3:
   version "1.8.1"
   resolved "https://registry.yarnpkg.com/web3-eth-abi/-/web3-eth-abi-1.8.1.tgz#47455d6513217c4b0866fea6f97b1c4afa0b6535"
   integrity sha512-0mZvCRTIG0UhDhJwNQJgJxu4b4DyIpuMA0GTfqxqeuqzX4Q/ZvmoNurw0ExTfXaGPP82UUmmdkRi6FdZOx+C6w==
   dependencies:
     "@ethersproject/abi" "^5.6.3"
     web3-utils "1.8.1"
-
-web3-eth-abi@^1.2.1, web3-eth-abi@^1.7.3:
-  version "1.8.0"
-  resolved "https://registry.yarnpkg.com/web3-eth-abi/-/web3-eth-abi-1.8.0.tgz#47fdff00bfdfa72064c9c612ff6369986598196d"
-  integrity sha512-xPeMb2hS9YLQK/Q5YZpkcmzoRGM+/R8bogSrYHhNC3hjZSSU0YRH+1ZKK0f9YF4qDZaPMI8tKWIMSCDIpjG6fg==
-  dependencies:
-    "@ethersproject/abi" "^5.6.3"
-    web3-utils "1.8.0"
 
 web3-eth-accounts@1.7.4:
   version "1.7.4"
