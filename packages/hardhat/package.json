@@ -9,14 +9,14 @@
     "@typechain/ethers-v5": "^10.1.0",
     "@typechain/hardhat": "^6.1.4",
     "@types/mocha": "^9.1.1",
-    "eslint": "^8.26.0",
+    "eslint": "^8.27.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-babel": "^5.3.1",
     "eslint-plugin-prettier": "^4.2.1",
     "solidity-coverage": "^0.7.22",
     "ts-node": "^10.9.1",
-    "typechain": "^8.1.0"
+    "typechain": "^8.1.1"
   },
   "dependencies": {
     "@lukso/lsp-factory.js": "^2.4.0",
@@ -25,18 +25,18 @@
     "@nomiclabs/hardhat-ethers": "npm:hardhat-deploy-ethers",
     "@nomiclabs/hardhat-etherscan": "^3.1.2",
     "@openzeppelin/contracts": "^4.7.3",
-    "@tenderly/hardhat-tenderly": "^1.1.6",
-    "chai": "^4.2.0",
+    "@tenderly/hardhat-tenderly": "^1.3.2",
+    "chai": "^4.3.7",
     "chalk": "^5.1.2",
     "dotenv": "^16.0.3",
     "ethers": "^5.7.2",
     "hardhat": "2.12.2",
-    "hardhat-deploy": "^0.11.19",
+    "hardhat-deploy": "^0.11.20",
     "hardhat-gas-reporter": "^1.0.9",
     "node-watch": "^0.7.3",
     "qrcode-terminal": "^0.12.0",
     "ramda": "^0.28.0",
-    "web3": "^1.8.0"
+    "web3": "^1.8.1"
   },
   "scripts": {
     "chain": "hardhat node --network hardhat --no-deploy",
