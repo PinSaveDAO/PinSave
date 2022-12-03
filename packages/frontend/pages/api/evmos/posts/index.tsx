@@ -23,7 +23,10 @@ export default async function handler(
       console.log(result);
       let x = result.replace("ipfs://", "https://");
 
-      let resURL = x.replace("/metadata.json", ".ipfs.dweb.link/metadata.json");
+      let resURL = x.replace(
+        "/metadata.json",
+        ".ipfs.nftstorage.link/metadata.json"
+      );
 
       const item = await fetch(resURL).then((x) => x.json());
 
