@@ -15,7 +15,7 @@ const Home: NextPage = () => {
   const currentChain = getCurrentChain(initialChain);
   const { data: posts, isLoading } = usePosts(currentChain);
   return (
-    <div>
+    <>
       <LoadingOverlay visible={isLoading} />
       <Box
         mx="auto"
@@ -31,7 +31,7 @@ const Home: NextPage = () => {
           return <PostCard {...post} key={i} />;
         })}
       </Box>
-    </div>
+    </>
   );
 };
 

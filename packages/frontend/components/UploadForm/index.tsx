@@ -16,7 +16,7 @@ import { Dropzone, DropzoneStatus, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { showNotification, updateNotification } from "@mantine/notifications";
 import { useAccount, useSigner, useNetwork } from "wagmi";
 
-import { uploadPost, uploadPostSkynet } from "@/services/upload";
+import { uploadPost } from "@/services/upload";
 
 export const dropzoneChildren = (
   status: DropzoneStatus,
@@ -118,47 +118,6 @@ const UploadForm = () => {
           chain?.id
         );
       }
-
-      if (postReceiver === "") {
-        uploadPost(
-          signer!,
-          address!,
-          {
-            name: title,
-            description: desc,
-            image: image!,
-          },
-          chain?.id
-        );
-      }
-    }
-
-    if (check && storageProvider == "skynet") {
-      if (postReceiver !== "") {
-        uploadPostSkynet(
-          signer!,
-          postReceiver,
-          {
-            name: title,
-            description: desc,
-            image: image!,
-          },
-          chain?.id
-        );
-      }
-
-      if (postReceiver === "") {
-        uploadPostSkynet(
-          signer!,
-          address!,
-          {
-            name: title,
-            description: desc,
-            image: image!,
-          },
-          chain?.id
-        );
-      }
     }
 
     if (!isValidUpload()) {
@@ -224,14 +183,6 @@ const UploadForm = () => {
             onClick={() => startUpload("ipfs")}
           >
             Upload Post
-          </Button>
-          <Button
-            component="a"
-            radius="lg"
-            mt="md"
-            onClick={() => startUpload("skynet")}
-          >
-            Upload to Skynet
           </Button>
         </Group>
       </Center>

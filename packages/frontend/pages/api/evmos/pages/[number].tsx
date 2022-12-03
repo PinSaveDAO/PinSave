@@ -26,9 +26,7 @@ export default async function handler(
       for (let i = lowerLimit; upperLimit > i; i++) {
         result = await contract.getPost(i);
 
-        let x = result
-          .replace("ipfs://", "https://")
-          .replace("sia://", "https://siasky.net/");
+        let x = result.replace("ipfs://", "https://");
 
         let resURL = x.replace(
           "/metadata.json",

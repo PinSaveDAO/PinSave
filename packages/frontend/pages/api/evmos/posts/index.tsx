@@ -20,9 +20,8 @@ export default async function handler(
     let result;
     for (let i = currentCount; i > 0; i--) {
       result = await contract.getPost(i);
-      let x = result
-        .replace("ipfs://", "https://")
-        .replace("sia://", "https://siasky.net/");
+      console.log(result);
+      let x = result.replace("ipfs://", "https://");
 
       let resURL = x.replace("/metadata.json", ".ipfs.dweb.link/metadata.json");
 
