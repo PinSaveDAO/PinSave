@@ -21,9 +21,7 @@ export default async function handler(
     const result = await contract.getPost(id);
     const owner = await contract.getPostOwner(id);
 
-    let x = result
-      .replace("ipfs://", "https://")
-      .replace("sia://", "https://siasky.net/");
+    let x = result.replace("ipfs://", "https://");
 
     let resURL = x
       .split("/metadata.json")
@@ -32,26 +30,17 @@ export default async function handler(
     const item: Post = await fetch(resURL).then((x) => x.json());
 
     let z, y;
-    if (item._data) {
-      if (typeof item._data?.image === "string") {
-        z = item._data?.image.replace("sia://", "https://siasky.net/");
-      } else {
-        z = "https://siasky.net/bABrwXB_uKp6AYEuBk_yxEfSMP7QFKfHQe9KB8AF2nTL2w";
-      }
-    }
+
     if (item.image) {
       if (item.image.charAt(0) === "i") {
         y = item.image.replace("ipfs://", "");
         z = y.replace("/", ".ipfs.dweb.link/");
         z = `https://${z}`;
       }
-      if (item.image.charAt(0) === "s") {
-        z = item.image.split("sia://").join("https://siasky.net/");
-      }
     }
 
     if (!z) {
-      z = "https://siasky.net/bABrwXB_uKp6AYEuBk_yxEfSMP7QFKfHQe9KB8AF2nTL2w";
+      z = "https://evm.pinsave.app/PinSaveCard.png";
     }
     const output = { ...item, owner: owner, image: z };
 

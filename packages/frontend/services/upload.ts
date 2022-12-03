@@ -1,7 +1,6 @@
 import { ethers, Signer } from "ethers";
 import { NFTStorage } from "nft.storage";
 import { updateNotification } from "@mantine/notifications";
-import { SkynetClient } from "skynet-js";
 
 import { getContractInfo } from "@/utils/contracts";
 
@@ -20,65 +19,6 @@ export type Post = PostData & {
   image: string;
   token_id: number;
 };
-
-export async function uploadPostSkynet(
-  signer: Signer,
-  accAddress: string,
-  data: PostData,
-  chain?: number
-) {
-  try {
-    const { address, abi } = getContractInfo(chain);
-    const contract = new ethers.Contract(address, abi, signer);
-
-    const portal = "https://siasky.net";
-    const client = new SkynetClient(portal);
-
-    const metadata = { ...data };
-
-    const { skylink } = await client.uploadFile(metadata.image);
-
-    const skData = {
-      name: metadata.name,
-      description: metadata.description,
-      image: skylink,
-    };
-
-    const blob = new Blob([JSON.stringify(skData)], {
-      type: "application/json",
-    });
-
-    const file = new File([blob], "metadata.json");
-
-    const completedSkylink = await client.uploadFile(file);
-
-    if (chain === 8001) {
-      await contract.mintPost(accAddress, completedSkylink.skylink);
-    }
-    if (chain === 22 || chain === 9000) {
-      const id = ethers.BigNumber.from(ethers.utils.randomBytes(32));
-      const Id = ethers.utils.hexZeroPad(
-        ethers.BigNumber.from(id).toHexString(),
-        32
-      );
-      await contract.createPost(accAddress, completedSkylink.skylink, Id);
-    }
-
-    updateNotification({
-      id: "upload-post",
-      color: "teal",
-      title: "Post uploaded successfully!!",
-      message: "",
-    });
-  } catch (error) {
-    updateNotification({
-      id: "upload-post",
-      color: "red",
-      title: "Failed to upload post",
-      message: `${error}`,
-    });
-  }
-}
 
 export async function uploadPost(
   signer: Signer,

@@ -16,7 +16,7 @@ export function getContractInfo(chain?: number) {
 
   if (chain === 9000)
     return {
-      address: "0x18587c47CE8eb3a2EE11bb19B6AbC92d6531d285",
+      address: "0xF46FCAb2404b071ac33e5eD2095802Cecf77FB21",
       abi: PinSaveL8.abi,
     };
 
