@@ -13,7 +13,7 @@ import { getCurrentChain } from "@/utils/chains";
 
 const PostPage = () => {
   const router = useRouter();
-  const currentChain = getCurrentChain(80001 as number);
+  const currentChain = getCurrentChain(80001);
   const { data: post, isLoading } = usePost(
     currentChain,
     router.query.id as string

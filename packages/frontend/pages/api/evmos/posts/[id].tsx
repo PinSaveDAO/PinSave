@@ -11,7 +11,6 @@ export default async function handler(
   try {
     const { id } = req.query;
     const { address, abi } = getContractInfo(9000);
-
     const transactions = `https://api.covalenthq.com/v1/9000/tokens/${address}/nft_transactions/${id}/?key=${process.env.NEXT_PUBLIC_COVALENT_API}`;
     const res_transactions = await fetch(transactions).then((x) => x.json());
 
