@@ -19,8 +19,8 @@ export default async function handler(
     let items = [];
     let result;
     for (let i = currentCount; i > 0; i--) {
-      result = await contract.getPost(i);
-      console.log(result);
+      result = await contract.tokenURI(i);
+
       let x = result.replace("ipfs://", "https://");
 
       let resURL = x.replace(

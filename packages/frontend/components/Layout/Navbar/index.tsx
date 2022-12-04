@@ -125,6 +125,7 @@ export function Navbar({ links }: NavbarProps) {
             width={140}
             height={35}
             className="block lg:hidden h-8 w-auto"
+            priority
           />
         </Link>
         <Group spacing={5} className={classes.links}>

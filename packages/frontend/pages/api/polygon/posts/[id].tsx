@@ -26,7 +26,7 @@ export default async function handler(
 
     let resURL = x
       .split("/metadata.json")
-      .join(".ipfs.dweb.link/metadata.json");
+      .join(".ipfs.nftstorage.link/metadata.json");
 
     const item: Post = await fetch(resURL).then((x) => x.json());
 
@@ -35,7 +35,7 @@ export default async function handler(
     if (item.image) {
       if (item.image.charAt(0) === "i") {
         y = item.image.replace("ipfs://", "");
-        z = y.replace("/", ".ipfs.dweb.link/");
+        z = y.replace("/", ".ipfs.nftstorage.link/");
         z = `https://${z}`;
       }
     }
