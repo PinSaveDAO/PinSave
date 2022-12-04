@@ -106,10 +106,22 @@ const UploadForm = () => {
 
     const check = isValidUpload();
     if (check && storageProvider == "ipfs") {
-      if (postReceiver !== "") {
+      if (postReceiver) {
         uploadPost(
           signer!,
           postReceiver,
+          {
+            name: title,
+            description: desc,
+            image: image!,
+          },
+          chain?.id
+        );
+      }
+      if (!postReceiver) {
+        uploadPost(
+          signer!,
+          address!,
           {
             name: title,
             description: desc,

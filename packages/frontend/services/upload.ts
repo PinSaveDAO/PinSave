@@ -38,11 +38,11 @@ export async function uploadPost(
       ...data,
     });
 
-    if (chain === 80001) {
+    if (chain === 80001 || chain === 9000) {
       await contract.mintPost(accAddress, metadata.url);
     }
 
-    if (chain === 22 || chain === 9000) {
+    if (chain === 22) {
       try {
         const id = ethers.BigNumber.from(ethers.utils.randomBytes(32));
         const Id = ethers.utils.hexZeroPad(

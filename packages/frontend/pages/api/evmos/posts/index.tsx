@@ -19,11 +19,14 @@ export default async function handler(
     let items = [];
     let result;
     for (let i = currentCount; i > 0; i--) {
-      result = await contract.getPost(i);
-      console.log(result);
+      result = await contract.tokenURI(i);
+
       let x = result.replace("ipfs://", "https://");
 
-      let resURL = x.replace("/metadata.json", ".ipfs.dweb.link/metadata.json");
+      let resURL = x.replace(
+        "/metadata.json",
+        ".ipfs.nftstorage.link/metadata.json"
+      );
 
       const item = await fetch(resURL).then((x) => x.json());
 

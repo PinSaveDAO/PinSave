@@ -1,5 +1,6 @@
 import {
   ActionIcon,
+  Badge,
   Paper,
   SimpleGrid,
   Image,
@@ -43,7 +44,7 @@ const PostPage = () => {
               { maxWidth: "md", cols: 1, spacing: "md" },
             ]}
           >
-            <Image src={post.image} alt="" />
+            <Image src={post.image} alt={post.description} />
             <Paper shadow="sm" p="md" withBorder>
               <h2 style={{ marginBottom: "1.4rem" }}>{post.name}</h2>
               <h4>Descripton</h4>
@@ -55,14 +56,58 @@ const PostPage = () => {
               >
                 <p>{post.description}</p>
               </Paper>
-              <div style={{ fontSize: "small", color: "#0000008d" }}>
+              <div
+                style={{
+                  fontSize: "medium",
+                  color: "#0000008d",
+                  padding: "10px",
+                }}
+              >
                 Owned by:{" "}
                 <Link
                   href={`https://evm.evmos.dev/address/${post.owner}/transactions#address-tabs`}
+                  style={{
+                    color: "teal",
+                  }}
                 >
-                  <a style={{ color: "#198b6eb9" }}>{post.owner}</a>
+                  {post.owner}
                 </Link>
               </div>
+              <div
+                style={{
+                  fontSize: "medium",
+                  color: "#0000008d",
+                  padding: "10px",
+                }}
+              >
+                Transactions:{" "}
+                <span
+                  style={{
+                    color: "#198b6eb9",
+                  }}
+                >
+                  {post.nTransactions}
+                </span>
+              </div>
+
+              {post.date ? (
+                <div
+                  style={{
+                    fontSize: "medium",
+                    color: "#0000008d",
+                    padding: "10px",
+                  }}
+                >
+                  Minted:{" "}
+                  <span
+                    style={{
+                      color: "#198b6eb9",
+                    }}
+                  >
+                    {new Date(post.date).toUTCString()}
+                  </span>
+                </div>
+              ) : null}
             </Paper>
           </SimpleGrid>
         </>
