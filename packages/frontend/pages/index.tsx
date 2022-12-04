@@ -8,7 +8,7 @@ import { getCurrentChain } from "@/utils/chains";
 
 const Home: NextPage = () => {
   const { chain } = useNetwork();
-  let initialChain = 80001;
+  let initialChain = 9000;
   if (chain) {
     initialChain = chain?.id;
   }

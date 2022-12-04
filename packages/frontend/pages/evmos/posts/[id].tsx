@@ -1,6 +1,5 @@
 import {
   ActionIcon,
-  Badge,
   Paper,
   SimpleGrid,
   Image,
@@ -9,15 +8,13 @@ import {
 import { ArrowLeft } from "tabler-icons-react";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import { useNetwork } from "wagmi";
 
 import { usePost } from "@/hooks/api";
 import { getCurrentChain } from "@/utils/chains";
 
 const PostPage = () => {
   const router = useRouter();
-  const { chain } = useNetwork();
-  const currentChain = getCurrentChain(chain?.id as number);
+  const currentChain = getCurrentChain(9000);
   const { data: post, isLoading } = usePost(
     currentChain,
     router.query.id as string
