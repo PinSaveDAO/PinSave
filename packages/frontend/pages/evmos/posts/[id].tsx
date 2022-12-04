@@ -89,22 +89,25 @@ const PostPage = () => {
                   {post.nTransactions}
                 </span>
               </div>
-              <div
-                style={{
-                  fontSize: "medium",
-                  color: "#0000008d",
-                  padding: "10px",
-                }}
-              >
-                Minted:{" "}
-                <span
+
+              {post.date ? (
+                <div
                   style={{
-                    color: "#198b6eb9",
+                    fontSize: "medium",
+                    color: "#0000008d",
+                    padding: "10px",
                   }}
                 >
-                  {new Date(post.date!).toUTCString()}
-                </span>
-              </div>
+                  Minted:{" "}
+                  <span
+                    style={{
+                      color: "#198b6eb9",
+                    }}
+                  >
+                    {new Date(post.date).toUTCString()}
+                  </span>
+                </div>
+              ) : null}
             </Paper>
           </SimpleGrid>
         </>
