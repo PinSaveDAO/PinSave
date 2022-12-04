@@ -67,7 +67,7 @@ const PostPage = () => {
                 <Link
                   href={`https://evm.evmos.dev/address/${post.owner}/transactions#address-tabs`}
                   style={{
-                    color: "#198b6eb9",
+                    color: "teal",
                   }}
                 >
                   {post.owner}
@@ -80,17 +80,30 @@ const PostPage = () => {
                   padding: "10px",
                 }}
               >
-                Transactions:
-                <Badge
-                  color="198b6eb9"
-                  size="lg"
-                  radius="xl"
+                Transactions:{" "}
+                <span
                   style={{
-                    fontSize: "small",
+                    color: "#198b6eb9",
                   }}
                 >
                   {post.nTransactions}
-                </Badge>
+                </span>
+              </div>
+              <div
+                style={{
+                  fontSize: "medium",
+                  color: "#0000008d",
+                  padding: "10px",
+                }}
+              >
+                Minted:{" "}
+                <span
+                  style={{
+                    color: "#198b6eb9",
+                  }}
+                >
+                  {new Date(post.date!).toUTCString()}
+                </span>
               </div>
             </Paper>
           </SimpleGrid>

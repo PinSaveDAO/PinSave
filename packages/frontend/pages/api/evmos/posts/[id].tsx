@@ -15,6 +15,9 @@ export default async function handler(
     const transactions = `https://api.covalenthq.com/v1/9000/tokens/${address}/nft_transactions/${id}/?key=${process.env.NEXT_PUBLIC_COVALENT_API}`;
     const res_transactions = await fetch(transactions).then((x) => x.json());
 
+    const dateMinted = new Date(
+      res_transactions.data.items[0].nft_transactions[0].block_signed_at
+    );
     const nTxs = res_transactions.data.items[0].nft_transactions.length;
 
     /*     const nft_meta = `https://api.covalenthq.com/v1/9000/tokens/${address}/nft_metadata/${id}/?key=${process.env.NEXT_PUBLIC_COVALENT_API}`;
@@ -52,7 +55,13 @@ export default async function handler(
       z = "https://evm.pinsave.app/PinSaveCard.png";
     }
 
-    const output = { ...item, owner: owner, image: z, nTransactions: nTxs };
+    const output = {
+      ...item,
+      owner: owner,
+      image: z,
+      nTransactions: nTxs,
+      date: dateMinted,
+    };
     res.status(200).json(output);
   } catch (err) {
     res.status(500).json({ error: "failed to fetch data" + err });
