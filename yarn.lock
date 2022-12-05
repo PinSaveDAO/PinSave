@@ -1363,10 +1363,10 @@
     js-yaml "^4.1.0"
     rescript "^9.1.4"
 
-"@graphprotocol/graph-cli@^0.36.1":
-  version "0.36.1"
-  resolved "https://registry.yarnpkg.com/@graphprotocol/graph-cli/-/graph-cli-0.36.1.tgz#025546d368985c9b0ce42064926bdf72dc54e6be"
-  integrity sha512-JTiIyPBxLKBOliC7Mdci8A+ApzOmfuGRHNQukgZVWn2+ktld/d/hPLghEKIgE+Fy4z8hCWa865oPUHV6r/J4+Q==
+"@graphprotocol/graph-cli@^0.37.0":
+  version "0.37.0"
+  resolved "https://registry.yarnpkg.com/@graphprotocol/graph-cli/-/graph-cli-0.37.0.tgz#42d7a40748ee7628bab653984e61b4496507ff4b"
+  integrity sha512-p//lNNxDTFO05LntKHeDt1sCwRxJHsdcIN2P9/FPnxE5Z2N3n3z0jHEifRhxrPpfkjKyydStT7TM5QMCqxf1kQ==
   dependencies:
     "@float-capital/float-subgraph-uncrashable" "^0.0.0-alpha.4"
     assemblyscript "0.19.10"
@@ -1378,7 +1378,7 @@
     dockerode "2.5.8"
     fs-extra "9.0.0"
     glob "7.1.6"
-    gluegun "https://github.com/edgeandnode/gluegun#v4.3.1-pin-colors-dep"
+    gluegun "git+https://github.com/edgeandnode/gluegun.git#v4.3.1-pin-colors-dep"
     graphql "15.5.0"
     immutable "3.8.2"
     ipfs-http-client "34.0.0"
