@@ -1700,13 +1700,13 @@
   resolved "https://registry.yarnpkg.com/@mantine/hooks/-/hooks-4.2.12.tgz#8dfbd23763959b721f5c5c784b3c412bb7c9823a"
   integrity sha512-/2GOsgv1tAUFBXOUV0YBZdDZHj3pHN82Sv1oI/hJMjfIT3ZkGeeiJO8Cw9cBcn76t6caP6Czi3hcuKhjz71O+A==
 
-"@mantine/next@^5.6.4":
-  version "5.6.4"
-  resolved "https://registry.yarnpkg.com/@mantine/next/-/next-5.6.4.tgz#19ed3343431c42b0aafc162f5881122d458e7127"
-  integrity sha512-XxmuqVgTofMaBCGlREGs3yz8Xu05rHisAuULrVrOrKRgQLVzxR/Ja00iyffjAY03ibOuPMUvYFVsVdMN1RlR+g==
+"@mantine/next@^5.9.1":
+  version "5.9.1"
+  resolved "https://registry.yarnpkg.com/@mantine/next/-/next-5.9.1.tgz#e892a64e5bfa0137f296d96a03c8014de0fbb75e"
+  integrity sha512-HIwDPitIfjtTmwrnWsDnDvwMFq/YifsrzZf+XxYTHu2wUXGVYovVPraXr6Q/RDkjXrjYix5cWVtAnyVf/kGEqA==
   dependencies:
-    "@mantine/ssr" "5.6.4"
-    "@mantine/styles" "5.6.4"
+    "@mantine/ssr" "5.9.1"
+    "@mantine/styles" "5.9.1"
 
 "@mantine/notifications@^4.2.12":
   version "4.2.12"
@@ -1715,12 +1715,12 @@
   dependencies:
     react-transition-group "^4.4.2"
 
-"@mantine/ssr@5.6.4":
-  version "5.6.4"
-  resolved "https://registry.yarnpkg.com/@mantine/ssr/-/ssr-5.6.4.tgz#120c3758d13069c46cf0baea788ed12949b61aa0"
-  integrity sha512-rTSMhtUk55Y77sXUwJ4a7D/C5UaqRKhkouyeeWkHr0+r6gh6VHpBtoH1+/wcgGQ2e1IGGBVZZJrXmcY9rhcTNQ==
+"@mantine/ssr@5.9.1":
+  version "5.9.1"
+  resolved "https://registry.yarnpkg.com/@mantine/ssr/-/ssr-5.9.1.tgz#69bfb0b208d4069ce20a8b6c165d0b07533cea62"
+  integrity sha512-ey00Z8Dn2wff5ibUOEHE6nTM8ygp/wNkCxT56MdEFtBzVLE3czcWK/Xau3m9xqKjsTZrer1PQNZP+F317sDIZQ==
   dependencies:
-    "@mantine/styles" "5.6.4"
+    "@mantine/styles" "5.9.1"
     html-react-parser "1.4.12"
 
 "@mantine/styles@4.2.12":
@@ -1735,10 +1735,10 @@
     clsx "^1.1.1"
     csstype "3.0.9"
 
-"@mantine/styles@5.6.4":
-  version "5.6.4"
-  resolved "https://registry.yarnpkg.com/@mantine/styles/-/styles-5.6.4.tgz#ea6089bb460ff420d910579f06643c0863486127"
-  integrity sha512-vXKr0suhdjKpp3My1AWQlcAYbnCrIsGXESjlbDTc8Dw3qlZVpkqAUik04LIaLuIMliad+qUV5SkQDQcAUeRbaQ==
+"@mantine/styles@5.9.1":
+  version "5.9.1"
+  resolved "https://registry.yarnpkg.com/@mantine/styles/-/styles-5.9.1.tgz#fc4c69199ca68ede398af8188048b22499678342"
+  integrity sha512-S4bHfAk62zR7++ANi3sxekyCeeKDCHpwlnCa0xz+C2FZSn0N0/d1Q+Z9Lhp1DB+PJCY2svCzuQJ7VU/AfGtCQw==
   dependencies:
     clsx "1.1.1"
     csstype "3.0.9"
@@ -9695,9 +9695,10 @@ globby@^6.1.0:
     pify "^2.0.0"
     pinkie-promise "^2.0.0"
 
-"gluegun@git+https://github.com/edgeandnode/gluegun.git#v4.3.1-pin-colors-dep":
+"gluegun@https://github.com/edgeandnode/gluegun#v4.3.1-pin-colors-dep":
   version "4.3.1"
-  resolved "git+https://github.com/edgeandnode/gluegun.git#b34b9003d7bf556836da41b57ef36eb21570620a"
+  uid b34b9003d7bf556836da41b57ef36eb21570620a
+  resolved "https://github.com/edgeandnode/gluegun#b34b9003d7bf556836da41b57ef36eb21570620a"
   dependencies:
     apisauce "^1.0.1"
     app-module-path "^2.2.0"
