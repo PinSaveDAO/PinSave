@@ -15,7 +15,7 @@
     "@mantine/core": "^4.2.12",
     "@mantine/dropzone": "^4.2.12",
     "@mantine/hooks": "^4.2.12",
-    "@mantine/next": "^5.6.4",
+    "@mantine/next": "^5.9.2",
     "@mantine/notifications": "^4.2.12",
     "@rainbow-me/rainbowkit": "^0.7.4",
     "@tanstack/react-query": "^4.16.1",
