@@ -24,7 +24,7 @@
     "isomorphic-fetch": "^3.0.0",
     "next": "^13.0.0",
     "nft.storage": "^7.0.0",
-    "postcss": "^8.4.18",
+    "postcss": "^8.4.20",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "tabler-icons-react": "^1.55.0",
