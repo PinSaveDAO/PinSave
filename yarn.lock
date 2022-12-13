@@ -16517,10 +16517,10 @@ table@^6.0.9, table@^6.8.0:
     string-width "^4.2.3"
     strip-ansi "^6.0.1"
 
-tabler-icons-react@^1.55.0:
-  version "1.55.0"
-  resolved "https://registry.yarnpkg.com/tabler-icons-react/-/tabler-icons-react-1.55.0.tgz#d4a4d6be3b504f6a1f50f818ad96d9335287ce39"
-  integrity sha512-+5zz2mQ2wl5658tMtK4mxUCFdF7TyPiPqLAvCUHHOeltZWukExE3aftY04HDMcap8skob/UFbzSzVhifCCMeUQ==
+tabler-icons-react@^1.56.0:
+  version "1.56.0"
+  resolved "https://registry.yarnpkg.com/tabler-icons-react/-/tabler-icons-react-1.56.0.tgz#d2a6cf9160f25b370c38c356fa6284c254e5113e"
+  integrity sha512-FOme3w6PJIWDpeXqQ4xjArQqdxzrr9xNy7PSSgWpRzOUQ71RyZ7jt6WThsfyLBz5os78TPJRA8f/0NLjnKcx9A==
 
 tapable@^1.1.3:
   version "1.1.3"
