@@ -49,7 +49,9 @@ const LuksoL14Chain: Chain = {
     symbol: "LYXt",
   },
   rpcUrls: {
-    default: "https://rpc.l14.lukso.network",
+    default: {
+      http: ["https://rpc.l14.lukso.network"],
+    },
   },
   blockExplorers: {
     default: {
@@ -64,8 +66,15 @@ const EvmosChain: Chain = {
   id: 9000,
   name: "EVMOS",
   network: "evmos",
+  nativeCurrency: {
+    decimals: 18,
+    name: "EVMOS",
+    symbol: "EVMOS",
+  },
   rpcUrls: {
-    default: "https://eth.bd.evmos.dev:8545",
+    default: {
+      http: ["https://eth.bd.evmos.dev:8545"],
+    },
   },
   testnet: true,
 };
@@ -79,14 +88,14 @@ const { chains, provider, webSocketProvider } = configureChains(
   ],
   [
     alchemyProvider({
-      apiKey: process.env.NEXT_ALCHEMY_ID,
+      apiKey: String(process.env.NEXT_ALCHEMY_ID),
     }),
     publicProvider(),
     jsonRpcProvider({
       rpc: (chain) => {
         if (chain.id !== LuksoL14Chain.id && chain.id !== EvmosChain.id)
           return null;
-        return { http: chain.rpcUrls.default };
+        return { http: chain.rpcUrls.default.http[0] };
       },
     }),
   ]
