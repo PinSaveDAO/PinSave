@@ -18,13 +18,8 @@ import {
   coinbaseWallet,
   walletConnectWallet,
 } from "@rainbow-me/rainbowkit/wallets";
-import {
-  Chain,
-  chain,
-  configureChains,
-  createClient,
-  WagmiConfig,
-} from "wagmi";
+import { Chain, configureChains, createClient, WagmiConfig } from "wagmi";
+import { polygonMumbai, hardhat } from "wagmi/chains";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
@@ -77,8 +72,8 @@ const EvmosChain: Chain = {
 
 const { chains, provider, webSocketProvider } = configureChains(
   [
-    ...(process.env.NEXT_PUBLIC_DEV === "true" ? [chain.hardhat] : []),
-    chain.polygonMumbai,
+    ...(process.env.NEXT_PUBLIC_DEV === "true" ? [hardhat] : []),
+    polygonMumbai,
     LuksoL14Chain,
     EvmosChain,
   ],
