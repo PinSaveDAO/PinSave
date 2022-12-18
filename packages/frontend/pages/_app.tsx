@@ -18,13 +18,8 @@ import {
   coinbaseWallet,
   walletConnectWallet,
 } from "@rainbow-me/rainbowkit/wallets";
-import {
-  Chain,
-  chain,
-  configureChains,
-  createClient,
-  WagmiConfig,
-} from "wagmi";
+import { Chain, configureChains, createClient, WagmiConfig } from "wagmi";
+import { polygonMumbai, hardhat } from "wagmi/chains";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
@@ -54,7 +49,9 @@ const LuksoL14Chain: Chain = {
     symbol: "LYXt",
   },
   rpcUrls: {
-    default: "https://rpc.l14.lukso.network",
+    default: {
+      http: ["https://rpc.l14.lukso.network"],
+    },
   },
   blockExplorers: {
     default: {
@@ -69,29 +66,36 @@ const EvmosChain: Chain = {
   id: 9000,
   name: "EVMOS",
   network: "evmos",
+  nativeCurrency: {
+    decimals: 18,
+    name: "EVMOS",
+    symbol: "EVMOS",
+  },
   rpcUrls: {
-    default: "https://eth.bd.evmos.dev:8545",
+    default: {
+      http: ["https://eth.bd.evmos.dev:8545"],
+    },
   },
   testnet: true,
 };
 
 const { chains, provider, webSocketProvider } = configureChains(
   [
-    ...(process.env.NEXT_PUBLIC_DEV === "true" ? [chain.hardhat] : []),
-    chain.polygonMumbai,
+    ...(process.env.NEXT_PUBLIC_DEV === "true" ? [hardhat] : []),
+    polygonMumbai,
     LuksoL14Chain,
     EvmosChain,
   ],
   [
     alchemyProvider({
-      apiKey: process.env.NEXT_ALCHEMY_ID,
+      apiKey: String(process.env.NEXT_ALCHEMY_ID),
     }),
     publicProvider(),
     jsonRpcProvider({
       rpc: (chain) => {
         if (chain.id !== LuksoL14Chain.id && chain.id !== EvmosChain.id)
           return null;
-        return { http: chain.rpcUrls.default };
+        return { http: chain.rpcUrls.default.http[0] };
       },
     }),
   ]
