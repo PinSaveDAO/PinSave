@@ -40,7 +40,6 @@ const PostCard = (post: Post) => {
         <div
           style={{
             position: "relative",
-            width: 200,
             height: 200,
           }}
         >

@@ -27,9 +27,10 @@ const Home: NextPage = () => {
           gridTemplateRows: "masonry",
         }}
       >
-        {posts?.map((post: any, i: any) => {
-          return <PostCard {...post} key={i} />;
-        })}
+        {posts &&
+          posts.map((post: any, i: any) => {
+            return <PostCard {...post} key={i} />;
+          })}
       </Box>
     </>
   );
