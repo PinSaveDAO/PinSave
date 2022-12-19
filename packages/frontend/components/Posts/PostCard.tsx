@@ -13,10 +13,6 @@ const PostCard = (post: Post) => {
     y = post.image.replace("ipfs://", "");
     x = y.replace("/", ".ipfs.dweb.link/");
   }
-  if (post.image?.charAt(0) === "s") {
-    y = post.image.replace("sia://", "");
-    x = "siasky.net/" + y;
-  }
 
   function loadPosts(chain: any) {
     if ([22, 9000, 80001, 31337].includes(chain?.id)) {

@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
 import { postKeys, fetchPosts, fetchPost } from "./queries";
 
 import type { Post } from "@/services/upload";

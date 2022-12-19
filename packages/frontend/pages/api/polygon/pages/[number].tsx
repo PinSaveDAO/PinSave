@@ -12,7 +12,6 @@ export default async function handler(
     const pageNumber = Number(number) + 1;
 
     const { address, abi } = getContractInfo(80001);
-
     let provider = new ethers.providers.AlchemyProvider(
       "maticmum",
       process.env.NEXT_ALCHEMY_ID
@@ -22,8 +21,9 @@ export default async function handler(
 
     let items = [];
     let result;
-    const upperLimit = 6 * pageNumber + 1;
-    const lowerLimit = 6 * pageNumber - 5;
+
+    const upperLimit = 6 * pageNumber;
+    const lowerLimit = upperLimit - 6 + 1;
     try {
       for (let i = lowerLimit; upperLimit > i; i++) {
         result = await contract.tokenURI(i);
