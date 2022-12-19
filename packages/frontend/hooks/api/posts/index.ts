@@ -11,7 +11,17 @@ type IndividualPost = Post & {
 };
 
 export const usePosts = (chain: Chain = "polygon") => {
-  return useQuery<Post[]>(postKeys.byChain(chain), () => fetchPosts(chain));
+  return useInfiniteQuery(
+    postKeys.byChain(chain),
+    ({ pageParam }) => fetchPosts(chain, { pageParam }),
+    {
+      getNextPageParam: (lastPage, pages) => {
+        if (lastPage[0]?.name) {
+          return pages.length;
+        }
+      },
+    }
+  );
 };
 
 export const usePost = (chain: Chain, id: string) => {

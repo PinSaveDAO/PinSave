@@ -4,16 +4,23 @@ import { useNetwork } from "wagmi";
 
 import { usePosts } from "@/hooks/api";
 import PostCard from "@/components/Posts/PostCard";
-import { getCurrentChain } from "@/utils/chains";
+import type { Chain } from "@/constants/chains";
 
 const Home: NextPage = () => {
   const { chain } = useNetwork();
-  let initialChain = 9000;
-  if (chain) {
-    initialChain = chain?.id;
+  var initialChain = "polygon" as Chain;
+  if (chain?.id === 22) {
+    initialChain = "lukso";
   }
-  const currentChain = getCurrentChain(initialChain);
-  const { data: posts, isLoading } = usePosts(currentChain);
+
+  const {
+    data: posts,
+    isFetching: isLoading,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = usePosts(initialChain);
+
   return (
     <>
       <LoadingOverlay visible={isLoading} />
@@ -27,10 +34,26 @@ const Home: NextPage = () => {
           gridTemplateRows: "masonry",
         }}
       >
-        {posts &&
-          posts.map((post: any, i: any) => {
-            return <PostCard {...post} key={i} />;
-          })}
+        {posts?.pages.map((page) => (
+          <>
+            {page.map((post: any, i: number) => {
+              return <PostCard {...post} key={page + i} />;
+            })}
+          </>
+        ))}
+
+        <div>
+          <button
+            onClick={() => fetchNextPage()}
+            disabled={!hasNextPage || isFetchingNextPage}
+          >
+            {isFetchingNextPage
+              ? "Loading more..."
+              : hasNextPage
+              ? "Load More"
+              : "Nothing more to load"}
+          </button>
+        </div>
       </Box>
     </>
   );

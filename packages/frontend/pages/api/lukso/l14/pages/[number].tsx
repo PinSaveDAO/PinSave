@@ -21,15 +21,14 @@ export default async function handler(
 
     let items = [];
     let result;
-    const upperLimit = 6 * pageNumber + 1;
-    const lowerLimit = 6 * pageNumber - 5;
+
+    const upperLimit = 6 * pageNumber;
+    const lowerLimit = upperLimit - 6 + 1;
     try {
-      for (let i = lowerLimit; upperLimit > i; i++) {
+      for (let i = lowerLimit; upperLimit >= i; i++) {
         result = await contract.getPost(i);
 
-        let x = result
-          .replace("ipfs://", "https://")
-          .replace("sia://", "https://siasky.net/");
+        let x = result.replace("ipfs://", "https://");
 
         let resURL = x.replace(
           "/metadata.json",

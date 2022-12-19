@@ -62,29 +62,11 @@ const LuksoL14Chain: Chain = {
   testnet: true,
 };
 
-const EvmosChain: Chain = {
-  id: 9000,
-  name: "EVMOS",
-  network: "evmos",
-  nativeCurrency: {
-    decimals: 18,
-    name: "EVMOS",
-    symbol: "EVMOS",
-  },
-  rpcUrls: {
-    default: {
-      http: ["https://eth.bd.evmos.dev:8545"],
-    },
-  },
-  testnet: true,
-};
-
 const { chains, provider, webSocketProvider } = configureChains(
   [
     ...(process.env.NEXT_PUBLIC_DEV === "true" ? [hardhat] : []),
     polygonMumbai,
     LuksoL14Chain,
-    EvmosChain,
   ],
   [
     alchemyProvider({
@@ -93,8 +75,7 @@ const { chains, provider, webSocketProvider } = configureChains(
     publicProvider(),
     jsonRpcProvider({
       rpc: (chain) => {
-        if (chain.id !== LuksoL14Chain.id && chain.id !== EvmosChain.id)
-          return null;
+        if (chain.id !== LuksoL14Chain.id) return null;
         return { http: chain.rpcUrls.default.http[0] };
       },
     }),
