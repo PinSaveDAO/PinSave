@@ -18,7 +18,7 @@
     "@mantine/next": "^5.9.5",
     "@mantine/notifications": "^4.2.12",
     "@rainbow-me/rainbowkit": "^0.8.1",
-    "@tanstack/react-query": "^4.16.1",
+    "@tanstack/react-query": "^4.20.4",
     "@tanstack/react-query-devtools": "^4.20.4",
     "ethers": "^5.7.2",
     "isomorphic-fetch": "^3.0.0",
