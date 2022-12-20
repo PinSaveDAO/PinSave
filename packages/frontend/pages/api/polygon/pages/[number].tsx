@@ -19,6 +19,10 @@ export default async function handler(
 
     const contract = new ethers.Contract(address, abi, provider);
 
+    const totalSupply = ethers.BigNumber.from(
+      await contract.totalSupply()
+    ).toNumber();
+
     let items = [];
     let result;
 
@@ -40,10 +44,10 @@ export default async function handler(
         items.push({ token_id: i, ...item });
       }
     } catch {
-      res.status(200).json(items);
+      res.status(200).json({ items: items, totalSupply: totalSupply });
     }
 
-    res.status(200).json(items);
+    res.status(200).json({ items: items, totalSupply: totalSupply });
   } catch (err) {
     res.status(500).json({ error: "failed to fetch data" + err });
   }

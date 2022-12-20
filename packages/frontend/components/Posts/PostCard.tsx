@@ -26,7 +26,7 @@ const PostCard = (post: Post) => {
   return (
     <Link href={`/${loadPosts(chain)}/posts/${post.token_id}`}>
       <Paper
-        component="a"
+        component="div"
         withBorder
         radius="lg"
         shadow="md"

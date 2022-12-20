@@ -1,4 +1,5 @@
-import { Box, LoadingOverlay } from "@mantine/core";
+import { Box, Button, Center, LoadingOverlay } from "@mantine/core";
+
 import type { NextPage } from "next";
 import { useNetwork } from "wagmi";
 
@@ -36,25 +37,25 @@ const Home: NextPage = () => {
       >
         {posts?.pages.map((page) => (
           <>
-            {page.map((post: any, i: number) => {
+            {page.items.map((post: any, i: number) => {
               return <PostCard {...post} key={page + i} />;
             })}
           </>
         ))}
-
-        <div>
-          <button
-            onClick={() => fetchNextPage()}
-            disabled={!hasNextPage || isFetchingNextPage}
-          >
-            {isFetchingNextPage
-              ? "Loading more..."
-              : hasNextPage
-              ? "Load More"
-              : "Nothing more to load"}
-          </button>
-        </div>
       </Box>
+      <Center my={8}>
+        <Button
+          mx="auto"
+          onClick={() => fetchNextPage()}
+          disabled={!hasNextPage || isFetchingNextPage}
+        >
+          {isFetchingNextPage
+            ? "Loading more..."
+            : hasNextPage
+            ? "Load More"
+            : "Nothing more to load"}
+        </Button>
+      </Center>
     </>
   );
 };

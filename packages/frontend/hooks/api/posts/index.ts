@@ -16,7 +16,7 @@ export const usePosts = (chain: Chain = "polygon") => {
     ({ pageParam }) => fetchPosts(chain, { pageParam }),
     {
       getNextPageParam: (lastPage, pages) => {
-        if (lastPage[0]?.name) {
+        if (lastPage.items[5]?.token_id < lastPage.totalSupply) {
           return pages.length;
         }
       },
