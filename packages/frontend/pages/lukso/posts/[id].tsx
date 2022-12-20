@@ -31,16 +31,11 @@ const PostPage = ({ post }: InferGetStaticPropsType<typeof getStaticProps>) => {
         ]}
       >
         <Image
-          src={
-            post.image ??
-            "https://siasky.net/bABrwXB_uKp6AYEuBk_yxEfSMP7QFKfHQe9KB8AF2nTL2w"
-          }
-          alt=""
+          src={post.image ?? "https://evm.pinsave.app/PinSaveCard.png"}
+          alt={post.name}
         />
         <Paper shadow="sm" p="md" withBorder>
-          <h2 style={{ marginBottom: "1.4rem" }}>
-            {post.name ?? post._data.name}
-          </h2>
+          <h2 style={{ marginBottom: "1.4rem" }}>{post.name}</h2>
           <h4>Descripton</h4>
           <Paper
             shadow="xs"
@@ -48,7 +43,7 @@ const PostPage = ({ post }: InferGetStaticPropsType<typeof getStaticProps>) => {
             px="sm"
             sx={{ backgroundColor: "#82c7fc1d" }}
           >
-            <p>{post.description ?? post._data.description}</p>
+            <p>{post.description}</p>
           </Paper>
           <p style={{ fontSize: "small", color: "#0000008d" }}>
             Owned by:{" "}

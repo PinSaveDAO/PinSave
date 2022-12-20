@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-    <a href="https://discord.gg/NTn6MZqk">
+    <a href="https://discord.gg/GzhgdRmbM8">
         <img src="https://img.shields.io/discord/915204325771444234?style=flat-square"
             alt="chat on Discord"></a>
     <a href="https://twitter.com/intent/follow?screen_name=pinsav3">

@@ -42,7 +42,7 @@ export async function uploadPost(
       await contract.mintPost(accAddress, metadata.url);
     }
 
-    if (chain === 22) {
+    if (chain === 22 || chain === 250) {
       try {
         const id = ethers.BigNumber.from(ethers.utils.randomBytes(32));
         const Id = ethers.utils.hexZeroPad(
