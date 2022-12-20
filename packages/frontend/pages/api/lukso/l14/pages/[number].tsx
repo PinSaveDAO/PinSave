@@ -18,18 +18,20 @@ export default async function handler(
     );
 
     const contract = new ethers.Contract(address, abi, provider);
+    const totalSupply = ethers.BigNumber.from(
+      await contract.totalSupply()
+    ).toNumber();
 
     let items = [];
     let result;
-    const upperLimit = 6 * pageNumber + 1;
-    const lowerLimit = 6 * pageNumber - 5;
+
+    const upperLimit = 6 * pageNumber;
+    const lowerLimit = upperLimit - 6 + 1;
     try {
-      for (let i = lowerLimit; upperLimit > i; i++) {
+      for (let i = lowerLimit; upperLimit >= i; i++) {
         result = await contract.getPost(i);
 
-        let x = result
-          .replace("ipfs://", "https://")
-          .replace("sia://", "https://siasky.net/");
+        let x = result.replace("ipfs://", "https://");
 
         let resURL = x.replace(
           "/metadata.json",
@@ -41,10 +43,10 @@ export default async function handler(
         items.push({ token_id: i, ...item });
       }
     } catch {
-      res.status(200).json(items);
+      res.status(200).json({ items: items, totalSupply: totalSupply });
     }
 
-    res.status(200).json(items);
+    res.status(200).json({ items: items, totalSupply: totalSupply });
   } catch (err) {
     res.status(500).json({ error: "failed to fetch data" + err });
   }

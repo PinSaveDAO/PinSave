@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
 import { postKeys, fetchPosts, fetchPost } from "./queries";
 
 import type { Post } from "@/services/upload";
@@ -11,7 +11,17 @@ type IndividualPost = Post & {
 };
 
 export const usePosts = (chain: Chain = "polygon") => {
-  return useQuery<Post[]>(postKeys.byChain(chain), () => fetchPosts(chain));
+  return useInfiniteQuery(
+    postKeys.byChain(chain),
+    ({ pageParam }) => fetchPosts(chain, { pageParam }),
+    {
+      getNextPageParam: (lastPage, pages) => {
+        if (lastPage.items[5]?.token_id < lastPage.totalSupply) {
+          return pages.length;
+        }
+      },
+    }
+  );
 };
 
 export const usePost = (chain: Chain, id: string) => {

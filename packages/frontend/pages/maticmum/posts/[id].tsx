@@ -41,11 +41,8 @@ const PostPage = () => {
             ]}
           >
             <Image
-              src={
-                post.image ??
-                "https://siasky.net/bABrwXB_uKp6AYEuBk_yxEfSMP7QFKfHQe9KB8AF2nTL2w"
-              }
-              alt=""
+              src={post.image ?? "https://evm.pinsave.app/PinSaveCard.png"}
+              alt={post.name}
             />
             <Paper shadow="sm" p="md" withBorder>
               <h2 style={{ marginBottom: "1.4rem" }}>{post.name}</h2>

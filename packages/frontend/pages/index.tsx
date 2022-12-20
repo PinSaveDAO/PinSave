@@ -1,19 +1,27 @@
-import { Box, LoadingOverlay } from "@mantine/core";
+import { Box, Button, Center, LoadingOverlay } from "@mantine/core";
+
 import type { NextPage } from "next";
 import { useNetwork } from "wagmi";
 
 import { usePosts } from "@/hooks/api";
 import PostCard from "@/components/Posts/PostCard";
-import { getCurrentChain } from "@/utils/chains";
+import type { Chain } from "@/constants/chains";
 
 const Home: NextPage = () => {
   const { chain } = useNetwork();
-  let initialChain = 9000;
-  if (chain) {
-    initialChain = chain?.id;
+  var initialChain = "polygon" as Chain;
+  if (chain?.id === 22 || chain?.id === 250) {
+    initialChain = chain.network as Chain;
   }
-  const currentChain = getCurrentChain(initialChain);
-  const { data: posts, isLoading } = usePosts(currentChain);
+
+  const {
+    data: posts,
+    isFetching: isLoading,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = usePosts(initialChain);
+
   return (
     <>
       <LoadingOverlay visible={isLoading} />
@@ -27,10 +35,27 @@ const Home: NextPage = () => {
           gridTemplateRows: "masonry",
         }}
       >
-        {posts?.map((post: any, i: any) => {
-          return <PostCard {...post} key={i} />;
-        })}
+        {posts?.pages.map((page) => (
+          <>
+            {page.items.map((post: any, i: number) => {
+              return <PostCard {...post} key={page + i} />;
+            })}
+          </>
+        ))}
       </Box>
+      <Center my={8}>
+        <Button
+          mx="auto"
+          onClick={() => fetchNextPage()}
+          disabled={!hasNextPage || isFetchingNextPage}
+        >
+          {isFetchingNextPage
+            ? "Loading more..."
+            : hasNextPage
+            ? "Load More"
+            : "Nothing more to load"}
+        </Button>
+      </Center>
     </>
   );
 };

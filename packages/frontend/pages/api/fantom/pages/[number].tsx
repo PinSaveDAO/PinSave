@@ -11,10 +11,9 @@ export default async function handler(
     const { number } = req.query;
     const pageNumber = Number(number) + 1;
 
-    const { address, abi } = getContractInfo(80001);
-    let provider = new ethers.providers.AlchemyProvider(
-      "maticmum",
-      process.env.NEXT_ALCHEMY_ID
+    const { address, abi } = getContractInfo(250);
+    const provider = new ethers.providers.JsonRpcProvider(
+      "https://rpc.ankr.com/fantom/"
     );
 
     const contract = new ethers.Contract(address, abi, provider);
