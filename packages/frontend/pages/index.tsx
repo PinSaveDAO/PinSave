@@ -10,8 +10,8 @@ import type { Chain } from "@/constants/chains";
 const Home: NextPage = () => {
   const { chain } = useNetwork();
   var initialChain = "polygon" as Chain;
-  if (chain?.id === 22) {
-    initialChain = "lukso";
+  if (chain?.id === 22 || chain?.id === 250) {
+    initialChain = chain.network as Chain;
   }
 
   const {

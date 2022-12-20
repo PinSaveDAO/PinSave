@@ -19,7 +19,7 @@ import {
   walletConnectWallet,
 } from "@rainbow-me/rainbowkit/wallets";
 import { Chain, configureChains, createClient, WagmiConfig } from "wagmi";
-import { polygonMumbai, hardhat } from "wagmi/chains";
+import { polygonMumbai, hardhat, fantom } from "wagmi/chains";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
@@ -67,6 +67,7 @@ const { chains, provider, webSocketProvider } = configureChains(
     ...(process.env.NEXT_PUBLIC_DEV === "true" ? [hardhat] : []),
     polygonMumbai,
     LuksoL14Chain,
+    fantom,
   ],
   [
     alchemyProvider({
