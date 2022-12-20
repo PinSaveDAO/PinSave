@@ -9,6 +9,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   try {
+    console.log(124);
     const { id } = req.query;
     const { address, abi } = getContractInfo(250);
 
@@ -18,8 +19,8 @@ export default async function handler(
 
     const contract = new ethers.Contract(address, abi, provider);
 
-    const result = await contract.tokenURI(id);
-    const owner = await contract.ownerOf(id);
+    const result = await contract.getPost(id);
+    const owner = await contract.getPostOwner(id);
 
     let x = result.replace("ipfs://", "https://");
 

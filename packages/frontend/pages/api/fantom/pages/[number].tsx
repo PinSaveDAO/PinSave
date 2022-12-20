@@ -29,7 +29,7 @@ export default async function handler(
     const lowerLimit = upperLimit - 6 + 1;
     try {
       for (let i = lowerLimit; upperLimit >= i; i++) {
-        result = await contract.tokenURI(i);
+        result = await contract.getPost(i);
 
         let x = result.replace("ipfs://", "https://");
 

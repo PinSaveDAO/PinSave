@@ -9,9 +9,12 @@ import type { Chain } from "@/constants/chains";
 
 const Home: NextPage = () => {
   const { chain } = useNetwork();
-  var initialChain = "polygon" as Chain;
-  if (chain?.id === 22 || chain?.id === 250) {
-    initialChain = chain.network as Chain;
+  var initialChain = "fantom";
+  if (chain?.id === 22) {
+    initialChain = "lukso";
+  }
+  if (chain?.id === 80001) {
+    initialChain = "polygon";
   }
 
   const {
@@ -20,7 +23,7 @@ const Home: NextPage = () => {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = usePosts(initialChain);
+  } = usePosts(initialChain as Chain);
 
   return (
     <>

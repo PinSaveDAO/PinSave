@@ -28,5 +28,10 @@ module.exports = {
       accounts: [process.env.PRIVATE_KEY, process.env.UP_PK],
       chainId: 9000,
     },
+    fantom: {
+      url: "https://rpc.ankr.com/fantom/",
+      accounts: [process.env.PRIVATE_KEY, process.env.UP_PK],
+      chainId: 250,
+    },
   },
 };
