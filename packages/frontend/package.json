@@ -22,7 +22,7 @@
     "@tanstack/react-query-devtools": "^4.20.4",
     "ethers": "^5.7.2",
     "isomorphic-fetch": "^3.0.0",
-    "next": "^13.0.0",
+    "next": "^13.0.7",
     "nft.storage": "^7.0.0",
     "postcss": "^8.4.20",
     "react": "^18.1.0",
