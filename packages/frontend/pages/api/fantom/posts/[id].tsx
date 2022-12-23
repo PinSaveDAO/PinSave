@@ -9,7 +9,6 @@ export default async function handler(
   res: NextApiResponse
 ) {
   try {
-    console.log(124);
     const { id } = req.query;
     const { address, abi } = getContractInfo(250);
 

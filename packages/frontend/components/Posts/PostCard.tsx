@@ -17,9 +17,13 @@ const PostCard = (post: Post) => {
   function loadPosts(chain: any) {
     if ([22, 250, 9000, 80001, 31337].includes(chain?.id)) {
       return String(chain.network);
-    } else {
+    }
+
+    if (chain?.id === 80001) {
       return "maticmum";
     }
+
+    return "fantom";
   }
   const imgSrc = `https://${x ?? "evm.pinsave.app/PinSaveCard.png"}`;
 

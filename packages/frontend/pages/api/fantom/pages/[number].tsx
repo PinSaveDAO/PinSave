@@ -25,8 +25,14 @@ export default async function handler(
     let items = [];
     let result;
 
-    const upperLimit = 6 * pageNumber;
+    var upperLimit = 6 * pageNumber;
+
     const lowerLimit = upperLimit - 6 + 1;
+
+    if (totalSupply < upperLimit) {
+      upperLimit = totalSupply;
+    }
+
     try {
       for (let i = lowerLimit; upperLimit >= i; i++) {
         result = await contract.getPost(i);
