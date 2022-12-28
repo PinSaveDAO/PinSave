@@ -1,7 +1,6 @@
 import { useRouter } from "next/router";
 import React, { useState, useEffect } from "react";
 import { Orbis } from "@orbisclub/orbis-sdk";
-import fetchJson, { FetchError } from "utils/fetchJson";
 
 import {
   Text,
