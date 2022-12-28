@@ -25,6 +25,12 @@
       "@/constants/*": ["constants/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "pages/profile/index.js",
+    "pages/profile/[address].jsx"
+  ],
   "exclude": ["node_modules"]
 }
