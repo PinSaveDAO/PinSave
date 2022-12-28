@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Orbis } from "@orbisclub/orbis-sdk";
-// import fetchJson, { FetchError } from "utils/fetchJson";
 
 import {
   Text,
@@ -12,7 +11,7 @@ import {
   Button,
   Image,
   Center,
-  MediaQuery,
+  Flex,
 } from "@mantine/core";
 
 let orbis = new Orbis();
@@ -48,22 +47,59 @@ const Upload = () => {
   return (
     <>
       <div>
-        {user?.did ? (
+        {user && user.did ? (
           <>
-            <p>Connected with: {user.did}</p>
-            <TextInput
-              label="Username"
-              placeholder="Username Title"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            />
-            <TextInput
-              label="PFP"
-              placeholder="https://images.app.goo.gl/bHjNNHKxuZYtXyM37"
-              value={pfp}
-              onChange={(e) => setPfp(e.target.value)}
-            />
-            <Button onClick={() => updateProfile()}>Submit</Button>
+            <Paper
+              withBorder
+              shadow="xl"
+              p="xl"
+              radius="xl"
+              sx={{ maxWidth: "900px", backgroundColor: "#82c7fc1d" }}
+              mx="auto"
+            >
+              <div
+                style={{ width: 400, marginLeft: "auto", marginRight: "auto" }}
+              >
+                <Center>
+                  <Title> {user.details.profile?.username}</Title>
+                </Center>
+                <Image
+                  radius="md"
+                  src={user.details.profile?.pfp}
+                  alt={user.details.profile?.username}
+                />
+              </div>
+
+              <TextInput
+                my={12}
+                size="md"
+                label="Change Username"
+                placeholder="Username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                style={{ width: 300, marginLeft: "auto", marginRight: "auto" }}
+              />
+
+              <TextInput
+                my={12}
+                size="md"
+                label="Change Profile Picture"
+                placeholder="https://images.app.goo.gl/bHjNNHKxuZYtXyM37"
+                value={pfp}
+                onChange={(e) => setPfp(e.target.value)}
+                style={{ width: 300, marginLeft: "auto", marginRight: "auto" }}
+              />
+              <Center>
+                <Button
+                  my={12}
+                  size="md"
+                  onClick={() => updateProfile()}
+                  style={{ marginLeft: "auto", marginRight: "auto" }}
+                >
+                  Submit
+                </Button>
+              </Center>
+            </Paper>
           </>
         ) : (
           <>Connecting</>
