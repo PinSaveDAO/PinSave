@@ -44,16 +44,25 @@ function Post() {
   return (
     <>
       {user && user.details ? (
-        <div style={{ width: 300, marginLeft: "auto", marginRight: "auto" }}>
-          <Center>
-            <Title> {user.details.profile?.username}</Title>
-          </Center>
-          <Image
-            radius="md"
-            src={user.details.profile?.pfp}
-            alt={user.details.profile?.username}
-          />
-        </div>
+        <Paper
+          withBorder
+          shadow="xl"
+          p="xl"
+          radius="xl"
+          sx={{ maxWidth: "900px", backgroundColor: "#82c7fc1d" }}
+          mx="auto"
+        >
+          <div style={{ width: 400, marginLeft: "auto", marginRight: "auto" }}>
+            <Center>
+              <Title> {user.details.profile?.username}</Title>
+            </Center>
+            <Image
+              radius="md"
+              src={user.details.profile?.pfp}
+              alt={user.details.profile?.username}
+            />
+          </div>
+        </Paper>
       ) : null}
     </>
   );

@@ -8,11 +8,6 @@ export type PostData = {
   name: string;
   description: string;
   image: File;
-  _data?: {
-    name: string;
-    description: string;
-    image: string;
-  };
 };
 
 export type Post = PostData & {
