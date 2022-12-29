@@ -61,7 +61,7 @@ const PostPage = () => {
                 Owned by:{" "}
                 <a
                   style={{ color: "#198b6eb9" }}
-                  href={`https://ftmscan.com/address/${post.owner}`}
+                  href={`https://evm.pinsave.app/profile/${post.owner}`}
                 >
                   {post.owner}
                 </a>
