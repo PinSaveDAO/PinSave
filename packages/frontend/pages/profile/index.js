@@ -98,13 +98,14 @@ const Upload = () => {
             mx="auto"
           >
             <div
-              style={{ width: 400, marginLeft: "auto", marginRight: "auto" }}
+              style={{ width: 450, marginLeft: "auto", marginRight: "auto" }}
             >
               <Center>
                 <Title> {user.details.profile?.username}</Title>
               </Center>
               <Image
                 radius="md"
+                mt={10}
                 src={user.details.profile?.pfp}
                 alt={user.details.profile?.username}
               />

@@ -5,11 +5,17 @@ import {
   Image,
   LoadingOverlay,
 } from "@mantine/core";
+import React, { useState, useEffect } from "react";
+
 import { ArrowLeft } from "tabler-icons-react";
 import { useRouter } from "next/router";
 
 import { usePost } from "@/hooks/api";
 import { getCurrentChain } from "@/utils/chains";
+
+import { Orbis } from "@orbisclub/orbis-sdk";
+
+let orbis = new Orbis();
 
 const PostPage = () => {
   const router = useRouter();
@@ -18,6 +24,24 @@ const PostPage = () => {
     currentChain,
     router.query.id as string
   );
+
+  const [user, setUser] = useState();
+
+  useEffect(() => {
+    async function loadData() {
+      let res = await orbis.isConnected();
+
+      if (res) {
+        setUser(res);
+      }
+
+      if (!res) {
+        let res = await orbis.connect();
+        setUser(res);
+      }
+    }
+    loadData();
+  }, []);
 
   return (
     <div>
@@ -48,7 +72,6 @@ const PostPage = () => {
             />
             <Paper shadow="sm" p="md" withBorder>
               <h2 style={{ marginBottom: "1.4rem" }}>{post.name}</h2>
-              <h4>Description</h4>
               <Paper
                 shadow="xs"
                 withBorder

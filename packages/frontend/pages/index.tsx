@@ -1,5 +1,4 @@
 import { Box, Button, Center, LoadingOverlay } from "@mantine/core";
-
 import type { NextPage } from "next";
 import { useNetwork } from "wagmi";
 
