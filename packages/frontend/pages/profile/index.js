@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Orbis } from "@orbisclub/orbis-sdk";
-import { Paper, Title, TextInput, Button, Image, Center } from "@mantine/core";
+import {
+  Paper,
+  Title,
+  TextInput,
+  Button,
+  Image,
+  Center,
+  LoadingOverlay,
+} from "@mantine/core";
 import { NFTStorage } from "nft.storage";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { showNotification, updateNotification } from "@mantine/notifications";
@@ -84,9 +92,9 @@ const Upload = () => {
           <Paper
             withBorder
             shadow="xl"
-            p="xl"
-            radius="xl"
-            sx={{ maxWidth: "900px", backgroundColor: "#82c7fc1d" }}
+            p="md"
+            radius="lg"
+            sx={{ maxWidth: "700px", backgroundColor: "#82c7fc1d" }}
             mx="auto"
           >
             <div
@@ -123,6 +131,8 @@ const Upload = () => {
             />
             <Dropzone
               mt="md"
+              ml="xl"
+              mr="xl"
               onDrop={(files) => setImage(files[0])}
               maxSize={3 * 1024 ** 2}
               multiple={false}
@@ -144,7 +154,7 @@ const Upload = () => {
           </Paper>
         </>
       ) : (
-        <>Connecting</>
+        <LoadingOverlay visible />
       )}
     </>
   );

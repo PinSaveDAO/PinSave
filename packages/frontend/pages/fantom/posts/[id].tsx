@@ -28,7 +28,7 @@ const PostPage = () => {
             onClick={() => router.back()}
             mb="md"
             color="teal"
-            size="lg"
+            size="xl"
             radius="xl"
             variant="filled"
           >
@@ -41,6 +41,8 @@ const PostPage = () => {
             ]}
           >
             <Image
+              height={550}
+              fit="contain"
               src={post.image ?? "https://evm.pinsave.app/PinSaveCard.png"}
               alt={post.name}
             />
