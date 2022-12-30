@@ -7,6 +7,8 @@ import {
   Button,
   TextInput,
   Text,
+  Group,
+  Avatar,
 } from "@mantine/core";
 import React, { useState, useEffect } from "react";
 
@@ -37,8 +39,36 @@ const PostPage = () => {
       body: message,
       context:
         "kjzl6cwe1jw147hcck185xfdlrxq9zv0y0hoa6shzskqfnio56lhf8190yaei7w",
+      tags: [{ slug: router.query.id, title: router.query.id }],
     });
   };
+
+  function timeConverter(UNIX_timestamp: number) {
+    var a = new Date(UNIX_timestamp * 1000);
+    var months = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+    var year = a.getFullYear();
+    var month = months[a.getMonth()];
+    var date = a.getDate();
+    var hour = a.getHours();
+    var min = a.getMinutes();
+    var sec = a.getSeconds();
+    var time =
+      date + " " + month + " " + year + " " + hour + ":" + min + ":" + sec;
+    return time;
+  }
 
   const sendReaction = async function (id: string, reaction: string) {
     await orbis.react(id, reaction);
@@ -48,58 +78,27 @@ const PostPage = () => {
     async function loadData() {
       let res = await orbis.isConnected();
 
+      if (!router.isReady) return;
+
       if (res) {
         setUser(res);
-
-        /* let { data, error } = await orbis.getProfileGroups(res.did);
-        console.log(data); */
-
-        /* let { data, error } = await orbis.getGroup(
-          "kjzl6cwe1jw147hcck185xfdlrxq9zv0y0hoa6shzskqfnio56lhf8190yaei7w"
-        ); */
-
-        let result = await orbis.getPosts({
-          context:
-            "kjzl6cwe1jw147hcck185xfdlrxq9zv0y0hoa6shzskqfnio56lhf8190yaei7w",
-        });
-
-        setMessages(result.data);
-
-        /* let { data, error } = await orbis.getChannel(
-          "kjzl6cwe1jw147hcck185xfdlrxq9zv0y0hoa6shzskqfnio56lhf8190yaei7w"
-        ); */
-
-        console.log(result.data);
-
-        /* await orbis.updateGroup(
-          "kjzl6cwe1jw147hcck185xfdlrxq9zv0y0hoa6shzskqfnio56lhf8190yaei7w",
-          {
-            pfp: "https://evm.pinsave.app/PinSaveL.png",
-            name: "Pin Save",
-            description: "decentralised Pinterest",
-          }
-        ); */
-
-        //"kjzl6cwe1jw14ai2gg8e0qmx2j944ppe3s3dgfk003jlb8guuybyg4m77nsrg73"
-        /* await orbis.createChannel(
-          "kjzl6cwe1jw147hcck185xfdlrxq9zv0y0hoa6shzskqfnio56lhf8190yaei7w",
-          {
-            group_id:
-              "kjzl6cwe1jw147hcck185xfdlrxq9zv0y0hoa6shzskqfnio56lhf8190yaei7w",
-            pfp: "https://evm.pinsave.app/PinSaveL.png",
-            name: "Pin Save",
-            description: "decentralised Pinterest",
-          }
-        ); */
       }
 
       if (!res) {
         let res = await orbis.connect();
         setUser(res);
       }
+
+      let result = await orbis.getPosts({
+        context:
+          "kjzl6cwe1jw147hcck185xfdlrxq9zv0y0hoa6shzskqfnio56lhf8190yaei7w",
+        tag: router.query.id,
+      });
+
+      setMessages(result.data);
     }
     loadData();
-  }, []);
+  }, [router.isReady]);
 
   return (
     <div>
@@ -133,7 +132,7 @@ const PostPage = () => {
               <Paper
                 shadow="xs"
                 withBorder
-                px="sm"
+                px="xs"
                 sx={{ backgroundColor: "#82c7fc1d" }}
               >
                 <p>{post.description}</p>
@@ -156,18 +155,30 @@ const PostPage = () => {
                     mt={4}
                     sx={{ backgroundColor: "#80c7fc1d" }}
                     withBorder
+                    px="xl"
                   >
-                    <Text px="lg">
-                      {post.content.body}
-                      <a
-                        href={`https://evm.pinsave.app/profile/${post.creator.substring(
-                          post.creator.indexOf(":0x") + 1
-                        )}`}
-                        style={{ color: "#198b6eb9", float: "right" }}
-                      >
-                        {post.creator_details.profile.username}
-                      </a>
-                    </Text>
+                    <Group spacing="xs">
+                      <Avatar size={25} color="blue">
+                        <Image
+                          src={
+                            post.creator_details.profile.pfp ??
+                            "https://evm.pinsave.app/PinSaveCard.png"
+                          }
+                        />
+                      </Avatar>
+                      <Text mt={3}>
+                        <a
+                          href={`https://evm.pinsave.app/profile/${post.creator.substring(
+                            post.creator.indexOf(":0x") + 1
+                          )}`}
+                          style={{ color: "#198b6eb9" }}
+                        >
+                          {post.creator_details.profile.username}
+                        </a>
+                        : <a>{post.content.body}</a>
+                      </Text>
+                    </Group>
+
                     <Button
                       size="xs"
                       component="a"
@@ -194,6 +205,9 @@ const PostPage = () => {
                     >
                       {post.count_downvotes} 👎
                     </Button>
+                    <Text sx={{ float: "right" }}>
+                      {timeConverter(post.timestamp)}
+                    </Text>
                   </Paper>
                 ))}
 
