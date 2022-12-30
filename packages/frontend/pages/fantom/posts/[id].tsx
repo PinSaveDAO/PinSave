@@ -146,7 +146,6 @@ const PostPage = () => {
                   {post.owner}
                 </a>
               </p>
-
               {messages &&
                 messages.map((post: any, i: number) => (
                   <Paper
@@ -161,7 +160,7 @@ const PostPage = () => {
                       <Avatar size={25} color="blue">
                         <Image
                           src={
-                            post.creator_details.profile.pfp ??
+                            post.creator_details.profile?.pfp ??
                             "https://evm.pinsave.app/PinSaveCard.png"
                           }
                         />
@@ -173,12 +172,14 @@ const PostPage = () => {
                           )}`}
                           style={{ color: "#198b6eb9" }}
                         >
-                          {post.creator_details.profile.username}
+                          {post.creator_details.profile?.username ??
+                            post.creator.substring(
+                              post.creator.indexOf(":0x") + 1
+                            )}
                         </a>
                         : <a>{post.content.body}</a>
                       </Text>
                     </Group>
-
                     <Button
                       size="xs"
                       component="a"
@@ -210,7 +211,6 @@ const PostPage = () => {
                     </Text>
                   </Paper>
                 ))}
-
               <TextInput
                 my="lg"
                 onChange={(e) => setMessage(e.target.value)}
