@@ -6,6 +6,7 @@ import {
   LoadingOverlay,
   Button,
   TextInput,
+  Text,
 } from "@mantine/core";
 import React, { useState, useEffect } from "react";
 
@@ -37,6 +38,10 @@ const PostPage = () => {
       context:
         "kjzl6cwe1jw147hcck185xfdlrxq9zv0y0hoa6shzskqfnio56lhf8190yaei7w",
     });
+  };
+
+  const sendReaction = async function (id: string, reaction: string) {
+    await orbis.react(id, reaction);
   };
 
   useEffect(() => {
@@ -146,31 +151,61 @@ const PostPage = () => {
               {messages &&
                 messages.map((post: any, i: number) => (
                   <Paper
+                    key={i}
                     shadow="xs"
-                    withBorder
-                    px="sm"
+                    mt={4}
                     sx={{ backgroundColor: "#80c7fc1d" }}
+                    withBorder
                   >
-                    <p key={i}>{post.content.body}</p>
+                    <Text px="lg">
+                      {post.content.body}
+                      <a
+                        href={`https://evm.pinsave.app/profile/${post.creator.substring(
+                          post.creator.indexOf(":0x") + 1
+                        )}`}
+                        style={{ color: "#198b6eb9", float: "right" }}
+                      >
+                        {post.creator_details.profile.username}
+                      </a>
+                    </Text>
+                    <Button
+                      size="xs"
+                      component="a"
+                      radius="sm"
+                      onClick={() => sendReaction(post.stream_id, "like")}
+                    >
+                      {post.count_likes} ❤️
+                    </Button>
+                    <Button
+                      size="xs"
+                      component="a"
+                      radius="sm"
+                      ml={4}
+                      onClick={() => sendReaction(post.stream_id, "ha-ha")}
+                    >
+                      {post.count_haha} 🤣
+                    </Button>
+                    <Button
+                      size="xs"
+                      component="a"
+                      radius="sm"
+                      ml={4}
+                      onClick={() => sendReaction(post.stream_id, "downvote")}
+                    >
+                      {post.count_downvotes} 👎
+                    </Button>
                   </Paper>
                 ))}
 
               <TextInput
                 my="lg"
-                required
                 onChange={(e) => setMessage(e.target.value)}
                 value={message}
-                label="Message"
                 placeholder="Enter your message"
                 sx={{ maxWidth: "240px" }}
               />
-              <Button
-                component="a"
-                radius="lg"
-                mt="md"
-                onClick={() => sendMessage()}
-              >
-                Upload Post
+              <Button component="a" radius="lg" onClick={() => sendMessage()}>
+                Send Message
               </Button>
             </Paper>
           </SimpleGrid>
