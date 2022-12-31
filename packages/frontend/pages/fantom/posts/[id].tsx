@@ -9,6 +9,7 @@ import {
   Text,
   Group,
   Avatar,
+  Switch,
 } from "@mantine/core";
 import React, { useState, useEffect } from "react";
 
@@ -24,7 +25,9 @@ let orbis = new Orbis();
 
 const PostPage = () => {
   const [user, setUser] = useState();
-  const [message, setMessage] = useState("");
+  const [isEncrypted, setIsEncrypted] = useState(false);
+
+  const [newMessage, setNewMessage] = useState("");
   const [messages, setMessages] = useState([]);
 
   const router = useRouter();
@@ -35,12 +38,35 @@ const PostPage = () => {
   );
 
   const sendMessage = async function () {
-    await orbis.createPost({
-      body: message,
-      context:
-        "kjzl6cwe1jw147hcck185xfdlrxq9zv0y0hoa6shzskqfnio56lhf8190yaei7w",
-      tags: [{ slug: router.query.id, title: router.query.id }],
-    });
+    if (isEncrypted)
+      await orbis.createPost(
+        {
+          body: newMessage,
+          context:
+            "kjzl6cwe1jw147hcck185xfdlrxq9zv0y0hoa6shzskqfnio56lhf8190yaei7w",
+          tags: [{ slug: router.query.id, title: router.query.id }],
+        },
+        {
+          type: "custom",
+          accessControlConditions: [
+            {
+              contractAddress: "0x3c046f8E210424317A5740CED78877ef0B3EFf4E",
+              standardContractType: "ERC721",
+              chain: "fantom",
+              method: "balanceOf",
+              parameters: [":userAddress"],
+              returnValueTest: { comparator: ">=", value: "1" },
+            },
+          ],
+        }
+      );
+    if (!isEncrypted)
+      await orbis.createPost({
+        body: newMessage,
+        context:
+          "kjzl6cwe1jw147hcck185xfdlrxq9zv0y0hoa6shzskqfnio56lhf8190yaei7w",
+        tags: [{ slug: router.query.id, title: router.query.id }],
+      });
   };
 
   function timeConverter(UNIX_timestamp: number) {
@@ -74,6 +100,14 @@ const PostPage = () => {
     await orbis.react(id, reaction);
   };
 
+  const getMessage = async function (content: any) {
+    if (content?.content?.body === "") {
+      let res = await orbis.decryptPost(content.content);
+      return res.result;
+    }
+    return content?.content?.body;
+  };
+
   useEffect(() => {
     async function loadData() {
       let res = await orbis.isConnected();
@@ -95,10 +129,19 @@ const PostPage = () => {
         tag: router.query.id,
       });
 
-      setMessages(result.data);
+      const messagesData = await Promise.all(
+        result.data.map(async (obj: object) => {
+          return {
+            ...obj,
+            newData: await getMessage(obj),
+          };
+        })
+      );
+
+      setMessages(messagesData as any);
     }
     loadData();
-  }, [router.isReady]);
+  }, [router.isReady, router.query.id]);
 
   return (
     <div>
@@ -127,6 +170,7 @@ const PostPage = () => {
               src={post.image ?? "https://evm.pinsave.app/PinSaveCard.png"}
               alt={post.name}
             />
+
             <Paper shadow="sm" p="md" withBorder>
               <h2 style={{ marginBottom: "1.4rem" }}>{post.name}</h2>
               <Paper
@@ -147,7 +191,7 @@ const PostPage = () => {
                 </a>
               </p>
               {messages &&
-                messages.map((post: any, i: number) => (
+                messages.map((message: any, i: number) => (
                   <Paper
                     key={i}
                     shadow="xs"
@@ -160,64 +204,74 @@ const PostPage = () => {
                       <Avatar size={25} color="blue">
                         <Image
                           src={
-                            post.creator_details.profile?.pfp ??
+                            message.creator_details.profile?.pfp ??
                             "https://evm.pinsave.app/PinSaveCard.png"
                           }
+                          alt="profile"
                         />
                       </Avatar>
                       <Text mt={3}>
                         <a
-                          href={`https://evm.pinsave.app/profile/${post.creator.substring(
-                            post.creator.indexOf(":0x") + 1
+                          href={`https://evm.pinsave.app/profile/${message.creator.substring(
+                            message.creator.indexOf(":0x") + 1
                           )}`}
                           style={{ color: "#198b6eb9" }}
                         >
-                          {post.creator_details.profile?.username ??
-                            post.creator.substring(
-                              post.creator.indexOf(":0x") + 1
+                          {message.creator_details.profile?.username ??
+                            message.creator.substring(
+                              message.creator.indexOf(":0x") + 1
                             )}
                         </a>
-                        : <a>{post.content.body}</a>
+                        : {message.newData}
                       </Text>
                     </Group>
                     <Button
                       size="xs"
                       component="a"
                       radius="sm"
-                      onClick={() => sendReaction(post.stream_id, "like")}
+                      onClick={() => sendReaction(message.stream_id, "like")}
                     >
-                      {post.count_likes} ❤️
+                      {message.count_likes} ❤️
                     </Button>
                     <Button
                       size="xs"
                       component="a"
                       radius="sm"
                       ml={4}
-                      onClick={() => sendReaction(post.stream_id, "ha-ha")}
+                      onClick={() => sendReaction(message.stream_id, "ha-ha")}
                     >
-                      {post.count_haha} 🤣
+                      {message.count_haha} 🤣
                     </Button>
                     <Button
                       size="xs"
                       component="a"
                       radius="sm"
                       ml={4}
-                      onClick={() => sendReaction(post.stream_id, "downvote")}
+                      onClick={() =>
+                        sendReaction(message.stream_id, "downvote")
+                      }
                     >
-                      {post.count_downvotes} 👎
+                      {message.count_downvotes} 👎
                     </Button>
                     <Text sx={{ float: "right" }}>
-                      {timeConverter(post.timestamp)}
+                      {timeConverter(message.timestamp)}
                     </Text>
                   </Paper>
                 ))}
-              <TextInput
-                my="lg"
-                onChange={(e) => setMessage(e.target.value)}
-                value={message}
-                placeholder="Enter your message"
-                sx={{ maxWidth: "240px" }}
-              />
+
+              <Group>
+                <TextInput
+                  my="lg"
+                  onChange={(e) => setNewMessage(e.target.value)}
+                  value={newMessage}
+                  placeholder="Enter your message"
+                  sx={{ maxWidth: "240px" }}
+                />
+                <Text>Only for PinSave holders:</Text>
+                <Switch
+                  onClick={() => setIsEncrypted((prevCheck) => !prevCheck)}
+                />
+              </Group>
               <Button component="a" radius="lg" onClick={() => sendMessage()}>
                 Send Message
               </Button>
