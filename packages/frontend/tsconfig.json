@@ -27,6 +27,7 @@
   },
   "include": [
     "next-env.d.ts",
+    "Orbis.d.ts",
     "**/*.ts",
     "**/*.tsx",
     "pages/profile/index.js",

@@ -1,15 +1,16 @@
 import { Box, Button, Center, LoadingOverlay } from "@mantine/core";
-
 import type { NextPage } from "next";
 import { useNetwork } from "wagmi";
 
 import { usePosts } from "@/hooks/api";
 import PostCard from "@/components/Posts/PostCard";
 import type { Chain } from "@/constants/chains";
+import type { Post } from "@/services/upload";
 
 const Home: NextPage = () => {
   const { chain } = useNetwork();
   var initialChain = "fantom";
+
   if (chain?.id === 22) {
     initialChain = "lukso";
   }
@@ -38,13 +39,14 @@ const Home: NextPage = () => {
           gridTemplateRows: "masonry",
         }}
       >
-        {posts?.pages.map((page) => (
-          <>
-            {page.items.map((post: any, i: number) => {
-              return <PostCard {...post} key={page + i} />;
-            })}
-          </>
-        ))}
+        {posts &&
+          posts.pages.map((page) => (
+            <>
+              {page.items.map((post: Post, i: number) => {
+                return <PostCard {...post} key={page + i} />;
+              })}
+            </>
+          ))}
       </Box>
       <Center my={8}>
         <Button
