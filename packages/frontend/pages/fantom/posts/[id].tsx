@@ -25,6 +25,7 @@ let orbis = new Orbis();
 
 const PostPage = () => {
   const [user, setUser] = useState();
+  const [reaction, setReaction] = useState("");
   const [isEncrypted, setIsEncrypted] = useState(false);
 
   const [newMessage, setNewMessage] = useState("");
@@ -98,6 +99,7 @@ const PostPage = () => {
 
   const sendReaction = async function (id: string, reaction: string) {
     await orbis.react(id, reaction);
+    setReaction(id + reaction);
   };
 
   const getMessage = async function (content: any) {
@@ -141,7 +143,7 @@ const PostPage = () => {
       setMessages(messagesData as any);
     }
     loadData();
-  }, [router.isReady, router.query.id]);
+  }, [router.isReady, router.query.id, newMessage, reaction]);
 
   return (
     <div>
@@ -238,7 +240,7 @@ const PostPage = () => {
                       component="a"
                       radius="sm"
                       ml={4}
-                      onClick={() => sendReaction(message.stream_id, "ha-ha")}
+                      onClick={() => sendReaction(message.stream_id, "haha")}
                     >
                       {message.count_haha} 🤣
                     </Button>
