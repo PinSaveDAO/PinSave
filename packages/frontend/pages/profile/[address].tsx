@@ -9,7 +9,7 @@ function Post() {
   const router = useRouter();
   const { address } = router.query;
 
-  const [user, setUser] = useState<any>([]);
+  const [user, setUser] = useState<any | undefined>();
 
   useEffect(() => {
     async function loadData() {

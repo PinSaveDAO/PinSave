@@ -29,7 +29,7 @@ const PostPage = () => {
   const [isEncrypted, setIsEncrypted] = useState(false);
 
   const [newMessage, setNewMessage] = useState("");
-  const [messages, setMessages] = useState<any>([]);
+  const [messages, setMessages] = useState<any | undefined>();
 
   const router = useRouter();
   const currentChain = getCurrentChain(250);

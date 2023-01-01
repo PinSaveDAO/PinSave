@@ -9,7 +9,7 @@ import type { Post } from "@/services/upload";
 
 const Home: NextPage = () => {
   const { chain } = useNetwork();
-  var initialChain = "fantom";
+  var initialChain: Chain = "fantom";
 
   if (chain?.id === 22) {
     initialChain = "lukso";
@@ -24,7 +24,7 @@ const Home: NextPage = () => {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = usePosts(initialChain as Chain);
+  } = usePosts(initialChain);
 
   return (
     <>

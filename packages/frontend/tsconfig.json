@@ -30,8 +30,7 @@
     "Orbis.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "pages/profile/index.js",
-    "pages/profile/[address].jsx"
+    "pages/profile/index.js"
   ],
   "exclude": ["node_modules"]
 }
