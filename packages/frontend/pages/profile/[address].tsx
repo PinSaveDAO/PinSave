@@ -1,7 +1,6 @@
 import { useRouter } from "next/router";
 import React, { useState, useEffect } from "react";
 import { Orbis } from "@orbisclub/orbis-sdk";
-
 import { Paper, Title, Image } from "@mantine/core";
 
 let orbis = new Orbis();
@@ -10,7 +9,7 @@ function Post() {
   const router = useRouter();
   const { address } = router.query;
 
-  const [user, setUser] = useState();
+  const [user, setUser] = useState<any | undefined>();
 
   useEffect(() => {
     async function loadData() {

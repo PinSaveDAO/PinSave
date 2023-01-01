@@ -29,7 +29,7 @@ const PostPage = () => {
   const [isEncrypted, setIsEncrypted] = useState(false);
 
   const [newMessage, setNewMessage] = useState("");
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState<any | undefined>();
 
   const router = useRouter();
   const currentChain = getCurrentChain(250);
@@ -140,7 +140,7 @@ const PostPage = () => {
         })
       );
 
-      setMessages(messagesData as any);
+      setMessages(messagesData);
     }
     loadData();
   }, [router.isReady, router.query.id, newMessage, reaction]);
