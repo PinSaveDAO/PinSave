@@ -66,6 +66,6 @@
   "devDependencies": {
     "@synthetixio/synpress": "^3.0.5",
     "cypress-file-upload": "^5.0.8",
-    "husky": "^8.0.2"
+    "husky": "^8.0.3"
   }
 }
