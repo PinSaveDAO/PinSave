@@ -20,7 +20,7 @@
     "@orbisclub/orbis-sdk": "^0.4.9",
     "@rainbow-me/rainbowkit": "^0.8.1",
     "@tanstack/react-query": "^4.20.4",
-    "@tanstack/react-query-devtools": "^4.20.4",
+    "@tanstack/react-query-devtools": "^4.20.9",
     "ethers": "^5.7.2",
     "isomorphic-fetch": "^3.0.0",
     "next": "^13.1.0",
