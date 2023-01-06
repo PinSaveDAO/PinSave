@@ -10,7 +10,7 @@ import {
   LoadingOverlay,
 } from "@mantine/core";
 import { NFTStorage } from "nft.storage";
-import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
+import { Dropzone, MIME_TYPES } from "@mantine/dropzone";
 import { showNotification, updateNotification } from "@mantine/notifications";
 
 import { dropzoneChildren } from "@/components/UploadForm";
@@ -38,7 +38,7 @@ const Upload = () => {
       }
     }
     loadData();
-  }, []);
+  }, [user]);
 
   async function updateProfile() {
     showNotification({
@@ -85,6 +85,11 @@ const Upload = () => {
     });
   }
 
+  async function logout() {
+    setUser("");
+    await orbis.logout();
+  }
+
   return (
     <>
       {user && user.did ? (
@@ -97,11 +102,21 @@ const Upload = () => {
             sx={{ maxWidth: "700px", backgroundColor: "#82c7fc1d" }}
             mx="auto"
           >
+            <Button
+              my={12}
+              size="sm"
+              onClick={() => logout()}
+              style={{
+                float: "right",
+              }}
+            >
+              Log Out
+            </Button>
             <div
               style={{ width: 450, marginLeft: "auto", marginRight: "auto" }}
             >
               <Center>
-                <Title> {user.details.profile?.username}</Title>
+                <Title> {user.details.profile?.username} </Title>
               </Center>
               <Image
                 radius="md"
@@ -110,7 +125,6 @@ const Upload = () => {
                 alt={user.details.profile?.username}
               />
             </div>
-
             <TextInput
               my={12}
               size="md"
@@ -120,7 +134,6 @@ const Upload = () => {
               onChange={(e) => setUsername(e.target.value)}
               style={{ width: 300, marginLeft: "auto", marginRight: "auto" }}
             />
-
             <TextInput
               my={12}
               size="md"
@@ -134,12 +147,19 @@ const Upload = () => {
               mt="md"
               ml="xl"
               mr="xl"
+              onReject={(files) => console.log("rejected files", files)}
               onDrop={(files) => setImage(files[0])}
-              maxSize={3 * 1024 ** 2}
+              maxSize={25000000}
               multiple={false}
-              accept={IMAGE_MIME_TYPE}
+              accept={[
+                MIME_TYPES.png,
+                MIME_TYPES.jpeg,
+                MIME_TYPES.webp,
+                MIME_TYPES.svg,
+                MIME_TYPES.gif,
+              ]}
             >
-              {(status) => dropzoneChildren(status, image)}
+              {() => dropzoneChildren(image)}
             </Dropzone>
 
             <Center>
