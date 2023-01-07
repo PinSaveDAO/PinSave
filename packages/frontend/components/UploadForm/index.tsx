@@ -17,7 +17,7 @@ import { Dropzone, MIME_TYPES } from "@mantine/dropzone";
 import { showNotification, updateNotification } from "@mantine/notifications";
 import { useAccount, useSigner, useNetwork } from "wagmi";
 
-import { uploadPost } from "@/services/upload";
+import { UploadPost } from "@/services/upload";
 
 export const dropzoneChildren = (image: File | undefined) => {
   if (image) {
@@ -109,27 +109,28 @@ const UploadForm = () => {
     });
 
     const check = isValidUpload();
-    if (check && storageProvider == "ipfs") {
+    if (signer && image && check && storageProvider == "ipfs") {
       if (postReceiver) {
-        uploadPost(
-          signer!,
+        UploadPost(
+          signer,
           postReceiver,
           {
             name: title,
             description: desc,
-            image: image!,
+            image: image,
           },
           chain?.id
         );
       }
-      if (!postReceiver) {
-        uploadPost(
-          signer!,
-          address!,
+
+      if (!postReceiver && address) {
+        UploadPost(
+          signer,
+          address,
           {
             name: title,
             description: desc,
-            image: image!,
+            image: image,
           },
           chain?.id
         );
@@ -146,6 +147,7 @@ const UploadForm = () => {
       });
     }
   };
+
   return (
     <Paper
       withBorder
@@ -197,7 +199,6 @@ const UploadForm = () => {
       >
         {() => dropzoneChildren(image)}
       </Dropzone>
-
       <Center>
         <Group position="center" sx={{ padding: 15 }}>
           <Button

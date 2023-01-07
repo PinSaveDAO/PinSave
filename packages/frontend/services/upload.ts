@@ -15,7 +15,7 @@ export type Post = PostData & {
   token_id: number;
 };
 
-export async function uploadPost(
+export async function UploadPost(
   signer: Signer,
   accAddress: string,
   data: PostData,

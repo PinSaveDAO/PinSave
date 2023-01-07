@@ -12,14 +12,12 @@ import {
   Switch,
 } from "@mantine/core";
 import React, { useState, useEffect } from "react";
-
+import { Orbis } from "@orbisclub/orbis-sdk";
 import { ArrowLeft } from "tabler-icons-react";
 import { useRouter } from "next/router";
 
 import { usePost } from "@/hooks/api";
 import { getCurrentChain } from "@/utils/chains";
-
-import { Orbis } from "@orbisclub/orbis-sdk";
 
 let orbis = new Orbis();
 
