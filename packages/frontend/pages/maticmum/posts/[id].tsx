@@ -7,17 +7,32 @@ import {
 } from "@mantine/core";
 import { ArrowLeft } from "tabler-icons-react";
 import { useRouter } from "next/router";
-
+import { parseArweaveTxId, parseCid } from "livepeer/media";
+import { useMemo } from "react";
+import { Player } from "@livepeer/react";
 import { usePost } from "@/hooks/api";
 import { getCurrentChain } from "@/utils/chains";
 
 const PostPage = () => {
   const router = useRouter();
   const currentChain = getCurrentChain(80001);
+
   const { data: post, isLoading } = usePost(
     currentChain,
     router.query.id as string
   );
+
+  const idParsed = useMemo(
+    () => parseCid(post?.image) ?? parseArweaveTxId(post?.image),
+    [post?.image]
+  );
+
+  function checkType(id: string | undefined) {
+    if (id && id.slice(-1) === "4") {
+      return true;
+    }
+    return false;
+  }
 
   return (
     <div>
@@ -40,10 +55,24 @@ const PostPage = () => {
               { maxWidth: "md", cols: 1, spacing: "md" },
             ]}
           >
-            <Image
-              src={post.image ?? "https://evm.pinsave.app/PinSaveCard.png"}
-              alt={post.name}
-            />
+            {checkType(post.image) === false ? (
+              <Image
+                src={post.image ?? "https://evm.pinsave.app/PinSaveCard.png"}
+                alt={post.name}
+              />
+            ) : (
+              <Player
+                title={idParsed?.id}
+                src={post.image}
+                autoPlay
+                muted
+                autoUrlUpload={{
+                  fallback: true,
+                  ipfsGateway: "https://w3s.link",
+                }}
+              />
+            )}
+
             <Paper shadow="sm" p="md" withBorder>
               <h2 style={{ marginBottom: "1.4rem" }}>{post.name}</h2>
               <h4>Description</h4>
