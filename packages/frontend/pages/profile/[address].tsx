@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import React, { useState, useEffect } from "react";
 import { Orbis } from "@orbisclub/orbis-sdk";
-import { Paper, Title, Image } from "@mantine/core";
+import { Paper, Title, Image, LoadingOverlay } from "@mantine/core";
 import { ethers } from "ethers";
 import { ENS } from "@ensdomains/ensjs";
 
@@ -32,10 +32,10 @@ function Post() {
             //"0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
             address as string
           );
-          //console.log(profile);
-          setEns(profile?.name as any);
+          console.log(profile?.name as string);
+          setEns(profile?.name as string);
         } catch {
-          setEns("");
+          // setEns("");
         }
       }
 
@@ -49,27 +49,31 @@ function Post() {
 
   return (
     <>
-      <Paper
-        withBorder
-        shadow="xl"
-        p="xl"
-        radius="xl"
-        sx={{ maxWidth: "700px", backgroundColor: "#82c7fc1d" }}
-        mx="auto"
-      >
-        <Title align="center">{user?.details.profile?.username}</Title>
-        <Title order={4} align="center">
-          {ens}
-        </Title>
-        <div style={{ width: 400, marginLeft: "auto", marginRight: "auto" }}>
-          <Image
-            radius="md"
-            mt={10}
-            src={user?.details.profile?.pfp}
-            alt={user?.details.profile?.username}
-          />
-        </div>
-      </Paper>
+      {user || ens ? (
+        <Paper
+          withBorder
+          shadow="xl"
+          p="xl"
+          radius="xl"
+          sx={{ maxWidth: "700px", backgroundColor: "#82c7fc1d" }}
+          mx="auto"
+        >
+          <Title align="center">{user?.details.profile?.username}</Title>
+          <Title order={4} align="center">
+            {ens}
+          </Title>
+          <div style={{ width: 400, marginLeft: "auto", marginRight: "auto" }}>
+            <Image
+              radius="md"
+              mt={10}
+              src={user?.details.profile?.pfp}
+              alt={user?.details.profile?.username}
+            />
+          </div>
+        </Paper>
+      ) : (
+        <LoadingOverlay visible />
+      )}
     </>
   );
 }
