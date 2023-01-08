@@ -12,14 +12,6 @@ export default async function handler(
     const { id } = req.query;
     const { address, abi } = getContractInfo(80001);
 
-    const transactions = `https://api.covalenthq.com/v1/80001/tokens/${address}/nft_transactions/${id}/?key=${process.env.NEXT_PUBLIC_COVALENT_API}`;
-    const res_transactions = await fetch(transactions).then((x) => x.json());
-
-    const dateMinted = new Date(
-      res_transactions.data.items[0].nft_transactions[0].block_signed_at
-    );
-    const nTxs = res_transactions.data.items[0].nft_transactions.length;
-
     let provider = new ethers.providers.AlchemyProvider(
       "maticmum",
       process.env.NEXT_ALCHEMY_ID
@@ -56,8 +48,6 @@ export default async function handler(
       ...item,
       owner: owner,
       image: z,
-      nTransactions: nTxs,
-      date: dateMinted,
     };
 
     res.status(200).json(output);

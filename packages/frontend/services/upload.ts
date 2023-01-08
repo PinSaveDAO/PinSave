@@ -15,7 +15,7 @@ export type Post = PostData & {
   token_id: number;
 };
 
-export async function uploadPost(
+export async function UploadPost(
   signer: Signer,
   accAddress: string,
   data: PostData,
@@ -26,12 +26,34 @@ export async function uploadPost(
     const contract = new ethers.Contract(address, abi, signer);
 
     const client = new NFTStorage({
-      token: process.env.NEXT_PUBLIC_TOKEN ?? "",
+      token: process.env.NEXT_PUBLIC_TOKEN as string,
     });
 
     const metadata = await client.store({
       ...data,
     });
+
+    const options = {
+      method: "POST",
+      headers: {
+        accept: "application/json",
+        "content-type": "application/json",
+        Authorization: process.env.NEXT_PUBLIC_NFTPORT as string,
+      },
+      body: JSON.stringify({
+        name: data.name,
+        description: data.description,
+        file_url: metadata.data.image.href,
+      }),
+    };
+
+    (async () => {
+      const rawResponse = await fetch(
+        "https://api.nftport.xyz/v0/metadata",
+        options
+      );
+      //const content = await rawResponse.json();
+    })();
 
     if (chain === 80001 || chain === 9000) {
       await contract.mintPost(accAddress, metadata.url);

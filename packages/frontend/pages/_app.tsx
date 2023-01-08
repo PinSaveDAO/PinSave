@@ -1,8 +1,8 @@
 import "@/styles/globals.css";
 import "@rainbow-me/rainbowkit/styles.css";
 
-import { useState } from "react";
-import Head from "next/head";
+import { useState, useMemo } from "react";
+import NextHead from "next/head";
 import type { AppProps as NextAppProps } from "next/app";
 import type { NextComponentType } from "next";
 import { MantineProvider } from "@mantine/core";
@@ -18,8 +18,8 @@ import {
   coinbaseWallet,
   walletConnectWallet,
 } from "@rainbow-me/rainbowkit/wallets";
-import { Chain, configureChains, createClient, WagmiConfig } from "wagmi";
-import { polygonMumbai, hardhat, fantom } from "wagmi/chains";
+import { configureChains, createClient, WagmiConfig } from "wagmi";
+import { polygonMumbai, hardhat, fantom, bsc } from "wagmi/chains";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
@@ -30,6 +30,12 @@ import {
 } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
+import {
+  LivepeerConfig,
+  createReactClient,
+  studioProvider,
+} from "@livepeer/react";
+
 import LayoutApp from "@/components/Layout";
 
 type AppProps<P = any> = NextAppProps & {
@@ -39,35 +45,12 @@ type AppProps<P = any> = NextAppProps & {
   };
 } & Omit<NextAppProps<P>, "pageProps">;
 
-const LuksoL14Chain: Chain = {
-  id: 22,
-  name: "L14",
-  network: "lukso",
-  nativeCurrency: {
-    decimals: 18,
-    name: "Lukso",
-    symbol: "LYXt",
-  },
-  rpcUrls: {
-    default: {
-      http: ["https://rpc.l14.lukso.network"],
-    },
-  },
-  blockExplorers: {
-    default: {
-      name: "Explorer",
-      url: "https://blockscout.com/lukso/l14",
-    },
-  },
-  testnet: true,
-};
-
 const { chains, provider, webSocketProvider } = configureChains(
   [
     ...(process.env.NEXT_PUBLIC_DEV === "true" ? [hardhat] : []),
     polygonMumbai,
-    LuksoL14Chain,
     fantom,
+    bsc,
   ],
   [
     alchemyProvider({
@@ -76,7 +59,7 @@ const { chains, provider, webSocketProvider } = configureChains(
     publicProvider(),
     jsonRpcProvider({
       rpc: (chain) => {
-        if (chain.id !== LuksoL14Chain.id) return null;
+        // if (chain.id !== LuksoL14Chain.id) return null;
         return { http: chain.rpcUrls.default.http[0] };
       },
     }),
@@ -110,7 +93,13 @@ const wagmiClient = createClient({
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [queryClient] = useState(() => new QueryClient());
-
+  const livepeerClient = useMemo(() => {
+    return createReactClient({
+      provider: studioProvider({
+        apiKey: process.env.NEXT_LIVEPEER ?? "",
+      }),
+    });
+  }, []);
   return (
     <MantineProvider
       theme={{
@@ -121,7 +110,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <QueryClientProvider client={queryClient}>
         <Hydrate state={pageProps.dehydratedState} />
         <WagmiConfig client={wagmiClient}>
-          <Head>
+          <NextHead>
             <title>Pin Save - decentralized Pinterest</title>
             <meta
               name="description"
@@ -141,12 +130,14 @@ function MyApp({ Component, pageProps }: AppProps) {
             <meta name="twitter:card" content="summary" />
             <meta name="twitter:site" content="@pinsav3" />
             <meta name="twitter:creator" content="@pfedprog" />
-          </Head>
+          </NextHead>
           <NotificationsProvider>
             <RainbowKitProvider chains={chains}>
-              <LayoutApp>
-                <Component {...pageProps} />
-              </LayoutApp>
+              <LivepeerConfig client={livepeerClient}>
+                <LayoutApp>
+                  <Component {...pageProps} />
+                </LayoutApp>
+              </LivepeerConfig>
             </RainbowKitProvider>
           </NotificationsProvider>
         </WagmiConfig>

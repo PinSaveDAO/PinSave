@@ -10,32 +10,35 @@ import {
   Center,
   MediaQuery,
 } from "@mantine/core";
+import ReactPlayer from "react-player";
 import React, { useState } from "react";
 import { Upload, Replace } from "tabler-icons-react";
-import { Dropzone, DropzoneStatus, IMAGE_MIME_TYPE } from "@mantine/dropzone";
+import { Dropzone, MIME_TYPES } from "@mantine/dropzone";
 import { showNotification, updateNotification } from "@mantine/notifications";
 import { useAccount, useSigner, useNetwork } from "wagmi";
 
-import { uploadPost } from "@/services/upload";
+import { UploadPost } from "@/services/upload";
 
-export const dropzoneChildren = (
-  status: DropzoneStatus,
-  image: File | undefined
-) => {
-  if (image)
+export const dropzoneChildren = (image: File | undefined) => {
+  if (image) {
+    let link = URL.createObjectURL(image);
     return (
       <Group
         position="center"
         spacing="xl"
         style={{ minHeight: 220, pointerEvents: "none" }}
       >
-        <Image
-          src={URL.createObjectURL(image)}
-          alt=""
-          my="md"
-          radius="lg"
-          sx={{ maxWidth: "240px" }}
-        />
+        {image.type[0] === "i" ? (
+          <Image
+            src={link}
+            alt=""
+            my="md"
+            radius="lg"
+            sx={{ maxWidth: "240px" }}
+          />
+        ) : (
+          <ReactPlayer url={link} />
+        )}
         <Group sx={{ color: "#3a3a3a79" }}>
           <MediaQuery
             query="(max-width:500px)"
@@ -53,6 +56,7 @@ export const dropzoneChildren = (
         </Group>
       </Group>
     );
+  }
   return (
     <Group
       position="center"
@@ -77,9 +81,9 @@ const UploadForm = () => {
   const { address } = useAccount();
   const { chain } = useNetwork();
   const { data: signer } = useSigner();
-  const [title, setTitle] = useState("");
-  const [desc, setDesc] = useState("");
-  const [postReceiver, setPostReceiver] = useState("");
+  const [title, setTitle] = useState<string>("");
+  const [desc, setDesc] = useState<string>("");
+  const [postReceiver, setPostReceiver] = useState<string>("");
 
   function filledPost() {
     return desc !== "" && title !== "";
@@ -105,27 +109,28 @@ const UploadForm = () => {
     });
 
     const check = isValidUpload();
-    if (check && storageProvider == "ipfs") {
+    if (signer && image && check && storageProvider == "ipfs") {
       if (postReceiver) {
-        uploadPost(
-          signer!,
+        UploadPost(
+          signer,
           postReceiver,
           {
             name: title,
             description: desc,
-            image: image!,
+            image: image,
           },
           chain?.id
         );
       }
-      if (!postReceiver) {
-        uploadPost(
-          signer!,
-          address!,
+
+      if (!postReceiver && address) {
+        UploadPost(
+          signer,
+          address,
           {
             name: title,
             description: desc,
-            image: image!,
+            image: image,
           },
           chain?.id
         );
@@ -142,6 +147,7 @@ const UploadForm = () => {
       });
     }
   };
+
   return (
     <Paper
       withBorder
@@ -178,14 +184,21 @@ const UploadForm = () => {
       />
       <Dropzone
         mt="md"
+        onReject={(files) => console.log("rejected files", files)}
         onDrop={(files) => setImage(files[0])}
-        maxSize={3 * 1024 ** 2}
+        maxSize={25000000}
         multiple={false}
-        accept={IMAGE_MIME_TYPE}
+        accept={[
+          MIME_TYPES.png,
+          MIME_TYPES.jpeg,
+          MIME_TYPES.webp,
+          MIME_TYPES.svg,
+          MIME_TYPES.gif,
+          MIME_TYPES.mp4,
+        ]}
       >
-        {(status) => dropzoneChildren(status, image)}
+        {() => dropzoneChildren(image)}
       </Dropzone>
-
       <Center>
         <Group position="center" sx={{ padding: 15 }}>
           <Button
