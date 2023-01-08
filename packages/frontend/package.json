@@ -8,11 +8,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@erc725/erc725.js": "^0.16.0",
     "@livepeer/react": "^1.5.6",
-    "@lukso/lsp-factory.js": "^2.4.0",
-    "@lukso/lsp-smart-contracts": "^0.7.0",
-    "@lukso/universalprofile-smart-contracts": "^0.4.1",
     "@mantine/core": "^4.2.12",
     "@mantine/dropzone": "^4.2.12",
     "@mantine/hooks": "^4.2.12",
@@ -31,8 +27,7 @@
     "react-dom": "^18.1.0",
     "react-player": "^2.11.0",
     "tabler-icons-react": "^1.56.0",
-    "wagmi": "^0.9.5",
-    "web3": "^1.8.1"
+    "wagmi": "^0.9.5"
   },
   "devDependencies": {
     "@types/isomorphic-fetch": "^0.0.36",

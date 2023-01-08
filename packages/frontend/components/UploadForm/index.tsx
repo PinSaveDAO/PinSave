@@ -81,9 +81,9 @@ const UploadForm = () => {
   const { address } = useAccount();
   const { chain } = useNetwork();
   const { data: signer } = useSigner();
-  const [title, setTitle] = useState("");
-  const [desc, setDesc] = useState("");
-  const [postReceiver, setPostReceiver] = useState("");
+  const [title, setTitle] = useState<string>("");
+  const [desc, setDesc] = useState<string>("");
+  const [postReceiver, setPostReceiver] = useState<string>("");
 
   function filledPost() {
     return desc !== "" && title !== "";

@@ -11,22 +11,25 @@ import {
   Avatar,
   Switch,
 } from "@mantine/core";
-import React, { useState, useEffect } from "react";
-import { Orbis } from "@orbisclub/orbis-sdk";
 import { ArrowLeft } from "tabler-icons-react";
+import React, { useState, useEffect, useMemo } from "react";
+import { Orbis } from "@orbisclub/orbis-sdk";
 import { useRouter } from "next/router";
+import { parseArweaveTxId, parseCid } from "livepeer/media";
+import { Player } from "@livepeer/react";
 
 import { usePost } from "@/hooks/api";
 import { getCurrentChain } from "@/utils/chains";
+import { timeConverter } from "@/utils/time";
 
 let orbis = new Orbis();
 
 const PostPage = () => {
   const [user, setUser] = useState();
-  const [reaction, setReaction] = useState("");
+  const [reaction, setReaction] = useState<string>();
   const [isEncrypted, setIsEncrypted] = useState(false);
 
-  const [newMessage, setNewMessage] = useState("");
+  const [newMessage, setNewMessage] = useState<string>();
   const [messages, setMessages] = useState<any | undefined>();
 
   const router = useRouter();
@@ -36,13 +39,24 @@ const PostPage = () => {
     router.query.id as string
   );
 
-  const sendMessage = async function () {
+  const idParsed = useMemo(
+    () => parseCid(post?.image) ?? parseArweaveTxId(post?.image),
+    [post?.image]
+  );
+
+  function checkType(id: string | undefined) {
+    if (id && id.slice(-1) === "4") {
+      return true;
+    }
+    return false;
+  }
+
+  const sendMessage = async function (context: string) {
     if (isEncrypted)
       await orbis.createPost(
         {
           body: newMessage,
-          context:
-            "kjzl6cwe1jw147hcck185xfdlrxq9zv0y0hoa6shzskqfnio56lhf8190yaei7w",
+          context: context,
           tags: [{ slug: router.query.id, title: router.query.id }],
         },
         {
@@ -62,38 +76,10 @@ const PostPage = () => {
     if (!isEncrypted)
       await orbis.createPost({
         body: newMessage,
-        context:
-          "kjzl6cwe1jw147hcck185xfdlrxq9zv0y0hoa6shzskqfnio56lhf8190yaei7w",
+        context: context,
         tags: [{ slug: router.query.id, title: router.query.id }],
       });
   };
-
-  function timeConverter(UNIX_timestamp: number) {
-    var a = new Date(UNIX_timestamp * 1000);
-    var months = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ];
-    var year = a.getFullYear();
-    var month = months[a.getMonth()];
-    var date = a.getDate();
-    var hour = a.getHours();
-    var min = a.getMinutes();
-    var sec = a.getSeconds();
-    var time =
-      date + " " + month + " " + year + " " + hour + ":" + min + ":" + sec;
-    return time;
-  }
 
   const sendReaction = async function (id: string, reaction: string) {
     await orbis.react(id, reaction);
@@ -164,13 +150,25 @@ const PostPage = () => {
               { maxWidth: "md", cols: 1, spacing: "md" },
             ]}
           >
-            <Image
-              height={550}
-              fit="contain"
-              src={post.image ?? "https://evm.pinsave.app/PinSaveCard.png"}
-              alt={post.name}
-            />
-
+            {checkType(post.image) === false ? (
+              <Image
+                height={550}
+                fit="contain"
+                src={post.image ?? "https://evm.pinsave.app/PinSaveCard.png"}
+                alt={post.name}
+              />
+            ) : (
+              <Player
+                title={idParsed?.id}
+                src={post.image}
+                autoPlay
+                muted
+                autoUrlUpload={{
+                  fallback: true,
+                  ipfsGateway: "https://w3s.link",
+                }}
+              />
+            )}
             <Paper shadow="sm" p="md" withBorder>
               <h2 style={{ marginBottom: "1.4rem" }}>{post.name}</h2>
               <Paper
@@ -258,7 +256,6 @@ const PostPage = () => {
                     </Text>
                   </Paper>
                 ))}
-
               <Group>
                 <TextInput
                   my="lg"
@@ -272,7 +269,15 @@ const PostPage = () => {
                   onClick={() => setIsEncrypted((prevCheck) => !prevCheck)}
                 />
               </Group>
-              <Button component="a" radius="lg" onClick={() => sendMessage()}>
+              <Button
+                component="a"
+                radius="lg"
+                onClick={() =>
+                  sendMessage(
+                    "kjzl6cwe1jw147hcck185xfdlrxq9zv0y0hoa6shzskqfnio56lhf8190yaei7w"
+                  )
+                }
+              >
                 Send Message
               </Button>
             </Paper>

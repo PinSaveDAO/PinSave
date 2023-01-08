@@ -18,7 +18,7 @@ import {
   coinbaseWallet,
   walletConnectWallet,
 } from "@rainbow-me/rainbowkit/wallets";
-import { Chain, configureChains, createClient, WagmiConfig } from "wagmi";
+import { configureChains, createClient, WagmiConfig } from "wagmi";
 import { polygonMumbai, hardhat, fantom, bsc } from "wagmi/chains";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
@@ -45,34 +45,10 @@ type AppProps<P = any> = NextAppProps & {
   };
 } & Omit<NextAppProps<P>, "pageProps">;
 
-const LuksoL14Chain: Chain = {
-  id: 22,
-  name: "L14",
-  network: "lukso",
-  nativeCurrency: {
-    decimals: 18,
-    name: "Lukso",
-    symbol: "LYXt",
-  },
-  rpcUrls: {
-    default: {
-      http: ["https://rpc.l14.lukso.network"],
-    },
-  },
-  blockExplorers: {
-    default: {
-      name: "Explorer",
-      url: "https://blockscout.com/lukso/l14",
-    },
-  },
-  testnet: true,
-};
-
 const { chains, provider, webSocketProvider } = configureChains(
   [
     ...(process.env.NEXT_PUBLIC_DEV === "true" ? [hardhat] : []),
     polygonMumbai,
-    LuksoL14Chain,
     fantom,
     bsc,
   ],
@@ -83,7 +59,7 @@ const { chains, provider, webSocketProvider } = configureChains(
     publicProvider(),
     jsonRpcProvider({
       rpc: (chain) => {
-        if (chain.id !== LuksoL14Chain.id) return null;
+        // if (chain.id !== LuksoL14Chain.id) return null;
         return { http: chain.rpcUrls.default.http[0] };
       },
     }),

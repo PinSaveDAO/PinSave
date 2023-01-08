@@ -11,9 +11,7 @@ const Home: NextPage = () => {
   const { chain } = useNetwork();
   var initialChain: Chain = "fantom";
 
-  if (chain?.id === 22) {
-    initialChain = "lukso";
-  }
+  // add polygon mainnet
   if (chain?.id === 80001) {
     initialChain = "polygon";
   }
