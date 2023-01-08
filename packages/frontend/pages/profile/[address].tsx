@@ -35,7 +35,7 @@ function Post() {
           //console.log(profile);
           setEns(profile?.name as any);
         } catch {
-          setEns("No ENS");
+          setEns("");
         }
       }
 
