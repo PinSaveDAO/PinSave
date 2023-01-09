@@ -57,15 +57,20 @@ const PostPage = () => {
         {
           body: newMessage,
           context: context,
-          tags: [{ slug: router.query.id, title: router.query.id }],
+          tags: [
+            {
+              slug: "matic" + router.query.id,
+              title: "matic" + router.query.id,
+            },
+          ],
         },
         {
           type: "custom",
           accessControlConditions: [
             {
-              contractAddress: "0x3c046f8E210424317A5740CED78877ef0B3EFf4E",
+              contractAddress: "0x042E56d9729dD6215ad58EB726c6347948BB9518",
               standardContractType: "ERC721",
-              chain: "fantom",
+              chain: "mumbai",
               method: "balanceOf",
               parameters: [":userAddress"],
               returnValueTest: { comparator: ">=", value: "1" },
