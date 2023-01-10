@@ -1,6 +1,6 @@
-import { Box, Button, Center, LoadingOverlay } from "@mantine/core";
 import type { NextPage } from "next";
 import { useNetwork } from "wagmi";
+import { Box, Button, Center, LoadingOverlay } from "@mantine/core";
 
 import { usePosts } from "@/hooks/api";
 import PostCard from "@/components/Posts/PostCard";
@@ -8,12 +8,17 @@ import type { Chain } from "@/constants/chains";
 import type { Post } from "@/services/upload";
 
 const Home: NextPage = () => {
-  const { chain } = useNetwork();
   var initialChain: Chain = "fantom";
+  const { chain } = useNetwork();
 
-  // add polygon mainnet
-  if (chain?.id === 80001) {
-    initialChain = "polygon";
+  if (chain && chain.id) {
+    if (chain?.id === 80001) {
+      initialChain = "polygon";
+    }
+
+    if (chain?.id === 56) {
+      initialChain = "bsc";
+    }
   }
 
   const {
@@ -41,7 +46,7 @@ const Home: NextPage = () => {
           posts.pages.map((page) => (
             <>
               {page.items.map((post: Post, i: number) => {
-                return <PostCard {...post} key={page + i} />;
+                return <PostCard {...post} key={i} />;
               })}
             </>
           ))}

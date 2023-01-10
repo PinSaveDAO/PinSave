@@ -72,4 +72,5 @@ Some interesting links that we keep returning to include and not limited to:
 - [Next Js ISG](https://nextjs.org/docs/basic-features/data-fetching/incremental-static-regeneration)
 - [Universal Profiles](https://docs.lukso.tech/standards/universal-profile/introduction)
 - [Working with Lit Access Control](https://litproject.substack.com/p/working-with-access-control)
+- [Supported Blockchains](https://developer.litprotocol.com/support/supportedchains/)
 - [Livepeer docs](https://docs.livepeer.org/)

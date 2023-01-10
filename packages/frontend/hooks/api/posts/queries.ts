@@ -1,5 +1,4 @@
 import fetcher from "@/utils/fetcher";
-
 import type { Chain } from "@/constants/chains";
 
 export const postKeys = {
@@ -8,13 +7,9 @@ export const postKeys = {
 };
 
 export const fetchPosts = async (chain: string, { pageParam = 0 }) => {
-  return await fetcher(
-    `/api/${chain}/${chain === "lukso" ? "l14/" : ""}/pages/${pageParam}`
-  );
+  return await fetcher(`/api/${chain}/pages/${pageParam}`);
 };
 
 export const fetchPost = async (chain: Chain, id: string) => {
-  return await fetcher(
-    `/api/${chain}/${chain === "lukso" ? "l14/" : ""}posts/${id}`
-  );
+  return await fetcher(`/api/${chain}/posts/${id}`);
 };
