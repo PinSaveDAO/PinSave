@@ -55,11 +55,11 @@ export async function UploadPost(
       //const content = await rawResponse.json();
     })();
 
-    if (chain === 80001 || chain === 9000) {
+    if (chain === 80001) {
       await contract.mintPost(accAddress, metadata.url);
     }
 
-    if (chain === 22 || chain === 250) {
+    if (chain === 22 || chain === 250 || chain === 56) {
       try {
         const id = ethers.BigNumber.from(ethers.utils.randomBytes(32));
         const Id = ethers.utils.hexZeroPad(

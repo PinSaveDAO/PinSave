@@ -14,17 +14,9 @@ export function getContractInfo(chain?: number) {
       abi: PinSaveL8.abi,
     };
 
-  if (chain === 9000)
+  if (chain === 56)
     return {
-      // address: "0xF46FCAb2404b071ac33e5eD2095802Cecf77FB21",
-      // abi: PinSaveL8.abi,
-      address: "0x9F14CE3dC2526A52395a8E17C191C73C9F88ca60",
-      abi: HardhatDeployments[31337][0].contracts.YourContract.abi,
-    };
-
-  if (chain === 250)
-    return {
-      address: "0x3c046f8E210424317A5740CED78877ef0B3EFf4E",
+      address: "0xf1926218c9D7c198bB3A4A0fbA989e06a4a97267",
       abi: PinSaveL8.abi,
     };
 

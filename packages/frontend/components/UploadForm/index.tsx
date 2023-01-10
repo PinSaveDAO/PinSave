@@ -10,11 +10,11 @@ import {
   Center,
   MediaQuery,
 } from "@mantine/core";
+import { Dropzone, MIME_TYPES } from "@mantine/dropzone";
+import { showNotification, updateNotification } from "@mantine/notifications";
 import ReactPlayer from "react-player";
 import React, { useState } from "react";
 import { Upload, Replace } from "tabler-icons-react";
-import { Dropzone, MIME_TYPES } from "@mantine/dropzone";
-import { showNotification, updateNotification } from "@mantine/notifications";
 import { useAccount, useSigner, useNetwork } from "wagmi";
 
 import { UploadPost } from "@/services/upload";
@@ -31,7 +31,7 @@ export const dropzoneChildren = (image: File | undefined) => {
         {image.type[0] === "i" ? (
           <Image
             src={link}
-            alt=""
+            alt="uploaded image"
             my="md"
             radius="lg"
             sx={{ maxWidth: "240px" }}
@@ -77,13 +77,13 @@ export const dropzoneChildren = (image: File | undefined) => {
 };
 
 const UploadForm = () => {
-  const [image, setImage] = useState<File | undefined>();
   const { address } = useAccount();
   const { chain } = useNetwork();
   const { data: signer } = useSigner();
   const [title, setTitle] = useState<string>("");
   const [desc, setDesc] = useState<string>("");
   const [postReceiver, setPostReceiver] = useState<string>("");
+  const [image, setImage] = useState<File | undefined>();
 
   function filledPost() {
     return desc !== "" && title !== "";

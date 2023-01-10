@@ -6,8 +6,6 @@ import type { Chain } from "@/constants/chains";
 
 type IndividualPost = Post & {
   owner: string;
-  nTransactions?: number;
-  date?: string;
 };
 
 export const usePosts = (chain: Chain = "polygon") => {

@@ -12,11 +12,6 @@ const PostCard = (post: Post) => {
   const { chain } = useNetwork();
   let y, x;
 
-  const idParsed = useMemo(
-    () => parseCid(post.image) ?? parseArweaveTxId(post.image),
-    [post.image]
-  );
-
   function checkType(id: string | undefined) {
     if (id && id.slice(-1) === "4") {
       return true;
@@ -30,7 +25,7 @@ const PostCard = (post: Post) => {
   }
 
   function loadPosts(chain: any) {
-    if ([22, 250, 9000, 80001, 31337].includes(chain?.id)) {
+    if ([22, 56, 250, 80001].includes(chain?.id)) {
       return String(chain.network);
     }
     if (chain?.id === 80001) {
