@@ -1663,10 +1663,10 @@
     graphql-import-node "^0.0.5"
     js-yaml "^4.1.0"
 
-"@graphprotocol/graph-cli@^0.37.1":
-  version "0.37.1"
-  resolved "https://registry.yarnpkg.com/@graphprotocol/graph-cli/-/graph-cli-0.37.1.tgz#7532aa7550154238e9469ee79d245db3f9373bc9"
-  integrity sha512-3liXj1O/4tDOOGRcgs9T9sbz1940APhfnNIusN7L3lWgfUb5G6OyfwDgf/mfma/veoFhvdEyccDwhY4CDLp4jQ==
+"@graphprotocol/graph-cli@^0.37.2":
+  version "0.37.2"
+  resolved "https://registry.yarnpkg.com/@graphprotocol/graph-cli/-/graph-cli-0.37.2.tgz#14d3b29e0e57ab2093b3cb42402c8ba5b9c4e557"
+  integrity sha512-RPHYCRCc62RsscwFpwFT+929lNNoB/FJW+PFaQ+zZaJuauj0x/+npcfIDCb4zAxlQskETqzT5WvWQ9gRK1l66g==
   dependencies:
     "@float-capital/float-subgraph-uncrashable" "^0.0.0-alpha.4"
     assemblyscript "0.19.23"
@@ -1678,7 +1678,7 @@
     dockerode "2.5.8"
     fs-extra "9.0.0"
     glob "7.1.6"
-    gluegun "https://github.com/edgeandnode/gluegun#v4.3.1-pin-colors-dep"
+    gluegun "git+https://github.com/edgeandnode/gluegun.git#v4.3.1-pin-colors-dep"
     graphql "15.5.0"
     immutable "3.8.2"
     ipfs-http-client "34.0.0"
@@ -3306,10 +3306,10 @@
   dependencies:
     "@tanstack/query-persist-client-core" "4.20.9"
 
-"@tanstack/react-query-devtools@^4.20.9":
-  version "4.20.9"
-  resolved "https://registry.yarnpkg.com/@tanstack/react-query-devtools/-/react-query-devtools-4.20.9.tgz#d1645e910213d9c5f23c06ba93fd1f511532c014"
-  integrity sha512-Bim/6nzxb5ZdFR+du4MvyAGPsOlMXiJiIiU8XcDIrgJzdRzHdw6dkkMpWXENKmjn9nTE5Ns0Mj+r11yBZcnMYA==
+"@tanstack/react-query-devtools@^4.22.0":
+  version "4.22.0"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-query-devtools/-/react-query-devtools-4.22.0.tgz#e39f04e55428ff6ce2b2796f3171db170afcb2a8"
+  integrity sha512-YeYFBnfqvb+ZlA0IiJqiHNNSzepNhI1p2o9i8NlhQli9+Zrn230M47OBaBUs8qr3DD1dC2zGB1Dis50Ktz8gAA==
   dependencies:
     "@tanstack/match-sorter-utils" "^8.7.0"
     superjson "^1.10.0"
@@ -11528,9 +11528,10 @@ globrex@^0.1.2:
   resolved "https://registry.yarnpkg.com/globrex/-/globrex-0.1.2.tgz#dd5d9ec826232730cd6793a5e33a9302985e6098"
   integrity sha512-uHJgbwAMwNFf5mLst7IWLNg14x1CkeqglJb/K3doi4dw6q2IvAAmM/Y81kevy83wP+Sst+nutFTYOGg3d1lsxg==
 
-"gluegun@https://github.com/edgeandnode/gluegun#v4.3.1-pin-colors-dep":
+"gluegun@git+https://github.com/edgeandnode/gluegun.git#v4.3.1-pin-colors-dep":
   version "4.3.1"
-  resolved "https://github.com/edgeandnode/gluegun#b34b9003d7bf556836da41b57ef36eb21570620a"
+  uid b34b9003d7bf556836da41b57ef36eb21570620a
+  resolved "git+https://github.com/edgeandnode/gluegun.git#b34b9003d7bf556836da41b57ef36eb21570620a"
   dependencies:
     apisauce "^1.0.1"
     app-module-path "^2.2.0"
