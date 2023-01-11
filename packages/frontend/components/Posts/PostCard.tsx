@@ -2,11 +2,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { Paper, Text } from "@mantine/core";
 import { useNetwork } from "wagmi";
-import { useMemo } from "react";
-import { parseArweaveTxId, parseCid } from "livepeer/media";
 import { Player } from "@livepeer/react";
 
 import type { Post } from "@/services/upload";
+import { Chain } from "wagmi";
 
 const PostCard = (post: Post) => {
   const { chain } = useNetwork();
@@ -24,12 +23,9 @@ const PostCard = (post: Post) => {
     x = y.replace("/", ".ipfs.dweb.link/");
   }
 
-  function loadPosts(chain: any) {
-    if ([22, 56, 250, 80001].includes(chain?.id)) {
-      return String(chain.network);
-    }
-    if (chain?.id === 80001) {
-      return "maticmum";
+  function loadPosts(chain: Chain) {
+    if ([56, 250, 80001].includes(chain.id)) {
+      return chain.network as string;
     }
     return "fantom";
   }
@@ -37,7 +33,7 @@ const PostCard = (post: Post) => {
   const imgSrc = `https://${x ?? "evm.pinsave.app/PinSaveCard.png"}`;
 
   return (
-    <Link href={`/${loadPosts(chain)}/posts/${post.token_id}`}>
+    <Link href={`/${loadPosts(chain as Chain)}/posts/${post.token_id}`}>
       <Paper
         component="div"
         withBorder

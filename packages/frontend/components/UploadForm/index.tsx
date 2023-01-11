@@ -109,7 +109,7 @@ const UploadForm = () => {
     });
 
     const check = isValidUpload();
-    if (signer && image && check && storageProvider == "ipfs") {
+    if (signer && image && check && chain && storageProvider === "ipfs") {
       if (postReceiver) {
         UploadPost(
           signer,
@@ -119,7 +119,7 @@ const UploadForm = () => {
             description: desc,
             image: image,
           },
-          chain?.id
+          chain.id
         );
       }
 
@@ -132,7 +132,7 @@ const UploadForm = () => {
             description: desc,
             image: image,
           },
-          chain?.id
+          chain.id
         );
       }
     }
