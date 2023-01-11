@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@ensdomains/ensjs": "^3.0.0-alpha.39",
-    "@livepeer/react": "^1.5.6",
+    "@livepeer/react": "^2.0.0",
     "@mantine/core": "^4.2.12",
     "@mantine/dropzone": "^4.2.12",
     "@mantine/hooks": "^4.2.12",
