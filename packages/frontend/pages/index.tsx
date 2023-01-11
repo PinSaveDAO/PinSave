@@ -11,14 +11,12 @@ const Home: NextPage = () => {
   var initialChain: Chain = "fantom";
   const { chain } = useNetwork();
 
-  if (chain && chain.id) {
-    if (chain?.id === 80001) {
-      initialChain = "polygon";
-    }
-
-    if (chain?.id === 56) {
-      initialChain = "bsc";
-    }
+  if (
+    chain &&
+    chain.id &&
+    (chain.id === 80001 || chain.id === 250 || chain.id === 56)
+  ) {
+    initialChain = chain.network as Chain;
   }
 
   const {

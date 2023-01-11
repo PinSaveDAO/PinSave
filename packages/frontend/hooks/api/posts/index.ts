@@ -8,7 +8,7 @@ type IndividualPost = Post & {
   owner: string;
 };
 
-export const usePosts = (chain: Chain = "polygon") => {
+export const usePosts = (chain: Chain = "maticmum") => {
   return useInfiniteQuery(
     postKeys.byChain(chain),
     ({ pageParam }) => fetchPosts(chain, { pageParam }),

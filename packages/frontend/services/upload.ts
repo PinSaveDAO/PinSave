@@ -59,7 +59,7 @@ export async function UploadPost(
       await contract.mintPost(accAddress, metadata.url);
     }
 
-    if (chain === 22 || chain === 250 || chain === 56) {
+    if (chain === 250 || chain === 56) {
       try {
         const id = ethers.BigNumber.from(ethers.utils.randomBytes(32));
         const Id = ethers.utils.hexZeroPad(
