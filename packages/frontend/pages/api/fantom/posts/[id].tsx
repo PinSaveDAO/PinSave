@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { ethers } from "ethers";
+import { parseCid } from "livepeer/media";
 
 import { getContractInfo } from "@/utils/contracts";
 import { Post } from "@/services/upload";
@@ -29,24 +30,22 @@ export default async function handler(
 
     const item: Post = await fetch(resURL).then((x) => x.json());
 
-    let z, y;
+    let decoded_image;
 
     if (item.image) {
       if (item.image.charAt(0) === "i") {
-        y = item.image.replace("ipfs://", "");
-        z = y.replace("/", ".ipfs.nftstorage.link/");
-        z = `https://${z}`;
+        decoded_image = "https://ipfs.io/ipfs/" + parseCid(item.image)?.id;
       }
     }
 
-    if (!z) {
-      z = "https://evm.pinsave.app/PinSaveCard.png";
+    if (!decoded_image) {
+      decoded_image = "https://evm.pinsave.app/PinSaveCard.png";
     }
 
     const output = {
       ...item,
       owner: owner,
-      image: z,
+      image: decoded_image,
     };
 
     res.status(200).json(output);

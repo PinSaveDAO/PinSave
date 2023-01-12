@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { ethers } from "ethers";
+import { parseCid } from "livepeer/media";
 
 import { getContractInfo } from "@/utils/contracts";
 
@@ -38,12 +39,7 @@ export default async function handler(
       for (let i = lowerLimit; upperLimit >= i; i++) {
         result = await contract.tokenURI(i);
 
-        let x = result.replace("ipfs://", "https://");
-
-        let resURL = x.replace(
-          "/metadata.json",
-          ".ipfs.dweb.link/metadata.json"
-        );
+        let resURL = "https://ipfs.io/ipfs/" + parseCid(result)?.id;
 
         const item = await fetch(resURL).then((x) => x.json());
 

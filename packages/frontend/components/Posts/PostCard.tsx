@@ -3,24 +3,19 @@ import Link from "next/link";
 import { Paper, Text } from "@mantine/core";
 import { useNetwork } from "wagmi";
 import { Player } from "@livepeer/react";
+import { parseCid } from "livepeer/media";
+import { Chain } from "wagmi";
 
 import type { Post } from "@/services/upload";
-import { Chain } from "wagmi";
 
 const PostCard = (post: Post) => {
   const { chain } = useNetwork();
-  let y, x;
 
   function checkType(id: string | undefined) {
     if (id && id.slice(-1) === "4") {
       return true;
     }
     return false;
-  }
-
-  if (post.image.charAt(0) === "i") {
-    y = post.image.replace("ipfs://", "");
-    x = y.replace("/", ".ipfs.dweb.link/");
   }
 
   function loadPosts(chain: Chain) {
@@ -30,7 +25,7 @@ const PostCard = (post: Post) => {
     return "fantom";
   }
 
-  const imgSrc = `https://${x ?? "evm.pinsave.app/PinSaveCard.png"}`;
+  const imgSrc = "https://ipfs.io/ipfs/" + parseCid(post.image)?.id;
 
   return (
     <Link href={`/${loadPosts(chain as Chain)}/posts/${post.token_id}`}>

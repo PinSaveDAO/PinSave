@@ -3,4 +3,4 @@ export const CHAINS = {
   fantom: 250,
   bsc: 56,
 };
-export type Chain = keyof typeof CHAINS;
+export type ChainName = keyof typeof CHAINS;
