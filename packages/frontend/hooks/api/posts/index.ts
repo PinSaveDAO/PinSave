@@ -2,13 +2,13 @@ import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
 import { postKeys, fetchPosts, fetchPost } from "./queries";
 
 import type { Post } from "@/services/upload";
-import type { Chain } from "@/constants/chains";
+import type { ChainName } from "@/constants/chains";
 
 type IndividualPost = Post & {
   owner: string;
 };
 
-export const usePosts = (chain: Chain = "polygon") => {
+export const usePosts = (chain: ChainName = "maticmum") => {
   return useInfiniteQuery(
     postKeys.byChain(chain),
     ({ pageParam }) => fetchPosts(chain, { pageParam }),
@@ -22,7 +22,7 @@ export const usePosts = (chain: Chain = "polygon") => {
   );
 };
 
-export const usePost = (chain: Chain, id: string) => {
+export const usePost = (chain: ChainName, id: string) => {
   return useQuery<IndividualPost>(postKeys.single(chain, id), () =>
     fetchPost(chain, id)
   );

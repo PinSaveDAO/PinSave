@@ -9,6 +9,7 @@ import {
   Image,
   Center,
   MediaQuery,
+  NativeSelect,
 } from "@mantine/core";
 import { Dropzone, MIME_TYPES } from "@mantine/dropzone";
 import { showNotification, updateNotification } from "@mantine/notifications";
@@ -85,20 +86,14 @@ const UploadForm = () => {
   const [postReceiver, setPostReceiver] = useState<string>("");
   const [image, setImage] = useState<File | undefined>();
 
+  const [provider, setProvider] = useState<string>("NFT.Storage");
+
   function filledPost() {
     return desc !== "" && title !== "";
   }
 
-  function isValidUpload() {
-    return (
-      filledPost() &&
-      address !== undefined &&
-      image !== undefined &&
-      signer !== undefined
-    );
-  }
-
   const startUpload = async (storageProvider: string) => {
+    console.log(storageProvider);
     showNotification({
       id: "upload-post",
       loading: true,
@@ -108,8 +103,8 @@ const UploadForm = () => {
       disallowClose: true,
     });
 
-    const check = isValidUpload();
-    if (signer && image && check && storageProvider == "ipfs") {
+    const check = filledPost();
+    if (signer && image && check && chain) {
       if (postReceiver) {
         UploadPost(
           signer,
@@ -119,7 +114,8 @@ const UploadForm = () => {
             description: desc,
             image: image,
           },
-          chain?.id
+          chain.id,
+          storageProvider
         );
       }
 
@@ -132,18 +128,36 @@ const UploadForm = () => {
             description: desc,
             image: image,
           },
-          chain?.id
+          chain.id,
+          storageProvider
         );
       }
     }
 
-    if (!isValidUpload()) {
+    if (!signer) {
       updateNotification({
         id: "upload-post",
         color: "red",
         title: "Failed to upload post",
-        message:
-          "Check if you've connected the wallet and you've filled the fields in properly",
+        message: "Check if you've connected the wallet",
+      });
+    }
+
+    if (!check) {
+      updateNotification({
+        id: "upload-post",
+        color: "red",
+        title: "Failed to upload post",
+        message: "Check if you've completed the post",
+      });
+    }
+
+    if (!image) {
+      updateNotification({
+        id: "upload-post",
+        color: "red",
+        title: "Failed to upload post",
+        message: "Check if you've uploaded an image",
       });
     }
   };
@@ -199,17 +213,25 @@ const UploadForm = () => {
       >
         {() => dropzoneChildren(image)}
       </Dropzone>
+
+      <Group position="center" sx={{ padding: 15 }}>
+        <Button
+          component="a"
+          radius="lg"
+          mt="md"
+          onClick={() => startUpload(provider)}
+        >
+          Upload Post
+        </Button>
+      </Group>
       <Center>
-        <Group position="center" sx={{ padding: 15 }}>
-          <Button
-            component="a"
-            radius="lg"
-            mt="md"
-            onClick={() => startUpload("ipfs")}
-          >
-            Upload Post
-          </Button>
-        </Group>
+        <NativeSelect
+          placeholder="Pick IPFS Provider"
+          value={provider}
+          onChange={(event) => setProvider(event.currentTarget.value)}
+          size="sm"
+          data={["NFT.Storage", "NFTPort"]}
+        />
       </Center>
     </Paper>
   );

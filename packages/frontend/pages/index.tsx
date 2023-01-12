@@ -4,21 +4,19 @@ import { Box, Button, Center, LoadingOverlay } from "@mantine/core";
 
 import { usePosts } from "@/hooks/api";
 import PostCard from "@/components/Posts/PostCard";
-import type { Chain } from "@/constants/chains";
+import type { ChainName } from "@/constants/chains";
 import type { Post } from "@/services/upload";
 
 const Home: NextPage = () => {
-  var initialChain: Chain = "fantom";
+  var initialChain: ChainName = "fantom";
   const { chain } = useNetwork();
 
-  if (chain && chain.id) {
-    if (chain?.id === 80001) {
-      initialChain = "polygon";
-    }
-
-    if (chain?.id === 56) {
-      initialChain = "bsc";
-    }
+  if (
+    chain &&
+    chain.id &&
+    (chain.id === 80001 || chain.id === 250 || chain.id === 56)
+  ) {
+    initialChain = chain.network as ChainName;
   }
 
   const {

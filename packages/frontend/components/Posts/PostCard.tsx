@@ -2,15 +2,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { Paper, Text } from "@mantine/core";
 import { useNetwork } from "wagmi";
-import { useMemo } from "react";
-import { parseArweaveTxId, parseCid } from "livepeer/media";
 import { Player } from "@livepeer/react";
+import { parseCid } from "livepeer/media";
+import { Chain } from "wagmi";
 
 import type { Post } from "@/services/upload";
 
 const PostCard = (post: Post) => {
   const { chain } = useNetwork();
-  let y, x;
 
   function checkType(id: string | undefined) {
     if (id && id.slice(-1) === "4") {
@@ -19,25 +18,17 @@ const PostCard = (post: Post) => {
     return false;
   }
 
-  if (post.image.charAt(0) === "i") {
-    y = post.image.replace("ipfs://", "");
-    x = y.replace("/", ".ipfs.dweb.link/");
-  }
-
-  function loadPosts(chain: any) {
-    if ([22, 56, 250, 80001].includes(chain?.id)) {
-      return String(chain.network);
-    }
-    if (chain?.id === 80001) {
-      return "maticmum";
+  function loadPosts(chain: Chain) {
+    if ([56, 250, 80001].includes(chain.id)) {
+      return chain.network as string;
     }
     return "fantom";
   }
 
-  const imgSrc = `https://${x ?? "evm.pinsave.app/PinSaveCard.png"}`;
+  const imgSrc = "https://ipfs.io/ipfs/" + parseCid(post.image)?.id;
 
   return (
-    <Link href={`/${loadPosts(chain)}/posts/${post.token_id}`}>
+    <Link href={`/${loadPosts(chain as Chain)}/posts/${post.token_id}`}>
       <Paper
         component="div"
         withBorder
