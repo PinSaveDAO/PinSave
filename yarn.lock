@@ -3400,10 +3400,10 @@
     "@tanstack/query-core" "4.22.0"
     use-sync-external-store "^1.2.0"
 
-"@tenderly/hardhat-tenderly@^1.4.1":
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/@tenderly/hardhat-tenderly/-/hardhat-tenderly-1.4.1.tgz#1dee0f28de8351caa33c32c9b44ba1c6d654811c"
-  integrity sha512-kdzuAIvsTsgCsw0SCOD+E5OkNFB+LM/LUgtyEInNyJVlCrD3LYjtY/iArvpva4+TxY8GYKv3aRBKumaItyYNow==
+"@tenderly/hardhat-tenderly@^1.5.1":
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/@tenderly/hardhat-tenderly/-/hardhat-tenderly-1.5.1.tgz#878ac0a1c2d3f8ba47aece0d2e49de5ad482f229"
+  integrity sha512-VUYJbSXKkpQrHuCXWtXozgHPEEod782Z865AqDF8qLDW71WgyhK6YxhTubMA+au0xnZfN8TjWJz0hnNhWOk/6Q==
   dependencies:
     "@ethersproject/bignumber" "^5.7.0"
     "@nomiclabs/hardhat-ethers" "^2.1.1"
@@ -3413,7 +3413,7 @@
     hardhat "^2.10.2"
     hardhat-deploy "^0.11.14"
     js-yaml "^4.1.0"
-    tenderly "^0.2.0"
+    tenderly "^0.3.0"
     tslog "^4.3.1"
 
 "@testing-library/cypress@^8.0.3":
@@ -20257,10 +20257,10 @@ tar@^6.1.0:
     mkdirp "^1.0.3"
     yallist "^4.0.0"
 
-tenderly@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/tenderly/-/tenderly-0.2.0.tgz#614027ce58e2465c7707b5815d44c9d6ee92ab9e"
-  integrity sha512-VsYKJfvNOKypcSXzba7o1w1on/lWuSdjZNK0UeHkRuhKYxo/RrvoOpTB2nuaSPQ1dhczy4FNH/mpGU+kqvNr5g==
+tenderly@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/tenderly/-/tenderly-0.3.0.tgz#0c24e33b21b9b546eb8ff545589e38c0b08e9afb"
+  integrity sha512-JulOh626MZUzfur4YGJeIjpGS+1e3f+dfutHg+JkaDTFaGdEzhE68qVyBAmhynbCcXUItkZTpLARdhQEpEXW5w==
   dependencies:
     axios "^0.27.2"
     cli-table3 "^0.6.2"
