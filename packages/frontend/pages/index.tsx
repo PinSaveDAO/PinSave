@@ -8,7 +8,7 @@ import type { ChainName } from "@/constants/chains";
 import type { Post } from "@/services/upload";
 
 const Home: NextPage = () => {
-  var initialChain: ChainName = "fantom";
+  var initialChain: ChainName = "maticmum";
   const { chain } = useNetwork();
 
   if (
