@@ -8,6 +8,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@bundlr-network/client": "^0.9.11",
     "@ensdomains/ensjs": "^3.0.0-alpha.39",
     "@livepeer/react": "^1.5.6",
     "@mantine/core": "^4.2.12",
@@ -19,7 +20,9 @@
     "@rainbow-me/rainbowkit": "^0.8.1",
     "@tanstack/react-query": "^4.22.0",
     "@tanstack/react-query-devtools": "^4.22.0",
+    "bignumber.js": "^9.1.1",
     "ethers": "^5.7.2",
+    "filereader-stream": "^2.0.0",
     "isomorphic-fetch": "^3.0.0",
     "next": "^13.1.0",
     "nft.storage": "^7.0.0",

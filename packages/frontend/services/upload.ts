@@ -3,6 +3,7 @@ import { NFTStorage } from "nft.storage";
 import { updateNotification } from "@mantine/notifications";
 
 import { getContractInfo } from "@/utils/contracts";
+import { dataStream } from "@/utils/stream";
 
 export type PostData = {
   name: string;
@@ -20,7 +21,8 @@ export async function UploadPost(
   accAddress: string,
   data: PostData,
   chain?: number,
-  provider?: string
+  provider?: string,
+  bundlrInstance?: any
 ) {
   try {
     let metadata_url;
@@ -86,8 +88,41 @@ export async function UploadPost(
       console.log(metadata_url);
     }
 
+    if (provider === "Arweave") {
+      let uploader = bundlrInstance.uploader.chunkedUploader;
+      let uploader1 = bundlrInstance.uploader.chunkedUploader;
+      const transactionOptions = {
+        tags: [{ name: "Content-Type", value: data.image.type }],
+      };
+
+      const dataBuffer = dataStream(data.image);
+      let response = await uploader.uploadData(dataBuffer, transactionOptions);
+
+      const transactionOptionsMetadata = {
+        tags: [{ name: "Content-Type", value: "application/json" }],
+      };
+
+      const obj = {
+        name: data.name,
+        description: data.description,
+        image: "https://arweave.net/" + response.data.id,
+      };
+
+      const blob = new Blob([JSON.stringify(obj)], {
+        type: "application/json",
+      });
+      const files = [new File([blob], "metadata.json")];
+
+      const dataBuffer0 = dataStream(files[0]);
+      let response0 = await uploader1.uploadData(
+        dataBuffer0,
+        transactionOptionsMetadata
+      );
+      metadata_url = "https://arweave.net/" + response0.data.id;
+      console.log("https://arweave.net/" + response0.data.id);
+    }
+
     if (chain === 80001) {
-      console.log(metadata_url);
       await contract.mintPost(accAddress, metadata_url);
     }
 

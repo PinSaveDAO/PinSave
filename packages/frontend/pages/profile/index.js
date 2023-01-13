@@ -9,9 +9,9 @@ import {
   Center,
   LoadingOverlay,
 } from "@mantine/core";
-import { NFTStorage } from "nft.storage";
 import { Dropzone, MIME_TYPES } from "@mantine/dropzone";
 import { showNotification, updateNotification } from "@mantine/notifications";
+import { NFTStorage } from "nft.storage";
 
 import { dropzoneChildren } from "@/components/UploadForm";
 

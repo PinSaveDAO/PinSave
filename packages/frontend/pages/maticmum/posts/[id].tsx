@@ -45,7 +45,7 @@ const PostPage = () => {
   );
 
   function checkType(id: string | undefined) {
-    if (id && id.slice(-1) === "4") {
+    if (id && id.slice(-3) === "mp4") {
       return true;
     }
     return false;

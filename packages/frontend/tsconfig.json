@@ -30,7 +30,8 @@
     "Orbis.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "pages/profile/index.js"
+    "pages/profile/index.js",
+    "utils/context.js"
   ],
   "exclude": ["node_modules"]
 }
