@@ -38,7 +38,15 @@ export default async function handler(
       for (let i = lowerLimit; upperLimit >= i; i++) {
         result = await contract.getPost(i);
 
-        let resURL = "https://ipfs.io/ipfs/" + parseCid(result)?.id;
+        let resURL;
+        if (result) {
+          if (result.charAt(0) === "i") {
+            resURL = "https://ipfs.io/ipfs/" + parseCid(result)?.id;
+          }
+          if (result.charAt(0) === "h") {
+            resURL = result;
+          }
+        }
 
         const item = await fetch(resURL).then((x) => x.json());
 

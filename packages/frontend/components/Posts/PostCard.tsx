@@ -19,7 +19,7 @@ const PostCard = (post: Post) => {
   }
 
   function loadPosts(chain: Chain) {
-    if ([56, 250, 80001].includes(chain.id)) {
+    if ([56, 250, 80001].includes(chain?.id)) {
       return chain.network as string;
     }
     return "fantom";

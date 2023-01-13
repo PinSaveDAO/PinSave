@@ -20,7 +20,15 @@ export default async function handler(
     const result = await contract.getPost(id);
     const owner = await contract.getPostOwner(id);
 
-    let resURL = "https://ipfs.io/ipfs/" + parseCid(result)?.id;
+    let resURL;
+    if (result) {
+      if (result.charAt(0) === "i") {
+        resURL = "https://ipfs.io/ipfs/" + parseCid(result)?.id;
+      }
+      if (result.charAt(0) === "h") {
+        resURL = result;
+      }
+    }
 
     const item: Post = await fetch(resURL).then((x) => x.json());
 
@@ -29,6 +37,9 @@ export default async function handler(
     if (item.image) {
       if (item.image.charAt(0) === "i") {
         decoded_image = "https://ipfs.io/ipfs/" + parseCid(item.image)?.id;
+      }
+      if (item.image.charAt(0) === "h") {
+        decoded_image = item.image;
       }
     }
 
