@@ -1,7 +1,6 @@
 import "@/styles/globals.css";
 import "@rainbow-me/rainbowkit/styles.css";
 
-import { useState, useMemo } from "react";
 import NextHead from "next/head";
 import type { AppProps as NextAppProps } from "next/app";
 import type { NextComponentType } from "next";
@@ -29,14 +28,17 @@ import {
   QueryClientProvider,
 } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-
+import { useState, useMemo, useRef } from "react";
 import {
   LivepeerConfig,
   createReactClient,
   studioProvider,
 } from "@livepeer/react";
+import { WebBundlr } from "@bundlr-network/client";
+import { providers, utils } from "ethers";
 
 import LayoutApp from "@/components/Layout";
+import { MainContext } from "@/utils/context";
 
 type AppProps<P = any> = NextAppProps & {
   pageProps: P;
@@ -59,7 +61,6 @@ const { chains, provider, webSocketProvider } = configureChains(
     publicProvider(),
     jsonRpcProvider({
       rpc: (chain) => {
-        // if (chain.id !== LuksoL14Chain.id) return null;
         return { http: chain.rpcUrls.default.http[0] };
       },
     }),
@@ -92,7 +93,12 @@ const wagmiClient = createClient({
 });
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const [bundlrInstance, setBundlrInstance] = useState<WebBundlr>();
+  const [balance, setBalance] = useState<string>();
+  const bundlrRef = useRef<any>();
+
   const [queryClient] = useState(() => new QueryClient());
+
   const livepeerClient = useMemo(() => {
     return createReactClient({
       provider: studioProvider({
@@ -100,6 +106,42 @@ function MyApp({ Component, pageProps }: AppProps) {
       }),
     });
   }, []);
+
+  async function initialiseBundlr() {
+    if (window.ethereum) {
+      //await window.ethereum.enable();
+
+      const provider = new providers.Web3Provider(window.ethereum as any);
+      await provider._ready();
+
+      /* const bundlr = new WebBundlr(
+        "https://node1.bundlr.network",
+        "matic",
+        provider
+      ); */
+      const bundlr = new WebBundlr(
+        "https://devnet.bundlr.network",
+        "matic",
+        provider,
+        {
+          providerUrl: "https://rpc-mumbai.matic.today",
+        }
+      );
+
+      await bundlr.ready();
+
+      setBundlrInstance(bundlr);
+      bundlrRef.current = bundlr;
+      fetchBalance();
+    }
+  }
+
+  async function fetchBalance() {
+    const bal = await bundlrRef.current.getLoadedBalance();
+    console.log("bal: ", utils.formatEther(bal.toString()));
+    setBalance(utils.formatEther(bal.toString()));
+  }
+
   return (
     <MantineProvider
       theme={{
@@ -134,9 +176,18 @@ function MyApp({ Component, pageProps }: AppProps) {
           <NotificationsProvider>
             <RainbowKitProvider chains={chains}>
               <LivepeerConfig client={livepeerClient}>
-                <LayoutApp>
-                  <Component {...pageProps} />
-                </LayoutApp>
+                <MainContext.Provider
+                  value={{
+                    initialiseBundlr,
+                    bundlrInstance,
+                    balance,
+                    fetchBalance,
+                  }}
+                >
+                  <LayoutApp>
+                    <Component {...pageProps} />
+                  </LayoutApp>
+                </MainContext.Provider>
               </LivepeerConfig>
             </RainbowKitProvider>
           </NotificationsProvider>

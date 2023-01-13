@@ -12,7 +12,7 @@ const PostCard = (post: Post) => {
   const { chain } = useNetwork();
 
   function checkType(id: string | undefined) {
-    if (id && id.slice(-1) === "4") {
+    if (id && id.slice(-3) === "mp4") {
       return true;
     }
     return false;
@@ -25,7 +25,15 @@ const PostCard = (post: Post) => {
     return "fantom";
   }
 
-  const imgSrc = "https://ipfs.io/ipfs/" + parseCid(post.image)?.id;
+  let imgSrc = "https://evm.pinsave.app/PinSaveCard.png";
+  if (post.image) {
+    if (post.image.charAt(0) === "i") {
+      imgSrc = "https://ipfs.io/ipfs/" + parseCid(post.image)?.id;
+    }
+    if (post.image.charAt(0) === "h") {
+      imgSrc = post.image;
+    }
+  }
 
   return (
     <Link href={`/${loadPosts(chain as Chain)}/posts/${post.token_id}`}>

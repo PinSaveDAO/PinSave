@@ -35,18 +35,22 @@ export default async function handler(
       upperLimit = totalSupply;
     }
 
-    try {
-      for (let i = lowerLimit; upperLimit >= i; i++) {
-        result = await contract.tokenURI(i);
+    for (let i = lowerLimit; upperLimit >= i; i++) {
+      result = await contract.tokenURI(i);
 
-        let resURL = "https://ipfs.io/ipfs/" + parseCid(result)?.id;
-
-        const item = await fetch(resURL).then((x) => x.json());
-
-        items.push({ token_id: i, ...item });
+      let resURL;
+      if (result) {
+        if (result.charAt(0) === "i") {
+          resURL = "https://ipfs.io/ipfs/" + parseCid(result)?.id;
+        }
+        if (result.charAt(0) === "h") {
+          resURL = result;
+        }
       }
-    } catch {
-      res.status(200).json({ items: items, totalSupply: totalSupply });
+
+      const item = await fetch(resURL).then((x) => x.json());
+
+      items.push({ token_id: i, ...item });
     }
 
     res.status(200).json({ items: items, totalSupply: totalSupply });

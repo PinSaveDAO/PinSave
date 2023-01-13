@@ -21,16 +21,16 @@
 
 </div>
 
-Pin Save is a decentralized image, video sharing and content aggregation platform where users can not only control the content, but also the platform itself.
+Pin Save is a decentralized image, video sharing and content aggregation platform where users can not only control the content but also the platform itself.
 
-1. The decentralized Feed to reinforce discovery of content and user feedback.
-2. Decentralized Identity (ERC-725) to provide anonymity and data protection.
+1. The decentralized feed reinforces the discovery of content and feedback.
+2. Decentralized Identity (ERC-725), which provides anonymity and data protection.
 3. Upgradeable, resilient, and more open decentralized storage.
-4. Smart Contracts to securely serve web experiences directly to users.
+4. Smart contracts to securely serve web experiences directly to users.
 
 ## Features
 
-- Decentralized feed of NFTs on polygon mumbai and fantom chains with decentralized storage on IPFS with NFTPort:
+- Decentralized feed of NFTs on polygon mumbai and fantom chains with decentralized storage on Arweave and IPFS with NFTPort and Nft.storage:
 
 ![decentralized feed](https://bafybeiaptrih3bg5zndjdncgqyfim3dfuy5pudeoe3znak2jan6llapjrq.ipfs.w3s.link/Screenshot%20from%202023-01-09%2023-13-27.png)
 

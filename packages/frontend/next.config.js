@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ["evm.pinsave.app", "ipfs.io"],
+    domains: ["evm.pinsave.app", "ipfs.io", "arweave.net"],
     remotePatterns: [
       {
         protocol: "https",
