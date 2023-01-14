@@ -18,11 +18,11 @@ import { dropzoneChildren } from "@/components/UploadForm";
 let orbis = new Orbis();
 
 const Upload = () => {
-  const [image, setImage] = useState();
+  const [image, setImage] = useState<File | undefined>();
 
-  const [user, setUser] = useState();
-  const [username, setUsername] = useState();
-  const [pfp, setPfp] = useState();
+  const [user, setUser] = useState<IOrbisProfile>();
+  const [username, setUsername] = useState<string>();
+  const [pfp, setPfp] = useState<string>();
 
   useEffect(() => {
     async function loadData() {
@@ -58,7 +58,7 @@ const Upload = () => {
       const cid = await client.storeBlob(new Blob([image]));
 
       await orbis.updateProfile({
-        username: username ?? user.details.profile?.username,
+        username: username ?? user?.details.profile?.username,
         pfp: "https://" + cid + ".ipfs.nftstorage.link",
       });
 
@@ -73,8 +73,8 @@ const Upload = () => {
     }
 
     await orbis.updateProfile({
-      username: username ?? user.details.profile?.username,
-      pfp: pfp ?? user.details.profile?.pfp,
+      username: username ?? user?.details.profile?.username,
+      pfp: pfp ?? user?.details.profile?.pfp,
     });
 
     updateNotification({
@@ -86,7 +86,7 @@ const Upload = () => {
   }
 
   async function logout() {
-    setUser("");
+    setUser(undefined);
     await orbis.logout();
   }
 
