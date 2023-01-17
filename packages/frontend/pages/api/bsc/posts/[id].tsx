@@ -36,7 +36,12 @@ export default async function handler(
 
     if (item.image) {
       if (item.image.charAt(0) === "i") {
-        decoded_image = "https://ipfs.io/ipfs/" + parseCid(item.image)?.id;
+        let ipfsCid = parseCid(item.image)?.id;
+        decoded_image = "https://ipfs.io/ipfs/" + ipfsCid;
+        const ipfsImageResponse = await fetch(decoded_image);
+        if (ipfsImageResponse.status !== 200) {
+          decoded_image = "https://w3s.link/" + ipfsCid;
+        }
       }
       if (item.image.charAt(0) === "h") {
         decoded_image = item.image;

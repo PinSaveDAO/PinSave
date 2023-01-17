@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Orbis } from "@orbisclub/orbis-sdk";
-import { IconUsers, IconHeart } from "@tabler/icons";
-
+import { IconUsers } from "@tabler/icons";
 import {
   BackgroundImage,
   Box,
   Button,
   Card,
   Center,
-  Container,
   Group,
   Image,
   Paper,
@@ -16,6 +14,7 @@ import {
   Text,
   TextInput,
   LoadingOverlay,
+  Stack,
 } from "@mantine/core";
 import { Dropzone, MIME_TYPES } from "@mantine/dropzone";
 import { showNotification, updateNotification } from "@mantine/notifications";
@@ -26,13 +25,11 @@ import { dropzoneChildren } from "@/components/UploadForm";
 let orbis = new Orbis();
 
 const Upload = () => {
-  const [cover, setCover] = useState<string>();
+  const [cover, setCover] = useState<File | undefined>();
   const [image, setImage] = useState<File | undefined>();
   const [description, setDescription] = useState<string>();
   const [user, setUser] = useState<IOrbisProfile>();
-  const [followers, setFollowers] = useState<number>();
   const [username, setUsername] = useState<string>();
-  const [pfp, setPfp] = useState<string>();
 
   useEffect(() => {
     async function loadData() {
@@ -42,10 +39,6 @@ const Upload = () => {
         res = await orbis.connect();
       }
       setUser(res);
-      console.log(res);
-      /*       setCover(res.details.profile.cover);
-      setDescription(res.details.description);
-      setFollowers(res.details.count_followers); */
     }
     loadData();
   }, [user]);
@@ -60,31 +53,45 @@ const Upload = () => {
       disallowClose: true,
     });
 
-    if (image) {
+    if (image || cover) {
+      let cidPfp, cidCover;
+
       const client = new NFTStorage({
         token: process.env.NEXT_PUBLIC_TOKEN ?? "",
       });
 
-      const cid = await client.storeBlob(new Blob([image]));
+      if (image) {
+        cidPfp = await client.storeBlob(new Blob([image]));
+        cidPfp = "https://" + cidPfp + ".ipfs.nftstorage.link";
+      }
+
+      if (cover) {
+        cidCover = await client.storeBlob(new Blob([cover]));
+        cidCover = "https://" + cidCover + ".ipfs.nftstorage.link";
+      }
 
       await orbis.updateProfile({
         username: username ?? user?.details.profile?.username,
-        pfp: "https://" + cid + ".ipfs.nftstorage.link",
+        pfp: cidPfp ?? user?.details.profile?.pfp ?? "",
+        cover: cidCover ?? user?.details.profile?.cover ?? "",
+        description: description ?? user?.details.profile?.description ?? "",
       });
 
       updateNotification({
         id: "upload-post",
         color: "teal",
         title: "Profile uploaded successfully!!",
-        message: "PFP:" + "https://" + cid + ".ipfs.nftstorage.link",
+        message: "File uploaded successfully ",
       });
 
       return;
     }
 
     await orbis.updateProfile({
-      username: username ?? user?.details.profile?.username,
-      pfp: pfp ?? user?.details.profile?.pfp,
+      username: username ?? user?.details.profile?.username ?? "",
+      pfp: user?.details.profile?.pfp ?? "",
+      cover: user?.details.profile?.cover ?? "",
+      description: description ?? user?.details.profile?.description ?? "",
     });
 
     updateNotification({
@@ -116,48 +123,62 @@ const Upload = () => {
           </Button>
           <Box sx={{ maxWidth: 1200 }} mx="auto">
             <BackgroundImage
-              src="https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=720&q=80"
+              src={
+                user.details.profile?.cover ??
+                "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=720&q=80"
+              }
               radius="xs"
               style={{
                 height: 500,
                 marginBottom: "25px",
               }}
             >
-              <Image
-                radius="md"
-                src={user.details.profile?.pfp}
-                alt={user.details.profile?.username}
-                mx="auto"
-                style={{
-                  width: 300,
-                  height: 300,
-                  paddingTop: 50,
-                }}
-              />
-
-              <Card
-                shadow="sm"
-                p="lg"
-                radius="lg"
-                withBorder
-                mx="auto"
-                style={{
-                  maxWidth: 400,
+              <Stack
+                spacing="xs"
+                sx={{
+                  height: 400,
                 }}
               >
-                <Center>
-                  <Title order={2}> {user.details.profile?.username} </Title>
-                </Center>
-                <Group mt={25} position="center">
-                  <Group position="center" mt="md" mb="xs">
-                    <IconUsers size={26} />
-                    <Text> {user.details.count_followers} </Text>
+                <Image
+                  radius="md"
+                  src={user.details.profile?.pfp}
+                  alt={user.details.profile?.username}
+                  mx="auto"
+                  style={{
+                    width: 300,
+                    height: 300,
+                    paddingTop: 50,
+                    paddingBottom: 40,
+                  }}
+                />
+                <Card
+                  shadow="sm"
+                  p="lg"
+                  radius="lg"
+                  withBorder
+                  mx="auto"
+                  style={{
+                    minWidth: 400,
+                    minHeight: 200,
+                  }}
+                >
+                  <Center>
+                    <Title mx="auto" order={2}>
+                      {user.details.profile?.username}
+                    </Title>
+                  </Center>
+                  <Center mt={15}>
+                    <Text mx="auto"> {user.details.profile?.description} </Text>
+                  </Center>
+                  <Group mt={10} position="center">
+                    <Group position="center" mt="md" mb="xs">
+                      <IconUsers size={26} />
+                      <Text> Followers: {user.details.count_followers} </Text>
+                      <Text> Following: {user.details.count_following} </Text>
+                    </Group>
                   </Group>
-                  <Container size={100}>
-                    <IconHeart size={20} />
-                  </Container>
-                </Group>
-              </Card>
+                </Card>
+              </Stack>
             </BackgroundImage>
           </Box>
           <Paper
@@ -174,17 +195,22 @@ const Upload = () => {
               placeholder="Username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              style={{ width: 300, marginLeft: "auto", marginRight: "auto" }}
+              mx="auto"
+              style={{ width: 300 }}
             />
             <TextInput
               my={12}
               size="md"
-              label="Change Profile Picture from URL"
-              placeholder="https://images.app.goo.gl/bHjNNHKxuZYtXyM37"
-              value={pfp}
-              onChange={(e) => setPfp(e.target.value)}
-              style={{ width: 300, marginLeft: "auto", marginRight: "auto" }}
+              label="Change Description"
+              placeholder="Description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              mx="auto"
+              style={{ width: 300 }}
             />
+            <Center>
+              <Title>Upload PFP</Title>
+            </Center>
             <Dropzone
               mt="md"
               ml="xl"
@@ -204,11 +230,32 @@ const Upload = () => {
               {() => dropzoneChildren(image)}
             </Dropzone>
             <Center>
+              <Title>Upload Cover</Title>
+            </Center>
+            <Dropzone
+              mt="md"
+              ml="xl"
+              mr="xl"
+              onReject={(files) => console.log("rejected files", files)}
+              onDrop={(files) => setCover(files[0])}
+              maxSize={25000000}
+              multiple={false}
+              accept={[
+                MIME_TYPES.png,
+                MIME_TYPES.jpeg,
+                MIME_TYPES.webp,
+                MIME_TYPES.svg,
+                MIME_TYPES.gif,
+              ]}
+            >
+              {() => dropzoneChildren(cover)}
+            </Dropzone>
+            <Center>
               <Button
                 my={12}
                 size="md"
                 onClick={() => updateProfile()}
-                style={{ marginLeft: "auto", marginRight: "auto" }}
+                mx="auto"
               >
                 Submit
               </Button>
