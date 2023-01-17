@@ -782,19 +782,21 @@
     ethers "^5.0.13"
     js-sha3 "^0.8.0"
 
-"@ensdomains/ensjs@^3.0.0-alpha.40":
-  version "3.0.0-alpha.40"
-  resolved "https://registry.yarnpkg.com/@ensdomains/ensjs/-/ensjs-3.0.0-alpha.40.tgz#2723f3ff1dbbc05a47d09f0970b9d42d7f7ac27c"
-  integrity sha512-E3M6oUKs/a6kRHvNm38Pp3C/vUpH1sckpqQtwfNKrtSs7V9efhDU4Dcwu0YVgqDSzhQhcuLS7V7fbBnXLaJT0Q==
+"@ensdomains/ensjs@^3.0.0-alpha.41":
+  version "3.0.0-alpha.41"
+  resolved "https://registry.yarnpkg.com/@ensdomains/ensjs/-/ensjs-3.0.0-alpha.41.tgz#413f53047121dc6b6ff06ffa8b753b1e602f346e"
+  integrity sha512-bIERjIC1wtNaMM1w7yTr7mMTuTwfoW+6C2U1LIkPtrRLeCa5rcFQTM1/YAKCahYVw7FU32hz4Dy+0+5yZrbUIQ==
   dependencies:
     "@ensdomains/address-encoder" "^0.2.18"
     "@ensdomains/content-hash" "^2.5.7"
     "@ensdomains/dnsprovejs" "^0.4.1"
     "@ensdomains/dnssecoraclejs" "^0.2.7"
+    cbor "^8.1.0"
     dns-packet "^5.3.1"
     graphql "^16.3.0"
     graphql-request next
     idna-uts46-hx "3.4.0"
+    pako "^2.1.0"
     traverse "^0.6.6"
 
 "@ensdomains/resolver@0.2.4", "@ensdomains/resolver@^0.2.4":
@@ -17014,7 +17016,7 @@ pako@^1.0.4, pako@~1.0.2:
   resolved "https://registry.yarnpkg.com/pako/-/pako-1.0.11.tgz#6c9599d340d54dfd3946380252a35705a6b992bf"
   integrity sha512-4hLB8Py4zZce5s4yd9XzopqwVv/yGNhV1Bl8NTmCq1763HeK2+EwVTv+leGeL13Dnh2wfbqowVPXCIO0z4taYw==
 
-pako@^2.0.4:
+pako@^2.0.4, pako@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/pako/-/pako-2.1.0.tgz#266cc37f98c7d883545d11335c00fbd4062c9a86"
   integrity sha512-w+eufiZ1WuJYgPXbV/PO3NCMEc3xqylkKHzp8bxp1uW4qaSNQUkwmLLEc3kKsfz8lpV1F8Ht3U1Cm+9Srog2ug==
