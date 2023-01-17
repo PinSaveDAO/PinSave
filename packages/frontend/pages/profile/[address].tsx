@@ -15,21 +15,15 @@ import {
   Stack,
 } from "@mantine/core";
 import { ethers } from "ethers";
-import { ENS } from "@ensdomains/ensjs";
-
-const provider = new ethers.providers.JsonRpcProvider(
-  "https://rpc.ankr.com/eth"
-);
 
 let orbis = new Orbis();
-const ENSInstance = new ENS();
 
 function Post() {
   const router = useRouter();
   const { address } = router.query;
 
   const [user, setUser] = useState<any | undefined>();
-  const [ens, setEns] = useState<string | undefined>();
+  const [ens, setEns] = useState<string | undefined>("");
 
   useEffect(() => {
     async function loadData() {
@@ -38,16 +32,6 @@ function Post() {
       if (res) {
         let { data } = await orbis.getDids(address);
         setUser(data[0]);
-        try {
-          const profile = await ENSInstance.withProvider(provider).getProfile(
-            //"0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
-            address as string
-          );
-          //console.log(profile?.name as string);
-          setEns(profile?.name as string);
-        } catch {
-          // setEns("");
-        }
       }
 
       if (!res) {
