@@ -1,7 +1,19 @@
 import { useRouter } from "next/router";
 import React, { useState, useEffect } from "react";
 import { Orbis } from "@orbisclub/orbis-sdk";
-import { Paper, Title, Image, LoadingOverlay } from "@mantine/core";
+import { IconUsers } from "@tabler/icons";
+import {
+  BackgroundImage,
+  Box,
+  Card,
+  Center,
+  Group,
+  Image,
+  Title,
+  Text,
+  LoadingOverlay,
+  Stack,
+} from "@mantine/core";
 import { ethers } from "ethers";
 import { ENS } from "@ensdomains/ensjs";
 
@@ -24,15 +36,14 @@ function Post() {
       let res = await orbis.isConnected();
 
       if (res) {
-        let { data, error } = await orbis.getDids(address);
+        let { data } = await orbis.getDids(address);
         setUser(data[0]);
-        //console.log(address);
         try {
           const profile = await ENSInstance.withProvider(provider).getProfile(
             //"0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
             address as string
           );
-          console.log(profile?.name as string);
+          //console.log(profile?.name as string);
           setEns(profile?.name as string);
         } catch {
           // setEns("");
@@ -50,27 +61,66 @@ function Post() {
   return (
     <>
       {user || ens ? (
-        <Paper
-          withBorder
-          shadow="xl"
-          p="xl"
-          radius="xl"
-          sx={{ maxWidth: "700px", backgroundColor: "#82c7fc1d" }}
-          mx="auto"
-        >
-          <Title align="center">{user?.details.profile?.username}</Title>
-          <Title order={4} align="center">
-            {ens}
-          </Title>
-          <div style={{ width: 400, marginLeft: "auto", marginRight: "auto" }}>
-            <Image
-              radius="md"
-              mt={10}
-              src={user?.details.profile?.pfp}
-              alt={user?.details.profile?.username}
-            />
-          </div>
-        </Paper>
+        <Box sx={{ maxWidth: 1200 }} mx="auto">
+          <BackgroundImage
+            src={
+              user?.details.profile?.cover ??
+              "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=720&q=80"
+            }
+            radius="xs"
+            style={{
+              height: 500,
+              marginBottom: "25px",
+            }}
+          >
+            <Stack
+              spacing="xs"
+              sx={{
+                height: 400,
+              }}
+            >
+              <Image
+                radius="md"
+                src={user?.details.profile?.pfp}
+                alt={user?.details.profile?.username}
+                mx="auto"
+                style={{
+                  width: 300,
+                  height: 300,
+                  paddingTop: 50,
+                  paddingBottom: 40,
+                }}
+              />
+              <Card
+                shadow="sm"
+                p="lg"
+                radius="lg"
+                withBorder
+                mx="auto"
+                style={{
+                  minWidth: 400,
+                  minHeight: 200,
+                }}
+              >
+                <Center>
+                  <Title mx="auto" order={2}>
+                    {user?.details.profile?.username} {ens}
+                  </Title>
+                </Center>
+                <Center mt={15}>
+                  <Text mx="auto"> {user?.details.profile?.description} </Text>
+                </Center>
+                <Group mt={10} position="center">
+                  <Group position="center" mt="md" mb="xs">
+                    <IconUsers size={26} />
+                    <Text> Followers: {user?.details.count_followers} </Text>
+                    <Text> Following: {user?.details.count_following} </Text>
+                  </Group>
+                </Group>
+              </Card>
+            </Stack>
+          </BackgroundImage>
+        </Box>
       ) : (
         <LoadingOverlay visible />
       )}
