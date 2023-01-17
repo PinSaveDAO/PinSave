@@ -3399,10 +3399,10 @@
     "@tanstack/query-core" "4.22.0"
     use-sync-external-store "^1.2.0"
 
-"@tenderly/hardhat-tenderly@^1.5.1":
-  version "1.5.1"
-  resolved "https://registry.yarnpkg.com/@tenderly/hardhat-tenderly/-/hardhat-tenderly-1.5.1.tgz#878ac0a1c2d3f8ba47aece0d2e49de5ad482f229"
-  integrity sha512-VUYJbSXKkpQrHuCXWtXozgHPEEod782Z865AqDF8qLDW71WgyhK6YxhTubMA+au0xnZfN8TjWJz0hnNhWOk/6Q==
+"@tenderly/hardhat-tenderly@^1.5.2":
+  version "1.5.2"
+  resolved "https://registry.yarnpkg.com/@tenderly/hardhat-tenderly/-/hardhat-tenderly-1.5.2.tgz#0a5a9df50e0430097c58fcb9ae6e40981bd4b2e9"
+  integrity sha512-qITow77BqF88lUCz+9OL5eanAdCNXRN/9IeU1GwtJ2NmR7e8o9qgz1XYTTQUVmtqnqcZzf3jT0nwlqKUGRimqw==
   dependencies:
     "@ethersproject/bignumber" "^5.7.0"
     "@nomiclabs/hardhat-ethers" "^2.1.1"

@@ -25,7 +25,7 @@
     "@nomiclabs/hardhat-ethers": "npm:hardhat-deploy-ethers",
     "@nomiclabs/hardhat-etherscan": "^3.1.5",
     "@openzeppelin/contracts": "^4.8.1",
-    "@tenderly/hardhat-tenderly": "^1.5.1",
+    "@tenderly/hardhat-tenderly": "^1.5.2",
     "chai": "^4.3.7",
     "chalk": "^5.2.0",
     "dotenv": "^16.0.3",
