@@ -74,7 +74,7 @@ export async function UploadPost(
         body: JSON.stringify({
           name: data.name,
           description: data.description,
-          file_url: image_ipfs,
+          image: image_ipfs,
         }),
       };
       const rawMetadataResponse = await fetch(
