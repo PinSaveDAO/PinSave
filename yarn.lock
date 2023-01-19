@@ -1529,10 +1529,10 @@
     graphql-import-node "^0.0.5"
     js-yaml "^4.1.0"
 
-"@graphprotocol/graph-cli@^0.37.2":
-  version "0.37.5"
-  resolved "https://registry.yarnpkg.com/@graphprotocol/graph-cli/-/graph-cli-0.37.5.tgz#afbda3c5b66a425e4518c6746a1dc139077363a1"
-  integrity sha512-ckwk5ogRrepW+4sgad8gYudk9bKY1pZb2UjkU5ciRDM1Fs48YNcgdv8IJZV+BDSza4dpAo77YXz2Sp75MRtigw==
+"@graphprotocol/graph-cli@^0.37.6":
+  version "0.37.6"
+  resolved "https://registry.yarnpkg.com/@graphprotocol/graph-cli/-/graph-cli-0.37.6.tgz#b5f3409587d6a727664f11b29a899e4eb54bac3a"
+  integrity sha512-MW1GJg87/RDz85LrosELkBPagyTsRf9K2i4b0h8CpfWPgeuLJZY2cSvkpxIHQ370Uebit6yW7WFJwzrZpGcwIA==
   dependencies:
     "@float-capital/float-subgraph-uncrashable" "^0.0.0-alpha.4"
     assemblyscript "0.19.23"
@@ -1544,14 +1544,13 @@
     dockerode "2.5.8"
     fs-extra "9.0.0"
     glob "7.1.6"
-    gluegun "https://github.com/edgeandnode/gluegun#v4.3.1-pin-colors-dep"
+    gluegun "git+https://github.com/edgeandnode/gluegun.git#v4.3.1-pin-colors-dep"
     graphql "15.5.0"
     immutable "4.2.1"
     ipfs-http-client "34.0.0"
     jayson "3.6.6"
     js-yaml "3.13.1"
     node-fetch "2.6.0"
-    pkginfo "0.4.1"
     prettier "1.19.1"
     request "2.88.2"
     semver "7.3.5"
@@ -10783,9 +10782,10 @@ globrex@^0.1.2:
   resolved "https://registry.yarnpkg.com/globrex/-/globrex-0.1.2.tgz#dd5d9ec826232730cd6793a5e33a9302985e6098"
   integrity sha512-uHJgbwAMwNFf5mLst7IWLNg14x1CkeqglJb/K3doi4dw6q2IvAAmM/Y81kevy83wP+Sst+nutFTYOGg3d1lsxg==
 
-"gluegun@https://github.com/edgeandnode/gluegun#v4.3.1-pin-colors-dep":
+"gluegun@git+https://github.com/edgeandnode/gluegun.git#v4.3.1-pin-colors-dep":
   version "4.3.1"
-  resolved "https://github.com/edgeandnode/gluegun#b34b9003d7bf556836da41b57ef36eb21570620a"
+  uid b34b9003d7bf556836da41b57ef36eb21570620a
+  resolved "git+https://github.com/edgeandnode/gluegun.git#b34b9003d7bf556836da41b57ef36eb21570620a"
   dependencies:
     apisauce "^1.0.1"
     app-module-path "^2.2.0"
@@ -15681,11 +15681,6 @@ pkg-dir@^4.1.0:
   integrity sha512-HRDzbaKjC+AOWVXxAU/x54COGeIv9eb+6CkDSQoNTt4XyWoIJvuPsXizxu/Fr23EiekbtZwmh1IcIG/l/a10GQ==
   dependencies:
     find-up "^4.0.0"
-
-pkginfo@0.4.1:
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/pkginfo/-/pkginfo-0.4.1.tgz#b5418ef0439de5425fc4995042dced14fb2a84ff"
-  integrity sha512-8xCNE/aT/EXKenuMDZ+xTVwkT8gsoHN2z/Q29l80u0ppGEXVvsKRzNMbtKhg8LS8k1tJLAHHylf6p4VFmP6XUQ==
 
 playwright-core@1.29.2:
   version "1.29.2"
