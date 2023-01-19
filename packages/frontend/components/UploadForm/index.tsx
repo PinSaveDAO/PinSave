@@ -93,7 +93,7 @@ const UploadForm = () => {
 
   const [amount, setAmount] = useState<string>();
 
-  const { bundlrInstance, initialiseBundlr, balance, fetchBalance } =
+  const { initialiseBundlr, bundlrInstance, balance, fetchBalance } =
     useContext(MainContext);
 
   async function initialize() {
@@ -106,13 +106,15 @@ const UploadForm = () => {
 
   async function fundWallet() {
     if (!amount) return;
-    const amountParsed = parseInput(amount);
+    if (!bundlrInstance) return;
+    const amountParsed = String(parseInput(amount));
     let response = await bundlrInstance.fund(amountParsed);
     console.log("Wallet funded: ", response);
     fetchBalance();
   }
 
   function parseInput(input: string) {
+    if (!bundlrInstance) return;
     const conv = new BigNumber(input).multipliedBy(
       bundlrInstance.currencyConfig.base[1]
     );
@@ -264,14 +266,14 @@ const UploadForm = () => {
           value={provider}
           onChange={(event) => setProvider(event.currentTarget.value)}
           size="sm"
-          data={["NFT.Storage", "NFTPort", "Arweave"]}
+          data={["NFT.Storage", "NFTPort", "Arweave", "Estuary"]}
         />
       </Center>
       <Group position="center">
         {provider === "Arweave" && !balance && (
           <Button onClick={initialize}>Initialize</Button>
         )}
-        {provider === "Arweave" && balance && (
+        {provider === "Arweave" && bundlrInstance && balance && (
           <div>
             <Title mt="md" order={4}>
               Balance: {balance}

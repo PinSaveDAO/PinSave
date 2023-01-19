@@ -1,6 +1,7 @@
 import { ethers, Signer } from "ethers";
 import { NFTStorage } from "nft.storage";
 import { updateNotification } from "@mantine/notifications";
+import { WebBundlr } from "@bundlr-network/client";
 
 import { getContractInfo } from "@/utils/contracts";
 import { dataStream } from "@/utils/stream";
@@ -22,7 +23,7 @@ export async function UploadPost(
   data: PostData,
   chain?: number,
   provider?: string,
-  bundlrInstance?: any
+  bundlrInstance?: WebBundlr
 ) {
   try {
     let metadata_url;
@@ -59,12 +60,10 @@ export async function UploadPost(
       );
       const content = await rawResponse.json();
 
-      console.log(content);
       image_ipfs =
         "ipfs://" +
         content.ipfs_url.substring(content.ipfs_url.indexOf("ipfs/") + 5);
 
-      console.log(image_ipfs);
       const optionsPost = {
         method: "POST",
         headers: {
@@ -85,10 +84,63 @@ export async function UploadPost(
       const metadata = await rawMetadataResponse.json();
 
       metadata_url = metadata.metadata_uri;
-      console.log(metadata_url);
     }
 
-    if (provider === "Arweave") {
+    if (provider === "Estuary") {
+      let image_ipfs;
+      const formData = new FormData();
+      formData.append("data", data.image);
+
+      const rawResponse = await fetch(
+        "https://upload.estuary.tech/content/add",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_ESTUARY}`,
+          },
+          body: formData,
+        }
+      );
+
+      const content = await rawResponse.json();
+      image_ipfs = "ipfs://" + content.cid;
+
+      const formDataJson = new FormData();
+
+      const blob = new Blob(
+        [
+          JSON.stringify({
+            name: data.name,
+            description: data.description,
+            image: image_ipfs,
+          }),
+        ],
+        {
+          type: "application/json",
+        }
+      );
+      const files = [new File([blob], "metadata.json")];
+
+      formDataJson.append("data", files[0]);
+
+      const optionsPost = {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_ESTUARY}`,
+        },
+        body: formDataJson,
+      };
+
+      const rawMetadataResponse = await fetch(
+        "https://upload.estuary.tech/content/add",
+        optionsPost
+      );
+      const metadata = await rawMetadataResponse.json();
+
+      metadata_url = "ipfs://" + metadata.cid;
+    }
+
+    if (provider === "Arweave" && bundlrInstance) {
       let uploader = bundlrInstance.uploader.chunkedUploader;
       let uploader1 = bundlrInstance.uploader.chunkedUploader;
       const transactionOptions = {
