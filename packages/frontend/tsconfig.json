@@ -25,12 +25,6 @@
       "@/constants/*": ["constants/*"]
     }
   },
-  "include": [
-    "next-env.d.ts",
-    "Orbis.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    "utils/context.js"
-  ],
+  "include": ["next-env.d.ts", "Orbis.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]
 }
