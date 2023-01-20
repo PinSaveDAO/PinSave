@@ -8,7 +8,7 @@ async function main() {
   console.log("Account balance:", (await deployer.getBalance()).toString());
 
   // We get the contract to deploy
-  const MyNFT = await ethers.getContractFactory("PinSaveL8");
+  const MyNFT = await ethers.getContractFactory("LSP8PinSave");
   const contract = await MyNFT.deploy("PinSave", "PIN", deployer.address, {
     // gasPrice: ethers.BigNumber.from(20000000000),
   });

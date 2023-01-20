@@ -18,7 +18,7 @@ import {
   walletConnectWallet,
 } from "@rainbow-me/rainbowkit/wallets";
 import { configureChains, createClient, WagmiConfig } from "wagmi";
-import { polygonMumbai, hardhat, fantom, bsc } from "wagmi/chains";
+import { Chain, polygonMumbai, hardhat, fantom, bsc } from "wagmi/chains";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
@@ -40,6 +40,29 @@ import { providers, utils } from "ethers";
 import LayoutApp from "@/components/Layout";
 import { MainContext } from "@/utils/context";
 
+const CantoChain: Chain = {
+  id: 7700,
+  name: "CANTO",
+  network: "canto",
+  nativeCurrency: {
+    decimals: 18,
+    name: "CANTO",
+    symbol: "CANTO",
+  },
+  rpcUrls: {
+    default: {
+      http: ["https://canto.slingshot.finance/"],
+    },
+  },
+  blockExplorers: {
+    default: {
+      name: "Explorer",
+      url: "https://evm.explorer.canto.io/",
+    },
+  },
+  testnet: false,
+};
+
 type AppProps<P = any> = NextAppProps & {
   pageProps: P;
   Component: NextComponentType & {
@@ -53,6 +76,7 @@ const { chains, provider, webSocketProvider } = configureChains(
     polygonMumbai,
     fantom,
     bsc,
+    CantoChain,
   ],
   [
     alchemyProvider({

@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: MIT
 
 import "@lukso/lsp-smart-contracts/contracts/LSP8IdentifiableDigitalAsset/LSP8IdentifiableDigitalAsset.sol";
-import "@lukso/lsp-smart-contracts/contracts/Utils/GasLib.sol";
 
 pragma solidity ^0.8.0;
 

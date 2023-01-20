@@ -38,5 +38,10 @@ module.exports = {
       accounts: [process.env.PRIVATE_KEY, process.env.UP_PK],
       chainId: 56,
     },
+    canto: {
+      url: "https://canto.slingshot.finance/",
+      accounts: [process.env.PRIVATE_KEY, process.env.UP_PK],
+      chainId: 7700,
+    },
   },
 };
