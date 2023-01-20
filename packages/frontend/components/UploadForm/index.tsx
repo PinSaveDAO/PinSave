@@ -170,7 +170,6 @@ const UploadForm = () => {
     }
     if (upload) {
       startUpload(provider);
-
       setUpload(false);
     }
   }, [
