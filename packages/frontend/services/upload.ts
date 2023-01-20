@@ -205,14 +205,26 @@ export async function UploadPost(
           Id
         );
         token.wait();
-        console.log(token);
+        // console.log(token);
       } catch (e) {
         console.log(e);
       }
     }
 
     if (chain === 7700) {
+      let Ids: string[] = [];
+
+      for (let i = 0; metadata_url.length - 1 >= i; i++) {
+        const id = ethers.BigNumber.from(ethers.utils.randomBytes(32));
+        const Id = ethers.utils.hexZeroPad(
+          ethers.BigNumber.from(id).toHexString(),
+          32
+        );
+        Ids.push(Id);
+      }
       console.log(metadata_url);
+      console.log(Ids);
+      await contract.createBatchPosts(accAddress, metadata_url, Ids);
     }
 
     updateNotification({

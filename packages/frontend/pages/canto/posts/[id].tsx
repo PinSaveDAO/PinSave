@@ -33,7 +33,7 @@ const PostPage = () => {
   const [messages, setMessages] = useState<any | undefined>();
 
   const router = useRouter();
-  const currentChain = getCurrentChain(56);
+  const currentChain = getCurrentChain(7700);
   const { data: post, isLoading } = usePost(
     currentChain,
     router.query.id as string
@@ -58,7 +58,10 @@ const PostPage = () => {
           body: newMessage,
           context: context,
           tags: [
-            { slug: "bsc" + router.query.id, title: "bsc" + router.query.id },
+            {
+              slug: "canto" + router.query.id,
+              title: "canto" + router.query.id,
+            },
           ],
         },
         {
@@ -80,7 +83,7 @@ const PostPage = () => {
         body: newMessage,
         context: context,
         tags: [
-          { slug: "bsc" + router.query.id, title: "bsc" + router.query.id },
+          { slug: "canto" + router.query.id, title: "canto" + router.query.id },
         ],
       });
   };
@@ -111,7 +114,7 @@ const PostPage = () => {
       let result = await orbis.getPosts({
         context:
           "kjzl6cwe1jw147hcck185xfdlrxq9zv0y0hoa6shzskqfnio56lhf8190yaei7w",
-        tag: "bsc" + router.query.id,
+        tag: "canto" + router.query.id,
       });
 
       const messagesData = await Promise.all(
