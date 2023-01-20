@@ -16,11 +16,11 @@ import {
 import { Dropzone, MIME_TYPES } from "@mantine/dropzone";
 import { showNotification, updateNotification } from "@mantine/notifications";
 import ReactPlayer from "react-player";
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Upload, Replace } from "tabler-icons-react";
 import { useAccount, useSigner, useNetwork } from "wagmi";
 
-import { UploadPost } from "@/services/upload";
+import { UploadPost, PostData } from "@/services/upload";
 import { MainContext } from "@/utils/context";
 
 export const dropzoneChildren = (image: File | undefined) => {
@@ -84,13 +84,15 @@ const UploadForm = () => {
   const { address } = useAccount();
   const { chain } = useNetwork();
   const { data: signer } = useSigner();
-  const [title, setTitle] = useState<string>("");
-  const [desc, setDesc] = useState<string>("");
-  const [postReceiver, setPostReceiver] = useState<string>("");
+  const [name, setName] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
   const [image, setImage] = useState<File | undefined>();
+  const [postReceiver, setPostReceiver] = useState<string>("");
+
+  const [metadata, setMetadata] = useState<PostData[]>([]);
+  const [upload, setUpload] = useState<boolean>(false);
 
   const [provider, setProvider] = useState<string>("NFT.Storage");
-
   const [amount, setAmount] = useState<string>();
 
   const { initialiseBundlr, bundlrInstance, balance, fetchBalance } =
@@ -100,16 +102,11 @@ const UploadForm = () => {
     initialiseBundlr();
   }
 
-  function filledPost() {
-    return desc !== "" && title !== "";
-  }
-
   async function fundWallet() {
     if (!amount) return;
     if (!bundlrInstance) return;
     const amountParsed = String(parseInput(amount));
-    let response = await bundlrInstance.fund(amountParsed);
-    console.log("Wallet funded: ", response);
+    await bundlrInstance.fund(amountParsed);
     fetchBalance();
   }
 
@@ -126,77 +123,94 @@ const UploadForm = () => {
     }
   }
 
-  const startUpload = async (storageProvider: string) => {
-    showNotification({
-      id: "upload-post",
-      loading: true,
-      title: "Uploading post",
-      message: "Data will be loaded in a couple of seconds",
-      autoClose: false,
-      disallowClose: true,
-    });
+  useEffect(() => {
+    async function startUpload(storageProvider: string) {
+      showNotification({
+        id: "upload-post",
+        loading: true,
+        title: "Uploading post",
+        message: "Data will be loaded in a couple of seconds",
+        autoClose: false,
+        disallowClose: true,
+      });
 
-    const check = filledPost();
+      if (signer && metadata && chain) {
+        if (postReceiver) {
+          UploadPost(
+            signer,
+            postReceiver,
+            metadata,
+            chain.id,
+            storageProvider,
+            bundlrInstance
+          );
+        }
 
-    if (signer && image && check && chain) {
-      if (postReceiver) {
-        UploadPost(
-          signer,
-          postReceiver,
-          {
-            name: title,
-            description: desc,
-            image: image,
-          },
-          chain.id,
-          storageProvider,
-          bundlrInstance
-        );
+        if (!postReceiver && address) {
+          UploadPost(
+            signer,
+            address,
+            metadata,
+            chain.id,
+            storageProvider,
+            bundlrInstance
+          );
+        }
+        setMetadata([]);
       }
 
-      if (!postReceiver && address) {
-        UploadPost(
-          signer,
-          address,
-          {
-            name: title,
-            description: desc,
-            image: image,
-          },
-          chain.id,
-          storageProvider,
-          bundlrInstance
-        );
+      if (!signer) {
+        updateNotification({
+          id: "upload-post",
+          color: "red",
+          title: "Failed to upload post",
+          message: "Check if you've connected the wallet",
+        });
       }
     }
+    if (upload) {
+      startUpload(provider);
 
-    if (!signer) {
-      updateNotification({
-        id: "upload-post",
-        color: "red",
-        title: "Failed to upload post",
-        message: "Check if you've connected the wallet",
-      });
+      setUpload(false);
     }
+  }, [
+    upload,
+    metadata,
+    provider,
+    address,
+    chain,
+    signer,
+    postReceiver,
+    bundlrInstance,
+  ]);
 
-    if (!check) {
-      updateNotification({
-        id: "upload-post",
-        color: "red",
-        title: "Failed to upload post",
-        message: "Check if you've completed the post",
-      });
-    }
+  function savePost(data: PostData) {
+    if (data.description !== "" && data.name !== "" && data.image) {
+      setMetadata((e) => [...e, data]);
 
-    if (!image) {
-      updateNotification({
-        id: "upload-post",
-        color: "red",
-        title: "Failed to upload post",
-        message: "Check if you've uploaded an image",
-      });
+      setImage(undefined);
+      setName("");
+      setDescription("");
     }
-  };
+  }
+
+  function savePostBeforeUpload(
+    name: string,
+    description: string,
+    image?: File
+  ) {
+    if (description !== "" && name !== "" && image) {
+      setMetadata((e) => [
+        ...e,
+        { name: name, description: description, image: image },
+      ]);
+
+      setImage(undefined);
+      setName("");
+      setDescription("");
+    }
+    setUpload(true);
+  }
 
   return (
     <Paper
@@ -214,14 +228,14 @@ const UploadForm = () => {
         required
         label="Title"
         placeholder="Post Title"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
+        value={name}
+        onChange={(e) => setName(e.target.value)}
       />
       <Textarea
         my="lg"
         required
-        onChange={(e) => setDesc(e.target.value)}
-        value={desc}
+        onChange={(e) => setDescription(e.target.value)}
+        value={description}
         label="Description"
         placeholder="Describe your post here"
       />
@@ -249,16 +263,28 @@ const UploadForm = () => {
       >
         {() => dropzoneChildren(image)}
       </Dropzone>
-
       <Group position="center" sx={{ padding: 15 }}>
         <Button
           component="a"
           radius="lg"
           mt="md"
-          onClick={() => startUpload(provider)}
+          onClick={() => savePostBeforeUpload(name, description, image)}
         >
           Upload Post
         </Button>
+        {chain && chain.id === 7700 ? (
+          <Button
+            component="a"
+            radius="lg"
+            mt="md"
+            onClick={() =>
+              image &&
+              savePost({ name: name, description: description, image: image })
+            }
+          >
+            Add another
+          </Button>
+        ) : null}
       </Group>
       <Center>
         <NativeSelect

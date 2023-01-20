@@ -20,7 +20,7 @@ export type Post = PostData & {
 export async function UploadPost(
   signer: Signer,
   accAddress: string,
-  data: PostData,
+  data: PostData[],
   chain?: number,
   provider?: string,
   bundlrInstance?: WebBundlr
@@ -36,7 +36,7 @@ export async function UploadPost(
       });
 
       const metadata = await client.store({
-        ...data,
+        ...data[0],
       });
 
       metadata_url = metadata.url;
@@ -45,7 +45,7 @@ export async function UploadPost(
     if (provider === "NFTPort") {
       let image_ipfs;
       const formData = new FormData();
-      formData.append("file", data.image);
+      formData.append("file", data[0].image);
       const options = {
         method: "POST",
         body: formData,
@@ -72,8 +72,8 @@ export async function UploadPost(
           Authorization: process.env.NEXT_PUBLIC_NFTPORT as string,
         },
         body: JSON.stringify({
-          name: data.name,
-          description: data.description,
+          name: data[0].name,
+          description: data[0].description,
           image: image_ipfs,
         }),
       };
@@ -89,7 +89,7 @@ export async function UploadPost(
     if (provider === "Estuary") {
       let image_ipfs;
       const formData = new FormData();
-      formData.append("data", data.image);
+      formData.append("data", data[0].image);
 
       const rawResponse = await fetch(
         "https://upload.estuary.tech/content/add",
@@ -110,8 +110,8 @@ export async function UploadPost(
       const blob = new Blob(
         [
           JSON.stringify({
-            name: data.name,
-            description: data.description,
+            name: data[0].name,
+            description: data[0].description,
             image: image_ipfs,
           }),
         ],
@@ -144,10 +144,10 @@ export async function UploadPost(
       let uploader = bundlrInstance.uploader.chunkedUploader;
       let uploader1 = bundlrInstance.uploader.chunkedUploader;
       const transactionOptions = {
-        tags: [{ name: "Content-Type", value: data.image.type }],
+        tags: [{ name: "Content-Type", value: data[0].image.type }],
       };
 
-      const dataBuffer = dataStream(data.image);
+      const dataBuffer = dataStream(data[0].image);
       let response = await uploader.uploadData(dataBuffer, transactionOptions);
 
       const transactionOptionsMetadata = {
@@ -155,8 +155,8 @@ export async function UploadPost(
       };
 
       const obj = {
-        name: data.name,
-        description: data.description,
+        name: data[0].name,
+        description: data[0].description,
         image: "https://arweave.net/" + response.data.id,
       };
 

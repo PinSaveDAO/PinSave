@@ -41,11 +41,11 @@ import LayoutApp from "@/components/Layout";
 import { MainContext } from "@/utils/context";
 
 const CantoChain: Chain = {
-  id: 22,
+  id: 7700,
   name: "CANTO",
   network: "canto",
   nativeCurrency: {
-    decimals: 7700,
+    decimals: 18,
     name: "CANTO",
     symbol: "CANTO",
   },
