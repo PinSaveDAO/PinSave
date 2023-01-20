@@ -38,6 +38,10 @@ Pin Save is a decentralized image, video sharing and content aggregation platfor
 
 ![decentralized comments](https://bafybeicvm4vqutptj2nxr4iej75tdgnjkc7fv7zez52uyq2laoswnsz6de.ipfs.w3s.link/Screenshot%20from%202023-01-09%2023-18-48.png)
 
+- Decentralized Profile
+
+![decentralized Profile](https://bafybeicpa6lfud7hq7wxvfvsu6dphfcwv5xwvbptc25ebtpxxg66q7mk7q.ipfs.dweb.link/)
+
 - Lit Access Control encrypted comments for PinSave NFT Posters:
 
 ![Lit Access Control Protected encrypted comments for PinSave Posters](https://bafybeidbac7r7mqokyz5tqjfrlluzwrkxqgkh2mohxbmqfitzat3qfn6fm.ipfs.w3s.link/Screenshot%20from%202023-01-09%2023-24-04.png)
