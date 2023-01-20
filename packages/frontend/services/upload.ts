@@ -211,8 +211,6 @@ export async function UploadPost(
       }
     }
 
-    console.log(chain);
-
     if (chain === 7700) {
       console.log(metadata_url);
     }

@@ -1,5 +1,6 @@
 import HardhatDeployments from "@/contracts/hardhat_contracts.json";
 import PinSaveL8 from "@/contracts/PinSaveL8.json";
+import LSP8PinSave from "@/contracts/LSP8PinSave.json";
 
 export function getContractInfo(chain?: number) {
   if (process.env.NEXT_PUBLIC_DEV === "true")
@@ -18,6 +19,12 @@ export function getContractInfo(chain?: number) {
     return {
       address: "0x3c046f8E210424317A5740CED78877ef0B3EFf4E",
       abi: PinSaveL8.abi,
+    };
+
+  if (chain === 7700)
+    return {
+      address: "0xC379129e9D617D6833D582bFc8C703a7b2858904",
+      abi: LSP8PinSave.abi,
     };
 
   return {
