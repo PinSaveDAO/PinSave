@@ -30,7 +30,7 @@ Pin Save is a decentralized image, video sharing and content aggregation platfor
 
 ## Features
 
-- Decentralized feed of NFTs on polygon mumbai and fantom chains with decentralized storage on Arweave and IPFS with NFTPort and Nft.storage:
+- Decentralized feed of NFTs on Canto, polygon mumbai and fantom chains with decentralized storage on Arweave and IPFS with NFTPort, Estuary and Nft.storage:
 
 ![decentralized feed](https://bafybeiaptrih3bg5zndjdncgqyfim3dfuy5pudeoe3znak2jan6llapjrq.ipfs.w3s.link/Screenshot%20from%202023-01-09%2023-13-27.png)
 
@@ -45,10 +45,6 @@ Pin Save is a decentralized image, video sharing and content aggregation platfor
 - Livepeer Video Player:
 
 ![Video Player](https://bafybeiacg6yoxvxvk2ayugwlcfnnjpm5kcchvy3t2fl7mu64ft4zt4fs6m.ipfs.nftstorage.link/)
-
-- Decentralized Profile with ENS integration:
-
-![Profile](https://bafkreifmvekqijk44xqzooa7n7wtxpwetfukstn7cb5p2cy7i2tfmbh4om.ipfs.nftstorage.link/)
 
 - Video and image posting:
 
