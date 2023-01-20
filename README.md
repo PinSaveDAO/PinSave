@@ -1,4 +1,4 @@
-# PinSave
+# Pin Save - decentralized Pinterest
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/Pfed-prog/Dspyt-NFTs-EVM/master/packages/frontend/public/PinSaveL.png" alt="Size Limit CLI" width="738" >
@@ -32,13 +32,13 @@ Pin Save is a decentralized image, video sharing and content aggregation platfor
 
 - Decentralized feed of NFTs on Canto, polygon mumbai and fantom chains with decentralized storage on Arweave and IPFS with NFTPort, Estuary and Nft.storage:
 
-![decentralized feed](https://bafybeiaptrih3bg5zndjdncgqyfim3dfuy5pudeoe3znak2jan6llapjrq.ipfs.w3s.link/Screenshot%20from%202023-01-09%2023-13-27.png)
+![decentralized feed](https://bafkreifexfjtkhprcn7jqp6gtk7b6a4jo73kh7vpfvuyvlgmlaieazbsta.ipfs.dweb.link/)
 
 - Decentralized comments section on orbis, ceramic and ipfs connected to a decentralized post and identity:
 
 ![decentralized comments](https://bafybeicvm4vqutptj2nxr4iej75tdgnjkc7fv7zez52uyq2laoswnsz6de.ipfs.w3s.link/Screenshot%20from%202023-01-09%2023-18-48.png)
 
-- Decentralized Profile
+- Decentralized Profile:
 
 ![decentralized Profile](https://bafybeicpa6lfud7hq7wxvfvsu6dphfcwv5xwvbptc25ebtpxxg66q7mk7q.ipfs.dweb.link/)
 
@@ -50,7 +50,7 @@ Pin Save is a decentralized image, video sharing and content aggregation platfor
 
 ![Video Player](https://bafybeiacg6yoxvxvk2ayugwlcfnnjpm5kcchvy3t2fl7mu64ft4zt4fs6m.ipfs.nftstorage.link/)
 
-- Video and image posting:
+- Video and Image batch posting:
 
 ![Upload](https://bafybeiaj46fxgxax6z3nd45n7p42rh7dbyweyssi3dunr3wfewh7ys2d7y.ipfs.nftstorage.link/)
 
