@@ -1,0 +1,5 @@
+[submodule "packages/foundry/lib/openzeppelin-contracts"]
+	path = packages/foundry/lib/openzeppelin-contracts
+	url = https://github.com/OpenZeppelin/openzeppelin-contracts
+[submodule "lib/openzeppelin-contracts"]
+	branch = v4.5.0
