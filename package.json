@@ -36,17 +36,6 @@
     "fundedwallet": "cd packages/hardhat && npx hardhat fundedwallet",
     "flatten": "cd packages/hardhat && npx hardhat flatten",
     "clean": "cd packages/hardhat && npx hardhat clean",
-    "run-graph-node": "yarn workspace @pinsav3/services run-graph-node",
-    "remove-graph-node": "yarn workspace @pinsav3/services remove-graph-node",
-    "clean-graph-node": "yarn workspace @pinsav3/services clean-graph-node",
-    "graph-prepare": "mustache packages/subgraph/config/config.json packages/subgraph/src/subgraph.template.yaml > packages/subgraph/subgraph.yaml",
-    "graph-codegen": "yarn workspace @pinsav3/subgraph graph codegen",
-    "graph-build": "yarn workspace @pinsav3/subgraph graph build",
-    "graph-create-local": "yarn workspace @pinsav3/subgraph graph create --node http://localhost:8020/ dspyt-nfts/your-contract",
-    "graph-remove-local": "yarn workspace @pinsav3/subgraph graph remove --node http://localhost:8020/ dspyt-nfts/your-contract",
-    "graph-deploy-local": "yarn workspace @pinsav3/subgraph graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 dspyt-nfts/your-contract",
-    "graph-ship-local": "yarn graph-prepare && yarn graph-codegen && yarn graph-deploy-local",
-    "deploy-and-graph": "yarn deploy && yarn graph-ship-local",
     "postinstall": "husky install"
   },
   "workspaces": {

@@ -73,7 +73,7 @@ const PostCard = (post: Post) => {
             />
           )}
         </div>
-        <Text align="center" mt="sm">
+        <Text align="center" mt="sm" lineClamp={1}>
           {post.name}
         </Text>
       </Paper>
