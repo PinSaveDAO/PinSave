@@ -20,7 +20,7 @@ import React, { useState, useContext, useEffect } from "react";
 import { Upload, Replace } from "tabler-icons-react";
 import { useAccount, useSigner, useNetwork } from "wagmi";
 
-import { UploadPost, PostData } from "@/services/upload";
+import { UploadPost, PostData, UploadingPost } from "@/services/upload";
 import { MainContext } from "@/utils/context";
 
 export const dropzoneChildren = (image: File | undefined) => {
@@ -136,25 +136,25 @@ const UploadForm = () => {
 
       if (signer && metadata && chain) {
         if (postReceiver) {
-          UploadPost(
-            signer,
-            postReceiver,
-            metadata,
-            chain.id,
-            storageProvider,
-            bundlrInstance
-          );
+          UploadPost({
+            signer: signer,
+            receiverAddress: postReceiver,
+            data: metadata,
+            chain: chain.id,
+            provider: storageProvider,
+            bundlrInstance: bundlrInstance,
+          });
         }
 
         if (!postReceiver && address) {
-          UploadPost(
-            signer,
-            address,
-            metadata,
-            chain.id,
-            storageProvider,
-            bundlrInstance
-          );
+          UploadPost({
+            signer: signer,
+            receiverAddress: address,
+            data: metadata,
+            chain: chain.id,
+            provider: storageProvider,
+            bundlrInstance: bundlrInstance,
+          });
         }
         setMetadata([]);
       }

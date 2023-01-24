@@ -17,39 +17,41 @@ export type Post = PostData & {
   token_id: number;
 };
 
-export async function UploadPost(
-  signer: Signer,
-  accAddress: string,
-  data: PostData[],
-  chain?: number,
-  provider?: string,
-  bundlrInstance?: WebBundlr
-) {
+export type UploadingPost = {
+  signer: Signer;
+  receiverAddress: string;
+  data: PostData[];
+  chain?: number;
+  provider?: string;
+  bundlrInstance?: WebBundlr;
+};
+
+export async function UploadPost(incomingData: UploadingPost) {
   try {
     let metadata_url = [];
-    const { address, abi } = getContractInfo(chain);
-    const contract = new ethers.Contract(address, abi, signer);
+    const { address, abi } = getContractInfo(incomingData.chain);
+    const contract = new ethers.Contract(address, abi, incomingData.signer);
 
-    if (provider === "NFT.Storage") {
+    if (incomingData.provider === "NFT.Storage") {
       const client = new NFTStorage({
         token: process.env.NEXT_PUBLIC_TOKEN as string,
       });
 
-      for (let i = 0; data.length - 1 >= i; i++) {
+      for (let i = 0; incomingData.data.length - 1 >= i; i++) {
         const metadata = await client.store({
-          ...data[i],
+          ...incomingData.data[i],
         });
 
         metadata_url.push(metadata.url);
       }
     }
 
-    if (provider === "NFTPort") {
-      for (let i = 0; data.length - 1 >= i; i++) {
+    if (incomingData.provider === "NFTPort") {
+      for (let i = 0; incomingData.data.length - 1 >= i; i++) {
         let image_ipfs;
 
         const formData = new FormData();
-        formData.append("file", data[i].image);
+        formData.append("file", incomingData.data[i].image);
 
         const options = {
           method: "POST",
@@ -77,8 +79,8 @@ export async function UploadPost(
             Authorization: process.env.NEXT_PUBLIC_NFTPORT as string,
           },
           body: JSON.stringify({
-            name: data[i].name,
-            description: data[i].description,
+            name: incomingData.data[i].name,
+            description: incomingData.data[i].description,
             image: image_ipfs,
           }),
         };
@@ -92,11 +94,11 @@ export async function UploadPost(
       }
     }
 
-    if (provider === "Estuary") {
-      for (let i = 0; data.length - 1 >= i; i++) {
+    if (incomingData.provider === "Estuary") {
+      for (let i = 0; incomingData.data.length - 1 >= i; i++) {
         let image_ipfs;
         const formData = new FormData();
-        formData.append("data", data[i].image);
+        formData.append("data", incomingData.data[i].image);
 
         const rawResponse = await fetch(
           "https://upload.estuary.tech/content/add",
@@ -117,8 +119,8 @@ export async function UploadPost(
         const blob = new Blob(
           [
             JSON.stringify({
-              name: data[i].name,
-              description: data[i].description,
+              name: incomingData.data[i].name,
+              description: incomingData.data[i].description,
               image: image_ipfs,
             }),
           ],
@@ -148,15 +150,17 @@ export async function UploadPost(
       }
     }
 
-    if (provider === "Arweave" && bundlrInstance) {
-      for (let i = 0; data.length - 1 >= i; i++) {
-        let uploader = bundlrInstance.uploader.chunkedUploader;
-        let uploader1 = bundlrInstance.uploader.chunkedUploader;
+    if (incomingData.provider === "Arweave" && incomingData.bundlrInstance) {
+      for (let i = 0; incomingData.data.length - 1 >= i; i++) {
+        let uploader = incomingData.bundlrInstance.uploader.chunkedUploader;
+        let uploader1 = incomingData.bundlrInstance.uploader.chunkedUploader;
         const transactionOptions = {
-          tags: [{ name: "Content-Type", value: data[i].image.type }],
+          tags: [
+            { name: "Content-Type", value: incomingData.data[i].image.type },
+          ],
         };
 
-        const dataBuffer = dataStream(data[i].image);
+        const dataBuffer = dataStream(incomingData.data[i].image);
         let response = await uploader.uploadData(
           dataBuffer,
           transactionOptions
@@ -167,8 +171,8 @@ export async function UploadPost(
         };
 
         const obj = {
-          name: data[i].name,
-          description: data[i].description,
+          name: incomingData.data[i].name,
+          description: incomingData.data[i].description,
           image: "https://arweave.net/" + response.data.id,
         };
 
@@ -183,16 +187,15 @@ export async function UploadPost(
           transactionOptionsMetadata
         );
 
-        console.log("https://arweave.net/" + response0.data.id);
         metadata_url.push("https://arweave.net/" + response0.data.id);
       }
     }
 
-    if (chain === 80001) {
-      await contract.mintPost(accAddress, metadata_url[0]);
+    if (incomingData.chain === 80001) {
+      await contract.mintPost(incomingData.receiverAddress, metadata_url[0]);
     }
 
-    if (chain === 250 || chain === 56) {
+    if (incomingData.chain === 250 || incomingData.chain === 56) {
       try {
         const id = ethers.BigNumber.from(ethers.utils.randomBytes(32));
         const Id = ethers.utils.hexZeroPad(
@@ -200,18 +203,17 @@ export async function UploadPost(
           32
         );
         const token = await contract.createPost(
-          accAddress,
+          incomingData.receiverAddress,
           metadata_url[0],
           Id
         );
         token.wait();
-        // console.log(token);
       } catch (e) {
         console.log(e);
       }
     }
 
-    if (chain === 7700) {
+    if (incomingData.chain === 7700) {
       let Ids: string[] = [];
 
       for (let i = 0; metadata_url.length - 1 >= i; i++) {
@@ -222,9 +224,12 @@ export async function UploadPost(
         );
         Ids.push(Id);
       }
-      console.log(metadata_url);
-      console.log(Ids);
-      await contract.createBatchPosts(accAddress, metadata_url, Ids);
+
+      await contract.createBatchPosts(
+        incomingData.receiverAddress,
+        metadata_url,
+        Ids
+      );
     }
 
     updateNotification({
