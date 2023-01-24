@@ -14,7 +14,6 @@ import {
   LoadingOverlay,
   Stack,
 } from "@mantine/core";
-import { ethers } from "ethers";
 
 let orbis = new Orbis();
 
@@ -22,7 +21,7 @@ function Post() {
   const router = useRouter();
   const { address } = router.query;
 
-  const [user, setUser] = useState<any | undefined>();
+  const [user, setUser] = useState<IOrbisProfile | undefined>();
   const [ens, setEns] = useState<string | undefined>("");
 
   useEffect(() => {
