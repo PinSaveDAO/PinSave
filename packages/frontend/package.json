@@ -19,12 +19,12 @@
     "@rainbow-me/rainbowkit": "^0.8.1",
     "@tabler/icons": "^1.119.0",
     "@tanstack/react-query": "^4.22.0",
-    "@tanstack/react-query-devtools": "^4.22.0",
+    "@tanstack/react-query-devtools": "^4.23.0",
     "bignumber.js": "^9.1.1",
     "ethers": "^5.7.2",
     "filereader-stream": "^2.0.0",
     "isomorphic-fetch": "^3.0.0",
-    "next": "^13.1.3",
+    "next": "^13.1.5",
     "nft.storage": "^7.0.0",
     "postcss": "^8.4.20",
     "react": "^18.1.0",
@@ -39,7 +39,7 @@
     "@types/node": "^18.11.18",
     "@types/react": "^18.0.27",
     "eslint": "^8.32.0",
-    "eslint-config-next": "^13.1.3",
+    "eslint-config-next": "^13.1.5",
     "typescript": "^4.9.4"
   }
 }
