@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 
-import "@lukso/lsp-smart-contracts/contracts/LSP0ERC725Account/LSP0ERC725AccountCore.sol";
-
 pragma solidity ^0.8.0;
+
+import "@lukso/lsp-smart-contracts/contracts/LSP0ERC725Account/LSP0ERC725AccountCore.sol";
 
 import {ERC165} from "@openzeppelin/contracts/utils/introspection/ERC165.sol";
 
