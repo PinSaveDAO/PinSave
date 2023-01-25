@@ -29,17 +29,14 @@ contract PinSave is LSP7Mintable {
         bool isNFT_
     ) LSP7Mintable(name_, symbol_, newOwner_, isNFT_) {}
 
-/*     function createPost(uint256 _quantity) public {
-        _mint(msg.sender, _quantity, true, "");
-    } */
-    function createPost(string calldata _cid) public {
+    function createPost(string calldata _cid, uint256 _quantity) public {
 
       latestPost.cid = _cid;
       latestPost.author = msg.sender;
       latestPost.id = ++postsCounter;
 
-      _mint(msg.sender, 1, true, "");
+      _mint(msg.sender, _quantity, true, "");
+      
     }
-
 
 }
