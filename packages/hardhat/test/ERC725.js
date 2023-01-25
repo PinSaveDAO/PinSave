@@ -2,7 +2,7 @@ const { ethers } = require("hardhat");
 const { expect } = require("chai");
 
 describe("ERC725", function () {
-  let er725Contract;
+  let erc725Contract;
   let nftContract;
 
   let bob;
@@ -11,12 +11,18 @@ describe("ERC725", function () {
   beforeEach(async () => {
     [bob, alice] = await ethers.getSigners();
     const identityContract = await ethers.getContractFactory("ERC725");
-    er725Contract = await identityContract.deploy(bob.address);
+    erc725Contract = await identityContract.deploy(bob.address);
 
     const nfToken = await ethers.getContractFactory("LSP8PinSave");
     nftContract = await nfToken.deploy("name", "ABC", bob.address);
 
-    await er725Contract.deployed();
+    await erc725Contract.deployed();
+
+    await bob.sendTransaction({
+      to: erc725Contract.address,
+      value: ethers.utils.parseEther("1"),
+      gasLimit: 5000000,
+    });
   });
 
   it("reverts minting to zero address", async function () {
@@ -27,31 +33,17 @@ describe("ERC725", function () {
   });
 
   it("checks owner", async function () {
-    expect(await er725Contract.owner()).to.equal(bob.address);
+    expect(await erc725Contract.owner()).to.equal(bob.address);
   });
 
-  it("calls from erc725", async function () {
-    console.log(
-      ethers.utils.formatEther(await ethers.provider.getBalance(bob.address))
-    );
-
-    await bob.sendTransaction({
-      to: er725Contract.address,
-      value: ethers.utils.parseEther("1"),
-      gasLimit: 5000000,
-    });
-
-    console.log(
-      ethers.utils.formatEther(await ethers.provider.getBalance(bob.address))
-    );
-
-    console.log(
+  it("transfers eth from erc725", async function () {
+    expect(
       ethers.utils.formatEther(
-        await ethers.provider.getBalance(er725Contract.address)
+        await ethers.provider.getBalance(erc725Contract.address)
       )
-    );
+    ).to.equal("1.0");
 
-    await er725Contract.execute(
+    await erc725Contract.execute(
       0,
       alice.address,
       ethers.utils.parseEther("0.1"),
@@ -61,5 +53,24 @@ describe("ERC725", function () {
     expect(
       ethers.utils.formatEther(await ethers.provider.getBalance(alice.address))
     ).to.equal("10000.1");
+  });
+
+  it("Mints from erc725", async function () {
+    expect(
+      ethers.utils.formatEther(
+        await ethers.provider.getBalance(erc725Contract.address)
+      )
+    ).to.equal("1.0");
+
+    /*     await erc725Contract.execute(
+      0,
+      alice.address,
+      ethers.utils.parseEther("0.1"),
+      "0x"
+    );
+
+    expect(
+      ethers.utils.formatEther(await ethers.provider.getBalance(alice.address))
+    ).to.equal("10000.1"); */
   });
 });
