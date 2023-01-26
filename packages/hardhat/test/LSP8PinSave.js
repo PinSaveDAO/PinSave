@@ -2,7 +2,7 @@ const { ethers } = require("hardhat");
 const { expect } = require("chai");
 
 describe("LSP8", function () {
-  let nfToken;
+  let nftContract;
 
   let bob;
   let jane;
@@ -59,63 +59,63 @@ describe("LSP8", function () {
 
   beforeEach(async () => {
     [bob, jane] = await ethers.getSigners();
-    const nftContract = await ethers.getContractFactory("LSP8PinSave");
-    nfToken = await nftContract.deploy("name", "N", bob.address);
+    const nftFactory = await ethers.getContractFactory("LSP8PinSave");
+    nftContract = await nftFactory.deploy("name", "N", bob.address);
 
-    await nfToken.deployed();
+    await nftContract.deployed();
   });
 
   it("correctly deployed", async function () {
-    expect(await nfToken.balanceOf(bob.address)).to.equal(0);
-    expect(await nfToken.totalSupply()).to.equal(0);
+    expect(await nftContract.balanceOf(bob.address)).to.equal(0);
+    expect(await nftContract.totalSupply()).to.equal(0);
   });
 
   it("mints", async function () {
-    await nfToken.connect(bob).createPost(bob.address, sampleLink, Id);
-    expect(await nfToken.balanceOf(bob.address)).to.equal(1);
-    expect(await nfToken.totalSupply()).to.equal(1);
+    await nftContract.connect(bob).createPost(bob.address, sampleLink, Id);
+    expect(await nftContract.balanceOf(bob.address)).to.equal(1);
+    expect(await nftContract.totalSupply()).to.equal(1);
   });
 
   it("tokenIdsOf", async function () {
-    await nfToken.connect(bob).createPost(bob.address, sampleLink, Id);
-    const eId = await nfToken.tokenIdsOf(bob.address);
+    await nftContract.connect(bob).createPost(bob.address, sampleLink, Id);
+    const eId = await nftContract.tokenIdsOf(bob.address);
     expect(eId[0]).to.equal(Id);
   });
 
   it("token owner", async function () {
-    await nfToken.connect(bob).createPost(bob.address, sampleLink, Id);
-    expect(await nfToken.tokenOwnerOf(Id)).to.equal(bob.address);
+    await nftContract.connect(bob).createPost(bob.address, sampleLink, Id);
+    expect(await nftContract.tokenOwnerOf(Id)).to.equal(bob.address);
   });
 
   it("check cid", async function () {
-    await nfToken.connect(bob).createPost(bob.address, sampleLink, Id);
-    expect(await nfToken.getPost(1)).to.equal(sampleLink);
+    await nftContract.connect(bob).createPost(bob.address, sampleLink, Id);
+    expect(await nftContract.getPost(1)).to.equal(sampleLink);
   });
 
   it("checks post owner", async function () {
-    await nfToken.connect(bob).createPost(bob.address, sampleLink, Id);
-    expect(await nfToken.getPostOwner(1)).to.equal(bob.address);
+    await nftContract.connect(bob).createPost(bob.address, sampleLink, Id);
+    expect(await nftContract.getPostOwner(1)).to.equal(bob.address);
   });
 
   it("transfers", async function () {
-    await nfToken.connect(bob).createPost(bob.address, sampleLink, Id);
-    await nfToken
+    await nftContract.connect(bob).createPost(bob.address, sampleLink, Id);
+    await nftContract
       .connect(bob)
       .transfer(bob.address, jane.address, Id, true, "0x00");
-    expect(await nfToken.balanceOf(bob.address)).to.equal(0);
-    expect(await nfToken.totalSupply()).to.equal(1);
+    expect(await nftContract.balanceOf(bob.address)).to.equal(0);
+    expect(await nftContract.totalSupply()).to.equal(1);
   });
 
   it("checks post creator", async function () {
-    await nfToken.connect(bob).createPost(bob.address, sampleLink, Id);
-    await nfToken
+    await nftContract.connect(bob).createPost(bob.address, sampleLink, Id);
+    await nftContract
       .connect(bob)
       .transfer(bob.address, jane.address, Id, true, "0x00");
-    expect(await nfToken.getCreator(1)).to.equal(bob.address);
+    expect(await nftContract.getCreator(1)).to.equal(bob.address);
   });
 
   it("mints multiple posts", async function () {
-    await nfToken
+    await nftContract
       .connect(bob)
       .createBatchPosts(
         bob.address,
@@ -133,9 +133,9 @@ describe("LSP8", function () {
         ],
         [Id, Id1, Id2, Id3, Id4, Id5, Id6, Id7, Id8, Id9]
       );
-    expect(await nfToken.totalSupply()).to.equal(10);
-    expect(await nfToken.balanceOf(bob.address)).to.equal(10);
-    const eIds = await nfToken.tokenIdsOf(bob.address);
+    expect(await nftContract.totalSupply()).to.equal(10);
+    expect(await nftContract.balanceOf(bob.address)).to.equal(10);
+    const eIds = await nftContract.tokenIdsOf(bob.address);
     expect(eIds[0]).to.equal(Id);
     expect(eIds[1]).to.equal(Id1);
   });

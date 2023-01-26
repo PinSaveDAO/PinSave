@@ -1,12 +1,22 @@
 const { ethers } = require("hardhat");
 const { expect } = require("chai");
 
+// const PinSaveL8 = require("../artifacts/contracts/LSP8PinSave.sol/LSP8PinSave.json");
+
 describe("ERC725", function () {
   let erc725Contract;
   let nftContract;
 
   let bob;
   let alice;
+
+  const Id = ethers.utils.hexZeroPad(
+    ethers.BigNumber.from("12").toHexString(),
+    32
+  );
+
+  const sampleLink =
+    "https://bafkreiblu6yf35thyjzjhblimxiynxbewgn4dtjjozgjveuhrdmrfgx53a.ipfs.dweb.link/";
 
   beforeEach(async () => {
     [bob, alice] = await ethers.getSigners();
@@ -55,22 +65,20 @@ describe("ERC725", function () {
     ).to.equal("10000.1");
   });
 
-  it("Mints from erc725", async function () {
+  it("Mints to erc725 from user", async function () {
     expect(
       ethers.utils.formatEther(
         await ethers.provider.getBalance(erc725Contract.address)
       )
     ).to.equal("1.0");
 
-    /*     await erc725Contract.execute(
-      0,
-      alice.address,
-      ethers.utils.parseEther("0.1"),
-      "0x"
-    );
+    expect(await nftContract.balanceOf(bob.address)).to.equal(0);
+    expect(await nftContract.totalSupply()).to.equal(0);
 
-    expect(
-      ethers.utils.formatEther(await ethers.provider.getBalance(alice.address))
-    ).to.equal("10000.1"); */
+    await nftContract
+      .connect(bob)
+      .createPost(erc725Contract.address, sampleLink, Id);
+    expect(await nftContract.balanceOf(erc725Contract.address)).to.equal(1);
+    expect(await nftContract.totalSupply()).to.equal(1);
   });
 });
