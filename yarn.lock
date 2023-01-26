@@ -3023,11 +3023,6 @@
   dependencies:
     defer-to-connect "^2.0.1"
 
-"@tabler/icons@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@tabler/icons/-/icons-2.0.0.tgz#051d769b23560af3d04389041072c0a299bd0742"
-  integrity sha512-ye93cVD8baCwJJ7J3GKlUM3FN+qW6lsEz4uaH8bHCwC8un2R4p+ZzyRNc/ksqVgMQJ4PKQ8xbYpv4dnbbRffsA==
-
 "@tanstack/match-sorter-utils@^8.7.0":
   version "8.7.6"
   resolved "https://registry.yarnpkg.com/@tanstack/match-sorter-utils/-/match-sorter-utils-8.7.6.tgz#ccf54a37447770e0cf0fe49a579c595fd2655b16"

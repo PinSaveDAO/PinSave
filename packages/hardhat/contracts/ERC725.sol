@@ -20,6 +20,8 @@ contract ERC725 is ERC725XCore, ERC725YCore {
         OwnableUnset._setOwner(newOwner);
     }
 
+    receive() external payable {}
+
     function supportsInterface(bytes4 interfaceId)
         public
         view

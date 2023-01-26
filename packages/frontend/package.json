@@ -10,6 +10,7 @@
   "dependencies": {
     "@bundlr-network/client": "^0.10.1",
     "@livepeer/react": "^1.5.6",
+    "@lukso/lsp-factory.js": "^2.4.0",
     "@mantine/core": "^4.2.12",
     "@mantine/dropzone": "^4.2.12",
     "@mantine/hooks": "^4.2.12",
@@ -17,7 +18,6 @@
     "@mantine/notifications": "^4.2.12",
     "@orbisclub/orbis-sdk": "^0.4.9",
     "@rainbow-me/rainbowkit": "^0.8.1",
-    "@tabler/icons": "^2.0.0",
     "@tanstack/react-query": "^4.23.0",
     "@tanstack/react-query-devtools": "^4.23.0",
     "bignumber.js": "^9.1.1",
