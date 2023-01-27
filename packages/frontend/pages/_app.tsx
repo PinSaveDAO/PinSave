@@ -1,9 +1,13 @@
 import "@/styles/globals.css";
 import "@rainbow-me/rainbowkit/styles.css";
-
-import NextHead from "next/head";
-import type { AppProps as NextAppProps } from "next/app";
-import type { NextComponentType } from "next";
+import LayoutApp from "@/components/Layout";
+import { MainContext } from "@/utils/context";
+import { WebBundlr } from "@bundlr-network/client";
+import {
+  LivepeerConfig,
+  createReactClient,
+  studioProvider,
+} from "@livepeer/react";
 import { MantineProvider } from "@mantine/core";
 import { NotificationsProvider } from "@mantine/notifications";
 import {
@@ -17,28 +21,22 @@ import {
   coinbaseWallet,
   walletConnectWallet,
 } from "@rainbow-me/rainbowkit/wallets";
-import { configureChains, createClient, WagmiConfig } from "wagmi";
-import { Chain, polygonMumbai, hardhat, fantom, bsc } from "wagmi/chains";
-import { alchemyProvider } from "wagmi/providers/alchemy";
-import { publicProvider } from "wagmi/providers/public";
-import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
 import {
   Hydrate,
   QueryClient,
   QueryClientProvider,
 } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { useState, useMemo, useRef } from "react";
-import {
-  LivepeerConfig,
-  createReactClient,
-  studioProvider,
-} from "@livepeer/react";
-import { WebBundlr } from "@bundlr-network/client";
 import { providers, utils } from "ethers";
-
-import LayoutApp from "@/components/Layout";
-import { MainContext } from "@/utils/context";
+import type { NextComponentType } from "next";
+import type { AppProps as NextAppProps } from "next/app";
+import NextHead from "next/head";
+import { useState, useMemo, useRef } from "react";
+import { configureChains, createClient, WagmiConfig } from "wagmi";
+import { Chain, polygonMumbai, hardhat, fantom, bsc } from "wagmi/chains";
+import { alchemyProvider } from "wagmi/providers/alchemy";
+import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
+import { publicProvider } from "wagmi/providers/public";
 
 const CantoChain: Chain = {
   id: 7700,

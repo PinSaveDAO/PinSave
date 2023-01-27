@@ -1,11 +1,10 @@
-import type { NextPage } from "next";
-import { useNetwork } from "wagmi";
-import { Box, Button, Center, LoadingOverlay } from "@mantine/core";
-
-import { usePosts } from "@/hooks/api";
 import PostCard from "@/components/Posts/PostCard";
 import type { ChainName } from "@/constants/chains";
+import { usePosts } from "@/hooks/api";
 import type { Post } from "@/services/upload";
+import { Box, Button, Center, LoadingOverlay } from "@mantine/core";
+import type { NextPage } from "next";
+import { useNetwork } from "wagmi";
 
 const Home: NextPage = () => {
   var initialChain: ChainName = "maticmum";

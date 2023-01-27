@@ -1,6 +1,7 @@
+import { Navbar } from "./Navbar";
 import { AppShell } from "@mantine/core";
 import React from "react";
-import { Navbar } from "./Navbar";
+
 interface LayoutProps {
   children: JSX.Element;
 }
