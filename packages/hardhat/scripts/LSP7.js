@@ -1,14 +1,14 @@
-const Web3 = require("web3");
+const web3 = require("web3");
 
 const LSP7Mintable = require("@lukso/lsp-smart-contracts/artifacts/LSP7Mintable.json");
 const { ethers } = require("hardhat");
 
 async function na() {
-  const [my] = await ethers.getSigners();
+  const [myEOA] = await ethers.getSigners();
 
   // create an instance
   const myToken = new web3.eth.Contract(LSP7Mintable.abi, {
-    gas: 5_000_000,
+    gas: 5000000,
     gasPrice: "1000000000",
   });
 
