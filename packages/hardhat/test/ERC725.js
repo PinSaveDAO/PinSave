@@ -42,6 +42,11 @@ describe("ERC725", function () {
     );
   });
 
+  it("checks interface", async function () {
+    expect(await erc725Contract.supportsInterface("0x570ef073")).to.equal(true);
+    expect(await erc725Contract.supportsInterface("0x714df77c")).to.equal(true);
+  });
+
   it("checks owner", async function () {
     expect(await erc725Contract.owner()).to.equal(bob.address);
   });
@@ -80,5 +85,19 @@ describe("ERC725", function () {
       .createPost(erc725Contract.address, sampleLink, Id);
     expect(await nftContract.balanceOf(erc725Contract.address)).to.equal(1);
     expect(await nftContract.totalSupply()).to.equal(1);
+  });
+
+  it("setData and getData works", async function () {
+    expect(
+      ethers.utils.formatEther(
+        await ethers.provider.getBalance(erc725Contract.address)
+      )
+    ).to.equal("1.0");
+
+    expect(await nftContract.balanceOf(bob.address)).to.equal(0);
+    expect(await nftContract.totalSupply()).to.equal(0);
+
+    await erc725Contract["setData(bytes32,bytes)"](Id, "0x0009");
+    expect(await erc725Contract["getData(bytes32)"](Id)).to.equal("0x0009");
   });
 });

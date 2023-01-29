@@ -1,8 +1,7 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+import { getContractInfo } from "@/utils/contracts";
 import { ethers } from "ethers";
 import { parseCid } from "livepeer/media";
-
-import { getContractInfo } from "@/utils/contracts";
+import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
   req: NextApiRequest,

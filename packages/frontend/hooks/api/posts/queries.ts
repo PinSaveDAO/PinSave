@@ -1,5 +1,5 @@
-import fetcher from "@/utils/fetcher";
 import type { ChainName } from "@/constants/chains";
+import fetcher from "@/utils/fetcher";
 
 export const postKeys = {
   byChain: (chain: ChainName) => [chain] as const,

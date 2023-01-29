@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import { Orbis } from "@orbisclub/orbis-sdk";
+import { dropzoneChildren } from "@/components/UploadForm";
 import {
   BackgroundImage,
   Box,
@@ -17,9 +16,9 @@ import {
 } from "@mantine/core";
 import { Dropzone, MIME_TYPES } from "@mantine/dropzone";
 import { showNotification, updateNotification } from "@mantine/notifications";
+import { Orbis } from "@orbisclub/orbis-sdk";
 import { NFTStorage } from "nft.storage";
-
-import { dropzoneChildren } from "@/components/UploadForm";
+import React, { useState, useEffect } from "react";
 
 let orbis = new Orbis();
 

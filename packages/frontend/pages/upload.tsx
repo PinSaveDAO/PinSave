@@ -1,6 +1,5 @@
-import type { NextPage } from "next";
-
 import UploadForm from "@/components/UploadForm";
+import type { NextPage } from "next";
 
 const Upload: NextPage = () => {
   return (

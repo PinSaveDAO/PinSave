@@ -9,10 +9,10 @@ import {
   Transition,
 } from "@mantine/core";
 import { useBooleanToggle } from "@mantine/hooks";
-import { useRouter } from "next/router";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 import Image from "next/image";
 import Link from "next/link";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { useRouter } from "next/router";
 
 const HEADER_HEIGHT = 60;
 

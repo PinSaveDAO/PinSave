@@ -1,4 +1,5 @@
-import BigNumber from "bignumber.js";
+import { UploadPost, PostData, UploadingPost } from "@/services/upload";
+import { MainContext } from "@/utils/context";
 import {
   Text,
   Paper,
@@ -15,13 +16,11 @@ import {
 } from "@mantine/core";
 import { Dropzone, MIME_TYPES } from "@mantine/dropzone";
 import { showNotification, updateNotification } from "@mantine/notifications";
-import ReactPlayer from "react-player";
+import BigNumber from "bignumber.js";
 import React, { useState, useContext, useEffect } from "react";
+import ReactPlayer from "react-player";
 import { Upload, Replace } from "tabler-icons-react";
 import { useAccount, useSigner, useNetwork } from "wagmi";
-
-import { UploadPost, PostData, UploadingPost } from "@/services/upload";
-import { MainContext } from "@/utils/context";
 
 export const dropzoneChildren = (image: File | undefined) => {
   if (image) {

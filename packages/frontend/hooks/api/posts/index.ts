@@ -1,8 +1,7 @@
-import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
 import { postKeys, fetchPosts, fetchPost } from "./queries";
-
-import type { Post } from "@/services/upload";
 import type { ChainName } from "@/constants/chains";
+import type { Post } from "@/services/upload";
+import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
 
 type IndividualPost = Post & {
   owner: string;

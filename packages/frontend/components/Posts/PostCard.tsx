@@ -1,12 +1,11 @@
+import type { Post } from "@/services/upload";
+import { Player } from "@livepeer/react";
+import { Paper, Text } from "@mantine/core";
+import { parseCid } from "livepeer/media";
 import Image from "next/image";
 import Link from "next/link";
-import { Paper, Text } from "@mantine/core";
 import { useNetwork } from "wagmi";
-import { Player } from "@livepeer/react";
-import { parseCid } from "livepeer/media";
 import { Chain } from "wagmi";
-
-import type { Post } from "@/services/upload";
 
 const PostCard = (post: Post) => {
   const { chain } = useNetwork();
