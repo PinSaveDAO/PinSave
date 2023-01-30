@@ -11,8 +11,37 @@ export default async function handler(req, res) {
       chainId: 80001,
     });
 
-    const myLSP3MetaData =
-      "ipfs://QmPzUfdKhY6vfcTNDnitwKnnpm5GqjYSmw9todNVmi4bqy";
+    const myLSP3MetaData = {
+      name: "My Universal Profile",
+      description: "My cool Universal Profile",
+      profileImage: [
+        {
+          width: 500,
+          height: 500,
+          hashFunction: "keccak256(bytes)",
+          // bytes32 hex string of the image hash
+          hash: "0xfdafad027ecfe57eb4ad047b938805d1dec209d6e9f960fc320d7b9b11cbed14",
+          url: "ipfs://QmPLqMFHxiUgYAom3Zg4SiwoxDaFcZpHXpCmiDzxrtjSGp",
+        },
+      ],
+      backgroundImage: [
+        {
+          width: 500,
+          height: 500,
+          hashFunction: "keccak256(bytes)",
+          // bytes32 hex string of the image hash
+          hash: "0xfdafad027ecfe57eb4ad047b938805d1dec209d6e9f960fc320d7b9b11cbed14",
+          url: "ipfs://QmPLqMFHxiUgYAom3Zg4SiwoxDaFcZpHXpCmiDzxrtjSGp",
+        },
+      ],
+      tags: ["public profile", "creator"],
+      links: [
+        {
+          title: "My Website",
+          url: "www.my-website.com",
+        },
+      ],
+    };
 
     const myContracts = await lspFactory.UniversalProfile.deploy({
       controllerAddresses: [address], // Account addresses which will control the UP
