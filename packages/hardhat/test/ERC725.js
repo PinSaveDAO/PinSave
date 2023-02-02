@@ -1,7 +1,7 @@
 require("dotenv").config();
 const { ethers } = require("hardhat");
 const { expect } = require("chai");
-const { NFTStorage, File, Blob } = require("nft.storage");
+const { NFTStorage, Blob } = require("nft.storage");
 
 const token = process.env.IPFS;
 

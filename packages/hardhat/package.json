@@ -36,8 +36,7 @@
     "nft.storage": "^7.0.0",
     "node-watch": "^0.7.3",
     "qrcode-terminal": "^0.12.0",
-    "ramda": "^0.28.0",
-    "web3": "^1.8.1"
+    "ramda": "^0.28.0"
   },
   "scripts": {
     "chain": "hardhat node --network hardhat --no-deploy",
