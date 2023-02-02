@@ -19,12 +19,12 @@
     "@orbisclub/orbis-sdk": "^0.4.9",
     "@rainbow-me/rainbowkit": "^0.8.1",
     "@tanstack/react-query": "^4.23.0",
-    "@tanstack/react-query-devtools": "^4.23.0",
+    "@tanstack/react-query-devtools": "^4.24.4",
     "bignumber.js": "^9.1.1",
     "ethers": "^5.7.2",
     "filereader-stream": "^2.0.0",
     "isomorphic-fetch": "^3.0.0",
-    "next": "^13.1.5",
+    "next": "^13.1.6",
     "nft.storage": "^7.0.0",
     "postcss": "^8.4.20",
     "react": "^18.1.0",
@@ -39,7 +39,7 @@
     "@types/isomorphic-fetch": "^0.0.36",
     "@types/node": "^18.11.18",
     "@types/react": "^18.0.27",
-    "eslint": "^8.32.0",
+    "eslint": "^8.33.0",
     "eslint-config-next": "^13.1.5",
     "typescript": "^4.9.4"
   }
