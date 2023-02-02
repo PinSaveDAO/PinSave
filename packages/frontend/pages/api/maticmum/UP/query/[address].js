@@ -1,4 +1,4 @@
-import LSP0ERC725Account from "@lukso/lsp-smart-contracts/artifacts/LSP0ERC725Account.json";
+import ERC725 from "@/contracts/ERC725.json";
 import { ethers } from "ethers";
 
 export default async function handler(req, res) {
@@ -14,7 +14,7 @@ export default async function handler(req, res) {
 
     const erc725 = new ethers.Contract(
       address,
-      LSP0ERC725Account.abi,
+      ERC725.abi,
       new ethers.Wallet(process.env.NEXT_PUBLIC_PRIVATE_KEY, provider)
     );
 

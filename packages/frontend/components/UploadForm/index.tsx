@@ -219,7 +219,7 @@ const UploadForm = () => {
       sx={{ maxWidth: "900px" }}
       mx="auto"
     >
-      <Title my="lg" align="center">
+      <Title order={1} my="lg" align="center">
         Upload a new Post
       </Title>
       <TextInput
