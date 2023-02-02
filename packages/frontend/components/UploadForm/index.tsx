@@ -219,7 +219,18 @@ const UploadForm = () => {
       sx={{ maxWidth: "900px" }}
       mx="auto"
     >
-      <Title order={1} my="lg" align="center">
+      <Title
+        order={1}
+        my="lg"
+        align="center"
+        style={{
+          WebkitBackgroundClip: "text",
+          WebkitTextFillColor: "transparent",
+        }}
+        sx={(theme) => ({
+          background: theme.fn.radialGradient("green", "lime"),
+        })}
+      >
         Upload a new Post
       </Title>
       <TextInput
