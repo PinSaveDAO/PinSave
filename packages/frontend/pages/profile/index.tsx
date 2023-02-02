@@ -160,14 +160,12 @@ const Upload = () => {
                     minHeight: 200,
                   }}
                 >
-                  <Center>
-                    <Title mx="auto" order={2}>
-                      {user.details.profile?.username}
-                    </Title>
-                  </Center>
-                  <Center mt={15}>
-                    <Text mx="auto"> {user.details.profile?.description} </Text>
-                  </Center>
+                  <Title mx="auto" order={2} align="center">
+                    {user.details.profile?.username}
+                  </Title>
+                  <Text mt={15} mx="auto" align="center">
+                    {user.details.profile?.description}
+                  </Text>
                   <Group mt={10} position="center">
                     <Group position="center" mt="md" mb="xs">
                       <svg
@@ -182,12 +180,8 @@ const Upload = () => {
                         stroke-linecap="round"
                         stroke-linejoin="round"
                       >
-                        <path
-                          stroke="none"
-                          d="M0 0h24v24H0z"
-                          fill="none"
-                        ></path>
-                        <path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0m-2 14v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2m1 -17.87a4 4 0 0 1 0 7.75m5 10.12v-2a4 4 0 0 0 -3 -3.85"></path>
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0m-2 14v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2m1 -17.87a4 4 0 0 1 0 7.75m5 10.12v-2a4 4 0 0 0 -3 -3.85" />
                       </svg>
                       <Text> Followers: {user.details.count_followers} </Text>
                       <Text> Following: {user.details.count_following} </Text>
@@ -224,51 +218,80 @@ const Upload = () => {
               mx="auto"
               style={{ width: 300 }}
             />
-            <Center>
-              <Title>Upload PFP</Title>
-            </Center>
-            <Dropzone
-              mt="md"
-              ml="xl"
-              mr="xl"
-              onReject={(files) => console.log("rejected files", files)}
-              onDrop={(files) => setImage(files[0])}
-              maxSize={25000000}
-              multiple={false}
-              accept={[
-                MIME_TYPES.png,
-                MIME_TYPES.jpeg,
-                MIME_TYPES.webp,
-                MIME_TYPES.svg,
-                MIME_TYPES.gif,
-              ]}
+            <Title
+              mt={20}
+              order={2}
+              align="center"
+              style={{
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+              sx={(theme) => ({
+                background: theme.fn.radialGradient("green", "white"),
+              })}
             >
-              {() => dropzoneChildren(image)}
-            </Dropzone>
+              Upload PFP
+            </Title>
             <Center>
-              <Title>Upload Cover</Title>
+              <Dropzone
+                mt="md"
+                ml="xl"
+                mr="xl"
+                onReject={(files) => console.log("rejected files", files)}
+                onDrop={(files) => setImage(files[0])}
+                maxSize={25000000}
+                multiple={false}
+                sx={{ maxWidth: 500 }}
+                accept={[
+                  MIME_TYPES.png,
+                  MIME_TYPES.jpeg,
+                  MIME_TYPES.webp,
+                  MIME_TYPES.svg,
+                  MIME_TYPES.gif,
+                ]}
+              >
+                {() => dropzoneChildren(image)}
+              </Dropzone>
             </Center>
-            <Dropzone
-              mt="md"
-              ml="xl"
-              mr="xl"
-              onReject={(files) => console.log("rejected files", files)}
-              onDrop={(files) => setCover(files[0])}
-              maxSize={25000000}
-              multiple={false}
-              accept={[
-                MIME_TYPES.png,
-                MIME_TYPES.jpeg,
-                MIME_TYPES.webp,
-                MIME_TYPES.svg,
-                MIME_TYPES.gif,
-              ]}
+            <Title
+              mt={20}
+              order={2}
+              align="center"
+              style={{
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+              sx={(theme) => ({
+                background: theme.fn.radialGradient("green", "white"),
+              })}
             >
-              {() => dropzoneChildren(cover)}
-            </Dropzone>
+              Upload Cover
+            </Title>
+            <Center>
+              <Dropzone
+                mt="md"
+                ml="xl"
+                mr="xl"
+                onReject={(files) => console.log("rejected files", files)}
+                onDrop={(files) => setCover(files[0])}
+                maxSize={25000000}
+                multiple={false}
+                sx={{ maxWidth: 500 }}
+                accept={[
+                  MIME_TYPES.png,
+                  MIME_TYPES.jpeg,
+                  MIME_TYPES.webp,
+                  MIME_TYPES.svg,
+                  MIME_TYPES.gif,
+                ]}
+              >
+                {() => dropzoneChildren(cover)}
+              </Dropzone>
+            </Center>
             <Center>
               <Button
                 my={12}
+                mt={20}
                 size="md"
                 onClick={() => updateProfile()}
                 mx="auto"

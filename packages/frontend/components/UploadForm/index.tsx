@@ -69,7 +69,7 @@ export const dropzoneChildren = (image: File | undefined) => {
       <Upload size={80} />
       <div>
         <Text size="xl" inline>
-          Drag image here or click to select a image
+          Drag image here or click to select an image
         </Text>
         <Text size="sm" color="dimmed" inline mt={7}>
           Image should not exceed 5mb
