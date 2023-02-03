@@ -727,6 +727,15 @@
     "@types/chai" "^4.3.1"
     solidity-bytes-utils "0.8.0"
 
+"@erc725/smart-contracts@^4.1.1":
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/@erc725/smart-contracts/-/smart-contracts-4.1.1.tgz#4cc26f3569dea8ba987f9514c1ed29f34cab3743"
+  integrity sha512-ZYnI1jaVGkReAsfxgv1QgXA3cgKkIjIADSxtUpPYFov5sC/IXb68QQzCh1Suz4RUxxs8Gyqzano83WAMigtpPQ==
+  dependencies:
+    "@openzeppelin/contracts" "^4.7.3"
+    "@openzeppelin/contracts-upgradeable" "^4.7.3"
+    solidity-bytes-utils "0.8.0"
+
 "@eslint/eslintrc@^0.4.3":
   version "0.4.3"
   resolved "https://registry.yarnpkg.com/@eslint/eslintrc/-/eslintrc-0.4.3.tgz#9e42981ef035beb3dd49add17acb96e8ff6f394c"
@@ -1810,7 +1819,7 @@
     ipfs-utils "8.1.6"
     rxjs "^7.3.0"
 
-"@lukso/lsp-smart-contracts@0.7.0", "@lukso/lsp-smart-contracts@^0.7.0":
+"@lukso/lsp-smart-contracts@0.7.0":
   version "0.7.0"
   resolved "https://registry.yarnpkg.com/@lukso/lsp-smart-contracts/-/lsp-smart-contracts-0.7.0.tgz#1c54fa19e49f06d4349bdc3e1d3a482f61a43d3b"
   integrity sha512-kHIbKUjvs1aeHB76omnsYuaTLp2j4yGUNxMxNneVFifya/ct21eI5NtSWoGkgzAr8+0kmeMvZ+XlwEe8/YCczQ==
@@ -1818,6 +1827,16 @@
     "@erc725/smart-contracts" "^3.2.0"
     "@openzeppelin/contracts" "^4.7.3"
     "@openzeppelin/contracts-upgradeable" "^4.7.3"
+    solidity-bytes-utils "0.8.0"
+
+"@lukso/lsp-smart-contracts@^0.8.0":
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/@lukso/lsp-smart-contracts/-/lsp-smart-contracts-0.8.0.tgz#9e0f4187288290c2b8513ab664fe00b79ab8ae40"
+  integrity sha512-ycgvZ2A4CGXjmGyl39xbyC0d7gHWJFw5c9TsLl1to7LZghtlLpG0qrJ1hpSErpFa1j3CSCu/RIkgggq7pt1WMw==
+  dependencies:
+    "@erc725/smart-contracts" "^4.1.1"
+    "@openzeppelin/contracts" "^4.8.0"
+    "@openzeppelin/contracts-upgradeable" "^4.8.0"
     solidity-bytes-utils "0.8.0"
 
 "@mantine/core@^4.2.12":
@@ -2299,12 +2318,12 @@
     table "^6.8.0"
     undici "^5.14.0"
 
-"@openzeppelin/contracts-upgradeable@^4.7.3":
+"@openzeppelin/contracts-upgradeable@^4.7.3", "@openzeppelin/contracts-upgradeable@^4.8.0":
   version "4.8.1"
   resolved "https://registry.yarnpkg.com/@openzeppelin/contracts-upgradeable/-/contracts-upgradeable-4.8.1.tgz#363f7dd08f25f8f77e16d374350c3d6b43340a7a"
   integrity sha512-1wTv+20lNiC0R07jyIAbHU7TNHKRwGiTGRfiNnA8jOWjKT98g5OgLpYWOi40Vgpk8SPLA9EvfJAbAeIyVn+7Bw==
 
-"@openzeppelin/contracts@^4.7.3", "@openzeppelin/contracts@^4.8.1":
+"@openzeppelin/contracts@^4.7.3", "@openzeppelin/contracts@^4.8.0", "@openzeppelin/contracts@^4.8.1":
   version "4.8.1"
   resolved "https://registry.yarnpkg.com/@openzeppelin/contracts/-/contracts-4.8.1.tgz#709cfc4bbb3ca9f4460d60101f15dac6b7a2d5e4"
   integrity sha512-xQ6eUZl+RDyb/FiZe1h+U7qr/f4p/SrTSQcTPH2bjur3C5DbuW/zFgCU/b1P/xcIaEqJep+9ju4xDRi3rmChdQ==
