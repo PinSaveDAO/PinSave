@@ -107,9 +107,27 @@ describe("ERC725", function () {
       .substr(0, 10);
 
     const json = JSON.stringify({
-      myProperty: "is a string",
-      anotherProperty: {
-        sdfsdf: 123456,
+      LSP3Profile: {
+        name: "frozeman",
+        description: "The inventor of ERC725 and ERC20",
+        profileImage: [
+          {
+            width: 1800,
+            height: 1013,
+            hashFunction: "keccak256(bytes)",
+            hash: "0x98fe032f81c43426fbcfb21c780c879667a08e2a65e8ae38027d4d61cdfe6f55",
+            url: "ifps://QmPJESHbVkPtSaHntNVY5F6JDLW8v69M2d6khXEYGUMn7N",
+          },
+        ],
+        backgroundImage: [
+          {
+            width: 1800,
+            height: 1013,
+            hashFunction: "keccak256(bytes)",
+            hash: "0x98fe032f81c43426fbcfb21c780c879667a08e2a65e8ae38027d4d61cdfe6f55",
+            url: "ifps://QmPJESHbVkPtSaHntNVY5F6JDLW8v69M2d6khXEYGUMn7N",
+          },
+        ],
       },
     });
 

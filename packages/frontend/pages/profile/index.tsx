@@ -1,4 +1,5 @@
 import { dropzoneChildren } from "@/components/UploadForm";
+import { UpdateProfile, CreateProfile } from "@/services/syncprofile";
 import {
   BackgroundImage,
   Box,
@@ -19,15 +20,21 @@ import { showNotification, updateNotification } from "@mantine/notifications";
 import { Orbis } from "@orbisclub/orbis-sdk";
 import { NFTStorage } from "nft.storage";
 import React, { useState, useEffect } from "react";
+import { useSigner, useAccount } from "wagmi";
 
 let orbis = new Orbis();
 
 const Upload = () => {
+  const { address } = useAccount();
+  const { data: signer } = useSigner();
+
   const [cover, setCover] = useState<File | undefined>();
   const [image, setImage] = useState<File | undefined>();
   const [description, setDescription] = useState<string>();
   const [user, setUser] = useState<IOrbisProfile>();
   const [username, setUsername] = useState<string>();
+
+  const [universalProfile, setUniversalProfile] = useState<string>();
 
   useEffect(() => {
     async function loadData() {
@@ -100,6 +107,29 @@ const Upload = () => {
     });
   }
 
+  async function syncProfile() {
+    if (signer && universalProfile) {
+      await UpdateProfile({
+        signer: signer,
+        address: universalProfile,
+        name: user?.details.profile?.username,
+        description: user?.details.profile?.description,
+        profileImage: user?.details.profile?.pfp,
+        backgroundImage: user?.details.profile?.cover,
+      });
+    }
+  }
+
+  async function createProfile() {
+    if (signer && address) {
+      let deployedERC725 = await CreateProfile({
+        signer: signer,
+        address: address,
+      });
+      setUniversalProfile(deployedERC725);
+    }
+  }
+
   async function logout() {
     setUser(undefined);
     await orbis.logout();
@@ -107,7 +137,7 @@ const Upload = () => {
 
   return (
     <>
-      {user && user.did ? (
+      {user?.did ? (
         <>
           <Button
             my={12}
@@ -206,7 +236,15 @@ const Upload = () => {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               mx="auto"
-              style={{ width: 300 }}
+              style={{
+                width: 300,
+                textAlign: "center",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+              sx={{
+                background: "green",
+              }}
             />
             <TextInput
               my={12}
@@ -216,7 +254,15 @@ const Upload = () => {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               mx="auto"
-              style={{ width: 300 }}
+              style={{
+                width: 300,
+                textAlign: "center",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+              sx={{
+                background: "green",
+              }}
             />
             <Title
               mt={20}
@@ -241,7 +287,7 @@ const Upload = () => {
                 onDrop={(files) => setImage(files[0])}
                 maxSize={25000000}
                 multiple={false}
-                sx={{ maxWidth: 500 }}
+                sx={{ maxWidth: 500, maxHeight: 250 }}
                 accept={[
                   MIME_TYPES.png,
                   MIME_TYPES.jpeg,
@@ -276,7 +322,7 @@ const Upload = () => {
                 onDrop={(files) => setCover(files[0])}
                 maxSize={25000000}
                 multiple={false}
-                sx={{ maxWidth: 500 }}
+                sx={{ maxWidth: 500, maxHeight: 250 }}
                 accept={[
                   MIME_TYPES.png,
                   MIME_TYPES.jpeg,
@@ -297,6 +343,43 @@ const Upload = () => {
                 mx="auto"
               >
                 Submit
+              </Button>
+            </Center>
+            <TextInput
+              my={12}
+              size="md"
+              label="Universal Profile"
+              placeholder="address"
+              value={universalProfile}
+              onChange={(e) => setUniversalProfile(e.target.value)}
+              mx="auto"
+              style={{
+                width: 300,
+                textAlign: "center",
+                WebkitBackgroundClip: "text",
+              }}
+              sx={{
+                background: "green",
+              }}
+            />
+            <Center>
+              <Button
+                my={12}
+                mt={20}
+                size="md"
+                onClick={() => syncProfile()}
+                mx="auto"
+              >
+                Sync
+              </Button>
+              <Button
+                my={12}
+                mt={20}
+                size="md"
+                onClick={() => createProfile()}
+                mx="auto"
+              >
+                Create Profile
               </Button>
             </Center>
           </Paper>
