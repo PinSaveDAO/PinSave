@@ -1,27 +1,17 @@
-import { LSPFactory } from "@lukso/lsp-factory.js";
+import ERC725 from "@/contracts/ERC725.json";
+import { ContractFactory, providers, Wallet } from "ethers";
 
 export default async function handler(req, res) {
   try {
     const { address } = req.query;
+    const provider = new providers.InfuraProvider("maticmum");
+    const wallet = new Wallet(process.env.NEXT_PUBLIC_PRIVATE_KEY);
+    const account = wallet.connect(provider);
 
-    const provider = "https://rpc-mumbai.maticvigil.com/";
+    const factory = new ContractFactory(ERC725.abi, ERC725.bytecode, account);
+    const contract = await factory.deploy(address);
 
-    const lspFactory = new LSPFactory(provider, {
-      deployKey: process.env.NEXT_PUBLIC_PRIVATE_KEY, // Private key of the account which will deploy smart contracts
-      chainId: 80001,
-    });
-
-    const myLSP3MetaData =
-      "ipfs://QmPzUfdKhY6vfcTNDnitwKnnpm5GqjYSmw9todNVmi4bqy";
-
-    const myContracts = await lspFactory.UniversalProfile.deploy({
-      controllerAddresses: [address], // Account addresses which will control the UP
-      lsp3Profile: myLSP3MetaData,
-    });
-
-    const myUPAddress = myContracts.LSP0ERC725Account.address;
-
-    res.status(200).json(myUPAddress);
+    res.status(200).json(contract.address);
   } catch (err) {
     res.status(500).send({ error: "failed to fetch data" + err });
   }

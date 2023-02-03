@@ -120,7 +120,6 @@ function MyApp({ Component, pageProps }: AppProps) {
   const bundlrRef = useRef<any>();
 
   const [queryClient] = useState(() => new QueryClient());
-
   const livepeerClient = useMemo(() => {
     return createReactClient({
       provider: studioProvider({
@@ -131,8 +130,6 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   async function initialiseBundlr() {
     if (window.ethereum) {
-      //await window.ethereum.enable();
-
       const provider = new providers.Web3Provider(window.ethereum as any);
       await provider._ready();
 

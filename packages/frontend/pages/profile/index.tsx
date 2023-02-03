@@ -1,4 +1,5 @@
 import { dropzoneChildren } from "@/components/UploadForm";
+import { UpdateProfile, CreateProfile } from "@/services/syncprofile";
 import {
   BackgroundImage,
   Box,
@@ -19,15 +20,21 @@ import { showNotification, updateNotification } from "@mantine/notifications";
 import { Orbis } from "@orbisclub/orbis-sdk";
 import { NFTStorage } from "nft.storage";
 import React, { useState, useEffect } from "react";
+import { useSigner, useAccount } from "wagmi";
 
 let orbis = new Orbis();
 
 const Upload = () => {
+  const { address } = useAccount();
+  const { data: signer } = useSigner();
+
   const [cover, setCover] = useState<File | undefined>();
   const [image, setImage] = useState<File | undefined>();
   const [description, setDescription] = useState<string>();
   const [user, setUser] = useState<IOrbisProfile>();
   const [username, setUsername] = useState<string>();
+
+  const [universalProfile, setUniversalProfile] = useState<string>();
 
   useEffect(() => {
     async function loadData() {
@@ -100,6 +107,29 @@ const Upload = () => {
     });
   }
 
+  async function syncProfile() {
+    if (signer && universalProfile) {
+      await UpdateProfile({
+        signer: signer,
+        address: universalProfile,
+        name: user?.details.profile?.username,
+        description: user?.details.profile?.description,
+        profileImage: user?.details.profile?.pfp,
+        backgroundImage: user?.details.profile?.cover,
+      });
+    }
+  }
+
+  async function createProfile() {
+    if (signer && address) {
+      let deployedERC725 = await CreateProfile({
+        signer: signer,
+        address: address,
+      });
+      setUniversalProfile(deployedERC725);
+    }
+  }
+
   async function logout() {
     setUser(undefined);
     await orbis.logout();
@@ -107,7 +137,7 @@ const Upload = () => {
 
   return (
     <>
-      {user && user.did ? (
+      {user?.did ? (
         <>
           <Button
             my={12}
@@ -160,14 +190,12 @@ const Upload = () => {
                     minHeight: 200,
                   }}
                 >
-                  <Center>
-                    <Title mx="auto" order={2}>
-                      {user.details.profile?.username}
-                    </Title>
-                  </Center>
-                  <Center mt={15}>
-                    <Text mx="auto"> {user.details.profile?.description} </Text>
-                  </Center>
+                  <Title mx="auto" order={2} align="center">
+                    {user.details.profile?.username}
+                  </Title>
+                  <Text mt={15} mx="auto" align="center">
+                    {user.details.profile?.description}
+                  </Text>
                   <Group mt={10} position="center">
                     <Group position="center" mt="md" mb="xs">
                       <svg
@@ -182,12 +210,8 @@ const Upload = () => {
                         stroke-linecap="round"
                         stroke-linejoin="round"
                       >
-                        <path
-                          stroke="none"
-                          d="M0 0h24v24H0z"
-                          fill="none"
-                        ></path>
-                        <path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0m-2 14v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2m1 -17.87a4 4 0 0 1 0 7.75m5 10.12v-2a4 4 0 0 0 -3 -3.85"></path>
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0m-2 14v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2m1 -17.87a4 4 0 0 1 0 7.75m5 10.12v-2a4 4 0 0 0 -3 -3.85" />
                       </svg>
                       <Text> Followers: {user.details.count_followers} </Text>
                       <Text> Following: {user.details.count_following} </Text>
@@ -212,7 +236,15 @@ const Upload = () => {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               mx="auto"
-              style={{ width: 300 }}
+              style={{
+                width: 300,
+                textAlign: "center",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+              sx={{
+                background: "green",
+              }}
             />
             <TextInput
               my={12}
@@ -222,58 +254,132 @@ const Upload = () => {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               mx="auto"
-              style={{ width: 300 }}
+              style={{
+                width: 300,
+                textAlign: "center",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+              sx={{
+                background: "green",
+              }}
             />
-            <Center>
-              <Title>Upload PFP</Title>
-            </Center>
-            <Dropzone
-              mt="md"
-              ml="xl"
-              mr="xl"
-              onReject={(files) => console.log("rejected files", files)}
-              onDrop={(files) => setImage(files[0])}
-              maxSize={25000000}
-              multiple={false}
-              accept={[
-                MIME_TYPES.png,
-                MIME_TYPES.jpeg,
-                MIME_TYPES.webp,
-                MIME_TYPES.svg,
-                MIME_TYPES.gif,
-              ]}
+            <Title
+              mt={20}
+              order={2}
+              align="center"
+              style={{
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+              sx={(theme) => ({
+                background: theme.fn.radialGradient("green", "white"),
+              })}
             >
-              {() => dropzoneChildren(image)}
-            </Dropzone>
+              Upload PFP
+            </Title>
             <Center>
-              <Title>Upload Cover</Title>
+              <Dropzone
+                mt="md"
+                ml="xl"
+                mr="xl"
+                onReject={(files) => console.log("rejected files", files)}
+                onDrop={(files) => setImage(files[0])}
+                maxSize={25000000}
+                multiple={false}
+                sx={{ maxWidth: 500, maxHeight: 250 }}
+                accept={[
+                  MIME_TYPES.png,
+                  MIME_TYPES.jpeg,
+                  MIME_TYPES.webp,
+                  MIME_TYPES.svg,
+                  MIME_TYPES.gif,
+                ]}
+              >
+                {() => dropzoneChildren(image)}
+              </Dropzone>
             </Center>
-            <Dropzone
-              mt="md"
-              ml="xl"
-              mr="xl"
-              onReject={(files) => console.log("rejected files", files)}
-              onDrop={(files) => setCover(files[0])}
-              maxSize={25000000}
-              multiple={false}
-              accept={[
-                MIME_TYPES.png,
-                MIME_TYPES.jpeg,
-                MIME_TYPES.webp,
-                MIME_TYPES.svg,
-                MIME_TYPES.gif,
-              ]}
+            <Title
+              mt={20}
+              order={2}
+              align="center"
+              style={{
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+              sx={(theme) => ({
+                background: theme.fn.radialGradient("green", "white"),
+              })}
             >
-              {() => dropzoneChildren(cover)}
-            </Dropzone>
+              Upload Cover
+            </Title>
+            <Center>
+              <Dropzone
+                mt="md"
+                ml="xl"
+                mr="xl"
+                onReject={(files) => console.log("rejected files", files)}
+                onDrop={(files) => setCover(files[0])}
+                maxSize={25000000}
+                multiple={false}
+                sx={{ maxWidth: 500, maxHeight: 250 }}
+                accept={[
+                  MIME_TYPES.png,
+                  MIME_TYPES.jpeg,
+                  MIME_TYPES.webp,
+                  MIME_TYPES.svg,
+                  MIME_TYPES.gif,
+                ]}
+              >
+                {() => dropzoneChildren(cover)}
+              </Dropzone>
+            </Center>
             <Center>
               <Button
                 my={12}
+                mt={20}
                 size="md"
                 onClick={() => updateProfile()}
                 mx="auto"
               >
                 Submit
+              </Button>
+            </Center>
+            <TextInput
+              my={12}
+              size="md"
+              label="Universal Profile"
+              placeholder="address"
+              value={universalProfile}
+              onChange={(e) => setUniversalProfile(e.target.value)}
+              mx="auto"
+              style={{
+                width: 300,
+                textAlign: "center",
+                WebkitBackgroundClip: "text",
+              }}
+              sx={{
+                background: "green",
+              }}
+            />
+            <Center>
+              <Button
+                my={12}
+                mt={20}
+                size="md"
+                onClick={() => syncProfile()}
+                mx="auto"
+              >
+                Sync
+              </Button>
+              <Button
+                my={12}
+                mt={20}
+                size="md"
+                onClick={() => createProfile()}
+                mx="auto"
+              >
+                Create Profile
               </Button>
             </Center>
           </Paper>

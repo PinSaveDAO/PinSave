@@ -1,7 +1,11 @@
+require("dotenv").config();
 const { ethers } = require("hardhat");
 const { expect } = require("chai");
+const { NFTStorage, Blob } = require("nft.storage");
 
-// const PinSaveL8 = require("../artifacts/contracts/LSP8PinSave.sol/LSP8PinSave.json");
+const token = process.env.IPFS;
+
+const client = new NFTStorage({ token });
 
 describe("ERC725", function () {
   let erc725Contract;
@@ -88,16 +92,71 @@ describe("ERC725", function () {
   });
 
   it("setData and getData works", async function () {
-    expect(
-      ethers.utils.formatEther(
-        await ethers.provider.getBalance(erc725Contract.address)
-      )
-    ).to.equal("1.0");
-
-    expect(await nftContract.balanceOf(bob.address)).to.equal(0);
-    expect(await nftContract.totalSupply()).to.equal(0);
-
     await erc725Contract["setData(bytes32,bytes)"](Id, "0x0009");
     expect(await erc725Contract["getData(bytes32)"](Id)).to.equal("0x0009");
+  });
+
+  it("UP setData and getData works", async function () {
+    const data = await erc725Contract["getData(bytes32)"](
+      "0x5ef83ad9559033e6e941db7d7c495acdce616347d28e90c7ce47cbfcfcad3bc5"
+    );
+    expect(data).to.equal("0x");
+
+    const hashFunction = ethers.utils
+      .keccak256(ethers.utils.toUtf8Bytes("keccak256(utf8)"))
+      .substr(0, 10);
+
+    const json = JSON.stringify({
+      LSP3Profile: {
+        name: "frozeman",
+        description: "The inventor of ERC725 and ERC20",
+        profileImage: [
+          {
+            width: 1800,
+            height: 1013,
+            hashFunction: "keccak256(bytes)",
+            hash: "0x98fe032f81c43426fbcfb21c780c879667a08e2a65e8ae38027d4d61cdfe6f55",
+            url: "ifps://QmPJESHbVkPtSaHntNVY5F6JDLW8v69M2d6khXEYGUMn7N",
+          },
+        ],
+        backgroundImage: [
+          {
+            width: 1800,
+            height: 1013,
+            hashFunction: "keccak256(bytes)",
+            hash: "0x98fe032f81c43426fbcfb21c780c879667a08e2a65e8ae38027d4d61cdfe6f55",
+            url: "ifps://QmPJESHbVkPtSaHntNVY5F6JDLW8v69M2d6khXEYGUMn7N",
+          },
+        ],
+      },
+    });
+
+    const hash = ethers.utils.keccak256(ethers.utils.toUtf8Bytes(json));
+
+    const blob = new Blob([json], { type: "application/json" });
+
+    const cid = await client.storeBlob(blob);
+
+    const url = ethers.utils.hexlify(ethers.utils.toUtf8Bytes(`ipfs://${cid}`));
+
+    const JSONURL = hashFunction + hash.substring(2) + url.substring(2);
+
+    await erc725Contract["setData(bytes32,bytes)"](
+      "0x5ef83ad9559033e6e941db7d7c495acdce616347d28e90c7ce47cbfcfcad3bc5",
+      JSONURL
+    );
+
+    const dataProfile = await erc725Contract["getData(bytes32)"](
+      "0x5ef83ad9559033e6e941db7d7c495acdce616347d28e90c7ce47cbfcfcad3bc5"
+    );
+    expect(dataProfile).to.equal(JSONURL);
+
+    const hashFunctionToDecode = dataProfile.slice(0, 10);
+    const urlToDecode = "0x" + dataProfile.slice(74);
+
+    expect(hashFunctionToDecode).to.eq("0x6f357c6a");
+    expect(ethers.utils.toUtf8String(urlToDecode).replace("ipfs://", "")).to.eq(
+      cid
+    );
   });
 });

@@ -69,7 +69,7 @@ export const dropzoneChildren = (image: File | undefined) => {
       <Upload size={80} />
       <div>
         <Text size="xl" inline>
-          Drag image here or click to select a image
+          Drag image here or click to select an image
         </Text>
         <Text size="sm" color="dimmed" inline mt={7}>
           Image should not exceed 5mb
@@ -219,7 +219,18 @@ const UploadForm = () => {
       sx={{ maxWidth: "900px" }}
       mx="auto"
     >
-      <Title my="lg" align="center">
+      <Title
+        order={1}
+        my="lg"
+        align="center"
+        style={{
+          WebkitBackgroundClip: "text",
+          WebkitTextFillColor: "transparent",
+        }}
+        sx={(theme) => ({
+          background: theme.fn.radialGradient("green", "lime"),
+        })}
+      >
         Upload a new Post
       </Title>
       <TextInput
