@@ -123,7 +123,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   const livepeerClient = useMemo(() => {
     return createReactClient({
       provider: studioProvider({
-        apiKey: process.env.NEXT_PUBLIC_LIVEPEER ?? "",
+        apiKey: process.env.NEXT_PUBLIC_LIVEPEER,
       }),
     });
   }, []);
