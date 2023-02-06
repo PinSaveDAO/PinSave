@@ -13,6 +13,7 @@ import { NotificationsProvider } from "@mantine/notifications";
 import {
   connectorsForWallets,
   RainbowKitProvider,
+  Wallet,
 } from "@rainbow-me/rainbowkit";
 import {
   injectedWallet,
@@ -34,6 +35,7 @@ import NextHead from "next/head";
 import { useState, useMemo, useRef } from "react";
 import { configureChains, createClient, WagmiConfig } from "wagmi";
 import { Chain, polygonMumbai, hardhat, fantom, bsc } from "wagmi/chains";
+import { MetaMaskConnector } from "wagmi/connectors/metaMask";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
 import { publicProvider } from "wagmi/providers/public";
@@ -68,6 +70,22 @@ type AppProps<P = any> = NextAppProps & {
   };
 } & Omit<NextAppProps<P>, "pageProps">;
 
+export interface MyWalletOptions {
+  chains: Chain[];
+}
+export const UD = ({ chains }: MyWalletOptions): Wallet => ({
+  id: "my-wallet",
+  name: "My Wallet",
+  iconUrl: "https://evm.pinsave.app/PinSaveCard.png",
+  iconBackground: "#0c2f78",
+  createConnector: () => {
+    const connector = new MetaMaskConnector({ chains });
+    return {
+      connector,
+    };
+  },
+});
+
 const { chains, provider, webSocketProvider } = configureChains(
   [
     ...(process.env.NEXT_PUBLIC_DEV === "true" ? [hardhat] : []),
@@ -78,7 +96,7 @@ const { chains, provider, webSocketProvider } = configureChains(
   ],
   [
     alchemyProvider({
-      apiKey: String(process.env.NEXT_ALCHEMY_ID),
+      apiKey: process.env.NEXT_ALCHEMY_ID,
     }),
     publicProvider(),
     jsonRpcProvider({
@@ -103,6 +121,7 @@ const connectors = connectorsForWallets([
     wallets: [
       coinbaseWallet({ chains, appName: "My RainbowKit App" }),
       walletConnectWallet({ chains }),
+      UD({ chains }),
     ],
   },
 ]);
