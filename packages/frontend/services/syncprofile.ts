@@ -3,9 +3,7 @@ import { updateNotification } from "@mantine/notifications";
 import { ethers, Signer, ContractFactory } from "ethers";
 import { NFTStorage, Blob } from "nft.storage";
 
-const token = process.env.NEXT_PUBLIC_TOKEN as string;
-
-const client = new NFTStorage({ token });
+const client = new NFTStorage({ token: process.env.NEXT_PUBLIC_TOKEN });
 
 export type Wallet = {
   signer: Signer;

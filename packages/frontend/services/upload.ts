@@ -1,10 +1,9 @@
-import { ethers, Signer } from "ethers";
-import { NFTStorage } from "nft.storage";
-import { updateNotification } from "@mantine/notifications";
-import { WebBundlr } from "@bundlr-network/client";
-
 import { getContractInfo } from "@/utils/contracts";
 import { dataStream } from "@/utils/stream";
+import { WebBundlr } from "@bundlr-network/client";
+import { updateNotification } from "@mantine/notifications";
+import { ethers, Signer } from "ethers";
+import { NFTStorage } from "nft.storage";
 
 export type PostData = {
   name: string;
@@ -34,7 +33,7 @@ export async function UploadPost(incomingData: UploadingPost) {
 
     if (incomingData.provider === "NFT.Storage") {
       const client = new NFTStorage({
-        token: process.env.NEXT_PUBLIC_TOKEN as string,
+        token: process.env.NEXT_PUBLIC_TOKEN,
       });
 
       for (let i = 0; incomingData.data.length - 1 >= i; i++) {
@@ -57,7 +56,7 @@ export async function UploadPost(incomingData: UploadingPost) {
           method: "POST",
           body: formData,
           headers: {
-            Authorization: process.env.NEXT_PUBLIC_NFTPORT as string,
+            Authorization: process.env.NEXT_PUBLIC_NFTPORT,
           },
         };
 
@@ -76,7 +75,7 @@ export async function UploadPost(incomingData: UploadingPost) {
           headers: {
             accept: "application/json",
             "content-type": "application/json",
-            Authorization: process.env.NEXT_PUBLIC_NFTPORT as string,
+            Authorization: process.env.NEXT_PUBLIC_NFTPORT,
           },
           body: JSON.stringify({
             name: incomingData.data[i].name,
