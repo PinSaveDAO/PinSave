@@ -1,5 +1,6 @@
 require("@nomicfoundation/hardhat-toolbox");
 require("dotenv").config();
+require("hardhat-gas-reporter");
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
@@ -44,5 +45,10 @@ module.exports = {
       accounts: [process.env.PRIVATE_KEY, process.env.UP_PK],
       chainId: 7700,
     },
+  },
+  gasReporter: {
+    enabled: true,
+    currency: "CHF",
+    gasPrice: 21,
   },
 };

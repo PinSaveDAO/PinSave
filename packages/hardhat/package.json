@@ -14,13 +14,14 @@
     "eslint-config-prettier": "^8.6.0",
     "eslint-plugin-babel": "^5.3.1",
     "eslint-plugin-prettier": "^4.2.1",
+    "hardhat-gas-reporter": "^1.0.9",
     "solidity-coverage": "^0.7.22",
     "ts-node": "^10.9.1",
     "typechain": "^8.1.1"
   },
   "dependencies": {
     "@lukso/lsp-factory.js": "^2.4.0",
-    "@lukso/lsp-smart-contracts": "^0.8.0",
+    "@lukso/lsp-smart-contracts": "0.7.0",
     "@nomicfoundation/hardhat-toolbox": "^1.0.2",
     "@nomiclabs/hardhat-ethers": "npm:hardhat-deploy-ethers",
     "@nomiclabs/hardhat-etherscan": "^3.1.5",
