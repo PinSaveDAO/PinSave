@@ -11,8 +11,7 @@ const Home: NextPage = () => {
   const { chain } = useNetwork();
 
   if (
-    chain &&
-    chain.id &&
+    chain?.id &&
     (chain.id === 80001 ||
       chain.id === 250 ||
       chain.id === 56 ||
