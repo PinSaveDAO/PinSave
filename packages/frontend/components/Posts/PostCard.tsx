@@ -19,7 +19,7 @@ const PostCard = (post: Post) => {
 
   function loadPosts(chain: Chain) {
     if ([56, 250, 7700, 80001].includes(chain?.id)) {
-      return chain.network as string;
+      return chain.network;
     }
     return "maticmum";
   }
