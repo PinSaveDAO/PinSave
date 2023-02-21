@@ -42,7 +42,8 @@ contract LSP8PinSave is LSP8IdentifiableDigitalAsset {
         bytes32[] memory tokenId
     ) public virtual {
 
-        for (uint256 i = 0; i < tokenId.length; i = GasLib.uncheckedIncrement(i)) {
+        uint len = tokenId.length;
+        for (uint256 i; i < len; i = GasLib.uncheckedIncrement(i)) {
           latestPost.cid = _cid[i];
           latestPost.author = msg.sender;
           latestPost.id = ++postsCounter;
