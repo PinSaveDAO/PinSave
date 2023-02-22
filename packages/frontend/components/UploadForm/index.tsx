@@ -281,7 +281,7 @@ const UploadForm = () => {
         >
           Upload Post
         </Button>
-        {chain && chain.id === 7700 ? (
+        {chain?.id === 7700 || chain?.id === 5001 ? (
           <Button
             component="a"
             radius="lg"

@@ -15,7 +15,8 @@ const Home: NextPage = () => {
     (chain.id === 80001 ||
       chain.id === 250 ||
       chain.id === 56 ||
-      chain.id === 7700)
+      chain.id === 7700 ||
+      chain.id === 5001)
   ) {
     initialChain = chain.network as ChainName;
   }

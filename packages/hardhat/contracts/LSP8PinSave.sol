@@ -16,7 +16,6 @@ contract LSP8PinSave is LSP8IdentifiableDigitalAsset {
 
     Post latestPost;
     uint256 private postsCounter;
-    uint[] public postsIds;
     mapping(uint256 => Post) public postByTokenId;
 
     constructor(
@@ -42,7 +41,8 @@ contract LSP8PinSave is LSP8IdentifiableDigitalAsset {
         bytes32[] memory tokenId
     ) public virtual {
 
-        for (uint256 i = 0; i < tokenId.length; i = GasLib.uncheckedIncrement(i)) {
+        uint len = tokenId.length;
+        for (uint256 i; i < len; i = GasLib.uncheckedIncrement(i)) {
           latestPost.cid = _cid[i];
           latestPost.author = msg.sender;
           latestPost.id = ++postsCounter;
@@ -59,7 +59,7 @@ contract LSP8PinSave is LSP8IdentifiableDigitalAsset {
       return tokenOwnerOf(postByTokenId[id].tokenId);
     }
 
-    function getPost(uint id) public view returns(string memory){
+    function getPost(uint id) external view returns(string memory){
       return postByTokenId[id].cid;
     }
 
