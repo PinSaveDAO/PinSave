@@ -246,10 +246,10 @@
     "@babel/helper-validator-identifier" "^7.19.1"
     to-fast-properties "^2.0.0"
 
-"@bundlr-network/client@^0.10.1":
-  version "0.10.1"
-  resolved "https://registry.yarnpkg.com/@bundlr-network/client/-/client-0.10.1.tgz#56b922d3075eb88b407a80bfa2a92198b8fb0281"
-  integrity sha512-FbaVbmo/SPWK7U55y80HP+RxedutAOg+Kz4f1PSt5jwt7m/WItdh2O2W3LmkCm/k2VEwV4H0kQBHIhFi76Fvnw==
+"@bundlr-network/client@^0.10.4":
+  version "0.10.4"
+  resolved "https://registry.yarnpkg.com/@bundlr-network/client/-/client-0.10.4.tgz#e09e7208e38bdb19b049c3597148d08cfa130d2e"
+  integrity sha512-URKgBH5exRRwQKs1cKZwXB341vvYvgAWw0oLKFfKIVG5kbVFT5ekegAG5V4S7YGTnRMGa4mXxZFbrAPlWR5Rjg==
   dependencies:
     "@solana/web3.js" "^1.36.0"
     "@supercharge/promise-pool" "^2.1.0"
