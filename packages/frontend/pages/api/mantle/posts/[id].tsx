@@ -24,7 +24,7 @@ export default async function handler(
     let resURL;
     if (result) {
       if (result.charAt(0) === "i") {
-        resURL = "https://ipfs.io/ipfs/" + parseCid(result)?.id;
+        resURL = "https://gateway.ipfs.io/ipfs/" + parseCid(result)?.id;
       }
       if (result.charAt(0) === "h") {
         resURL = result;
@@ -38,10 +38,10 @@ export default async function handler(
     if (item.image) {
       if (item.image.charAt(0) === "i") {
         let ipfsCid = parseCid(item.image)?.id;
-        decoded_image = "https://ipfs.io/ipfs/" + ipfsCid;
+        decoded_image = "https://gateway.ipfs.io/ipfs/" + ipfsCid;
         const ipfsImageResponse = await fetch(decoded_image);
         if (ipfsImageResponse.status !== 200) {
-          decoded_image = "https://w3s.link/" + ipfsCid;
+          decoded_image = "https://gateway.ipfs.io/ipfs/" + ipfsCid;
         }
       }
       if (item.image.charAt(0) === "h") {
