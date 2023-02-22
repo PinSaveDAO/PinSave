@@ -16,7 +16,6 @@ contract LSP8PinSave is LSP8IdentifiableDigitalAsset {
 
     Post latestPost;
     uint256 private postsCounter;
-    uint[] public postsIds;
     mapping(uint256 => Post) public postByTokenId;
 
     constructor(
@@ -60,7 +59,7 @@ contract LSP8PinSave is LSP8IdentifiableDigitalAsset {
       return tokenOwnerOf(postByTokenId[id].tokenId);
     }
 
-    function getPost(uint id) public view returns(string memory){
+    function getPost(uint id) external view returns(string memory){
       return postByTokenId[id].cid;
     }
 
