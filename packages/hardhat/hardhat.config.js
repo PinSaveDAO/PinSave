@@ -45,6 +45,11 @@ module.exports = {
       accounts: [process.env.PRIVATE_KEY, process.env.UP_PK],
       chainId: 7700,
     },
+    mantle: {
+      url: "https://rpc.testnet.mantle.xyz/",
+      accounts: [process.env.PRIVATE_KEY, process.env.UP_PK],
+      chainId: 5001,
+    },
   },
   gasReporter: {
     enabled: true,

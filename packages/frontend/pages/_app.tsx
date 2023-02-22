@@ -63,6 +63,23 @@ const CantoChain: Chain = {
   testnet: false,
 };
 
+const MantleChain: Chain = {
+  id: 5001,
+  name: "Mantle",
+  network: "mantle",
+  nativeCurrency: {
+    symbol: "BIT",
+    decimals: 18,
+    name: "BIT",
+  },
+  rpcUrls: {
+    default: {
+      http: ["https://rpc.testnet.mantle.xyz/"],
+    },
+  },
+  testnet: true,
+};
+
 type AppProps<P = any> = NextAppProps & {
   pageProps: P;
   Component: NextComponentType & {
@@ -93,6 +110,7 @@ const { chains, provider, webSocketProvider } = configureChains(
     fantom,
     bsc,
     CantoChain,
+    MantleChain,
   ],
   [
     alchemyProvider({
