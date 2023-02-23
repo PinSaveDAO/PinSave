@@ -9,7 +9,7 @@
     "@typechain/ethers-v5": "^10.2.0",
     "@typechain/hardhat": "^6.1.5",
     "@types/mocha": "^9.1.1",
-    "eslint": "^8.33.0",
+    "eslint": "^8.34.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-prettier": "^8.6.0",
     "eslint-plugin-babel": "^5.3.1",
