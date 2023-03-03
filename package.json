@@ -53,7 +53,7 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@synthetixio/synpress": "^3.0.5",
+    "@synthetixio/synpress": "^3.1.0",
     "cypress-file-upload": "^5.0.8",
     "husky": "^8.0.3"
   }
