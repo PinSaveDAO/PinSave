@@ -21,9 +21,12 @@ import { useRouter } from "next/router";
 import React, { useState, useEffect, useMemo } from "react";
 import { BiDislike } from "react-icons/bi";
 import { FaLaughSquint } from "react-icons/fa";
-import { ArrowLeft, Heart, ThumbDown } from "tabler-icons-react";
+import { ArrowLeft, Heart } from "tabler-icons-react";
 
 let orbis = new Orbis();
+
+const context =
+  "kjzl6cwe1jw147hcck185xfdlrxq9zv0y0hoa6shzskqfnio56lhf8190yaei7w";
 
 const PostPage = () => {
   const [reaction, setReaction] = useState<string>();
@@ -105,8 +108,7 @@ const PostPage = () => {
       }
 
       let result = await orbis.getPosts({
-        context:
-          "kjzl6cwe1jw147hcck185xfdlrxq9zv0y0hoa6shzskqfnio56lhf8190yaei7w",
+        context: context,
         tag: router.query.id,
       });
 
@@ -183,79 +185,76 @@ const PostPage = () => {
                   {post.owner}
                 </a>
               </p>
-              {messages &&
-                messages.map((message: any, i: number) => (
-                  <Paper
-                    key={i}
-                    shadow="xs"
-                    mt={4}
-                    sx={{ backgroundColor: "#80c7fc1d" }}
-                    withBorder
-                    px="xl"
-                  >
-                    <Group spacing="xs">
-                      <Avatar size={25} color="blue">
-                        <Image
-                          src={
-                            message.creator_details.profile?.pfp ??
-                            "https://evm.pinsave.app/PinSaveCard.png"
-                          }
-                          alt="profile"
-                        />
-                      </Avatar>
-                      <Text mt={3}>
-                        <a
-                          href={`https://evm.pinsave.app/profile/${message.creator.substring(
+              {messages?.map((message: any, i: number) => (
+                <Paper
+                  key={i}
+                  shadow="xs"
+                  mt={4}
+                  sx={{ backgroundColor: "#80c7fc1d" }}
+                  withBorder
+                  px="xl"
+                >
+                  <Group spacing="xs">
+                    <Avatar size={25} color="blue">
+                      <Image
+                        src={
+                          message.creator_details.profile?.pfp ??
+                          "https://evm.pinsave.app/PinSaveCard.png"
+                        }
+                        alt="profile"
+                      />
+                    </Avatar>
+                    <Text mt={3}>
+                      <a
+                        href={`https://evm.pinsave.app/profile/${message.creator.substring(
+                          message.creator.indexOf(":0x") + 1
+                        )}`}
+                        style={{ color: "#198b6eb9" }}
+                      >
+                        {message.creator_details.profile?.username ??
+                          message.creator.substring(
                             message.creator.indexOf(":0x") + 1
-                          )}`}
-                          style={{ color: "#198b6eb9" }}
-                        >
-                          {message.creator_details.profile?.username ??
-                            message.creator.substring(
-                              message.creator.indexOf(":0x") + 1
-                            )}
-                        </a>
-                        : {message.newData}
-                      </Text>
-                    </Group>
-                    <Button
-                      color="red"
-                      size="xs"
-                      component="a"
-                      radius="sm"
-                      rightIcon={<Heart fill="white" />}
-                      onClick={() => sendReaction(message.stream_id, "like")}
-                    >
-                      {message.count_likes}
-                    </Button>
-                    <Button
-                      size="xs"
-                      component="a"
-                      radius="sm"
-                      rightIcon={<FaLaughSquint size={22} />}
-                      ml={4}
-                      onClick={() => sendReaction(message.stream_id, "haha")}
-                    >
-                      {message.count_haha}
-                    </Button>
-                    <Button
-                      color="blue"
-                      size="xs"
-                      component="a"
-                      radius="sm"
-                      ml={4}
-                      rightIcon={<BiDislike size={22} />}
-                      onClick={() =>
-                        sendReaction(message.stream_id, "downvote")
-                      }
-                    >
-                      {message.count_downvotes}
-                    </Button>
-                    <Text sx={{ float: "right" }}>
-                      {timeConverter(message.timestamp)}
+                          )}
+                      </a>
+                      : {message.newData}
                     </Text>
-                  </Paper>
-                ))}
+                  </Group>
+                  <Button
+                    color="red"
+                    size="xs"
+                    component="a"
+                    radius="sm"
+                    rightIcon={<Heart fill="white" />}
+                    onClick={() => sendReaction(message.stream_id, "like")}
+                  >
+                    {message.count_likes}
+                  </Button>
+                  <Button
+                    size="xs"
+                    component="a"
+                    radius="sm"
+                    rightIcon={<FaLaughSquint size={22} />}
+                    ml={4}
+                    onClick={() => sendReaction(message.stream_id, "haha")}
+                  >
+                    {message.count_haha}
+                  </Button>
+                  <Button
+                    color="blue"
+                    size="xs"
+                    component="a"
+                    radius="sm"
+                    ml={4}
+                    rightIcon={<BiDislike size={22} />}
+                    onClick={() => sendReaction(message.stream_id, "downvote")}
+                  >
+                    {message.count_downvotes}
+                  </Button>
+                  <Text sx={{ float: "right" }}>
+                    {timeConverter(message.timestamp)}
+                  </Text>
+                </Paper>
+              ))}
               <Group>
                 <TextInput
                   my="lg"
@@ -272,11 +271,7 @@ const PostPage = () => {
               <Button
                 component="a"
                 radius="lg"
-                onClick={() =>
-                  sendMessage(
-                    "kjzl6cwe1jw147hcck185xfdlrxq9zv0y0hoa6shzskqfnio56lhf8190yaei7w"
-                  )
-                }
+                onClick={() => sendMessage(context)}
               >
                 Send Message
               </Button>

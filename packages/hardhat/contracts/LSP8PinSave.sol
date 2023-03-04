@@ -1,11 +1,18 @@
 // SPDX-License-Identifier: MIT
 
 import "@lukso/lsp-smart-contracts/contracts/LSP8IdentifiableDigitalAsset/LSP8IdentifiableDigitalAsset.sol";
-import "@lukso/lsp-smart-contracts/contracts/Utils/GasLib.sol";
 
 pragma solidity 0.8.19;
 
 contract LSP8PinSave is LSP8IdentifiableDigitalAsset {
+
+    bool internal locked;
+    modifier noReentrant() {
+        require(!locked, "No re-entrancy");
+        locked = true;
+        _;
+        locked = false;
+    }
 
     struct Post {
       string cid;
@@ -25,7 +32,7 @@ contract LSP8PinSave is LSP8IdentifiableDigitalAsset {
     ) LSP8IdentifiableDigitalAsset(name_, symbol_, newOwner_) {}
 
 
-    function createPost(address receiver, string memory _cid, bytes32 tokenId) public {
+    function createPost(address receiver, string memory _cid, bytes32 tokenId) public noReentrant {
       latestPost.cid = _cid;
       latestPost.author = msg.sender;
       latestPost.id = ++postsCounter;
@@ -39,17 +46,11 @@ contract LSP8PinSave is LSP8IdentifiableDigitalAsset {
         address to,
         string[] memory _cid,
         bytes32[] memory tokenId
-    ) public virtual {
+    ) public {
         uint len = tokenId.length;
-        for (uint256 i; i != len; i = GasLib.uncheckedIncrement(i)) {
-          latestPost.cid = _cid[i];
-          latestPost.author = msg.sender;
-          latestPost.id = ++postsCounter;
-          latestPost.tokenId = tokenId[i];
-
-          postByTokenId[postsCounter] = latestPost;
-
-          _mint(to, tokenId[i], true, "");
+        for (uint256 i; i != len;) {
+          createPost(to, _cid[i], tokenId[i]);
+          unchecked{++i;}
         }
     }
 

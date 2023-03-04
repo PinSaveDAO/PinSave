@@ -21,7 +21,7 @@ import { useRouter } from "next/router";
 import React, { useState, useMemo, useEffect } from "react";
 import { BiDislike } from "react-icons/bi";
 import { FaLaughSquint } from "react-icons/fa";
-import { ArrowLeft, Heart, MoodHappy, ThumbDown } from "tabler-icons-react";
+import { ArrowLeft, Heart } from "tabler-icons-react";
 
 let orbis = new Orbis();
 
