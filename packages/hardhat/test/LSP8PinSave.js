@@ -68,6 +68,7 @@ describe("LSP8", function () {
   it("correctly deployed", async function () {
     expect(await nftContract.balanceOf(bob.address)).to.equal(0);
     expect(await nftContract.totalSupply()).to.equal(0);
+    expect(await nftContract.owner()).to.equal(bob.address);
   });
 
   it("mints", async function () {

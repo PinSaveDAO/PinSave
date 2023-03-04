@@ -74,7 +74,7 @@ describe("ERC725", function () {
     ).to.equal("10000.1");
   });
 
-  it("Mints to erc725 from user", async function () {
+  it("mints to erc725 from user", async function () {
     expect(
       ethers.utils.formatEther(
         await ethers.provider.getBalance(erc725Contract.address)

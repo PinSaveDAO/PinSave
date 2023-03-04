@@ -3,7 +3,7 @@
 import "@lukso/lsp-smart-contracts/contracts/LSP8IdentifiableDigitalAsset/LSP8IdentifiableDigitalAsset.sol";
 import "@lukso/lsp-smart-contracts/contracts/Utils/GasLib.sol";
 
-pragma solidity 0.8.15;
+pragma solidity 0.8.19;
 
 contract LSP8PinSave is LSP8IdentifiableDigitalAsset {
 
