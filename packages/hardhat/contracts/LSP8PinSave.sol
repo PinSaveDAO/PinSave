@@ -3,7 +3,7 @@
 import "@lukso/lsp-smart-contracts/contracts/LSP8IdentifiableDigitalAsset/LSP8IdentifiableDigitalAsset.sol";
 import "@lukso/lsp-smart-contracts/contracts/Utils/GasLib.sol";
 
-pragma solidity ^0.8.0;
+pragma solidity 0.8.19;
 
 contract LSP8PinSave is LSP8IdentifiableDigitalAsset {
 
@@ -40,9 +40,8 @@ contract LSP8PinSave is LSP8IdentifiableDigitalAsset {
         string[] memory _cid,
         bytes32[] memory tokenId
     ) public virtual {
-
         uint len = tokenId.length;
-        for (uint256 i; i < len; i = GasLib.uncheckedIncrement(i)) {
+        for (uint256 i; i != len; i = GasLib.uncheckedIncrement(i)) {
           latestPost.cid = _cid[i];
           latestPost.author = msg.sender;
           latestPost.id = ++postsCounter;
@@ -52,10 +51,9 @@ contract LSP8PinSave is LSP8IdentifiableDigitalAsset {
 
           _mint(to, tokenId[i], true, "");
         }
-
     }
 
-    function getPostOwner(uint id) public view returns(address){
+    function getPostOwner(uint id) external view returns(address){
       return tokenOwnerOf(postByTokenId[id].tokenId);
     }
 
