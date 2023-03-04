@@ -89,7 +89,8 @@ describe("LSP8", function () {
 
   it("check cid", async function () {
     await nftContract.connect(bob).createPost(bob.address, sampleLink, Id);
-    expect(await nftContract.getPost(1)).to.equal(sampleLink);
+    const cid = await nftContract.getPost(1);
+    expect(cid).to.equal(sampleLink);
   });
 
   it("checks post owner", async function () {
