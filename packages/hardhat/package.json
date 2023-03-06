@@ -32,7 +32,7 @@
     "dotenv": "^16.0.3",
     "ethers": "^5.7.2",
     "hardhat": "2.12.6",
-    "hardhat-deploy": "^0.11.23",
+    "hardhat-deploy": "^0.11.24",
     "hardhat-gas-reporter": "^1.0.9",
     "nft.storage": "^7.0.0",
     "node-watch": "^0.7.3",
