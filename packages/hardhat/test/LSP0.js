@@ -24,7 +24,7 @@ describe("ERC725", function () {
 
   beforeEach(async () => {
     [bob, alice] = await ethers.getSigners();
-    const identityContract = await ethers.getContractFactory("ERC725");
+    const identityContract = await ethers.getContractFactory("MyAccount");
     erc725Contract = await identityContract.deploy(bob.address);
 
     const nfToken = await ethers.getContractFactory("LSP8PinSave");
@@ -40,7 +40,7 @@ describe("ERC725", function () {
   });
 
   it("reverts minting to zero address", async function () {
-    const iContract = await ethers.getContractFactory("ERC725");
+    const iContract = await ethers.getContractFactory("MyAccount");
     expect(iContract.deploy(ethers.constants.AddressZero)).to.be.revertedWith(
       "Ownable: new owner is the zero address"
     );
@@ -62,7 +62,7 @@ describe("ERC725", function () {
       )
     ).to.equal("1.0");
 
-    await erc725Contract.execute(
+    await erc725Contract["execute(uint256,address,uint256,bytes)"](
       0,
       alice.address,
       ethers.utils.parseEther("0.1"),
