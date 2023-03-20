@@ -11,10 +11,9 @@ export default async function handler(
     const { number } = req.query;
     const pageNumber = Number(number) + 1;
 
-    const { address, abi } = getContractInfo(80001);
-    let provider = new ethers.providers.AlchemyProvider(
-      "maticmum",
-      process.env.NEXT_ALCHEMY_ID
+    const { address, abi } = getContractInfo(314);
+    const provider = new ethers.providers.JsonRpcProvider(
+      "https://rpc.ankr.com/filecoin"
     );
 
     const contract = new ethers.Contract(address, abi, provider);
@@ -34,22 +33,26 @@ export default async function handler(
       upperLimit = totalSupply;
     }
 
-    for (let i = lowerLimit; upperLimit >= i; i++) {
-      result = await contract.tokenURI(i);
+    try {
+      for (let i = lowerLimit; upperLimit >= i; i++) {
+        result = await contract.getPost(i);
 
-      let resURL;
-      if (result) {
-        if (result.charAt(0) === "i") {
-          resURL = "https://ipfs.io/ipfs/" + parseCid(result);
+        let resURL;
+        if (result) {
+          if (result.charAt(0) === "i") {
+            resURL = "https://ipfs.io/ipfs/" + parseCid(result);
+          }
+          if (result.charAt(0) === "h") {
+            resURL = result;
+          }
         }
-        if (result.charAt(0) === "h") {
-          resURL = result;
-        }
+
+        const item = await fetch(resURL).then((x) => x.json());
+
+        items.push({ token_id: i, ...item });
       }
-
-      const item = await fetch(resURL).then((x) => x.json());
-
-      items.push({ token_id: i, ...item });
+    } catch {
+      res.status(200).json({ items: items, totalSupply: totalSupply });
     }
 
     res.status(200).json({ items: items, totalSupply: totalSupply });

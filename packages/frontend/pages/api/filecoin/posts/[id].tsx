@@ -10,17 +10,16 @@ export default async function handler(
 ) {
   try {
     const { id } = req.query;
-    const { address, abi } = getContractInfo(80001);
+    const { address, abi } = getContractInfo(314);
 
-    let provider = new ethers.providers.AlchemyProvider(
-      "maticmum",
-      process.env.NEXT_ALCHEMY_ID
+    const provider = new ethers.providers.JsonRpcProvider(
+      "https://rpc.ankr.com/filecoin"
     );
 
     const contract = new ethers.Contract(address, abi, provider);
 
-    const result = await contract.tokenURI(id);
-    const owner = await contract.ownerOf(id);
+    const result = await contract.getPost(id);
+    const owner = await contract.getPostOwner(id);
 
     let resURL;
     if (result) {

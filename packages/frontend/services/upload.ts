@@ -212,7 +212,11 @@ export async function UploadPost(incomingData: UploadingPost) {
       }
     }
 
-    if (incomingData.chain === 7700 || incomingData.chain === 5001) {
+    if (
+      incomingData.chain === 7700 ||
+      incomingData.chain === 5001 ||
+      incomingData.chain === 314
+    ) {
       let Ids: string[] = [];
 
       for (let i = 0; metadata_url.length - 1 >= i; i++) {
