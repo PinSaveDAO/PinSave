@@ -1,6 +1,6 @@
+import { parseCid } from "@/services/parseCid";
 import { getContractInfo } from "@/utils/contracts";
 import { ethers } from "ethers";
-import { parseCid } from "livepeer/media";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
@@ -38,7 +38,7 @@ export default async function handler(
         let resURL;
         if (result) {
           if (result.charAt(0) === "i") {
-            resURL = "https://ipfs.io/ipfs/" + parseCid(result)?.id;
+            resURL = "https://ipfs.io/ipfs/" + parseCid(result);
           }
           if (result.charAt(0) === "h") {
             resURL = result;

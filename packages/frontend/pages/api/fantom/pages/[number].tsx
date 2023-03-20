@@ -1,4 +1,4 @@
-import { parseCid } from "@/services/parseCid";
+import { parseCidIpfsio } from "@/services/parseCid";
 import { getContractInfo } from "@/utils/contracts";
 import { ethers } from "ethers";
 import type { NextApiRequest, NextApiResponse } from "next";
@@ -40,8 +40,7 @@ export default async function handler(
         let resURL;
         if (result) {
           if (result.charAt(0) === "i") {
-            resURL = parseCid(result);
-            console.log(resURL);
+            resURL = parseCidIpfsio(result);
           }
           if (result.charAt(0) === "h") {
             resURL = result;
@@ -49,7 +48,6 @@ export default async function handler(
         }
 
         const item = await fetch(resURL).then((x) => x.json());
-        console.log(item);
         items.push({ token_id: i, ...item });
       }
     } catch {

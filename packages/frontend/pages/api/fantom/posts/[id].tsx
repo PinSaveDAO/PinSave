@@ -1,4 +1,4 @@
-import { parseCid } from "@/services/parseCid";
+import { parseCidIpfsio } from "@/services/parseCid";
 import { Post } from "@/services/upload";
 import { getContractInfo } from "@/utils/contracts";
 import { ethers } from "ethers";
@@ -24,7 +24,7 @@ export default async function handler(
     let resURL;
     if (result) {
       if (result.charAt(0) === "i") {
-        resURL = parseCid(result);
+        resURL = parseCidIpfsio(result);
       }
       if (result.charAt(0) === "h") {
         resURL = result;
@@ -37,7 +37,7 @@ export default async function handler(
 
     if (item.image) {
       if (item.image.charAt(0) === "i") {
-        decoded_image = parseCid(item.image);
+        decoded_image = parseCidIpfsio(item.image);
         const ipfsImageResponse = await fetch(decoded_image);
         if (ipfsImageResponse.status !== 200) {
           decoded_image = "https://w3s.link/" + decoded_image;
