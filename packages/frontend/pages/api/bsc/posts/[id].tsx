@@ -1,7 +1,7 @@
+import { parseCid } from "@/services/parseCid";
 import { Post } from "@/services/upload";
 import { getContractInfo } from "@/utils/contracts";
 import { ethers } from "ethers";
-import { parseCid } from "livepeer/media";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
@@ -22,7 +22,7 @@ export default async function handler(
     let resURL;
     if (result) {
       if (result.charAt(0) === "i") {
-        resURL = "https://ipfs.io/ipfs/" + parseCid(result)?.id;
+        resURL = "https://ipfs.io/ipfs/" + parseCid(result);
       }
       if (result.charAt(0) === "h") {
         resURL = result;
@@ -35,7 +35,7 @@ export default async function handler(
 
     if (item.image) {
       if (item.image.charAt(0) === "i") {
-        let ipfsCid = parseCid(item.image)?.id;
+        let ipfsCid = parseCid(item.image);
         decoded_image = "https://ipfs.io/ipfs/" + ipfsCid;
         const ipfsImageResponse = await fetch(decoded_image);
         if (ipfsImageResponse.status !== 200) {

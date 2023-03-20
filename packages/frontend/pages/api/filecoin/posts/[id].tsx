@@ -1,4 +1,4 @@
-import { parseCidIpfsio } from "@/services/parseCid";
+import { parseCid } from "@/services/parseCid";
 import { Post } from "@/services/upload";
 import { getContractInfo } from "@/utils/contracts";
 import { ethers } from "ethers";
@@ -10,10 +10,10 @@ export default async function handler(
 ) {
   try {
     const { id } = req.query;
-    const { address, abi } = getContractInfo(250);
+    const { address, abi } = getContractInfo(314);
 
     const provider = new ethers.providers.JsonRpcProvider(
-      "https://rpc.ankr.com/fantom/"
+      "https://rpc.ankr.com/filecoin"
     );
 
     const contract = new ethers.Contract(address, abi, provider);
@@ -24,7 +24,7 @@ export default async function handler(
     let resURL;
     if (result) {
       if (result.charAt(0) === "i") {
-        resURL = parseCidIpfsio(result);
+        resURL = "https://ipfs.io/ipfs/" + parseCid(result);
       }
       if (result.charAt(0) === "h") {
         resURL = result;
@@ -37,10 +37,11 @@ export default async function handler(
 
     if (item.image) {
       if (item.image.charAt(0) === "i") {
-        decoded_image = parseCidIpfsio(item.image);
+        let ipfsCid = parseCid(item.image);
+        decoded_image = "https://ipfs.io/ipfs/" + ipfsCid;
         const ipfsImageResponse = await fetch(decoded_image);
         if (ipfsImageResponse.status !== 200) {
-          decoded_image = "https://w3s.link/" + decoded_image;
+          decoded_image = "https://w3s.link/" + ipfsCid;
         }
       }
       if (item.image.charAt(0) === "h") {

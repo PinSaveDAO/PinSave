@@ -7,7 +7,7 @@ import type { NextPage } from "next";
 import { useNetwork } from "wagmi";
 
 const Home: NextPage = () => {
-  var initialChain: ChainName = "maticmum";
+  var initialChain: ChainName = "fantom";
   const { chain } = useNetwork();
 
   if (
@@ -16,6 +16,7 @@ const Home: NextPage = () => {
       chain.id === 250 ||
       chain.id === 56 ||
       chain.id === 7700 ||
+      chain.id === 314 ||
       chain.id === 5001)
   ) {
     initialChain = chain.network as ChainName;

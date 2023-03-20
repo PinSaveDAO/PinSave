@@ -57,6 +57,11 @@ module.exports = {
       accounts: [process.env.PRIVATE_KEY, process.env.UP_PK],
       chainId: 5001,
     },
+    filecoin: {
+      url: "https://rpc.ankr.com/filecoin",
+      accounts: [process.env.PRIVATE_KEY, process.env.UP_PK],
+      chainId: 314,
+    },
   },
   gasReporter: {
     enabled: true,
