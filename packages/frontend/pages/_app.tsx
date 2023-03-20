@@ -80,6 +80,23 @@ const MantleChain: Chain = {
   testnet: true,
 };
 
+const FilecoinChain: Chain = {
+  id: 314,
+  name: "Filecoin",
+  network: "filecoin",
+  nativeCurrency: {
+    symbol: "FIL",
+    decimals: 18,
+    name: "FIL",
+  },
+  rpcUrls: {
+    default: {
+      http: ["https://rpc.ankr.com/filecoin"],
+    },
+  },
+  testnet: false,
+};
+
 type AppProps<P = any> = NextAppProps & {
   pageProps: P;
   Component: NextComponentType & {
@@ -111,6 +128,7 @@ const { chains, provider, webSocketProvider } = configureChains(
     bsc,
     CantoChain,
     MantleChain,
+    FilecoinChain,
   ],
   [
     alchemyProvider({

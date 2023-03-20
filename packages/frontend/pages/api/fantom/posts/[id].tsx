@@ -1,11 +1,8 @@
+import { parseCid } from "@/services/parseCid";
 import { Post } from "@/services/upload";
 import { getContractInfo } from "@/utils/contracts";
 import { ethers } from "ethers";
 import type { NextApiRequest, NextApiResponse } from "next";
-
-function parseCid(link: string) {
-  return link.replace("ipfs://", "https://ipfs.io/ipfs/");
-}
 
 export default async function handler(
   req: NextApiRequest,

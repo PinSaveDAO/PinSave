@@ -4,5 +4,6 @@ export const CHAINS = {
   fantom: 250,
   bsc: 56,
   mantle: 5001,
+  filecoin: 314,
 };
 export type ChainName = keyof typeof CHAINS;
