@@ -2861,10 +2861,10 @@
   dependencies:
     "@tanstack/query-persist-client-core" "4.26.1"
 
-"@tanstack/react-query-devtools@^4.27.0":
-  version "4.27.0"
-  resolved "https://registry.yarnpkg.com/@tanstack/react-query-devtools/-/react-query-devtools-4.27.0.tgz#a9ea7274bb4a12db30ca888697a62430a382b155"
-  integrity sha512-DWtW1V2hG+I92ixr7uS3z70IMa4Yz4xwDiqyd7Af+qXGSD0cbcsnvBMyIcU20KaXW6PY1OdceX/SBkiioQUjCA==
+"@tanstack/react-query-devtools@^4.28.0":
+  version "4.28.0"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-query-devtools/-/react-query-devtools-4.28.0.tgz#7920041899d06efa36ada6a3239d397c277ac26f"
+  integrity sha512-1SnoMw1CWn8FdPEIHvlAzmMBX3heXJo11fyBtt+FzYAHj5yFC8P67Kpgi0HpLkY7SLnd6QK/7qFkpeH4AQbgZg==
   dependencies:
     "@tanstack/match-sorter-utils" "^8.7.0"
     superjson "^1.10.0"
