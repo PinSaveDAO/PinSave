@@ -1,4 +1,5 @@
 import { usePost } from "@/hooks/api";
+import { parseArweaveTxId, parseCid } from "@/services/parseCid";
 import { getCurrentChain } from "@/utils/chains";
 import { timeConverter } from "@/utils/time";
 import { Player } from "@livepeer/react";
@@ -16,7 +17,6 @@ import {
   Switch,
 } from "@mantine/core";
 import { Orbis } from "@orbisclub/orbis-sdk";
-import { parseArweaveTxId, parseCid } from "livepeer/media";
 import { useRouter } from "next/router";
 import React, { useState, useMemo, useEffect } from "react";
 import { BiDislike } from "react-icons/bi";
@@ -38,9 +38,11 @@ const PostPage = () => {
     currentChain,
     router.query.id as string
   );
-
+  console.log(post?.image);
   const idParsed = useMemo(
-    () => parseCid(post?.image) ?? parseArweaveTxId(post?.image),
+    () =>
+      parseCid(post?.image as string) ??
+      parseArweaveTxId(post?.image as string),
     [post?.image]
   );
 
@@ -161,7 +163,7 @@ const PostPage = () => {
               />
             ) : (
               <Player
-                title={idParsed?.id}
+                title={idParsed}
                 src={post.image}
                 autoPlay
                 muted

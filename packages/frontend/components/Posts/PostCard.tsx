@@ -1,7 +1,7 @@
+import { parseCid } from "@/services/parseCid";
 import type { Post } from "@/services/upload";
 import { Player } from "@livepeer/react";
 import { Paper, Text } from "@mantine/core";
-import { parseCid } from "livepeer/media";
 import Image from "next/image";
 import Link from "next/link";
 import { useNetwork } from "wagmi";
@@ -27,7 +27,7 @@ const PostCard = (post: Post) => {
   let imgSrc = "https://evm.pinsave.app/PinSaveCard.png";
   if (post.image) {
     if (post.image.charAt(0) === "i") {
-      imgSrc = "https://ipfs.io/ipfs/" + parseCid(post.image)?.id;
+      imgSrc = "https://ipfs.io/ipfs/" + parseCid(post.image);
     }
     if (post.image.charAt(0) === "h") {
       imgSrc = post.image;
