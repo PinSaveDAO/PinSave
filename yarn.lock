@@ -2076,10 +2076,10 @@
   resolved "https://registry.yarnpkg.com/@openzeppelin/contracts/-/contracts-4.8.2.tgz#d815ade0027b50beb9bcca67143c6bcc3e3923d6"
   integrity sha512-kEUOgPQszC0fSYWpbh2kT94ltOJwj1qfT2DWo+zVttmGmf97JZ99LspePNaeeaLhCImaHVeBbjaQFZQn7+Zc5g==
 
-"@orbisclub/orbis-sdk@^0.4.34":
-  version "0.4.34"
-  resolved "https://registry.yarnpkg.com/@orbisclub/orbis-sdk/-/orbis-sdk-0.4.34.tgz#9e5f7d00878e4486e8c3fe1a9a47a49d97926e6e"
-  integrity sha512-QtNHwQHtjC21yrbbmQGYz/9J7yo3//+q1V0ZpKe8R5r+cNTkfjvW9FwAi/cskxwj0binpmeMtC5XQWBlgr6B1g==
+"@orbisclub/orbis-sdk@^0.4.38":
+  version "0.4.38"
+  resolved "https://registry.yarnpkg.com/@orbisclub/orbis-sdk/-/orbis-sdk-0.4.38.tgz#acf4aa1a75be1deccf3e17381bcfefbbb5359429"
+  integrity sha512-pHqHDd23dv4yvMrE/vG1Fg6M8PvBCCmkGV5tScGfeqimwMFmnt9G+odcXWPT2AWpb6rh/Kw1xaT+ZzFGMRwvzA==
   dependencies:
     "@ceramicnetwork/http-client" "^2.13.0-hotfix.0"
     "@ceramicnetwork/stream-tile" "^2.12.0-hotfix.0"
