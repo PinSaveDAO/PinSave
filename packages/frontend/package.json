@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@bundlr-network/client": "^0.10.5",
-    "@livepeer/react": "2.3.1",
+    "@livepeer/react": "2.3.2",
     "@mantine/core": "^4.2.12",
     "@mantine/dropzone": "^4.2.12",
     "@mantine/hooks": "^4.2.12",
