@@ -37,7 +37,7 @@
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "^3.7.2",
     "@types/isomorphic-fetch": "^0.0.36",
-    "@types/node": "^18.15.5",
+    "@types/node": "^18.15.10",
     "@types/react": "^18.0.29",
     "eslint": "^8.35.0",
     "eslint-config-next": "^13.1.5",
