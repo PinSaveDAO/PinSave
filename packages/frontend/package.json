@@ -39,7 +39,7 @@
     "@types/isomorphic-fetch": "^0.0.36",
     "@types/node": "^18.15.10",
     "@types/react": "^18.0.31",
-    "eslint": "^8.35.0",
+    "eslint": "^8.37.0",
     "eslint-config-next": "^13.1.5",
     "typescript": "^5.0.2"
   }
