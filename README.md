@@ -32,7 +32,7 @@ Pin Save is a decentralized image, video sharing and content aggregation platfor
 
 - Decentralized feed of NFTs on Canto, polygon mumbai and fantom chains with decentralized storage on Arweave and IPFS with NFTPort, Estuary and Nft.storage:
 
-![decentralized feed](/assets/feed.png)
+![decentralized feed](https://github.com/dspytdao/PinSave-EVM/blob/master/assets/feed.png)
 
 - Decentralized Lit Access Control encrypted comments section on orbis, ceramic and ipfs connected to a decentralized post and identity:
 
@@ -40,7 +40,7 @@ Pin Save is a decentralized image, video sharing and content aggregation platfor
 
 - Decentralized Profile:
 
-![decentralized Profile](/assets/profile.png)
+![decentralized Profile](https://github.com/dspytdao/PinSave-EVM/blob/master/assets/profile.png)
 
 - Livepeer Video Player:
 
