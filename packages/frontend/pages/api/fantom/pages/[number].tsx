@@ -35,8 +35,9 @@ export default async function handler(
 
     try {
       for (let i = lowerLimit; upperLimit >= i; i++) {
+        //console.log(i);
         result = await contract.getPost(i);
-
+        //console.log(result);
         let resURL;
         if (result) {
           if (result.charAt(0) === "i") {
@@ -51,10 +52,14 @@ export default async function handler(
         items.push({ token_id: i, ...item });
       }
     } catch {
-      res.status(200).json({ items: items, totalSupply: totalSupply });
+      res
+        .status(200)
+        .json({ items: items, totalSupply: totalSupply, error: "true" });
     }
 
-    res.status(200).json({ items: items, totalSupply: totalSupply });
+    res
+      .status(200)
+      .json({ items: items, totalSupply: totalSupply, error: "false" });
   } catch (err) {
     res.status(500).json({ error: "failed to fetch data" + err });
   }

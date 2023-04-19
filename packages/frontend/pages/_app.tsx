@@ -10,18 +10,7 @@ import {
 } from "@livepeer/react";
 import { MantineProvider } from "@mantine/core";
 import { NotificationsProvider } from "@mantine/notifications";
-import {
-  connectorsForWallets,
-  RainbowKitProvider,
-  Wallet,
-} from "@rainbow-me/rainbowkit";
-import {
-  injectedWallet,
-  rainbowWallet,
-  metaMaskWallet,
-  coinbaseWallet,
-  walletConnectWallet,
-} from "@rainbow-me/rainbowkit/wallets";
+import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import {
   Hydrate,
   QueryClient,
@@ -35,7 +24,6 @@ import NextHead from "next/head";
 import { useState, useMemo, useRef } from "react";
 import { configureChains, createClient, WagmiConfig } from "wagmi";
 import { Chain, polygonMumbai, hardhat, fantom, bsc } from "wagmi/chains";
-import { MetaMaskConnector } from "wagmi/connectors/metaMask";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
 import { publicProvider } from "wagmi/providers/public";
@@ -50,6 +38,9 @@ const CantoChain: Chain = {
     symbol: "CANTO",
   },
   rpcUrls: {
+    public: {
+      http: ["https://canto.slingshot.finance/"],
+    },
     default: {
       http: ["https://canto.slingshot.finance/"],
     },
@@ -76,6 +67,9 @@ const MantleChain: Chain = {
     default: {
       http: ["https://rpc.testnet.mantle.xyz/"],
     },
+    public: {
+      http: ["https://rpc.testnet.mantle.xyz/"],
+    },
   },
   testnet: true,
 };
@@ -90,6 +84,9 @@ const FilecoinChain: Chain = {
     name: "FIL",
   },
   rpcUrls: {
+    public: {
+      http: ["https://rpc.ankr.com/filecoin"],
+    },
     default: {
       http: ["https://rpc.ankr.com/filecoin"],
     },
@@ -107,20 +104,8 @@ type AppProps<P = any> = NextAppProps & {
 export interface MyWalletOptions {
   chains: Chain[];
 }
-export const UD = ({ chains }: MyWalletOptions): Wallet => ({
-  id: "uauth",
-  name: "Unstoppable Login",
-  iconUrl: "https://evm.pinsave.app/UnstoppableDomains.png",
-  iconBackground: "#0c2f78",
-  createConnector: () => {
-    const connector = new MetaMaskConnector({ chains });
-    return {
-      connector,
-    };
-  },
-});
 
-const { chains, provider, webSocketProvider } = configureChains(
+const { chains, provider } = configureChains(
   [
     ...(process.env.NEXT_PUBLIC_DEV === "true" ? [hardhat] : []),
     polygonMumbai,
@@ -143,30 +128,16 @@ const { chains, provider, webSocketProvider } = configureChains(
   ]
 );
 
-const connectors = connectorsForWallets([
-  {
-    groupName: "Recommended",
-    wallets: [
-      injectedWallet({ chains }),
-      rainbowWallet({ chains }),
-      metaMaskWallet({ chains }),
-    ],
-  },
-  {
-    groupName: "Others",
-    wallets: [
-      coinbaseWallet({ chains, appName: "My RainbowKit App" }),
-      walletConnectWallet({ chains }),
-      UD({ chains }),
-    ],
-  },
-]);
+const { connectors } = getDefaultWallets({
+  appName: "My RainbowKit App",
+  projectId: "YOUR_PROJECT_ID",
+  chains,
+});
 
 const wagmiClient = createClient({
   autoConnect: true,
   connectors,
   provider,
-  webSocketProvider,
 });
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -223,7 +194,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         primaryColor: "green",
       }}
     >
-      <QueryClientProvider client={queryClient}>
+      <QueryClientProvider client={queryClient} contextSharing={true}>
         <Hydrate state={pageProps.dehydratedState} />
         <WagmiConfig client={wagmiClient}>
           <NextHead>
