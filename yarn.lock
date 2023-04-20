@@ -787,10 +787,10 @@
   resolved "https://registry.yarnpkg.com/@ensdomains/resolver/-/resolver-0.2.4.tgz#c10fe28bf5efbf49bff4666d909aed0265efbc89"
   integrity sha512-bvaTH34PMCbv6anRa9I/0zjLJgY4EuznbEMgbV77JBCQ9KNC46rzi0avuxpOfu+xDjPEtSFGqVEOr5GlUSGudA==
 
-"@erc725/erc725.js@0.17.1":
-  version "0.17.1"
-  resolved "https://registry.yarnpkg.com/@erc725/erc725.js/-/erc725.js-0.17.1.tgz#000f9a9c03cc5fe0bd63c5139dbdaf71088de1a2"
-  integrity sha512-LAcjkfcl0Z3NU9yG6UvQGtTLX04X09wUC/cRcq1IIWFZC3CSsTjCQDJg2FcMXApnroV++N0IX+IOOBmvGcK70w==
+"@erc725/erc725.js@^0.17.2":
+  version "0.17.2"
+  resolved "https://registry.yarnpkg.com/@erc725/erc725.js/-/erc725.js-0.17.2.tgz#0db3d050f5fb39cb1d956443d67a3039776f7d73"
+  integrity sha512-PwlTnSY0VhhcovRsne4vDevYYEeiGxwRhueR9C457u9d9Cg7evPkoFb+hmCUrT5xuOdjAbqeAaV1V8QXAfhTuA==
   dependencies:
     ethereumjs-util "^7.1.5"
     web3-eth-abi "^1.8.2"
@@ -1578,15 +1578,15 @@
     livepeer "2.3.2"
     zustand "^4.3.2"
 
-"@lukso/lsp-factory.js@^2.4.0":
-  version "2.5.0"
-  resolved "https://registry.yarnpkg.com/@lukso/lsp-factory.js/-/lsp-factory.js-2.5.0.tgz#80716e6f92e8c2c4c81a87d96a657120cb141abb"
-  integrity sha512-bBUGRxPWxYEhbWZ6GK2OTUWsCpbdp4wlNmeVDskkyivURSfDmN4KqHucFciavhTt9FvjfHYm24Ab9IQwPrIdwA==
+"@lukso/lsp-factory.js@^2.5.1":
+  version "2.5.1"
+  resolved "https://registry.yarnpkg.com/@lukso/lsp-factory.js/-/lsp-factory.js-2.5.1.tgz#f0e51fcd995df086ad403c6867c2cd2c4975aea5"
+  integrity sha512-EQS841QpE0LLKihfxqd9213gyDPnjCwpLXkH2LGNMQGyHH7YrlegV3n2t3526YMAic7KupXH+wj6Gk8GjI7E7w==
   dependencies:
-    "@erc725/erc725.js" "0.17.1"
+    "@erc725/erc725.js" "^0.17.2"
     "@ethersproject/abi" "^5.7.0"
     "@ethersproject/experimental" "^5.7.0"
-    "@lukso/lsp-smart-contracts" "0.8.0"
+    "@lukso/lsp-smart-contracts" "^0.8.2"
     axios "^0.23.0"
     browser-image-compression "^2.0.0"
     ethers "^5.7.0"
@@ -1594,20 +1594,20 @@
     ipfs-utils "8.1.6"
     rxjs "^7.8.0"
 
-"@lukso/lsp-smart-contracts@0.8.0":
-  version "0.8.0"
-  resolved "https://registry.yarnpkg.com/@lukso/lsp-smart-contracts/-/lsp-smart-contracts-0.8.0.tgz#9e0f4187288290c2b8513ab664fe00b79ab8ae40"
-  integrity sha512-ycgvZ2A4CGXjmGyl39xbyC0d7gHWJFw5c9TsLl1to7LZghtlLpG0qrJ1hpSErpFa1j3CSCu/RIkgggq7pt1WMw==
+"@lukso/lsp-smart-contracts@0.8.1":
+  version "0.8.1"
+  resolved "https://registry.yarnpkg.com/@lukso/lsp-smart-contracts/-/lsp-smart-contracts-0.8.1.tgz#990c916df6dfb816445246d16ef1d2816b64880e"
+  integrity sha512-l/ijpvuU7fr+PEGmUXssbSQ7tdarlOoXdwP14u1LSpq9l6iKq1/klmQlyQ0TwuyRBftCpDNRXoPXADQ8KZOupw==
   dependencies:
     "@erc725/smart-contracts" "^4.1.1"
     "@openzeppelin/contracts" "^4.8.0"
     "@openzeppelin/contracts-upgradeable" "^4.8.0"
     solidity-bytes-utils "0.8.0"
 
-"@lukso/lsp-smart-contracts@0.8.1":
-  version "0.8.1"
-  resolved "https://registry.yarnpkg.com/@lukso/lsp-smart-contracts/-/lsp-smart-contracts-0.8.1.tgz#990c916df6dfb816445246d16ef1d2816b64880e"
-  integrity sha512-l/ijpvuU7fr+PEGmUXssbSQ7tdarlOoXdwP14u1LSpq9l6iKq1/klmQlyQ0TwuyRBftCpDNRXoPXADQ8KZOupw==
+"@lukso/lsp-smart-contracts@^0.8.2":
+  version "0.8.2"
+  resolved "https://registry.yarnpkg.com/@lukso/lsp-smart-contracts/-/lsp-smart-contracts-0.8.2.tgz#c7c2ac66beebbb411b8b26b770cf4c94601bfe9b"
+  integrity sha512-ZjFHBg3Z9bb72qqe1RFhYwLAWY8UNCBmqCuXFXOOMke5xEZPS+oV+1RFBLSo9Oyifh8GMJFoTFKNoKytQGoeZw==
   dependencies:
     "@erc725/smart-contracts" "^4.1.1"
     "@openzeppelin/contracts" "^4.8.0"
