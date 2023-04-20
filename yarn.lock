@@ -1604,10 +1604,10 @@
     "@openzeppelin/contracts-upgradeable" "^4.8.0"
     solidity-bytes-utils "0.8.0"
 
-"@lukso/lsp-smart-contracts@0.8.1":
-  version "0.8.1"
-  resolved "https://registry.yarnpkg.com/@lukso/lsp-smart-contracts/-/lsp-smart-contracts-0.8.1.tgz#990c916df6dfb816445246d16ef1d2816b64880e"
-  integrity sha512-l/ijpvuU7fr+PEGmUXssbSQ7tdarlOoXdwP14u1LSpq9l6iKq1/klmQlyQ0TwuyRBftCpDNRXoPXADQ8KZOupw==
+"@lukso/lsp-smart-contracts@0.8.2":
+  version "0.8.2"
+  resolved "https://registry.yarnpkg.com/@lukso/lsp-smart-contracts/-/lsp-smart-contracts-0.8.2.tgz#c7c2ac66beebbb411b8b26b770cf4c94601bfe9b"
+  integrity sha512-ZjFHBg3Z9bb72qqe1RFhYwLAWY8UNCBmqCuXFXOOMke5xEZPS+oV+1RFBLSo9Oyifh8GMJFoTFKNoKytQGoeZw==
   dependencies:
     "@erc725/smart-contracts" "^4.1.1"
     "@openzeppelin/contracts" "^4.8.0"
