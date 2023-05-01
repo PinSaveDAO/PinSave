@@ -24,7 +24,7 @@
     "ethers": "^5.7.2",
     "filereader-stream": "^2.0.0",
     "isomorphic-fetch": "^3.0.0",
-    "next": "^13.3.0",
+    "next": "^13.3.4",
     "nft.storage": "^7.0.0",
     "postcss": "^8.4.22",
     "react": "^18.1.0",
