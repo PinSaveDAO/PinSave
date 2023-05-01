@@ -13,7 +13,7 @@
     "@mantine/core": "^4.2.12",
     "@mantine/dropzone": "^6.0.9",
     "@mantine/hooks": "^4.2.12",
-    "@mantine/next": "^6.0.5",
+    "@mantine/next": "^6.0.9",
     "@mantine/notifications": "^4.2.12",
     "@orbisclub/orbis-sdk": "^0.4.40",
     "@rainbow-me/rainbowkit": "^0.12.12",
