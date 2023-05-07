@@ -14,7 +14,7 @@ import {
   MediaQuery,
   NativeSelect,
 } from "@mantine/core";
-import { Dropzone, DropzoneStatus, MIME_TYPES } from "@mantine/dropzone";
+import { Dropzone, MIME_TYPES } from "@mantine/dropzone";
 import { showNotification, updateNotification } from "@mantine/notifications";
 import BigNumber from "bignumber.js";
 import React, { useState, useContext, useEffect, ReactNode } from "react";
@@ -22,10 +22,7 @@ import ReactPlayer from "react-player";
 import { Upload, Replace } from "tabler-icons-react";
 import { useAccount, useSigner, useNetwork } from "wagmi";
 
-export const dropzoneChildren = (
-  image: File | undefined,
-  status: DropzoneStatus
-): ReactNode => {
+export const dropzoneChildren = (image: File | undefined) => {
   if (image) {
     let link = URL.createObjectURL(image);
     return (
@@ -83,8 +80,6 @@ export const dropzoneChildren = (
 };
 
 const UploadForm = () => {
-  //const undefined = new File([""], "example.jpg", { type: "image/jpeg" });
-
   const { address } = useAccount();
   const { chain } = useNetwork();
   const { data: signer } = useSigner();
@@ -275,7 +270,7 @@ const UploadForm = () => {
           MIME_TYPES.mp4,
         ]}
       >
-        {(status) => dropzoneChildren(image, status)}
+        {() => dropzoneChildren(image)}
       </Dropzone>
       <Group position="center" sx={{ padding: 15 }}>
         <Button

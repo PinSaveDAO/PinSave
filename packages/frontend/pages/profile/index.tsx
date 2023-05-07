@@ -295,7 +295,7 @@ const Upload = () => {
                   MIME_TYPES.gif,
                 ]}
               >
-                {(status) => dropzoneChildren(image, status)}
+                {() => dropzoneChildren(image)}
               </Dropzone>
             </Center>
             <Title
@@ -330,7 +330,7 @@ const Upload = () => {
                   MIME_TYPES.gif,
                 ]}
               >
-                {(status) => dropzoneChildren(cover, status)}
+                {() => dropzoneChildren(cover)}
               </Dropzone>
             </Center>
             <Center>
