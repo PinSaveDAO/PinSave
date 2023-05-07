@@ -14,7 +14,7 @@ import {
   MediaQuery,
   NativeSelect,
 } from "@mantine/core";
-import { Dropzone, MIME_TYPES } from "@mantine/dropzone";
+import { Dropzone, DropzoneStatus, MIME_TYPES } from "@mantine/dropzone";
 import { showNotification, updateNotification } from "@mantine/notifications";
 import BigNumber from "bignumber.js";
 import React, { useState, useContext, useEffect, ReactNode } from "react";
@@ -22,7 +22,10 @@ import ReactPlayer from "react-player";
 import { Upload, Replace } from "tabler-icons-react";
 import { useAccount, useSigner, useNetwork } from "wagmi";
 
-export const dropzoneChildren = (image: File | undefined): ReactNode => {
+export const dropzoneChildren = (
+  image: File | undefined,
+  status: DropzoneStatus
+): ReactNode => {
   if (image) {
     let link = URL.createObjectURL(image);
     return (
@@ -80,12 +83,14 @@ export const dropzoneChildren = (image: File | undefined): ReactNode => {
 };
 
 const UploadForm = () => {
+  //const undefined = new File([""], "example.jpg", { type: "image/jpeg" });
+
   const { address } = useAccount();
   const { chain } = useNetwork();
   const { data: signer } = useSigner();
   const [name, setName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
-  const [image, setImage] = useState<File | undefined>(undefined);
+  const [image, setImage] = useState<File | undefined>();
   const [postReceiver, setPostReceiver] = useState<string>("");
 
   const [metadata, setMetadata] = useState<PostData[]>([]);
@@ -270,7 +275,7 @@ const UploadForm = () => {
           MIME_TYPES.mp4,
         ]}
       >
-        {() => dropzoneChildren(image)}
+        {(status) => dropzoneChildren(image, status)}
       </Dropzone>
       <Group position="center" sx={{ padding: 15 }}>
         <Button
