@@ -17,7 +17,7 @@ import {
 import { Dropzone, MIME_TYPES } from "@mantine/dropzone";
 import { showNotification, updateNotification } from "@mantine/notifications";
 import BigNumber from "bignumber.js";
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, ReactNode } from "react";
 import ReactPlayer from "react-player";
 import { Upload, Replace } from "tabler-icons-react";
 import { useAccount, useSigner, useNetwork } from "wagmi";
