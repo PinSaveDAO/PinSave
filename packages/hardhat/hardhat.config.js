@@ -18,6 +18,13 @@ module.exports = {
       url: `https://polygon-mumbai.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY}`,
       accounts: [process.env.PRIVATE_KEY, process.env.UP_PK],
     },
+    goerli: {
+      url: `https://eth-goerli.g.alchemy.com/v2/${process.env.GOERLI_ALCHEMY_API_KEY}`,
+      accounts: [process.env.PRIVATE_KEY, process.env.UP_PK],
+      chainId: 5,
+      gas: 8000000,
+      gasPrice: 1000000000,
+    },
     l16: {
       url: "https://rpc.l16.lukso.network",
       accounts: [process.env.PRIVATE_KEY, process.env.UP_PK],
