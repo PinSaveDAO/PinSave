@@ -245,9 +245,7 @@ function MyApp({ Component, pageProps }: AppProps) {
             </RainbowKitProvider>
           </NotificationsProvider>
         </WagmiConfig>
-        {/*
-        <ReactQueryDevtools initialIsOpen={false} />
-                */}
+        {/*<ReactQueryDevtools initialIsOpen={false} />*/}
       </QueryClientProvider>
     </MantineProvider>
   );
