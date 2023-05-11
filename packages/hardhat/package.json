@@ -15,7 +15,7 @@
     "eslint-plugin-babel": "^5.3.1",
     "eslint-plugin-prettier": "^4.2.1",
     "hardhat-gas-reporter": "^1.0.9",
-    "solidity-coverage": "^0.7.22",
+    "solidity-coverage": "^0.8.2",
     "ts-node": "^10.9.1",
     "typechain": "^8.1.1"
   },
