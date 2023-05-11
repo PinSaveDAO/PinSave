@@ -1,7 +1,7 @@
+import DisputeInfo from "@/components/Posts/DisputeInfo";
 import { usePost } from "@/hooks/api";
 import { parseArweaveTxId, parseCid } from "@/services/parseCid";
 import { getCurrentChain } from "@/utils/chains";
-import { timeConverter } from "@/utils/time";
 import { Player } from "@livepeer/react";
 import {
 	ActionIcon,
@@ -13,15 +13,13 @@ import {
 	TextInput,
 	Text,
 	Group,
-	Avatar,
-	Switch,
 	Title,
+	Box,
+	NumberInput,
 } from "@mantine/core";
 import { Orbis } from "@orbisclub/orbis-sdk";
 import { useRouter } from "next/router";
 import React, { useState, useMemo, useEffect } from "react";
-import { BiDislike } from "react-icons/bi";
-import { FaLaughSquint } from "react-icons/fa";
 import { ArrowLeft, Heart } from "tabler-icons-react";
 
 let orbis = new Orbis();
@@ -31,10 +29,11 @@ const PostPage = () => {
 	const [isEncrypted, setIsEncrypted] = useState(false);
 
 	const [newMessage, setNewMessage] = useState<string>();
+	const [disputeAmount, setDisputeAmount] = useState<number>();
 	const [messages, setMessages] = useState<any | undefined>();
 
 	const router = useRouter();
-	const currentChain = getCurrentChain(80001);
+	const currentChain = getCurrentChain(5);
 	const { data: post, isLoading } = usePost(
 		currentChain,
 		router.query.id as string
@@ -196,7 +195,7 @@ const PostPage = () => {
 									{post.owner}
 								</a>
 							</p>
-							{messages &&
+							{/* {messages &&
 								messages.map((message: any, i: number) => (
 									<Paper
 										key={i}
@@ -292,7 +291,39 @@ const PostPage = () => {
 								}
 							>
 								Send Message
-							</Button>
+							</Button> */}
+							{
+								///TODO impl disputes logic
+							}
+							<Box my="lg">
+								<Title order={4}>Create new dispute</Title>
+								<TextInput
+									my="sm"
+									label="Dispute message"
+									onChange={(e) => setNewMessage(e.target.value)}
+									value={newMessage}
+									placeholder="Enter your message"
+								/>
+								<Text size="sm" mb="2px">
+									Dispute amount
+								</Text>
+								<Group>
+									<NumberInput
+										icon={"Ξ"}
+										placeholder="0.01"
+										onChange={(x) => setDisputeAmount(x)}
+										value={disputeAmount}
+										sx={{ flexGrow: 1 }}
+									/>
+									<Button my="auto">Submit dispute</Button>
+								</Group>
+							</Box>
+							<Box my="lg">
+								<Title order={4}>Open disputes</Title>
+								<DisputeInfo />
+								<DisputeInfo />
+								<DisputeInfo />
+							</Box>
 						</Paper>
 					</SimpleGrid>
 				</>
