@@ -215,7 +215,8 @@ export async function UploadPost(incomingData: UploadingPost) {
     if (
       incomingData.chain === 7700 ||
       incomingData.chain === 5001 ||
-      incomingData.chain === 314
+      incomingData.chain === 314 ||
+      incomingData.chain === 5
     ) {
       let Ids: string[] = [];
 

@@ -22,8 +22,6 @@ export default async function handler(
       await contract.totalSupply()
     ).toNumber();
 
-    console.log(totalSupply);
-
     let items = [];
     let result;
 
