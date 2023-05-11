@@ -5,5 +5,6 @@ export const CHAINS = {
   bsc: 56,
   mantle: 5001,
   filecoin: 314,
+  goerli: 5,
 };
 export type ChainName = keyof typeof CHAINS;

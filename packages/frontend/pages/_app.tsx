@@ -16,14 +16,21 @@ import {
   QueryClient,
   QueryClientProvider,
 } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+// import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { providers, utils } from "ethers";
 import type { NextComponentType } from "next";
 import type { AppProps as NextAppProps } from "next/app";
 import NextHead from "next/head";
 import { useState, useMemo, useRef } from "react";
 import { configureChains, createClient, WagmiConfig } from "wagmi";
-import { Chain, polygonMumbai, hardhat, fantom, bsc } from "wagmi/chains";
+import {
+  Chain,
+  polygonMumbai,
+  hardhat,
+  fantom,
+  bsc,
+  goerli,
+} from "wagmi/chains";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
 import { publicProvider } from "wagmi/providers/public";
@@ -114,6 +121,7 @@ const { chains, provider } = configureChains(
     CantoChain,
     MantleChain,
     FilecoinChain,
+    goerli,
   ],
   [
     alchemyProvider({
@@ -237,7 +245,9 @@ function MyApp({ Component, pageProps }: AppProps) {
             </RainbowKitProvider>
           </NotificationsProvider>
         </WagmiConfig>
+        {/*
         <ReactQueryDevtools initialIsOpen={false} />
+                */}
       </QueryClientProvider>
     </MantineProvider>
   );
