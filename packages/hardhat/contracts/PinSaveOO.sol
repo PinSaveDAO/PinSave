@@ -96,7 +96,7 @@ contract PinSaveOO {
             data,
             asserter,
             false,
-            counter++
+            count++
         );
 
         emit DataAsserted(dataId, data, asserter, assertionId);
