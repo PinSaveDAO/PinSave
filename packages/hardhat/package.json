@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "@lukso/lsp-factory.js": "^2.4.0",
-    "@lukso/lsp-smart-contracts": "0.8.1",
+    "@lukso/lsp-smart-contracts": "0.10.0",
     "@nomicfoundation/hardhat-toolbox": "^2.0.2",
     "@nomiclabs/hardhat-ethers": "npm:hardhat-deploy-ethers",
     "@nomiclabs/hardhat-etherscan": "^3.1.7",
