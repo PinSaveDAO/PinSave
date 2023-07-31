@@ -25,7 +25,7 @@
     "@nomicfoundation/hardhat-toolbox": "^2.0.2",
     "@nomiclabs/hardhat-ethers": "npm:hardhat-deploy-ethers",
     "@nomiclabs/hardhat-etherscan": "^3.1.7",
-    "@openzeppelin/contracts": "^4.8.1",
+    "@openzeppelin/contracts": "^4.9.3",
     "@synthetixio/synpress": "^3.1.0",
     "@tenderly/hardhat-tenderly": "^1.6.1",
     "chai": "^4.3.7",
