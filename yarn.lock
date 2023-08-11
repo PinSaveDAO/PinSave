@@ -4097,15 +4097,25 @@
   resolved "https://registry.yarnpkg.com/@uauth/common/-/common-2.3.0.tgz#de0018503614e993af9f6373983bc53828bf9b80"
   integrity sha512-RuRYd8UgVN1eotoZjj2YhgHHP7PlEGxPEKSqUbmtJYumb6DLrlR0HNRF+wM8LQz/x4SBBo+hdm0ueC5bAHcXBg==
 
-"@uauth/js@^2.4.0":
-  version "2.7.0"
-  resolved "https://registry.yarnpkg.com/@uauth/js/-/js-2.7.0.tgz#03930e76faab7a7b542fd2be2e5d65efe065d12a"
-  integrity sha512-caakTuA+EECRfZ0103tdtO9zXCcCkRIAl7xiRFOJf1mziV99/LIJ8BEeeRQwY+XjuF4R1f/IuYitI/Fmo/w7sQ==
+"@uauth/js@2.8.0", "@uauth/js@^2.8.0":
+  version "2.8.0"
+  resolved "https://registry.yarnpkg.com/@uauth/js/-/js-2.8.0.tgz#c7c4f3b7c8a4feede78ed9f2434604452e0115b7"
+  integrity sha512-DxxP7ybH5j0/Dc5yIpnhVBql3spvde3I+ZrtIRPFJrw5MxhajltxdoHKTtaKMy4Vj8QKfXjt85AS92ij9oGFiA==
   dependencies:
     "@uauth/common" "2.3.0"
     "@unstoppabledomains/resolution" "^8.0"
     global "^4.4.0"
     jose "^4.5.0"
+
+"@uauth/wagmi@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@uauth/wagmi/-/wagmi-3.0.0.tgz#77682ed915b0200e4e6bd6a2f5e6044f0e3536e7"
+  integrity sha512-yvx8g668LPVHYu0FK7RDA2ROvi4nZmC4CI0rBXZLTGjGX2p7Zmq6lHk6L7MyMP3XAmmxp+ZOXLSrZz9mki72Ng==
+  dependencies:
+    "@uauth/js" "2.8.0"
+    ethers "^5"
+    eventemitter3 "4.0.7"
+    wagmi "^0.12.9"
 
 "@unstoppabledomains/resolution@^8.0":
   version "8.5.0"
@@ -9745,7 +9755,7 @@ ethers@5.0.7:
     "@ethersproject/web" "^5.0.0"
     "@ethersproject/wordlists" "^5.0.0"
 
-ethers@=5.7.2, ethers@^5.0.13, ethers@^5.5.3, ethers@^5.7.0, ethers@^5.7.1, ethers@^5.7.2:
+ethers@=5.7.2, ethers@^5, ethers@^5.0.13, ethers@^5.5.3, ethers@^5.7.0, ethers@^5.7.1, ethers@^5.7.2:
   version "5.7.2"
   resolved "https://registry.yarnpkg.com/ethers/-/ethers-5.7.2.tgz#3a7deeabbb8c030d4126b24f84e525466145872e"
   integrity sha512-wswUsmWo1aOK8rR7DIKiWSw9DbLWe6x98Jrn8wcTflTVvaXhAMaB5zGAXy0GYQEQp9iO1iSHWVyARQm11zUtyg==
@@ -18568,7 +18578,7 @@ vlq@^2.0.4:
   resolved "https://registry.yarnpkg.com/vlq/-/vlq-2.0.4.tgz#6057b85729245b9829e3cc7755f95b228d4fe041"
   integrity sha512-aodjPa2wPQFkra1G8CzJBTHXhgk3EVSwxSWXNPr1fgdFLUb8kvLV1iEb6rFgasIsjP82HWI6dsb5Io26DDnasA==
 
-wagmi@^0.12.10:
+wagmi@^0.12.10, wagmi@^0.12.9:
   version "0.12.13"
   resolved "https://registry.yarnpkg.com/wagmi/-/wagmi-0.12.13.tgz#995cd453fcfa6a6b3aa3a8bf30f6b52c3fbd7879"
   integrity sha512-1J+F68MztodPUo2OIFImiC3OoZD4gdryxTidfwQz9LJawXdBNmAOFvq0LQClrrqgFk0Gd3EoLo/MKGiEn2RsMg==
