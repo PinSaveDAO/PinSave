@@ -30,7 +30,7 @@ Pin Save is a decentralized image, video sharing and content aggregation platfor
 
 ## Features
 
-- Decentralized feed of NFTs on Canto, polygon mumbai and fantom chains with decentralized storage on Arweave and IPFS with NFTPort, Estuary and Nft.storage:
+- Decentralized feed of NFTs on Filecoin, Polygon, Binance Smart Chain and Fantom chains with decentralized storage on Arweave and IPFS with NFTPort, Estuary and Nft.storage:
 
 ![decentralized feed](https://github.com/dspytdao/PinSave-EVM/blob/master/assets/feed.png)
 
