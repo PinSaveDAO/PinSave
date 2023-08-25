@@ -11,6 +11,7 @@ function LoginButton() {
 
   return (
     <Button
+      radius="md"
       leftIcon={
         <Image
           src="/UnstoppableDomains.png"
@@ -41,6 +42,7 @@ function LogoutButton() {
 
   return (
     <Button
+      radius="md"
       leftIcon={
         <Image
           src="/UnstoppableDomains.png"
