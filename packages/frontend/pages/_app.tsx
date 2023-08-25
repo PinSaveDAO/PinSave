@@ -1,5 +1,3 @@
-"use client";
-
 import "@/styles/globals.css";
 import "@rainbow-me/rainbowkit/styles.css";
 import LayoutApp from "@/components/Layout";
@@ -21,6 +19,7 @@ import {
 import { default as UAuth } from "@uauth/js";
 import { UAuthWagmiConnector } from "@uauth/wagmi";
 import { MetaMaskConnector } from "@wagmi/core/connectors/metaMask";
+import { WalletConnectConnector } from "@wagmi/core/connectors/walletConnect";
 import { providers, utils } from "ethers";
 import type { NextComponentType } from "next";
 import type { AppProps as NextAppProps } from "next/app";
@@ -39,11 +38,6 @@ import {
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
 import { publicProvider } from "wagmi/providers/public";
-
-/* 
-const UAuthWagmiConnector = dynamic<any>(() => import("@uauth/wagmi"), {
-	ssr: false,
-}); */
 
 type AppProps<P = any> = NextAppProps & {
   pageProps: P;
@@ -77,17 +71,25 @@ const { chains, provider } = configureChains(
     }),
   ]
 );
+
 const uauthClient = new UAuth({
-  clientID: process.env.NEXT_PUBLIC_UAUTH_CLIENT_ID!,
-  redirectUri: "/",
+  clientID: process.env.NEXT_PUBLIC_UAUTH_CLIENT_ID as string,
+  redirectUri: "https://evm.pinsave.app",
   // Scope must include openid and wallet
   scope: "openid wallet",
 });
 const { connectors } = getDefaultWallets({
   appName: "PinSave",
-  projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_ID,
+  projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_ID as string,
   chains,
 });
+
+const walletConnectConnector = new WalletConnectConnector({
+  options: {
+    projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_ID as string, // Get projectID at https://cloud.walletconnect.com
+  },
+});
+
 const metaMaskConnector = new MetaMaskConnector();
 
 const uauthConnector = new UAuthWagmiConnector({
@@ -95,6 +97,7 @@ const uauthConnector = new UAuthWagmiConnector({
   options: {
     uauth: uauthClient,
     metaMaskConnector,
+    walletConnectConnector,
   },
 });
 

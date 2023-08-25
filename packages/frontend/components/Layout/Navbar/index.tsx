@@ -139,9 +139,7 @@ export function Navbar({ links }: NavbarProps) {
               largeScreen: "full",
             }}
           />
-          {
-            //<UauthButton />
-          }
+          <UauthButton />
           <Burger
             opened={opened}
             onClick={() => toggleOpened()}
