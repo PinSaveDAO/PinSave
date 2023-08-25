@@ -52,6 +52,12 @@ const useStyles = createStyles((theme) => ({
     },
   },
 
+  logo: {
+    [theme.fn.smallerThan("sm")]: {
+      display: "none",
+    },
+  },
+
   burger: {
     [theme.fn.largerThan("md")]: {
       display: "none",
@@ -121,11 +127,11 @@ export function Navbar({ links }: NavbarProps) {
       <Container className={classes.header}>
         <Link href="/">
           <Image
+            className={classes.logo}
             src="/PinSaveL.png"
             alt="Pin Save EVM"
             width={140}
             height={35}
-            className="block lg:hidden h-8 w-auto"
             priority
           />
         </Link>
