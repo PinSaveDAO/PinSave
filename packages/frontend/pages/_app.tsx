@@ -78,11 +78,12 @@ const uauthClient = new UAuth({
   // Scope must include openid and wallet
   scope: "openid wallet",
 });
-const { connectors } = getDefaultWallets({
+
+/* const { connectors } = getDefaultWallets({
   appName: "PinSave",
   projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_ID as string,
   chains,
-});
+}); */
 
 const walletConnectConnector = new WalletConnectConnector({
   options: {
@@ -103,7 +104,11 @@ const uauthConnector = new UAuthWagmiConnector({
 
 const wagmiClient = createClient({
   autoConnect: true,
-  connectors: [...connectors(), uauthConnector],
+  connectors: [
+    uauthConnector as any,
+    metaMaskConnector,
+    walletConnectConnector,
+  ],
   provider,
 });
 
