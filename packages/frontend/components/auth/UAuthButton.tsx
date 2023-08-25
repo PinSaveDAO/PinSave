@@ -1,3 +1,5 @@
+import { Button } from "@mantine/core";
+import Image from "next/image";
 import { useAccount, useConnect, useDisconnect } from "wagmi";
 
 function LoginButton() {
@@ -7,7 +9,27 @@ function LoginButton() {
     connect({ connector: connectors[0] });
   };
 
-  return <button onClick={onClick}>Login</button>;
+  return (
+    <Button
+      leftIcon={
+        <Image
+          src="/UnstoppableDomains.png"
+          width={30}
+          height={30}
+          alt="Picture of the author"
+        />
+      }
+      sx={() => ({
+        backgroundColor: "#0D67FE",
+        "&:hover": {
+          backgroundColor: "#0546B7",
+        },
+      })}
+      onClick={onClick}
+    >
+      Login with Unstoppable
+    </Button>
+  );
 }
 
 function LogoutButton() {
@@ -17,8 +39,29 @@ function LogoutButton() {
     disconnect();
   };
 
-  return <button onClick={onClick}>Logout</button>;
+  return (
+    <Button
+      leftIcon={
+        <Image
+          src="/UnstoppableDomains.png"
+          width={30}
+          height={30}
+          alt="Picture of the author"
+        />
+      }
+      sx={() => ({
+        backgroundColor: "#0D67FE",
+        "&:hover": {
+          backgroundColor: "#0546B7",
+        },
+      })}
+      onClick={onClick}
+    >
+      Logout
+    </Button>
+  );
 }
+
 export function UauthButton() {
   const { address } = useAccount();
   if (address) {
