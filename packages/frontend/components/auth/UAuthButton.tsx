@@ -1,29 +1,73 @@
-import { useState } from "react";
+import { Button } from "@mantine/core";
+import Image from "next/image";
 import { useAccount, useConnect, useDisconnect } from "wagmi";
 
 function LoginButton() {
-	const { connect, connectors } = useConnect();
+  const { connect, connectors } = useConnect();
 
-	const onClick = async () => {
-		await connect({ connector: connectors[0] });
-	};
+  const onClick = async () => {
+    connect({ connector: connectors[0] });
+  };
 
-	return <button onClick={onClick}>Login</button>;
+  return (
+    <Button
+      radius="md"
+      leftIcon={
+        <Image
+          src="/UnstoppableDomains.png"
+          width={30}
+          height={30}
+          alt="Picture of the author"
+        />
+      }
+      sx={() => ({
+        backgroundColor: "#0D67FE",
+        "&:hover": {
+          backgroundColor: "#0546B7",
+        },
+      })}
+      onClick={onClick}
+    >
+      Login with Unstoppable
+    </Button>
+  );
 }
 
 function LogoutButton() {
-	const { disconnect } = useDisconnect();
+  const { disconnect } = useDisconnect();
 
-	const onClick = async () => {
-		await disconnect();
-	};
+  const onClick = async () => {
+    disconnect();
+  };
 
-	return <button onClick={onClick}>Logout</button>;
+  return (
+    <Button
+      radius="md"
+      leftIcon={
+        <Image
+          src="/UnstoppableDomains.png"
+          width={30}
+          height={30}
+          alt="Picture of the author"
+        />
+      }
+      sx={() => ({
+        backgroundColor: "#0D67FE",
+        "&:hover": {
+          backgroundColor: "#0546B7",
+        },
+      })}
+      onClick={onClick}
+    >
+      Logout
+    </Button>
+  );
 }
+
 export function UauthButton() {
-	const { address } = useAccount();
-	if (address) {
-		return <LogoutButton />;
-	}
-	return <LoginButton />;
+  const { address } = useAccount();
+  if (address) {
+    return <LogoutButton />;
+  }
+  return <LoginButton />;
 }
