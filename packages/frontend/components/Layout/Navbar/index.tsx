@@ -25,7 +25,7 @@ const useStyles = createStyles((theme) => ({
 
   dropdown: {
     position: "absolute",
-    top: 60,
+    top: 80,
     left: 0,
     right: 0,
     zIndex: 0,
@@ -48,12 +48,6 @@ const useStyles = createStyles((theme) => ({
 
   links: {
     [theme.fn.smallerThan("md")]: {
-      display: "none",
-    },
-  },
-
-  rainbowConnect: {
-    [theme.fn.smallerThan("xs")]: {
       display: "none",
     },
   },
@@ -130,7 +124,6 @@ export function Navbar({ links }: NavbarProps) {
 
   return (
     <div>
-      {" "}
       {isClient ? (
         <Header height={largeScreen ? 60 : 90} mb={10} className={classes.root}>
           <Container className={classes.header}>
