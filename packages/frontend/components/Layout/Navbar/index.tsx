@@ -15,8 +15,7 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-
-const HEADER_HEIGHT = 60;
+import { useState, useEffect } from "react";
 
 const useStyles = createStyles((theme) => ({
   root: {
@@ -26,7 +25,7 @@ const useStyles = createStyles((theme) => ({
 
   dropdown: {
     position: "absolute",
-    top: HEADER_HEIGHT,
+    top: 60,
     left: 0,
     right: 0,
     zIndex: 0,
@@ -49,6 +48,12 @@ const useStyles = createStyles((theme) => ({
 
   links: {
     [theme.fn.smallerThan("md")]: {
+      display: "none",
+    },
+  },
+
+  rainbowConnect: {
+    [theme.fn.smallerThan("xs")]: {
       display: "none",
     },
   },
@@ -105,8 +110,12 @@ export function Navbar({ links }: NavbarProps) {
   const [opened, toggleOpened] = useBooleanToggle(false);
   const { classes, cx } = useStyles();
   const router = useRouter();
-  const largeScreen = useMediaQuery("(min-width: 38em)");
+  const largeScreen = useMediaQuery("(min-width: 600px)");
+  const [isClient, setIsClient] = useState(false);
 
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
   const items = links.map((link) => (
     <Link key={link.label} href={link.link} passHref>
       <Text
@@ -120,44 +129,53 @@ export function Navbar({ links }: NavbarProps) {
   ));
 
   return (
-    <Header height={HEADER_HEIGHT} mb={10} className={classes.root}>
-      <Container className={classes.header}>
-        <Link href="/">
-          <Image
-            src={largeScreen ? "/PinSaveL.png" : "/Pin.png"}
-            alt="Pin Save EVM"
-            width={largeScreen ? 140 : 30}
-            height={largeScreen ? 35 : 30}
-            priority
-          />
-        </Link>
-        <Group spacing={5} className={classes.links}>
-          {items}
-        </Group>
-        <Group spacing={5}>
-          <ConnectButton
-            accountStatus={{
-              smallScreen: "avatar",
-              largeScreen: "full",
-            }}
-          />
-          <UauthButton />
-          <Burger
-            opened={opened}
-            onClick={() => toggleOpened()}
-            className={classes.burger}
-            size="sm"
-          />
-        </Group>
-
-        <Transition transition="pop-top-right" duration={200} mounted={opened}>
-          {(styles) => (
-            <Paper className={classes.dropdown} withBorder style={styles}>
+    <div>
+      {" "}
+      {isClient ? (
+        <Header height={largeScreen ? 60 : 90} mb={10} className={classes.root}>
+          <Container className={classes.header}>
+            <Link href="/">
+              <Image
+                src={largeScreen ? "/PinSaveL.png" : "/Pin.png"}
+                alt="Pin Save EVM"
+                width={largeScreen ? 140 : 30}
+                height={largeScreen ? 35 : 30}
+                priority
+              />
+            </Link>
+            <Group spacing={5} className={classes.links}>
               {items}
-            </Paper>
-          )}
-        </Transition>
-      </Container>
-    </Header>
+            </Group>
+            <Group spacing={5}>
+              <ConnectButton
+                accountStatus={{
+                  smallScreen: "avatar",
+                  largeScreen: "full",
+                }}
+              />
+              <UauthButton />
+              <Burger
+                opened={opened}
+                onClick={() => toggleOpened()}
+                className={classes.burger}
+                size="sm"
+              />
+            </Group>
+
+            <Transition
+              transition="pop-top-right"
+              duration={200}
+              mounted={opened}
+            >
+              {(styles) => (
+                <Paper className={classes.dropdown} withBorder style={styles}>
+                  {items}
+                </Paper>
+              )}
+            </Transition>
+          </Container>
+        </Header>
+      ) : null}
+    </div>
   );
 }
