@@ -179,7 +179,7 @@ function MyApp({ Component, pageProps }: AppProps) {
             <link rel="icon" href="/favicon.svg" />
             <meta
               property="og:image"
-              content="https://evm.pinsave.app/PinSaveCard.png"
+              content="https://evm.pinsave.app/CardBlack.png"
             />
             <meta property="og:url" content="https://evm.pinsave.app/" />
             <meta
