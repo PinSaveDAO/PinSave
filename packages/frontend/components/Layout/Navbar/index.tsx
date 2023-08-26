@@ -10,6 +10,7 @@ import {
   Transition,
 } from "@mantine/core";
 import { useBooleanToggle } from "@mantine/hooks";
+import { useMediaQuery } from "@mantine/hooks";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import Image from "next/image";
 import Link from "next/link";
@@ -48,12 +49,6 @@ const useStyles = createStyles((theme) => ({
 
   links: {
     [theme.fn.smallerThan("md")]: {
-      display: "none",
-    },
-  },
-
-  logo: {
-    [theme.fn.smallerThan("sm")]: {
       display: "none",
     },
   },
@@ -110,6 +105,8 @@ export function Navbar({ links }: NavbarProps) {
   const [opened, toggleOpened] = useBooleanToggle(false);
   const { classes, cx } = useStyles();
   const router = useRouter();
+  const largeScreen = useMediaQuery("(min-width: 38em)");
+
   const items = links.map((link) => (
     <Link key={link.label} href={link.link} passHref>
       <Text
@@ -127,11 +124,10 @@ export function Navbar({ links }: NavbarProps) {
       <Container className={classes.header}>
         <Link href="/">
           <Image
-            className={classes.logo}
-            src="/PinSaveL.png"
+            src={largeScreen ? "/PinSaveL.png" : "/Pin.png"}
             alt="Pin Save EVM"
-            width={140}
-            height={35}
+            width={largeScreen ? 140 : 30}
+            height={largeScreen ? 35 : 30}
             priority
           />
         </Link>
