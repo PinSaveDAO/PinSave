@@ -2347,10 +2347,10 @@
   resolved "https://registry.yarnpkg.com/@openzeppelin/contracts/-/contracts-4.8.3.tgz#cbef3146bfc570849405f59cba18235da95a252a"
   integrity sha512-bQHV8R9Me8IaJoJ2vPG4rXcL7seB7YVuskr4f+f5RyOStSZetwzkWtoqDMl5erkBJy0lDRUnIR2WIkPiC0GJlg==
 
-"@orbisclub/orbis-sdk@^0.4.40":
-  version "0.4.53"
-  resolved "https://registry.yarnpkg.com/@orbisclub/orbis-sdk/-/orbis-sdk-0.4.53.tgz#c4d27c2a5e31c863da233119cf68c844f312168d"
-  integrity sha512-v7vtNkczrGOQVrDh6FxeWGJ2W9OaPwSdwUO9MO0aujEKDNLW0u8rlgWJw1nxKJXPJuyTeJCBr5ya8yyLiExm9A==
+"@orbisclub/orbis-sdk@^0.4.83":
+  version "0.4.83"
+  resolved "https://registry.yarnpkg.com/@orbisclub/orbis-sdk/-/orbis-sdk-0.4.83.tgz#f4c7bf5fc24da57b99601f86cef68a1399bc010a"
+  integrity sha512-5+JQhPxmBSHxkfJpdZ+WtrOwVIW358IXDwW/GOomBurU8oEZn4g8OZ2Sh3g0O35YTSBYYR38fbbNtZWplZMunA==
   dependencies:
     "@ceramicnetwork/http-client" "^2.13.0-hotfix.0"
     "@ceramicnetwork/stream-tile" "^2.12.0-hotfix.0"
