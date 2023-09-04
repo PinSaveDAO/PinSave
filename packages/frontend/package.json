@@ -15,7 +15,7 @@
     "@mantine/hooks": "^4.2.12",
     "@mantine/next": "^6.0.11",
     "@mantine/notifications": "^4.2.12",
-    "@orbisclub/orbis-sdk": "^0.4.40",
+    "@orbisclub/orbis-sdk": "^0.4.87",
     "@rainbow-me/rainbowkit": "^0.12.12",
     "@tanstack/react-query": "^4.28.0",
     "@tanstack/react-query-devtools": "^4.29.7",
