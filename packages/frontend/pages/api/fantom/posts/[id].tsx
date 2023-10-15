@@ -1,4 +1,4 @@
-import { parseCidIpfsio, parseCid } from "@/services/parseCid";
+import { parseCidIpfsio, parseCidDweb } from "@/services/parseCid";
 import { Post } from "@/services/upload";
 import { getContractInfo } from "@/utils/contracts";
 import { ethers } from "ethers";
@@ -20,26 +20,36 @@ export default async function handler(
 
     const result = await contract.getPost(id);
     const owner = await contract.getPostOwner(id);
-    let resURL;
+    let resURL, resURL2;
     if (result) {
       if (result.charAt(0) === "i") {
         resURL = parseCidIpfsio(result);
+        resURL2 = parseCidDweb(result);
       }
       if (result.charAt(0) === "h") {
         resURL = result;
+        resURL2 = result;
       }
     }
-    const item: Post = await fetch(resURL).then((x) => x.json());
+
+    let item: Post;
+    try {
+      item = await fetch(resURL).then((x) => x.json());
+    } catch {
+      item = await fetch(resURL2).then((x) => x.json());
+    }
 
     let decoded_image;
 
     if (item.image) {
       if (item.image.charAt(0) === "i") {
-        decoded_image = "https://ipfs.io/ipfs/" + parseCid(item.image);
-
-        const ipfsImageResponse = await fetch(decoded_image);
-        if (ipfsImageResponse.status !== 200) {
-          decoded_image = "https://w3s.link/" + decoded_image;
+        console.log(12);
+        try {
+          decoded_image = parseCidIpfsio(item.image);
+          await fetch(decoded_image);
+        } catch {
+          decoded_image = parseCidDweb(item.image);
+          await fetch(decoded_image);
         }
       }
       if (item.image.charAt(0) === "h") {
