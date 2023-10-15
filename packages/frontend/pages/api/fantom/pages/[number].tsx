@@ -1,4 +1,4 @@
-import { parseCidIpfsio } from "@/services/parseCid";
+import { parseCidDweb, parseCidIpfsio } from "@/services/parseCid";
 import { getContractInfo } from "@/utils/contracts";
 import { ethers } from "ethers";
 import type { NextApiRequest, NextApiResponse } from "next";
@@ -35,20 +35,24 @@ export default async function handler(
 
     try {
       for (let i = lowerLimit; upperLimit >= i; i++) {
-        //console.log(i);
         result = await contract.getPost(i);
-        //console.log(result);
-        let resURL;
+        let resURL, resURL2;
         if (result) {
           if (result.charAt(0) === "i") {
             resURL = parseCidIpfsio(result);
+            resURL2 = parseCidDweb(result);
           }
           if (result.charAt(0) === "h") {
             resURL = result;
+            resURL2 = result;
           }
         }
-
-        const item = await fetch(resURL).then((x) => x.json());
+        let item;
+        try {
+          item = await fetch(resURL).then((x) => x.json());
+        } catch {
+          item = await fetch(resURL2).then((x) => x.json());
+        }
         items.push({ token_id: i, ...item });
       }
     } catch {
