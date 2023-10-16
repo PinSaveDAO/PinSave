@@ -1,5 +1,4 @@
 import { parseCidIpfsio, parseCidDweb } from "@/services/parseCid";
-import { Post } from "@/services/upload";
 import { getContractInfo } from "@/utils/contracts";
 import { ethers } from "ethers";
 import type { NextApiRequest, NextApiResponse } from "next";
@@ -21,18 +20,21 @@ export default async function handler(
     const result = await contract.getPost(id);
     const owner = await contract.getPostOwner(id);
     let resURL, resURL2;
+
     if (result) {
       if (result.charAt(0) === "i") {
         resURL = parseCidIpfsio(result);
         resURL2 = parseCidDweb(result);
       }
+
       if (result.charAt(0) === "h") {
         resURL = result;
         resURL2 = result;
       }
     }
 
-    let item: Post;
+    let item;
+
     try {
       item = await fetch(resURL).then((x) => x.json());
     } catch {
@@ -43,7 +45,6 @@ export default async function handler(
 
     if (item.image) {
       if (item.image.charAt(0) === "i") {
-        console.log(12);
         try {
           decoded_image = parseCidIpfsio(item.image);
           await fetch(decoded_image);

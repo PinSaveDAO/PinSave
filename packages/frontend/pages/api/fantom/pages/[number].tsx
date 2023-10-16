@@ -1,4 +1,4 @@
-import { parseCidDweb, parseCidIpfsio } from "@/services/parseCid";
+import { fetchURLs, parseImage } from "@/services/fetchCid";
 import { getContractInfo } from "@/utils/contracts";
 import { ethers } from "ethers";
 import type { NextApiRequest, NextApiResponse } from "next";
@@ -12,6 +12,7 @@ export default async function handler(
     const pageNumber = Number(number) + 1;
 
     const { address, abi } = getContractInfo(250);
+
     const provider = new ethers.providers.JsonRpcProvider(
       "https://rpc.ankr.com/fantom/"
     );
@@ -22,7 +23,7 @@ export default async function handler(
       await contract.totalSupply()
     ).toNumber();
 
-    let items = [];
+    var items = [];
     let result;
 
     var upperLimit = 6 * pageNumber;
@@ -36,23 +37,11 @@ export default async function handler(
     try {
       for (let i = lowerLimit; upperLimit >= i; i++) {
         result = await contract.getPost(i);
-        let resURL, resURL2;
-        if (result) {
-          if (result.charAt(0) === "i") {
-            resURL = parseCidIpfsio(result);
-            resURL2 = parseCidDweb(result);
-          }
-          if (result.charAt(0) === "h") {
-            resURL = result;
-            resURL2 = result;
-          }
-        }
-        let item;
-        try {
-          item = await fetch(resURL).then((x) => x.json());
-        } catch {
-          item = await fetch(resURL2).then((x) => x.json());
-        }
+
+        const [resURL, resURL2] = await parseImage(result);
+
+        const item = await fetchURLs(resURL, resURL2);
+
         items.push({ token_id: i, ...item });
       }
     } catch {
