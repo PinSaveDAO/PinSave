@@ -1,4 +1,4 @@
-import { fetchURLs, parseImage } from "@/services/fetchCid";
+import { fetchMetadata } from "@/services/fetchCid";
 import { getContractInfo } from "@/utils/contracts";
 import { ethers } from "ethers";
 import type { NextApiRequest, NextApiResponse } from "next";
@@ -38,9 +38,7 @@ export default async function handler(
       for (let i = lowerLimit; upperLimit >= i; i++) {
         result = await contract.getPost(i);
 
-        const [resURL, resURL2] = await parseImage(result);
-
-        const item = await fetchURLs(resURL, resURL2);
+        const item = await fetchMetadata(result);
 
         items.push({ token_id: i, ...item });
       }
