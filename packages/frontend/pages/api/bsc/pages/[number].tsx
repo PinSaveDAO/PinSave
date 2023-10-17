@@ -1,4 +1,5 @@
-import { parseCid } from "@/services/parseCid";
+import { fetchMetadata } from "@/services/fetchCid";
+
 import { getContractInfo } from "@/utils/contracts";
 import { ethers } from "ethers";
 import type { NextApiRequest, NextApiResponse } from "next";
@@ -35,22 +36,14 @@ export default async function handler(
       for (let i = lowerLimit; upperLimit >= i; i++) {
         result = await contract.getPost(i);
 
-        let resURL;
-        if (result) {
-          if (result.charAt(0) === "i") {
-            resURL = "https://ipfs.io/ipfs/" + parseCid(result);
-          }
-          if (result.charAt(0) === "h") {
-            resURL = result;
-          }
-        }
-
-        const item = await fetch(resURL).then((x) => x.json());
+        const item = await fetchMetadata(result);
 
         items.push({ token_id: i, ...item });
       }
     } catch {
-      res.status(200).json({ items: items, totalSupply: totalSupply });
+      res
+        .status(200)
+        .json({ items: items, totalSupply: totalSupply, error: "true" });
     }
 
     res.status(200).json({ items: items, totalSupply: totalSupply });

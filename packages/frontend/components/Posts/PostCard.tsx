@@ -1,3 +1,4 @@
+import { fetchImage } from "@/services/fetchCid";
 import { parseCid } from "@/services/parseCid";
 import type { Post } from "@/services/upload";
 import { Player } from "@livepeer/react";
@@ -18,9 +19,14 @@ const PostCard = (post: Post) => {
   }
 
   function loadPosts(chain: Chain) {
-    if ([5, 56, 250, 314, 5001, 7700, 80001].includes(chain?.id)) {
+    if ([5, 56, 250, 5001, 7700, 80001].includes(chain?.id)) {
       return chain.network;
     }
+
+    if (chain?.id === 314) {
+      return "filecoin";
+    }
+
     return "fantom";
   }
 

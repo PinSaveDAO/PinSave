@@ -10,6 +10,7 @@ export function parseCidDweb(link: string): string {
   const cid = parseCid(link);
 
   const lastIndex = cid.lastIndexOf("/");
+  if (lastIndex <= 7) return "https://" + cid + ".ipfs.dweb.link/";
   const firstPart = cid.substring(0, lastIndex);
   const lastPart = cid.substring(lastIndex + 1);
 

@@ -16,11 +16,14 @@ const Home: NextPage = () => {
       chain.id === 250 ||
       chain.id === 56 ||
       chain.id === 7700 ||
-      chain.id === 314 ||
       chain.id === 5001 ||
       chain.id === 5)
   ) {
     initialChain = chain.network as ChainName;
+  }
+
+  if (chain?.id && chain.id === 314) {
+    initialChain = "filecoin";
   }
 
   const {

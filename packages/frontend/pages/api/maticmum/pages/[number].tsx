@@ -34,12 +34,16 @@ export default async function handler(
       upperLimit = totalSupply;
     }
 
-    for (let i = lowerLimit; upperLimit >= i; i++) {
-      result = await contract.tokenURI(i);
+    try {
+      for (let i = lowerLimit; upperLimit >= i; i++) {
+        result = await contract.tokenURI(i);
 
-      const item = await fetchMetadata(result);
+        const item = await fetchMetadata(result);
 
-      items.push({ token_id: i, ...item });
+        items.push({ token_id: i, ...item });
+      }
+    } catch {
+      res.status(200).json({ items: items, totalSupply: totalSupply });
     }
 
     res.status(200).json({ items: items, totalSupply: totalSupply });

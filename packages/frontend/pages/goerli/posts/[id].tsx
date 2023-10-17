@@ -4,18 +4,18 @@ import { parseArweaveTxId, parseCid } from "@/services/parseCid";
 import { getCurrentChain } from "@/utils/chains";
 import { Player } from "@livepeer/react";
 import {
-	ActionIcon,
-	Paper,
-	SimpleGrid,
-	Image,
-	LoadingOverlay,
-	Button,
-	TextInput,
-	Text,
-	Group,
-	Title,
-	Box,
-	NumberInput,
+  ActionIcon,
+  Paper,
+  SimpleGrid,
+  Image,
+  LoadingOverlay,
+  Button,
+  TextInput,
+  Text,
+  Group,
+  Title,
+  Box,
+  NumberInput,
 } from "@mantine/core";
 import { Orbis } from "@orbisclub/orbis-sdk";
 import { useRouter } from "next/router";
@@ -25,177 +25,176 @@ import { ArrowLeft, Heart } from "tabler-icons-react";
 let orbis = new Orbis();
 
 const PostPage = () => {
-	const [reaction, setReaction] = useState<string>();
-	const [isEncrypted, setIsEncrypted] = useState(false);
+  const [reaction, setReaction] = useState<string>();
+  const [isEncrypted, setIsEncrypted] = useState(false);
 
-	const [newMessage, setNewMessage] = useState<string>();
-	const [disputeAmount, setDisputeAmount] = useState<number>();
-	const [messages, setMessages] = useState<any | undefined>();
+  const [newMessage, setNewMessage] = useState<string>();
+  const [disputeAmount, setDisputeAmount] = useState<number>();
+  const [messages, setMessages] = useState<any | undefined>();
 
-	const router = useRouter();
-	const currentChain = getCurrentChain(5);
-	const { data: post, isLoading } = usePost(
-		currentChain,
-		router.query.id as string
-	);
-	console.log(post?.image);
-	const idParsed = useMemo(
-		() =>
-			parseCid(post?.image as string) ??
-			parseArweaveTxId(post?.image as string),
-		[post?.image]
-	);
+  const router = useRouter();
+  const currentChain = getCurrentChain(5);
+  const { data: post, isLoading } = usePost(
+    currentChain,
+    router.query.id as string
+  );
+  const idParsed = useMemo(
+    () =>
+      parseCid(post?.image as string) ??
+      parseArweaveTxId(post?.image as string),
+    [post?.image]
+  );
 
-	function checkType(id: string | undefined) {
-		if (id && id.slice(-3) === "mp4") {
-			return true;
-		}
-		return false;
-	}
+  function checkType(id: string | undefined) {
+    if (id && id.slice(-3) === "mp4") {
+      return true;
+    }
+    return false;
+  }
 
-	const sendMessage = async function (context: string) {
-		if (isEncrypted)
-			await orbis.createPost(
-				{
-					body: newMessage,
-					context: context,
-					tags: [
-						{
-							slug: "goerli" + router.query.id,
-							title: "goerli" + router.query.id,
-						},
-					],
-				},
-				{
-					type: "custom",
-					accessControlConditions: [
-						{
-							contractAddress: "0x042E56d9729dD6215ad58EB726c6347948BB9518",
-							standardContractType: "ERC721",
-							chain: "goerli",
-							method: "balanceOf",
-							parameters: [":userAddress"],
-							returnValueTest: { comparator: ">=", value: "1" },
-						},
-					],
-				}
-			);
-		if (!isEncrypted)
-			await orbis.createPost({
-				body: newMessage,
-				context: context,
-				tags: [
-					{
-						slug: "goerli" + router.query.id,
-						title: "goerli" + router.query.id,
-					},
-				],
-			});
-	};
+  const sendMessage = async function (context: string) {
+    if (isEncrypted)
+      await orbis.createPost(
+        {
+          body: newMessage,
+          context: context,
+          tags: [
+            {
+              slug: "goerli" + router.query.id,
+              title: "goerli" + router.query.id,
+            },
+          ],
+        },
+        {
+          type: "custom",
+          accessControlConditions: [
+            {
+              contractAddress: "0x042E56d9729dD6215ad58EB726c6347948BB9518",
+              standardContractType: "ERC721",
+              chain: "goerli",
+              method: "balanceOf",
+              parameters: [":userAddress"],
+              returnValueTest: { comparator: ">=", value: "1" },
+            },
+          ],
+        }
+      );
+    if (!isEncrypted)
+      await orbis.createPost({
+        body: newMessage,
+        context: context,
+        tags: [
+          {
+            slug: "goerli" + router.query.id,
+            title: "goerli" + router.query.id,
+          },
+        ],
+      });
+  };
 
-	const sendReaction = async function (id: string, reaction: string) {
-		await orbis.react(id, reaction);
-		setReaction(id + reaction);
-	};
+  const sendReaction = async function (id: string, reaction: string) {
+    await orbis.react(id, reaction);
+    setReaction(id + reaction);
+  };
 
-	const getMessage = async function (content: any) {
-		if (content?.content?.body === "") {
-			let res = await orbis.decryptPost(content.content);
-			return res.result;
-		}
-		return content?.content?.body;
-	};
+  const getMessage = async function (content: any) {
+    if (content?.content?.body === "") {
+      let res = await orbis.decryptPost(content.content);
+      return res.result;
+    }
+    return content?.content?.body;
+  };
 
-	useEffect(() => {
-		async function loadData() {
-			let res = await orbis.isConnected();
+  useEffect(() => {
+    async function loadData() {
+      let res = await orbis.isConnected();
 
-			if (!router.isReady) return;
+      if (!router.isReady) return;
 
-			if (!res) {
-				res = await orbis.connect();
-			}
+      if (!res) {
+        res = await orbis.connect();
+      }
 
-			let result = await orbis.getPosts({
-				context:
-					"kjzl6cwe1jw147hcck185xfdlrxq9zv0y0hoa6shzskqfnio56lhf8190yaei7w",
-				tag: "goerli" + router.query.id,
-			});
+      let result = await orbis.getPosts({
+        context:
+          "kjzl6cwe1jw147hcck185xfdlrxq9zv0y0hoa6shzskqfnio56lhf8190yaei7w",
+        tag: "goerli" + router.query.id,
+      });
 
-			const messagesData = await Promise.all(
-				result.data.map(async (obj: object) => {
-					return {
-						...obj,
-						newData: await getMessage(obj),
-					};
-				})
-			);
+      const messagesData = await Promise.all(
+        result.data.map(async (obj: object) => {
+          return {
+            ...obj,
+            newData: await getMessage(obj),
+          };
+        })
+      );
 
-			setMessages(messagesData);
-		}
-		loadData();
-	}, [router.isReady, router.query.id, newMessage, reaction]);
+      setMessages(messagesData);
+    }
+    loadData();
+  }, [router.isReady, router.query.id, newMessage, reaction]);
 
-	return (
-		<div>
-			<LoadingOverlay visible={isLoading} />
-			{post && (
-				<>
-					<ActionIcon
-						onClick={() => router.back()}
-						mb="md"
-						color="teal"
-						size="xl"
-						radius="xl"
-						variant="filled"
-					>
-						<ArrowLeft />
-					</ActionIcon>
-					<SimpleGrid
-						breakpoints={[
-							{ minWidth: "md", cols: 2, spacing: "lg" },
-							{ maxWidth: "md", cols: 1, spacing: "md" },
-						]}
-					>
-						{checkType(post.image) === false ? (
-							<Image
-								height={550}
-								fit="contain"
-								src={post.image ?? "https://evm.pinsave.app/PinSaveCard.png"}
-								alt={post.name}
-							/>
-						) : (
-							<Player
-								title={idParsed}
-								src={post.image}
-								autoPlay
-								muted
-								autoUrlUpload={{
-									fallback: true,
-									ipfsGateway: "https://w3s.link",
-								}}
-							/>
-						)}
-						<Paper shadow="sm" p="md" withBorder>
-							<Title mb="1.4rem">{post.name}</Title>
-							<Paper
-								shadow="xs"
-								withBorder
-								px="sm"
-								sx={{ backgroundColor: "#82c7fc1d" }}
-							>
-								<Text my={2}>{post.description}</Text>
-							</Paper>
-							<p style={{ fontSize: "small", color: "#0000008d" }}>
-								Owned by:{" "}
-								<a
-									style={{ color: "#198b6eb9" }}
-									href={`https://evm.pinsave.app/profile/${post.owner}`}
-								>
-									{post.owner}
-								</a>
-							</p>
-							{/* {messages &&
+  return (
+    <div>
+      <LoadingOverlay visible={isLoading} />
+      {post && (
+        <>
+          <ActionIcon
+            onClick={() => router.back()}
+            mb="md"
+            color="teal"
+            size="xl"
+            radius="xl"
+            variant="filled"
+          >
+            <ArrowLeft />
+          </ActionIcon>
+          <SimpleGrid
+            breakpoints={[
+              { minWidth: "md", cols: 2, spacing: "lg" },
+              { maxWidth: "md", cols: 1, spacing: "md" },
+            ]}
+          >
+            {checkType(post.image) === false ? (
+              <Image
+                height={550}
+                fit="contain"
+                src={post.image ?? "https://evm.pinsave.app/PinSaveCard.png"}
+                alt={post.name}
+              />
+            ) : (
+              <Player
+                title={idParsed}
+                src={post.image}
+                autoPlay
+                muted
+                autoUrlUpload={{
+                  fallback: true,
+                  ipfsGateway: "https://w3s.link",
+                }}
+              />
+            )}
+            <Paper shadow="sm" p="md" withBorder>
+              <Title mb="1.4rem">{post.name}</Title>
+              <Paper
+                shadow="xs"
+                withBorder
+                px="sm"
+                sx={{ backgroundColor: "#82c7fc1d" }}
+              >
+                <Text my={2}>{post.description}</Text>
+              </Paper>
+              <p style={{ fontSize: "small", color: "#0000008d" }}>
+                Owned by:{" "}
+                <a
+                  style={{ color: "#198b6eb9" }}
+                  href={`https://evm.pinsave.app/profile/${post.owner}`}
+                >
+                  {post.owner}
+                </a>
+              </p>
+              {/* {messages &&
 								messages.map((message: any, i: number) => (
 									<Paper
 										key={i}
@@ -292,44 +291,44 @@ const PostPage = () => {
 							>
 								Send Message
 							</Button> */}
-							{
-								///TODO impl disputes logic
-							}
-							<Box my="lg">
-								<Title order={4}>Create new dispute</Title>
-								<TextInput
-									my="sm"
-									label="Dispute message"
-									onChange={(e) => setNewMessage(e.target.value)}
-									value={newMessage}
-									placeholder="Enter your message"
-								/>
-								<Text size="sm" mb="2px">
-									Dispute amount
-								</Text>
-								<Group>
-									<NumberInput
-										icon={"Ξ"}
-										placeholder="0.01"
-										onChange={(x) => setDisputeAmount(x)}
-										value={disputeAmount}
-										sx={{ flexGrow: 1 }}
-									/>
-									<Button my="auto">Submit dispute</Button>
-								</Group>
-							</Box>
-							<Box my="lg">
-								<Title order={4}>Open disputes</Title>
-								<DisputeInfo />
-								<DisputeInfo />
-								<DisputeInfo />
-							</Box>
-						</Paper>
-					</SimpleGrid>
-				</>
-			)}
-		</div>
-	);
+              {
+                ///TODO impl disputes logic
+              }
+              <Box my="lg">
+                <Title order={4}>Create new dispute</Title>
+                <TextInput
+                  my="sm"
+                  label="Dispute message"
+                  onChange={(e) => setNewMessage(e.target.value)}
+                  value={newMessage}
+                  placeholder="Enter your message"
+                />
+                <Text size="sm" mb="2px">
+                  Dispute amount
+                </Text>
+                <Group>
+                  <NumberInput
+                    icon={"Ξ"}
+                    placeholder="0.01"
+                    onChange={(x) => setDisputeAmount(x)}
+                    value={disputeAmount}
+                    sx={{ flexGrow: 1 }}
+                  />
+                  <Button my="auto">Submit dispute</Button>
+                </Group>
+              </Box>
+              <Box my="lg">
+                <Title order={4}>Open disputes</Title>
+                <DisputeInfo />
+                <DisputeInfo />
+                <DisputeInfo />
+              </Box>
+            </Paper>
+          </SimpleGrid>
+        </>
+      )}
+    </div>
+  );
 };
 
 export default PostPage;
