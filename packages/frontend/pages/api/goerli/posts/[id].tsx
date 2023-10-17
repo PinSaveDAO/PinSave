@@ -1,6 +1,6 @@
-import { parseCid } from "@/services/parseCid";
-import { Post } from "@/services/upload";
+import { fetchImage, fetchMetadata } from "@/services/fetchCid";
 import { getContractInfo } from "@/utils/contracts";
+
 import { ethers } from "ethers";
 import type { NextApiRequest, NextApiResponse } from "next";
 
@@ -21,37 +21,9 @@ export default async function handler(
     const result = await contract.getPost(id);
     const owner = await contract.getPostOwner(id);
 
-    let resURL;
-    if (result) {
-      if (result.charAt(0) === "i") {
-        resURL = "https://ipfs.io/ipfs/" + parseCid(result);
-      }
-      if (result.charAt(0) === "h") {
-        resURL = result;
-      }
-    }
+    const item = await fetchMetadata(result);
 
-    const item: Post = await fetch(resURL).then((x) => x.json());
-
-    let decoded_image;
-
-    if (item.image) {
-      if (item.image.charAt(0) === "i") {
-        let ipfsCid = parseCid(item.image);
-        decoded_image = "https://ipfs.io/ipfs/" + ipfsCid;
-        const ipfsImageResponse = await fetch(decoded_image);
-        if (ipfsImageResponse.status !== 200) {
-          decoded_image = "https://w3s.link/" + ipfsCid;
-        }
-      }
-      if (item.image.charAt(0) === "h") {
-        decoded_image = item.image;
-      }
-    }
-
-    if (!decoded_image) {
-      decoded_image = "https://evm.pinsave.app/PinSaveCard.png";
-    }
+    const decoded_image = await fetchImage(item.image);
 
     const output = {
       ...item,

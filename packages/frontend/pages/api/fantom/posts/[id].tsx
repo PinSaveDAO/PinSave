@@ -1,5 +1,4 @@
-import { parseCidIpfsio, parseCidDweb } from "@/services/parseCid";
-import { Post } from "@/services/upload";
+import { fetchImage, fetchMetadata } from "@/services/fetchCid";
 import { getContractInfo } from "@/utils/contracts";
 import { ethers } from "ethers";
 import type { NextApiRequest, NextApiResponse } from "next";
@@ -20,46 +19,10 @@ export default async function handler(
 
     const result = await contract.getPost(id);
     const owner = await contract.getPostOwner(id);
-    let resURL, resURL2;
-    if (result) {
-      if (result.charAt(0) === "i") {
-        resURL = parseCidIpfsio(result);
-        resURL2 = parseCidDweb(result);
-      }
-      if (result.charAt(0) === "h") {
-        resURL = result;
-        resURL2 = result;
-      }
-    }
 
-    let item: Post;
-    try {
-      item = await fetch(resURL).then((x) => x.json());
-    } catch {
-      item = await fetch(resURL2).then((x) => x.json());
-    }
+    const item = await fetchMetadata(result);
 
-    let decoded_image;
-
-    if (item.image) {
-      if (item.image.charAt(0) === "i") {
-        console.log(12);
-        try {
-          decoded_image = parseCidIpfsio(item.image);
-          await fetch(decoded_image);
-        } catch {
-          decoded_image = parseCidDweb(item.image);
-          await fetch(decoded_image);
-        }
-      }
-      if (item.image.charAt(0) === "h") {
-        decoded_image = item.image;
-      }
-    }
-
-    if (!decoded_image) {
-      decoded_image = "https://evm.pinsave.app/PinSaveCard.png";
-    }
+    const decoded_image = await fetchImage(item.image);
 
     const output = {
       ...item,
