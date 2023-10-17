@@ -5,7 +5,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
   try {
     const { number } = req.query;
@@ -13,7 +13,7 @@ export default async function handler(
 
     const { address, abi } = getContractInfo(5);
     const provider = new JsonRpcProvider(
-      "https://goerli.blockpi.network/v1/rpc/public"
+      "https://goerli.blockpi.network/v1/rpc/public",
     );
 
     const contract = new Contract(address, abi, provider);

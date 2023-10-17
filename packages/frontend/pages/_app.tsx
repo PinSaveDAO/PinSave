@@ -66,7 +66,7 @@ const { chains, provider } = configureChains(
         return { http: chain.rpcUrls.default.http[0] };
       },
     }),
-  ]
+  ],
 );
 
 const uauthClient = new UAuth({

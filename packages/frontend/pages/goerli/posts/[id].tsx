@@ -36,13 +36,13 @@ const PostPage = () => {
   const currentChain = getCurrentChain(5);
   const { data: post, isLoading } = usePost(
     currentChain,
-    router.query.id as string
+    router.query.id as string,
   );
   const idParsed = useMemo(
     () =>
       parseCid(post?.image as string) ??
       parseArweaveTxId(post?.image as string),
-    [post?.image]
+    [post?.image],
   );
 
   function checkType(id: string | undefined) {
@@ -77,7 +77,7 @@ const PostPage = () => {
               returnValueTest: { comparator: ">=", value: "1" },
             },
           ],
-        }
+        },
       );
     if (!isEncrypted)
       await orbis.createPost({
@@ -127,7 +127,7 @@ const PostPage = () => {
             ...obj,
             newData: await getMessage(obj),
           };
-        })
+        }),
       );
 
       setMessages(messagesData);

@@ -13,7 +13,7 @@ export default async function handler(
     const { address, abi } = getContractInfo(5);
 
     const provider = new JsonRpcProvider(
-      "https://goerli.blockpi.network/v1/rpc/public	"
+      "https://goerli.blockpi.network/v1/rpc/public"
     );
 
     const contract = new Contract(address, abi, provider);

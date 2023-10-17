@@ -68,7 +68,7 @@ export async function UploadPost(incomingData: UploadingPost) {
 
         const rawResponse = await fetch(
           "https://api.nftport.xyz/v0/files",
-          options
+          options,
         );
         const content = await rawResponse.json();
 
@@ -91,7 +91,7 @@ export async function UploadPost(incomingData: UploadingPost) {
         };
         const rawMetadataResponse = await fetch(
           "https://api.nftport.xyz/v0/metadata",
-          optionsPost
+          optionsPost,
         );
         const metadata = await rawMetadataResponse.json();
 
@@ -113,7 +113,7 @@ export async function UploadPost(incomingData: UploadingPost) {
               Authorization: `Bearer ${process.env.NEXT_PUBLIC_ESTUARY}`,
             },
             body: formData,
-          }
+          },
         );
 
         const content = await rawResponse.json();
@@ -131,7 +131,7 @@ export async function UploadPost(incomingData: UploadingPost) {
           ],
           {
             type: "application/json",
-          }
+          },
         );
         const files = [new File([blob], "metadata.json")];
 
@@ -147,7 +147,7 @@ export async function UploadPost(incomingData: UploadingPost) {
 
         const rawMetadataResponse = await fetch(
           "https://upload.estuary.tech/content/add",
-          optionsPost
+          optionsPost,
         );
         const metadata = await rawMetadataResponse.json();
 
@@ -166,7 +166,7 @@ export async function UploadPost(incomingData: UploadingPost) {
         const token = await contract.createPost(
           incomingData.receiverAddress,
           metadata_url[0],
-          Id
+          Id,
         );
         token.wait();
       } catch (e) {
@@ -191,7 +191,7 @@ export async function UploadPost(incomingData: UploadingPost) {
       await contract.createBatchPosts(
         incomingData.receiverAddress,
         metadata_url,
-        Ids
+        Ids,
       );
     }
 

@@ -17,12 +17,12 @@ export const usePosts = (chain: ChainName) => {
           return pages.length;
         }
       },
-    }
+    },
   );
 };
 
 export const usePost = (chain: ChainName, id: string) => {
   return useQuery<IndividualPost>(postKeys.single(chain, id), () =>
-    fetchPost(chain, id)
+    fetchPost(chain, id),
   );
 };

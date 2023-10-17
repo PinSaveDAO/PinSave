@@ -29,13 +29,13 @@ export async function UpdateProfile(incomingData: SyncingProfile) {
     const erc725Contract = new ethers.Contract(
       incomingData.address,
       ERC725.abi,
-      incomingData.signer
+      incomingData.signer,
     );
 
     //keep substr
     const hashFunction = keccak256(toUtf8Bytes("keccak256(utf8)")).substr(
       0,
-      10
+      10,
     );
 
     const json = JSON.stringify({
@@ -67,7 +67,7 @@ export async function UpdateProfile(incomingData: SyncingProfile) {
 
     await erc725Contract["setData(bytes32,bytes)"](
       "0x5ef83ad9559033e6e941db7d7c495acdce616347d28e90c7ce47cbfcfcad3bc5",
-      JSONURL
+      JSONURL,
     );
 
     updateNotification({
@@ -91,7 +91,7 @@ export async function CreateProfile(incomingData: Wallet) {
     const factory = new ContractFactory(
       ERC725.abi,
       ERC725.bytecode,
-      incomingData.signer
+      incomingData.signer,
     );
 
     const contract = await factory.deploy(incomingData.address);
