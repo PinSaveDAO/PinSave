@@ -1,8 +1,6 @@
 import "@/styles/globals.css";
 import "@rainbow-me/rainbowkit/styles.css";
 import LayoutApp from "@/components/Layout";
-import { MainContext } from "@/utils/context";
-import { WebBundlr } from "@bundlr-network/client";
 import {
   LivepeerConfig,
   createReactClient,
@@ -16,16 +14,11 @@ import {
   QueryClient,
   QueryClientProvider,
 } from "@tanstack/react-query";
-import { default as UAuth } from "@uauth/js";
-import { UAuthWagmiConnector } from "@uauth/wagmi";
-import { MetaMaskConnector } from "@wagmi/core/connectors/metaMask";
-import { WalletConnectConnector } from "@wagmi/core/connectors/walletConnect";
-import { providers, utils } from "ethers";
 import type { NextComponentType } from "next";
 import type { AppProps as NextAppProps } from "next/app";
 import NextHead from "next/head";
-import { useState, useMemo, useRef } from "react";
-import { configureChains, createClient, WagmiConfig } from "wagmi";
+import { useState, useMemo } from "react";
+import { configureChains, createConfig, WagmiConfig } from "wagmi";
 import {
   Chain,
   polygonMumbai,
@@ -50,7 +43,7 @@ export interface MyWalletOptions {
   chains: Chain[];
 }
 
-const { chains, provider } = configureChains(
+const { chains, publicClient } = configureChains(
   [
     ...(process.env.NEXT_PUBLIC_DEV === "true" ? [hardhat] : []),
     polygonMumbai,
@@ -69,15 +62,8 @@ const { chains, provider } = configureChains(
         return { http: chain.rpcUrls.default.http[0] };
       },
     }),
-  ]
+  ],
 );
-
-const uauthClient = new UAuth({
-  clientID: process.env.NEXT_PUBLIC_UAUTH_CLIENT_ID as string,
-  redirectUri: "https://evm.pinsave.app",
-  // Scope must include openid and wallet
-  scope: "openid wallet",
-});
 
 const { connectors } = getDefaultWallets({
   appName: "PinSave",
@@ -85,39 +71,7 @@ const { connectors } = getDefaultWallets({
   chains,
 });
 
-const walletConnectConnector = new WalletConnectConnector({
-  options: {
-    projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_ID as string, // Get projectID at https://cloud.walletconnect.com
-  },
-});
-
-const metaMaskConnector = new MetaMaskConnector();
-
-const uauthConnector = new UAuthWagmiConnector({
-  chains,
-  options: {
-    uauth: uauthClient,
-    metaMaskConnector,
-    walletConnectConnector,
-  },
-});
-
-const wagmiClient = createClient({
-  autoConnect: true,
-  connectors: [
-    uauthConnector as any,
-    metaMaskConnector,
-    walletConnectConnector,
-    ...connectors(),
-  ],
-  provider,
-});
-
 function MyApp({ Component, pageProps }: AppProps) {
-  const [bundlrInstance, setBundlrInstance] = useState<WebBundlr>();
-  const [balance, setBalance] = useState<string>();
-  const bundlrRef = useRef<any>();
-
   const [queryClient] = useState(() => new QueryClient());
   const livepeerClient = useMemo(() => {
     return createReactClient({
@@ -127,38 +81,11 @@ function MyApp({ Component, pageProps }: AppProps) {
     });
   }, []);
 
-  async function initialiseBundlr() {
-    if (window.ethereum) {
-      const provider = new providers.Web3Provider(window.ethereum as any);
-      await provider._ready();
-
-      /* const bundlr = new WebBundlr(
-              "https://node1.bundlr.network",
-              "matic",
-              provider
-            ); */
-      const bundlr = new WebBundlr(
-        "https://devnet.bundlr.network",
-        "matic",
-        provider,
-        {
-          providerUrl: "https://rpc-mumbai.matic.today",
-        }
-      );
-
-      await bundlr.ready();
-
-      setBundlrInstance(bundlr);
-      bundlrRef.current = bundlr;
-      fetchBalance();
-    }
-  }
-
-  async function fetchBalance() {
-    const bal = await bundlrRef.current.getLoadedBalance();
-    console.log("bal: ", utils.formatEther(bal.toString()));
-    setBalance(utils.formatEther(bal.toString()));
-  }
+  const wagmiConfig = createConfig({
+    autoConnect: true,
+    connectors,
+    publicClient,
+  });
 
   return (
     <MantineProvider
@@ -169,7 +96,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     >
       <QueryClientProvider client={queryClient} contextSharing={true}>
         <Hydrate state={pageProps.dehydratedState} />
-        <WagmiConfig client={wagmiClient}>
+        <WagmiConfig config={wagmiConfig}>
           <NextHead>
             <title>Pin Save - decentralized Pinterest</title>
             <meta
@@ -194,18 +121,9 @@ function MyApp({ Component, pageProps }: AppProps) {
           <NotificationsProvider>
             <RainbowKitProvider chains={chains}>
               <LivepeerConfig client={livepeerClient}>
-                <MainContext.Provider
-                  value={{
-                    initialiseBundlr,
-                    bundlrInstance,
-                    balance,
-                    fetchBalance,
-                  }}
-                >
-                  <LayoutApp>
-                    <Component {...pageProps} />
-                  </LayoutApp>
-                </MainContext.Provider>
+                <LayoutApp>
+                  <Component {...pageProps} />
+                </LayoutApp>
               </LivepeerConfig>
             </RainbowKitProvider>
           </NotificationsProvider>

@@ -1,27 +1,22 @@
-import { fetchMetadata } from "@/services/fetchCid";
+import { fetchDecodedPost } from "@/services/fetchCid";
 import { getContractInfo } from "@/utils/contracts";
-import { ethers } from "ethers";
+import { AlchemyProvider, Contract } from "ethers";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
   try {
     const { number } = req.query;
     const pageNumber = Number(number) + 1;
 
     const { address, abi } = getContractInfo(80001);
-    let provider = new ethers.providers.AlchemyProvider(
-      "maticmum",
-      process.env.NEXT_ALCHEMY_ID
-    );
+    let provider = new AlchemyProvider("maticmum", process.env.NEXT_ALCHEMY_ID);
 
-    const contract = new ethers.Contract(address, abi, provider);
+    const contract = new Contract(address, abi, provider);
 
-    const totalSupply = ethers.BigNumber.from(
-      await contract.totalSupply()
-    ).toNumber();
+    const totalSupply = Number(await contract.totalSupply());
 
     let items = [];
     let result;
@@ -34,12 +29,16 @@ export default async function handler(
       upperLimit = totalSupply;
     }
 
-    for (let i = lowerLimit; upperLimit >= i; i++) {
-      result = await contract.tokenURI(i);
+    try {
+      for (let i = lowerLimit; upperLimit >= i; i++) {
+        result = await contract.tokenURI(i);
 
-      const item = await fetchMetadata(result);
+        const item = await fetchDecodedPost(result);
 
-      items.push({ token_id: i, ...item });
+        items.push({ token_id: i, ...item });
+      }
+    } catch {
+      res.status(200).json({ items: items, totalSupply: totalSupply });
     }
 
     res.status(200).json({ items: items, totalSupply: totalSupply });

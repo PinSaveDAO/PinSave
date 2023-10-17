@@ -1,37 +1,28 @@
-import { fetchImage, fetchMetadata } from "@/services/fetchCid";
+import { fetchDecodedPost } from "@/services/fetchCid";
 import { getContractInfo } from "@/utils/contracts";
 
-import { ethers } from "ethers";
+import { JsonRpcProvider, Contract } from "ethers";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
   try {
     const { id } = req.query;
     const { address, abi } = getContractInfo(5);
 
-    const provider = new ethers.providers.JsonRpcProvider(
-      "https://goerli.blockpi.network/v1/rpc/public	"
+    const provider = new JsonRpcProvider(
+      "https://goerli.blockpi.network/v1/rpc/public",
     );
 
-    const contract = new ethers.Contract(address, abi, provider);
+    const contract = new Contract(address, abi, provider);
 
     const result = await contract.getPost(id);
     const owner = await contract.getPostOwner(id);
 
-    const item = await fetchMetadata(result);
-
-    const decoded_image = await fetchImage(item.image);
-
-    const output = {
-      ...item,
-      owner: owner,
-      image: decoded_image,
-    };
-
-    res.status(200).json(output);
+    const output = await fetchDecodedPost(result);
+    res.status(200).json({ ...output, owner: owner });
   } catch (err) {
     res.status(500).send({ error: "failed to fetch data" + err });
   }

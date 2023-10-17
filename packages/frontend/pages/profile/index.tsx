@@ -1,5 +1,5 @@
 import { dropzoneChildren } from "@/components/UploadForm";
-import { UpdateProfile, CreateProfile } from "@/services/syncprofile";
+import { UpdateProfile } from "@/services/syncprofile";
 import {
   BackgroundImage,
   Box,
@@ -20,13 +20,13 @@ import { showNotification, updateNotification } from "@mantine/notifications";
 import { Orbis } from "@orbisclub/orbis-sdk";
 import { NFTStorage } from "nft.storage";
 import React, { useState, useEffect } from "react";
-import { useSigner, useAccount } from "wagmi";
+import { useWalletClient, useAccount } from "wagmi";
 
 let orbis = new Orbis();
 
 const Upload = () => {
   const { address } = useAccount();
-  const { data: signer } = useSigner();
+  const { data: walletClient } = useWalletClient();
 
   const [cover, setCover] = useState<File | undefined>();
   const [image, setImage] = useState<File | undefined>();
@@ -34,7 +34,7 @@ const Upload = () => {
   const [user, setUser] = useState<IOrbisProfile>();
   const [username, setUsername] = useState<string>();
 
-  const [universalProfile, setUniversalProfile] = useState<string>();
+  const [universalProfile, setUniversalProfile] = useState<`0x${string}`>();
 
   useEffect(() => {
     async function loadData() {
@@ -108,9 +108,8 @@ const Upload = () => {
   }
 
   async function syncProfile() {
-    if (signer && universalProfile) {
+    if (walletClient && universalProfile) {
       await UpdateProfile({
-        signer: signer,
         address: universalProfile,
         name: user?.details.profile?.username,
         description: user?.details.profile?.description,
@@ -120,15 +119,15 @@ const Upload = () => {
     }
   }
 
-  async function createProfile() {
-    if (signer && address) {
-      let deployedERC725 = await CreateProfile({
-        signer: signer,
+  /*   async function createProfile() {
+    if (walletClient && address) {
+      const deployedERC725 = await CreateProfile({
+        signer: walletClient,
         address: address,
       });
       setUniversalProfile(deployedERC725);
     }
-  }
+  } */
 
   async function logout() {
     setUser(undefined);
@@ -235,7 +234,7 @@ const Upload = () => {
               label="Change Username"
               placeholder="Username"
               value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              onChange={(e) => setUsername(e.target.value as `0x${string}`)}
               mx="auto"
               style={{
                 width: 300,
@@ -350,7 +349,9 @@ const Upload = () => {
               label="Universal Profile"
               placeholder="address"
               value={universalProfile}
-              onChange={(e) => setUniversalProfile(e.target.value)}
+              onChange={(e) =>
+                setUniversalProfile(e.target.value as `0x${string}`)
+              }
               mx="auto"
               style={{
                 width: 300,
@@ -371,6 +372,7 @@ const Upload = () => {
               >
                 Sync
               </Button>
+              {/*
               <Button
                 my={12}
                 mt={20}
@@ -380,6 +382,7 @@ const Upload = () => {
               >
                 Create Profile
               </Button>
+            */}
             </Center>
           </Paper>
         </>

@@ -1,56 +1,47 @@
-import { parseCid } from "@/services/parseCid";
+import { fetchDecodedPost } from "@/services/fetchCid";
+
 import { getContractInfo } from "@/utils/contracts";
-import { ethers } from "ethers";
+import { JsonRpcProvider, Contract } from "ethers";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
   try {
     const { number } = req.query;
     const pageNumber = Number(number) + 1;
 
-    const { address, abi } = getContractInfo(56);
-    const provider = new ethers.providers.JsonRpcProvider("https://bscrpc.com");
-
-    const contract = new ethers.Contract(address, abi, provider);
-
-    const totalSupply = ethers.BigNumber.from(
-      await contract.totalSupply()
-    ).toNumber();
-
-    let items = [];
-    let result;
-
     var upperLimit = 6 * pageNumber;
 
     const lowerLimit = upperLimit - 6 + 1;
+
+    const { address, abi } = getContractInfo(56);
+    const provider = new JsonRpcProvider("https://bscrpc.com");
+
+    const contract = new Contract(address, abi, provider);
+
+    const totalSupply = Number(await contract.totalSupply());
 
     if (totalSupply < upperLimit) {
       upperLimit = totalSupply;
     }
 
+    let result;
+    let items = [];
+
     try {
       for (let i = lowerLimit; upperLimit >= i; i++) {
         result = await contract.getPost(i);
 
-        let resURL;
-        if (result) {
-          if (result.charAt(0) === "i") {
-            resURL = "https://ipfs.io/ipfs/" + parseCid(result);
-          }
-          if (result.charAt(0) === "h") {
-            resURL = result;
-          }
-        }
-
-        const item = await fetch(resURL).then((x) => x.json());
+        const item = await fetchDecodedPost(result);
 
         items.push({ token_id: i, ...item });
       }
     } catch {
-      res.status(200).json({ items: items, totalSupply: totalSupply });
+      res
+        .status(200)
+        .json({ items: items, totalSupply: totalSupply, error: "true" });
     }
 
     res.status(200).json({ items: items, totalSupply: totalSupply });

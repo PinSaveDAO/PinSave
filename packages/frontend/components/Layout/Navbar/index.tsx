@@ -1,4 +1,4 @@
-import { UauthButton } from "@/components/auth/UAuthButton";
+// import { UauthButton } from "@/components/auth/UAuthButton";
 import {
   createStyles,
   Text,
@@ -146,7 +146,6 @@ export function Navbar({ links }: NavbarProps) {
                   largeScreen: "full",
                 }}
               />
-              <UauthButton />
               <Burger
                 opened={opened}
                 onClick={() => toggleOpened()}

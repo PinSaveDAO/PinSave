@@ -1,9 +1,15 @@
 import { getContractInfo } from "@/utils/contracts";
-import { dataStream } from "@/utils/stream";
-import { WebBundlr } from "@bundlr-network/client";
+
 import { updateNotification } from "@mantine/notifications";
-import { ethers, Signer } from "ethers";
+import {
+  randomBytes,
+  Contract,
+  zeroPadValue,
+  hexlify,
+  toUtf8Bytes,
+} from "ethers";
 import { NFTStorage } from "nft.storage";
+import { useContractWrite, useWalletClient } from "wagmi";
 
 export type PostData = {
   name: string;
@@ -17,19 +23,17 @@ export type Post = PostData & {
 };
 
 export type UploadingPost = {
-  signer: Signer;
   receiverAddress: string;
   data: PostData[];
   chain?: number;
   provider?: string;
-  bundlrInstance?: WebBundlr;
 };
 
 export async function UploadPost(incomingData: UploadingPost) {
   try {
     let metadata_url = [];
+
     const { address, abi } = getContractInfo(incomingData.chain);
-    const contract = new ethers.Contract(address, abi, incomingData.signer);
 
     if (incomingData.provider === "NFT.Storage") {
       const client = new NFTStorage({
@@ -62,7 +66,7 @@ export async function UploadPost(incomingData: UploadingPost) {
 
         const rawResponse = await fetch(
           "https://api.nftport.xyz/v0/files",
-          options
+          options,
         );
         const content = await rawResponse.json();
 
@@ -85,7 +89,7 @@ export async function UploadPost(incomingData: UploadingPost) {
         };
         const rawMetadataResponse = await fetch(
           "https://api.nftport.xyz/v0/metadata",
-          optionsPost
+          optionsPost,
         );
         const metadata = await rawMetadataResponse.json();
 
@@ -107,7 +111,7 @@ export async function UploadPost(incomingData: UploadingPost) {
               Authorization: `Bearer ${process.env.NEXT_PUBLIC_ESTUARY}`,
             },
             body: formData,
-          }
+          },
         );
 
         const content = await rawResponse.json();
@@ -125,7 +129,7 @@ export async function UploadPost(incomingData: UploadingPost) {
           ],
           {
             type: "application/json",
-          }
+          },
         );
         const files = [new File([blob], "metadata.json")];
 
@@ -141,7 +145,7 @@ export async function UploadPost(incomingData: UploadingPost) {
 
         const rawMetadataResponse = await fetch(
           "https://upload.estuary.tech/content/add",
-          optionsPost
+          optionsPost,
         );
         const metadata = await rawMetadataResponse.json();
 
@@ -149,64 +153,26 @@ export async function UploadPost(incomingData: UploadingPost) {
       }
     }
 
-    if (incomingData.provider === "Arweave" && incomingData.bundlrInstance) {
-      for (let i = 0; incomingData.data.length - 1 >= i; i++) {
-        let uploader = incomingData.bundlrInstance.uploader.chunkedUploader;
-        let uploader1 = incomingData.bundlrInstance.uploader.chunkedUploader;
-        const transactionOptions = {
-          tags: [
-            { name: "Content-Type", value: incomingData.data[i].image.type },
-          ],
-        };
-
-        const dataBuffer = dataStream(incomingData.data[i].image);
-        let response = await uploader.uploadData(
-          dataBuffer,
-          transactionOptions
-        );
-
-        const transactionOptionsMetadata = {
-          tags: [{ name: "Content-Type", value: "application/json" }],
-        };
-
-        const obj = {
-          name: incomingData.data[i].name,
-          description: incomingData.data[i].description,
-          image: "https://arweave.net/" + response.data.id,
-        };
-
-        const blob = new Blob([JSON.stringify(obj)], {
-          type: "application/json",
-        });
-        const files = [new File([blob], "metadata.json")];
-
-        const dataBuffer0 = dataStream(files[0]);
-        let response0 = await uploader1.uploadData(
-          dataBuffer0,
-          transactionOptionsMetadata
-        );
-
-        metadata_url.push("https://arweave.net/" + response0.data.id);
-      }
-    }
-
     if (incomingData.chain === 80001) {
-      await contract.mintPost(incomingData.receiverAddress, metadata_url[0]);
+      const { write } = useContractWrite({
+        address: address,
+        abi: abi,
+        functionName: "mintPost",
+      });
+
+      write({ args: [incomingData.receiverAddress, metadata_url[0]] });
     }
 
     if (incomingData.chain === 250 || incomingData.chain === 56) {
       try {
-        const id = ethers.BigNumber.from(ethers.utils.randomBytes(32));
-        const Id = ethers.utils.hexZeroPad(
-          ethers.BigNumber.from(id).toHexString(),
-          32
-        );
-        const token = await contract.createPost(
-          incomingData.receiverAddress,
-          metadata_url[0],
-          Id
-        );
-        token.wait();
+        const id = String(randomBytes(32));
+        const Id = zeroPadValue(hexlify(toUtf8Bytes(id)), 32);
+        const { write } = useContractWrite({
+          address: address,
+          abi: abi,
+          functionName: "createPost",
+        });
+        write({ args: [incomingData.receiverAddress, metadata_url[0], Id] });
       } catch (e) {
         console.log(e);
       }
@@ -221,19 +187,17 @@ export async function UploadPost(incomingData: UploadingPost) {
       let Ids: string[] = [];
 
       for (let i = 0; metadata_url.length - 1 >= i; i++) {
-        const id = ethers.BigNumber.from(ethers.utils.randomBytes(32));
-        const Id = ethers.utils.hexZeroPad(
-          ethers.BigNumber.from(id).toHexString(),
-          32
-        );
+        const id = String(randomBytes(32));
+        const Id = zeroPadValue(hexlify(toUtf8Bytes(id)), 32);
         Ids.push(Id);
       }
 
-      await contract.createBatchPosts(
-        incomingData.receiverAddress,
-        metadata_url,
-        Ids
-      );
+      const { write } = useContractWrite({
+        address: address,
+        abi: abi,
+        functionName: "createBatchPosts",
+      });
+      write({ args: [incomingData.receiverAddress, metadata_url, Ids] });
     }
 
     updateNotification({

@@ -1,4 +1,4 @@
-import { parseCidDweb, parseCidIpfsio } from "@/services/parseCid";
+import { parseCidDweb, parseCidNFTStorage } from "@/services/parseCid";
 
 export async function fetchJson(resURL: string, resURL2: string) {
   let item;
@@ -13,10 +13,12 @@ export async function fetchJson(resURL: string, resURL2: string) {
 export async function fetchImageUrls(resURL: string, resURL2: string) {
   let image = "https://evm.pinsave.app/PinSaveCard.png";
   try {
-    await fetch(resURL);
+    const response = await fetch(resURL);
+    //console.log(response.status);
     image = resURL;
   } catch {
-    await fetch(resURL2);
+    const response = await fetch(resURL2);
+    //console.log(response.status);
     image = resURL2;
   }
   return image;
@@ -27,7 +29,7 @@ export async function parseString(result: string) {
   var resURL2 = "";
   if (result) {
     if (result.charAt(0) === "i") {
-      resURL = parseCidIpfsio(result);
+      resURL = parseCidNFTStorage(result);
       resURL2 = parseCidDweb(result);
     }
     if (result.charAt(0) === "h") {
@@ -48,4 +50,16 @@ export async function fetchImage(result: string) {
   const [resURL, resURL2] = await parseString(result);
   const item = await fetchImageUrls(resURL, resURL2);
   return item;
+}
+
+export async function fetchDecodedPost(result: string) {
+  const item = await fetchMetadata(result);
+
+  const decoded_image = await fetchImage(item.image);
+
+  const output = {
+    ...item,
+    image: decoded_image,
+  };
+  return output;
 }

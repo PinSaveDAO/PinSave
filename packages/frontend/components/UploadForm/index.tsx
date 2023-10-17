@@ -1,5 +1,4 @@
-import { UploadPost, PostData, UploadingPost } from "@/services/upload";
-import { MainContext } from "@/utils/context";
+import { UploadPost, PostData } from "@/services/upload";
 import {
   Text,
   Paper,
@@ -9,18 +8,17 @@ import {
   Group,
   Button,
   Image,
-  Input,
   Center,
   MediaQuery,
   NativeSelect,
 } from "@mantine/core";
 import { Dropzone, MIME_TYPES } from "@mantine/dropzone";
 import { showNotification, updateNotification } from "@mantine/notifications";
-import BigNumber from "bignumber.js";
-import React, { useState, useContext, useEffect, ReactNode } from "react";
+
+import { useState, useEffect } from "react";
 import ReactPlayer from "react-player";
 import { Upload, Replace } from "tabler-icons-react";
-import { useAccount, useSigner, useNetwork } from "wagmi";
+import { useAccount, useNetwork, useWalletClient } from "wagmi";
 
 export const dropzoneChildren = (image: File | undefined) => {
   if (image) {
@@ -82,7 +80,7 @@ export const dropzoneChildren = (image: File | undefined) => {
 const UploadForm = () => {
   const { address } = useAccount();
   const { chain } = useNetwork();
-  const { data: signer } = useSigner();
+  const { data: walletClient } = useWalletClient();
   const [name, setName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [image, setImage] = useState<File | undefined>();
@@ -92,35 +90,6 @@ const UploadForm = () => {
   const [upload, setUpload] = useState<boolean>(false);
 
   const [provider, setProvider] = useState<string>("NFT.Storage");
-  const [amount, setAmount] = useState<string>();
-
-  const { initialiseBundlr, bundlrInstance, balance, fetchBalance } =
-    useContext(MainContext);
-
-  async function initialize() {
-    initialiseBundlr();
-  }
-
-  async function fundWallet() {
-    if (!amount) return;
-    if (!bundlrInstance) return;
-    const amountParsed = String(parseInput(amount));
-    await bundlrInstance.fund(amountParsed);
-    fetchBalance();
-  }
-
-  function parseInput(input: string) {
-    if (!bundlrInstance) return;
-    const conv = new BigNumber(input).multipliedBy(
-      bundlrInstance.currencyConfig.base[1]
-    );
-    if (conv.isLessThan(1)) {
-      console.log("error: value too small");
-      return;
-    } else {
-      return conv;
-    }
-  }
 
   useEffect(() => {
     async function startUpload(storageProvider: string) {
@@ -133,32 +102,28 @@ const UploadForm = () => {
         disallowClose: true,
       });
 
-      if (signer && metadata && chain) {
+      if (walletClient && metadata && chain) {
         if (postReceiver) {
           UploadPost({
-            signer: signer,
             receiverAddress: postReceiver,
             data: metadata,
             chain: chain.id,
             provider: storageProvider,
-            bundlrInstance: bundlrInstance,
           });
         }
 
         if (!postReceiver && address) {
           UploadPost({
-            signer: signer,
             receiverAddress: address,
             data: metadata,
             chain: chain.id,
             provider: storageProvider,
-            bundlrInstance: bundlrInstance,
           });
         }
         setMetadata([]);
       }
 
-      if (!signer) {
+      if (!walletClient) {
         updateNotification({
           id: "upload-post",
           color: "red",
@@ -171,16 +136,7 @@ const UploadForm = () => {
       startUpload(provider);
       setUpload(false);
     }
-  }, [
-    upload,
-    metadata,
-    provider,
-    address,
-    chain,
-    signer,
-    postReceiver,
-    bundlrInstance,
-  ]);
+  }, [upload, metadata, provider, address, chain, walletClient, postReceiver]);
 
   function savePost(data: PostData) {
     if (data.description !== "" && data.name !== "" && data.image) {
@@ -195,7 +151,7 @@ const UploadForm = () => {
   function savePostBeforeUpload(
     name: string,
     description: string,
-    image?: File
+    image?: File,
   ) {
     if (description !== "" && name !== "" && image) {
       setMetadata((e) => [
@@ -307,22 +263,6 @@ const UploadForm = () => {
           data={["NFT.Storage", "NFTPort", "Arweave", "Estuary"]}
         />
       </Center>
-      <Group position="center">
-        {provider === "Arweave" && !balance && (
-          <Button onClick={initialize}>Initialize</Button>
-        )}
-        {provider === "Arweave" && bundlrInstance && balance && (
-          <div>
-            <Title mt="md" order={4}>
-              Balance: {balance}
-            </Title>
-            <Input size="xs" onChange={(e) => setAmount(e.target.value)} />
-            <Button mt="md" size="xs" onClick={fundWallet}>
-              Fund Wallet
-            </Button>
-          </div>
-        )}
-      </Group>
     </Paper>
   );
 };
