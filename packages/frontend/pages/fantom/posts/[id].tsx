@@ -3,6 +3,7 @@ import { parseArweaveTxId, parseCid } from "@/services/parseCid";
 import { getCurrentChain } from "@/utils/chains";
 import { timeConverter } from "@/utils/time";
 import { checkType } from "@/utils/media";
+import { getContractInfo } from "@/utils/contracts";
 
 import { Player } from "@livepeer/react";
 import {
@@ -39,17 +40,20 @@ const PostPage = () => {
   const [messages, setMessages] = useState<any | undefined>();
 
   const router = useRouter();
+
   const currentChain = getCurrentChain(250);
+  const { address } = getContractInfo(250);
+
   const { data: post, isLoading } = usePost(
     currentChain,
-    router.query.id as string,
+    router.query.id as string
   );
 
   const idParsed = useMemo(
     () =>
       parseCid(post?.image as string) ??
       parseArweaveTxId(post?.image as string),
-    [post?.image],
+    [post?.image]
   );
 
   const sendMessage = async function (context: string) {
@@ -64,15 +68,15 @@ const PostPage = () => {
           type: "custom",
           accessControlConditions: [
             {
-              contractAddress: "0x3c046f8E210424317A5740CED78877ef0B3EFf4E",
+              contractAddress: address,
               standardContractType: "ERC721",
-              chain: "fantom",
+              chain: currentChain,
               method: "balanceOf",
               parameters: [":userAddress"],
               returnValueTest: { comparator: ">=", value: "1" },
             },
           ],
-        },
+        }
       );
     if (!isEncrypted)
       await orbis.createPost({
@@ -116,7 +120,7 @@ const PostPage = () => {
             ...obj,
             newData: await getMessage(obj),
           };
-        }),
+        })
       );
 
       setMessages(messagesData);
@@ -205,13 +209,13 @@ const PostPage = () => {
                     <Text mt={3}>
                       <a
                         href={`https://evm.pinsave.app/profile/${message.creator.substring(
-                          message.creator.indexOf(":0x") + 1,
+                          message.creator.indexOf(":0x") + 1
                         )}`}
                         style={{ color: "#198b6eb9" }}
                       >
                         {message.creator_details.profile?.username ??
                           message.creator.substring(
-                            message.creator.indexOf(":0x") + 1,
+                            message.creator.indexOf(":0x") + 1
                           )}
                       </a>
                       : {message.newData}
