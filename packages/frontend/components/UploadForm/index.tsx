@@ -237,10 +237,7 @@ const UploadForm = () => {
         >
           Upload Post
         </Button>
-        {chain?.id === 7700 ||
-        chain?.id === 5001 ||
-        chain?.id === 314 ||
-        chain?.id === 5 ? (
+        {chain?.id === 5001 || chain?.id === 314 || chain?.id === 5 ? (
           <Button
             component="a"
             radius="lg"
@@ -260,7 +257,7 @@ const UploadForm = () => {
           value={provider}
           onChange={(event) => setProvider(event.currentTarget.value)}
           size="sm"
-          data={["NFT.Storage", "NFTPort", "Arweave", "Estuary"]}
+          data={["NFT.Storage", "NFTPort", "Estuary"]}
         />
       </Center>
     </Paper>
