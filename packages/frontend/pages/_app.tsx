@@ -14,15 +14,11 @@ import {
   QueryClient,
   QueryClientProvider,
 } from "@tanstack/react-query";
-import { default as UAuth } from "@uauth/js";
-import { UAuthWagmiConnector } from "@uauth/wagmi";
-import { MetaMaskConnector } from "@wagmi/core/connectors/metaMask";
-import { WalletConnectConnector } from "@wagmi/core/connectors/walletConnect";
 import type { NextComponentType } from "next";
 import type { AppProps as NextAppProps } from "next/app";
 import NextHead from "next/head";
-import { useState, useMemo, useRef } from "react";
-import { configureChains, createClient, WagmiConfig } from "wagmi";
+import { useState, useMemo } from "react";
+import { configureChains, createConfig, WagmiConfig } from "wagmi";
 import {
   Chain,
   polygonMumbai,
@@ -47,7 +43,7 @@ export interface MyWalletOptions {
   chains: Chain[];
 }
 
-const { chains, provider } = configureChains(
+const { chains, publicClient } = configureChains(
   [
     ...(process.env.NEXT_PUBLIC_DEV === "true" ? [hardhat] : []),
     polygonMumbai,
@@ -69,45 +65,10 @@ const { chains, provider } = configureChains(
   ],
 );
 
-const uauthClient = new UAuth({
-  clientID: process.env.NEXT_PUBLIC_UAUTH_CLIENT_ID as string,
-  redirectUri: "https://evm.pinsave.app",
-  // Scope must include openid and wallet
-  scope: "openid wallet",
-});
-
 const { connectors } = getDefaultWallets({
   appName: "PinSave",
   projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_ID as string,
   chains,
-});
-
-const walletConnectConnector = new WalletConnectConnector({
-  options: {
-    projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_ID as string, // Get projectID at https://cloud.walletconnect.com
-  },
-});
-
-const metaMaskConnector = new MetaMaskConnector();
-
-const uauthConnector = new UAuthWagmiConnector({
-  chains,
-  options: {
-    uauth: uauthClient,
-    metaMaskConnector,
-    walletConnectConnector,
-  },
-});
-
-const wagmiClient = createClient({
-  autoConnect: true,
-  connectors: [
-    uauthConnector as any,
-    metaMaskConnector,
-    walletConnectConnector,
-    ...connectors(),
-  ],
-  provider,
 });
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -120,6 +81,12 @@ function MyApp({ Component, pageProps }: AppProps) {
     });
   }, []);
 
+  const wagmiConfig = createConfig({
+    autoConnect: true,
+    connectors,
+    publicClient,
+  });
+
   return (
     <MantineProvider
       theme={{
@@ -129,7 +96,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     >
       <QueryClientProvider client={queryClient} contextSharing={true}>
         <Hydrate state={pageProps.dehydratedState} />
-        <WagmiConfig client={wagmiClient}>
+        <WagmiConfig config={wagmiConfig}>
           <NextHead>
             <title>Pin Save - decentralized Pinterest</title>
             <meta

@@ -13,8 +13,6 @@ import {
 import { useDisclosure } from "@mantine/hooks";
 import React, { useState } from "react";
 import { ChevronDown, ChevronUp } from "tabler-icons-react";
-import { useNetwork, useSigner } from "wagmi";
-
 interface Dispute {
   label?: string;
   replies?: string[];
@@ -29,8 +27,6 @@ const DisputeInfo = ({
 }) => {
   const [opened, { toggle }] = useDisclosure(false);
   const [reply, setReply] = useState<string>();
-  const { chain } = useNetwork();
-  const { data: signer } = useSigner();
   const CorrectReply = ({ t }: { t: string }) => (
     <Group px={4} sx={{ backgroundColor: "#A3EBB1", borderRadius: "4px" }}>
       <Text>{t}</Text>

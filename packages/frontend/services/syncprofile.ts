@@ -1,36 +1,27 @@
 import ERC725 from "@/contracts/ERC725.json";
 import { updateNotification } from "@mantine/notifications";
-import {
-  ethers,
-  Signer,
-  ContractFactory,
-  keccak256,
-  toUtf8Bytes,
-  hexlify,
-} from "ethers";
+import { ContractFactory, keccak256, toUtf8Bytes, hexlify } from "ethers";
 import { NFTStorage, Blob } from "nft.storage";
+import { WalletClient } from "wagmi";
+import { useContractWrite, useWalletClient } from "wagmi";
 
 const client = new NFTStorage({ token: process.env.NEXT_PUBLIC_TOKEN });
 
-export type Wallet = {
-  signer: Signer;
-  address: string;
-};
-
-export type SyncingProfile = Wallet & {
+export type SyncingProfile = {
   name?: string;
   description?: string;
   profileImage?: string;
   backgroundImage?: string;
+  address: `0x${string}`;
 };
 
 export async function UpdateProfile(incomingData: SyncingProfile) {
   try {
-    const erc725Contract = new ethers.Contract(
-      incomingData.address,
-      ERC725.abi,
-      incomingData.signer,
-    );
+    const { write } = useContractWrite({
+      address: incomingData.address,
+      abi: ERC725.abi,
+      functionName: "setData(bytes32,bytes)",
+    });
 
     //keep substr
     const hashFunction = keccak256(toUtf8Bytes("keccak256(utf8)")).substr(
@@ -65,10 +56,12 @@ export async function UpdateProfile(incomingData: SyncingProfile) {
 
     const JSONURL = hashFunction + hash.substring(2) + url.substring(2);
 
-    await erc725Contract["setData(bytes32,bytes)"](
-      "0x5ef83ad9559033e6e941db7d7c495acdce616347d28e90c7ce47cbfcfcad3bc5",
-      JSONURL,
-    );
+    write({
+      args: [
+        "0x5ef83ad9559033e6e941db7d7c495acdce616347d28e90c7ce47cbfcfcad3bc5",
+        JSONURL,
+      ],
+    });
 
     updateNotification({
       id: "upload-post",
@@ -86,12 +79,13 @@ export async function UpdateProfile(incomingData: SyncingProfile) {
   }
 }
 
-export async function CreateProfile(incomingData: Wallet) {
+/* export async function CreateProfile(incomingData: Wallet) {
   try {
+    const { data: walletClient, isError, isLoading } = useWalletClient();
     const factory = new ContractFactory(
       ERC725.abi,
       ERC725.bytecode,
-      incomingData.signer,
+      walletClient
     );
 
     const contract = await factory.deploy(incomingData.address);
@@ -112,3 +106,4 @@ export async function CreateProfile(incomingData: Wallet) {
     });
   }
 }
+ */

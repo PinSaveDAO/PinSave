@@ -8,7 +8,6 @@ import {
   Group,
   Button,
   Image,
-  Input,
   Center,
   MediaQuery,
   NativeSelect,
@@ -16,7 +15,7 @@ import {
 import { Dropzone, MIME_TYPES } from "@mantine/dropzone";
 import { showNotification, updateNotification } from "@mantine/notifications";
 
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import ReactPlayer from "react-player";
 import { Upload, Replace } from "tabler-icons-react";
 import { useAccount, useNetwork, useWalletClient } from "wagmi";
@@ -106,7 +105,6 @@ const UploadForm = () => {
       if (walletClient && metadata && chain) {
         if (postReceiver) {
           UploadPost({
-            signer: walletClient,
             receiverAddress: postReceiver,
             data: metadata,
             chain: chain.id,
@@ -116,7 +114,6 @@ const UploadForm = () => {
 
         if (!postReceiver && address) {
           UploadPost({
-            signer: walletClient,
             receiverAddress: address,
             data: metadata,
             chain: chain.id,

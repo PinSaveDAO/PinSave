@@ -1,6 +1,7 @@
 import { fetchImage, fetchMetadata } from "@/services/fetchCid";
 import { getContractInfo } from "@/utils/contracts";
 import { JsonRpcProvider, Contract } from "ethers";
+
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(

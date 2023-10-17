@@ -4,13 +4,12 @@ import { updateNotification } from "@mantine/notifications";
 import {
   randomBytes,
   Contract,
-  Signer,
   zeroPadValue,
   hexlify,
   toUtf8Bytes,
 } from "ethers";
 import { NFTStorage } from "nft.storage";
-import { WalletClient } from "viem";
+import { useContractWrite, useWalletClient } from "wagmi";
 
 export type PostData = {
   name: string;
@@ -24,7 +23,6 @@ export type Post = PostData & {
 };
 
 export type UploadingPost = {
-  signer: WalletClient;
   receiverAddress: string;
   data: PostData[];
   chain?: number;
@@ -34,8 +32,8 @@ export type UploadingPost = {
 export async function UploadPost(incomingData: UploadingPost) {
   try {
     let metadata_url = [];
+
     const { address, abi } = getContractInfo(incomingData.chain);
-    const contract = new Contract(address, abi, incomingData.signer);
 
     if (incomingData.provider === "NFT.Storage") {
       const client = new NFTStorage({
@@ -156,19 +154,25 @@ export async function UploadPost(incomingData: UploadingPost) {
     }
 
     if (incomingData.chain === 80001) {
-      await contract.mintPost(incomingData.receiverAddress, metadata_url[0]);
+      const { write } = useContractWrite({
+        address: address,
+        abi: abi,
+        functionName: "mintPost",
+      });
+
+      write({ args: [incomingData.receiverAddress, metadata_url[0]] });
     }
 
     if (incomingData.chain === 250 || incomingData.chain === 56) {
       try {
         const id = String(randomBytes(32));
         const Id = zeroPadValue(hexlify(toUtf8Bytes(id)), 32);
-        const token = await contract.createPost(
-          incomingData.receiverAddress,
-          metadata_url[0],
-          Id,
-        );
-        token.wait();
+        const { write } = useContractWrite({
+          address: address,
+          abi: abi,
+          functionName: "createPost",
+        });
+        write({ args: [incomingData.receiverAddress, metadata_url[0], Id] });
       } catch (e) {
         console.log(e);
       }
@@ -188,11 +192,12 @@ export async function UploadPost(incomingData: UploadingPost) {
         Ids.push(Id);
       }
 
-      await contract.createBatchPosts(
-        incomingData.receiverAddress,
-        metadata_url,
-        Ids,
-      );
+      const { write } = useContractWrite({
+        address: address,
+        abi: abi,
+        functionName: "createBatchPosts",
+      });
+      write({ args: [incomingData.receiverAddress, metadata_url, Ids] });
     }
 
     updateNotification({
