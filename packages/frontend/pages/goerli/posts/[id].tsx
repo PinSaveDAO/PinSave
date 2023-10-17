@@ -2,6 +2,8 @@ import DisputeInfo from "@/components/Posts/DisputeInfo";
 import { usePost } from "@/hooks/api";
 import { parseArweaveTxId, parseCid } from "@/services/parseCid";
 import { getCurrentChain } from "@/utils/chains";
+import { checkType } from "@/utils/media";
+
 import { Player } from "@livepeer/react";
 import {
   ActionIcon,
@@ -44,13 +46,6 @@ const PostPage = () => {
       parseArweaveTxId(post?.image as string),
     [post?.image],
   );
-
-  function checkType(id: string | undefined) {
-    if (id && id.slice(-3) === "mp4") {
-      return true;
-    }
-    return false;
-  }
 
   const sendMessage = async function (context: string) {
     if (isEncrypted)

@@ -1,4 +1,4 @@
-import { fetchMetadata } from "@/services/fetchCid";
+import { fetchDecodedPost } from "@/services/fetchCid";
 import { getContractInfo } from "@/utils/contracts";
 import { JsonRpcProvider, Contract } from "ethers";
 import type { NextApiRequest, NextApiResponse } from "next";
@@ -33,7 +33,7 @@ export default async function handler(
       for (let i = lowerLimit; upperLimit >= i; i++) {
         result = await contract.getPost(i);
 
-        const item = await fetchMetadata(result);
+        const item = await fetchDecodedPost(result);
 
         items.push({ token_id: i, ...item });
       }

@@ -2,6 +2,8 @@ import { usePost } from "@/hooks/api";
 import { parseArweaveTxId, parseCid } from "@/services/parseCid";
 import { getCurrentChain } from "@/utils/chains";
 import { timeConverter } from "@/utils/time";
+import { checkType } from "@/utils/media";
+
 import { Player } from "@livepeer/react";
 import {
   ActionIcon,
@@ -43,21 +45,12 @@ const PostPage = () => {
     router.query.id as string,
   );
 
-  console.log(post);
-
   const idParsed = useMemo(
     () =>
       parseCid(post?.image as string) ??
       parseArweaveTxId(post?.image as string),
     [post?.image],
   );
-
-  function checkType(id: string | undefined) {
-    if (id && id.slice(-3) === "mp4") {
-      return true;
-    }
-    return false;
-  }
 
   const sendMessage = async function (context: string) {
     if (isEncrypted)

@@ -51,3 +51,15 @@ export async function fetchImage(result: string) {
   const item = await fetchImageUrls(resURL, resURL2);
   return item;
 }
+
+export async function fetchDecodedPost(result: string) {
+  const item = await fetchMetadata(result);
+
+  const decoded_image = await fetchImage(item.image);
+
+  const output = {
+    ...item,
+    image: decoded_image,
+  };
+  return output;
+}
