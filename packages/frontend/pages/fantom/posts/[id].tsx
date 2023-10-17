@@ -43,6 +43,8 @@ const PostPage = () => {
     router.query.id as string,
   );
 
+  console.log(post);
+
   const idParsed = useMemo(
     () =>
       parseCid(post?.image as string) ??
