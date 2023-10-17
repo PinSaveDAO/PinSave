@@ -20,7 +20,7 @@
     "typechain": "^8.1.1"
   },
   "dependencies": {
-    "@lukso/lsp-factory.js": "^2.4.0",
+    "@lukso/lsp-factory.js": "^3.1.1",
     "@lukso/lsp-smart-contracts": "0.8.1",
     "@nomicfoundation/hardhat-toolbox": "^2.0.2",
     "@nomiclabs/hardhat-ethers": "npm:hardhat-deploy-ethers",
