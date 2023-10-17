@@ -110,6 +110,7 @@ export function Navbar({ links }: NavbarProps) {
   useEffect(() => {
     setIsClient(true);
   }, []);
+
   const items = links.map((link) => (
     <Link key={link.label} href={link.link} passHref>
       <Text

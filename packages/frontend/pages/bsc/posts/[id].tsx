@@ -36,17 +36,19 @@ const PostPage = () => {
   const [messages, setMessages] = useState<any | undefined>();
 
   const router = useRouter();
+
   const currentChain = getCurrentChain(56);
+
   const { data: post, isLoading } = usePost(
     currentChain,
-    router.query.id as string,
+    router.query.id as string
   );
 
   const idParsed = useMemo(
     () =>
       parseCid(post?.image as string) ??
       parseArweaveTxId(post?.image as string),
-    [post?.image],
+    [post?.image]
   );
 
   const sendMessage = async function (context: string) {
@@ -71,7 +73,7 @@ const PostPage = () => {
               returnValueTest: { comparator: ">=", value: "1" },
             },
           ],
-        },
+        }
       );
     if (!isEncrypted)
       await orbis.createPost({
@@ -118,7 +120,7 @@ const PostPage = () => {
             ...obj,
             newData: await getMessage(obj),
           };
-        }),
+        })
       );
 
       setMessages(messagesData);
@@ -208,13 +210,13 @@ const PostPage = () => {
                       <Text mt={3}>
                         <a
                           href={`https://evm.pinsave.app/profile/${message.creator.substring(
-                            message.creator.indexOf(":0x") + 1,
+                            message.creator.indexOf(":0x") + 1
                           )}`}
                           style={{ color: "#198b6eb9" }}
                         >
                           {message.creator_details.profile?.username ??
                             message.creator.substring(
-                              message.creator.indexOf(":0x") + 1,
+                              message.creator.indexOf(":0x") + 1
                             )}
                         </a>
                         : {message.newData}
@@ -276,7 +278,7 @@ const PostPage = () => {
                 radius="lg"
                 onClick={() =>
                   sendMessage(
-                    "kjzl6cwe1jw147hcck185xfdlrxq9zv0y0hoa6shzskqfnio56lhf8190yaei7w",
+                    "kjzl6cwe1jw147hcck185xfdlrxq9zv0y0hoa6shzskqfnio56lhf8190yaei7w"
                   )
                 }
               >
