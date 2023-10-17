@@ -1,6 +1,6 @@
 import { fetchMetadata } from "@/services/fetchCid";
 import { getContractInfo } from "@/utils/contracts";
-import { ethers } from "ethers";
+import { JsonRpcProvider, Contract } from "ethers";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
@@ -12,15 +12,11 @@ export default async function handler(
     const pageNumber = Number(number) + 1;
 
     const { address, abi } = getContractInfo(314);
-    const provider = new ethers.providers.JsonRpcProvider(
-      "https://rpc.ankr.com/filecoin"
-    );
+    const provider = new JsonRpcProvider("https://rpc.ankr.com/filecoin");
 
-    const contract = new ethers.Contract(address, abi, provider);
+    const contract = new Contract(address, abi, provider);
 
-    const totalSupply = ethers.BigNumber.from(
-      await contract.totalSupply()
-    ).toNumber();
+    const totalSupply = Number(await contract.totalSupply());
 
     let items = [];
     let result;

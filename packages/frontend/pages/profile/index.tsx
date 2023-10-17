@@ -20,7 +20,7 @@ import { showNotification, updateNotification } from "@mantine/notifications";
 import { Orbis } from "@orbisclub/orbis-sdk";
 import { NFTStorage } from "nft.storage";
 import React, { useState, useEffect } from "react";
-import { useSigner, useAccount } from "wagmi";
+import { useWalletClient, useAccount } from "wagmi";
 
 let orbis = new Orbis();
 
@@ -122,7 +122,7 @@ const Upload = () => {
 
   async function createProfile() {
     if (signer && address) {
-      let deployedERC725 = await CreateProfile({
+      const deployedERC725 = await CreateProfile({
         signer: signer,
         address: address,
       });

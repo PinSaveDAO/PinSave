@@ -1,6 +1,13 @@
 import ERC725 from "@/contracts/ERC725.json";
 import { updateNotification } from "@mantine/notifications";
-import { ethers, Signer, ContractFactory } from "ethers";
+import {
+  ethers,
+  Signer,
+  ContractFactory,
+  keccak256,
+  toUtf8Bytes,
+  hexlify,
+} from "ethers";
 import { NFTStorage, Blob } from "nft.storage";
 
 const client = new NFTStorage({ token: process.env.NEXT_PUBLIC_TOKEN });
@@ -26,9 +33,10 @@ export async function UpdateProfile(incomingData: SyncingProfile) {
     );
 
     //keep substr
-    const hashFunction = ethers.utils
-      .keccak256(ethers.utils.toUtf8Bytes("keccak256(utf8)"))
-      .substr(0, 10);
+    const hashFunction = keccak256(toUtf8Bytes("keccak256(utf8)")).substr(
+      0,
+      10
+    );
 
     const json = JSON.stringify({
       LSP3Profile: {
@@ -47,13 +55,13 @@ export async function UpdateProfile(incomingData: SyncingProfile) {
       },
     });
 
-    const hash = ethers.utils.keccak256(ethers.utils.toUtf8Bytes(json));
+    const hash = keccak256(toUtf8Bytes(json));
 
     const blob = new Blob([json], { type: "application/json" });
 
     const cid = await client.storeBlob(blob);
 
-    const url = ethers.utils.hexlify(ethers.utils.toUtf8Bytes(`ipfs://${cid}`));
+    const url = hexlify(toUtf8Bytes(`ipfs://${cid}`));
 
     const JSONURL = hashFunction + hash.substring(2) + url.substring(2);
 
@@ -92,9 +100,9 @@ export async function CreateProfile(incomingData: Wallet) {
       id: "upload-post",
       color: "teal",
       title: "Universal Profile created successfully!!",
-      message: `${contract.address}`,
+      message: `${contract.target}`,
     });
-    return contract.address;
+    return contract.target as string;
   } catch (error) {
     updateNotification({
       id: "upload-post",

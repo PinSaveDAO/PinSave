@@ -1,8 +1,6 @@
 import "@/styles/globals.css";
 import "@rainbow-me/rainbowkit/styles.css";
 import LayoutApp from "@/components/Layout";
-import { MainContext } from "@/utils/context";
-import { WebBundlr } from "@bundlr-network/client";
 import {
   LivepeerConfig,
   createReactClient,
@@ -20,7 +18,6 @@ import { default as UAuth } from "@uauth/js";
 import { UAuthWagmiConnector } from "@uauth/wagmi";
 import { MetaMaskConnector } from "@wagmi/core/connectors/metaMask";
 import { WalletConnectConnector } from "@wagmi/core/connectors/walletConnect";
-import { providers, utils } from "ethers";
 import type { NextComponentType } from "next";
 import type { AppProps as NextAppProps } from "next/app";
 import NextHead from "next/head";
@@ -114,10 +111,6 @@ const wagmiClient = createClient({
 });
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const [bundlrInstance, setBundlrInstance] = useState<WebBundlr>();
-  const [balance, setBalance] = useState<string>();
-  const bundlrRef = useRef<any>();
-
   const [queryClient] = useState(() => new QueryClient());
   const livepeerClient = useMemo(() => {
     return createReactClient({
@@ -126,39 +119,6 @@ function MyApp({ Component, pageProps }: AppProps) {
       }),
     });
   }, []);
-
-  async function initialiseBundlr() {
-    if (window.ethereum) {
-      const provider = new providers.Web3Provider(window.ethereum as any);
-      await provider._ready();
-
-      /* const bundlr = new WebBundlr(
-              "https://node1.bundlr.network",
-              "matic",
-              provider
-            ); */
-      const bundlr = new WebBundlr(
-        "https://devnet.bundlr.network",
-        "matic",
-        provider,
-        {
-          providerUrl: "https://rpc-mumbai.matic.today",
-        }
-      );
-
-      await bundlr.ready();
-
-      setBundlrInstance(bundlr);
-      bundlrRef.current = bundlr;
-      fetchBalance();
-    }
-  }
-
-  async function fetchBalance() {
-    const bal = await bundlrRef.current.getLoadedBalance();
-    console.log("bal: ", utils.formatEther(bal.toString()));
-    setBalance(utils.formatEther(bal.toString()));
-  }
 
   return (
     <MantineProvider
@@ -194,18 +154,9 @@ function MyApp({ Component, pageProps }: AppProps) {
           <NotificationsProvider>
             <RainbowKitProvider chains={chains}>
               <LivepeerConfig client={livepeerClient}>
-                <MainContext.Provider
-                  value={{
-                    initialiseBundlr,
-                    bundlrInstance,
-                    balance,
-                    fetchBalance,
-                  }}
-                >
-                  <LayoutApp>
-                    <Component {...pageProps} />
-                  </LayoutApp>
-                </MainContext.Provider>
+                <LayoutApp>
+                  <Component {...pageProps} />
+                </LayoutApp>
               </LivepeerConfig>
             </RainbowKitProvider>
           </NotificationsProvider>

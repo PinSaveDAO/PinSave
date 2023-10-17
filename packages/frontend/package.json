@@ -5,7 +5,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "prettier:write": "prettier --write \"**/*.{ts,tsx}\""
   },
   "dependencies": {
     "@bundlr-network/client": "^0.11.1",
@@ -16,14 +17,14 @@
     "@mantine/next": "^6.0.11",
     "@mantine/notifications": "^4.2.12",
     "@orbisclub/orbis-sdk": "^0.4.88",
-    "@rainbow-me/rainbowkit": "^0.12.12",
+    "@rainbow-me/rainbowkit": "^1.1.2",
     "@synthetixio/synpress": "^3.1.0",
     "@tanstack/react-query": "^4.28.0",
     "@tanstack/react-query-devtools": "^4.29.7",
     "@uauth/js": "^2.8.0",
     "@uauth/wagmi": "^3.0.0",
     "bignumber.js": "^9.1.1",
-    "ethers": "^5.7.2",
+    "ethers": "^6.8.0",
     "filereader-stream": "^2.0.0",
     "isomorphic-fetch": "^3.0.0",
     "next": "^13.4.2",
@@ -34,7 +35,8 @@
     "react-icons": "^4.7.1",
     "react-player": "^2.11.2",
     "tabler-icons-react": "^1.56.0",
-    "wagmi": "^0.12.10"
+    "viem": "^1.16.6",
+    "wagmi": "^1.4.3"
   },
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "^3.7.2",
