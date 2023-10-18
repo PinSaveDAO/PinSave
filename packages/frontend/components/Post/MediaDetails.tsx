@@ -89,14 +89,14 @@ const MediaDetails: React.FC<IMyProps> = ({ post, currentChain }) => {
             <Text mt={3}>
               <a
                 href={`https://evm.pinsave.app/profile/${message.creator.substring(
-                  message.creator.indexOf(":0x") + 1
+                  message.creator.indexOf(":0x") + 1,
                 )}`}
                 style={{ color: "#198b6eb9", fontSize: "smaller" }}
               >
                 {message.creator_details.profile?.username ??
                   message.creator.substring(
                     message.creator.indexOf(":0x") + 1,
-                    message.creator.indexOf(":0x") + 8
+                    message.creator.indexOf(":0x") + 8,
                   ) + "..."}
               </a>
               : {message.newData}
@@ -139,7 +139,7 @@ const MediaDetails: React.FC<IMyProps> = ({ post, currentChain }) => {
                   message.stream_id,
                   "downvote",
                   orbis,
-                  setOrbisResponse
+                  setOrbisResponse,
                 )
               }
             >
@@ -174,7 +174,7 @@ const MediaDetails: React.FC<IMyProps> = ({ post, currentChain }) => {
             queryId,
             address,
             currentChain,
-            setOrbisResponse
+            setOrbisResponse,
           )) && setNewMessage("")
         }
       >

@@ -5,7 +5,6 @@ import { getCurrentChain } from "@/utils/chains";
 
 import { ActionIcon, SimpleGrid, LoadingOverlay } from "@mantine/core";
 import { useRouter } from "next/router";
-
 import { ArrowLeft } from "tabler-icons-react";
 import { ChainName } from "@/constants/chains";
 

@@ -7,7 +7,7 @@ import { useMemo } from "react";
 const VideoPlayer = (post: IndividualPost) => {
   const idParsed = useMemo(
     () => parseCid(post?.image) ?? parseArweaveTxId(post?.image),
-    [post?.image]
+    [post?.image],
   );
 
   return (

@@ -151,7 +151,7 @@ const UploadForm = () => {
   function savePostBeforeUpload(
     name: string,
     description: string,
-    image?: File
+    image?: File,
   ) {
     if (description !== "" && name !== "" && image) {
       setMetadata((e) => [
