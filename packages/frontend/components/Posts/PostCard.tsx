@@ -8,7 +8,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { useNetwork, Chain } from "wagmi";
 
-const PostCard = (post: Post) => {
+interface IMyProps {
+  post: Post;
+}
+
+const PostCard: React.FC<IMyProps> = ({ post }) => {
   const { chain } = useNetwork();
 
   return (

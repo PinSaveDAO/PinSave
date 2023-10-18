@@ -4,7 +4,11 @@ import VideoPlayer from "@/components/Post/VideoPlayer";
 
 import { Image } from "@mantine/core";
 
-const DisplayMedia = (post: IndividualPost) => {
+interface IMyProps {
+  post: IndividualPost;
+}
+
+const DisplayMedia: React.FC<IMyProps> = ({ post }) => {
   return (
     <>
       {IsNotMp4(post?.image) ? (

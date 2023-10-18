@@ -2,6 +2,7 @@ import { timeConverter } from "@/utils/time";
 import { getContractInfo } from "@/utils/contracts";
 import { sendMessage, sendReaction } from "@/services/orbis";
 import { loadData } from "@/services/orbis";
+import type { ChainName } from "@/constants/chains";
 import type { IndividualPost } from "@/services/upload";
 
 import { useState, useEffect } from "react";
@@ -21,7 +22,6 @@ import { FaLaughSquint } from "react-icons/fa";
 import { Heart } from "tabler-icons-react";
 import { Orbis } from "@orbisclub/orbis-sdk";
 import { useRouter } from "next/router";
-import { ChainName } from "@/constants/chains";
 
 interface IMyProps {
   post: IndividualPost;
