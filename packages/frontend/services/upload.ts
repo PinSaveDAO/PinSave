@@ -1,13 +1,7 @@
 import { getContractInfo } from "@/utils/contracts";
 
 import { updateNotification } from "@mantine/notifications";
-import {
-  randomBytes,
-  Contract,
-  zeroPadValue,
-  hexlify,
-  toUtf8Bytes,
-} from "ethers";
+import { randomBytes, zeroPadValue, hexlify, toUtf8Bytes } from "ethers";
 import { NFTStorage } from "nft.storage";
 import { useContractWrite } from "wagmi";
 

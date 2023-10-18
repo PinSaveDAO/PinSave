@@ -12,7 +12,7 @@ declare interface IOrbisConstructor {
 
 declare interface IOrbis {
   api: any;
-  connect: (provider: any, lit?: boolean) => Promise<IOrbisConnectReturns>;
+  connect: (provider?: any, lit?: boolean) => Promise<IOrbisConnectReturns>;
   connect_v2: (opts?: {
     provider?: any;
     chain?: string;
@@ -27,7 +27,7 @@ declare interface IOrbis {
   connectWithSeed: (seed: Uint8Array) => Promise<IOrbisConnectReturns>;
   createChannel: (
     group_id: string,
-    content: Pick<IOrbisChannel, "content">,
+    content: Pick<IOrbisChannel, "content">
   ) => Promise<{
     status: number;
     doc: string;
@@ -53,7 +53,10 @@ declare interface IOrbis {
     doc: string;
     result: string;
   }>;
-  createPost: (content: IOrbisPostContent) => Promise<{
+  createPost: (
+    content: IOrbisPostContent,
+    encryption?: IOrbisEncryptionPostRules
+  ) => Promise<{
     status: number;
     doc: string;
     result: string;
@@ -62,7 +65,7 @@ declare interface IOrbis {
     content: any,
     tags: string[],
     schema: string,
-    family: string,
+    family: string
   ) => Promise<{
     status: number;
     doc?: string;
@@ -82,7 +85,7 @@ declare interface IOrbis {
     content: any,
     tags: string[],
     schema?: string,
-    family?: string,
+    family?: string
   ) => Promise<{
     status: number;
     doc?: string;
@@ -92,7 +95,7 @@ declare interface IOrbis {
   editPost: (
     stream_id: string,
     content: IOrbisPostContent,
-    encryptionRules?: IOrbisEncryptionRules,
+    encryptionRules?: IOrbisEncryptionRules
   ) => Promise<{
     status: number;
     result: string;
@@ -147,7 +150,7 @@ declare interface IOrbis {
   }>;
   getIsFollowing: (
     did_following: string,
-    did_followed: string,
+    did_followed: string
   ) => Promise<{
     data: boolean;
     error: any;
@@ -155,7 +158,7 @@ declare interface IOrbis {
   }>;
   getIsGroupMember: (
     group_id: string,
-    did: string,
+    did: string
   ) => Promise<{
     data: boolean;
     error: any;
@@ -163,7 +166,7 @@ declare interface IOrbis {
   }>;
   getMessages: (
     conversation_id: string,
-    page: number,
+    page: number
   ) => Promise<{
     data: IOrbisMessage[];
     error: any;
@@ -188,7 +191,7 @@ declare interface IOrbis {
       tag?: string;
       algorithm?: keyof typeof IOrbisGetPostsAlgorithm | null;
     },
-    page?: number,
+    page?: number
   ) => Promise<{
     data: IOrbisPost[];
     error: any;
@@ -196,7 +199,7 @@ declare interface IOrbis {
   }>;
   getReaction: (
     post_id: string,
-    did: string,
+    did: string
   ) => Promise<{
     data: { type: string };
     error: any;
@@ -246,7 +249,7 @@ declare interface IOrbis {
   };
   react: (
     post_id: string,
-    type: string,
+    type: string
   ) => Promise<{
     status: number;
     doc: string;
@@ -259,7 +262,7 @@ declare interface IOrbis {
   }>;
   setFollow: (
     did: string,
-    active: boolean,
+    active: boolean
   ) => Promise<{
     status: number;
     doc: string;
@@ -267,7 +270,7 @@ declare interface IOrbis {
   }>;
   setGroupMember: (
     group_id: string,
-    active: boolean,
+    active: boolean
   ) => Promise<{
     status: number;
     doc?: string;
@@ -277,7 +280,7 @@ declare interface IOrbis {
   setNotificationsReadTime: (
     type: string,
     timestamp: number,
-    context?: string,
+    context?: string
   ) => Promise<{
     status: number;
     doc?: string;
@@ -286,7 +289,7 @@ declare interface IOrbis {
   }>;
   updateChannel: (
     channel_id: string,
-    content: Pick<IOrbisChannel, "content">,
+    content: Pick<IOrbisChannel, "content">
   ) => Promise<{
     status: number;
     doc: string;
@@ -295,7 +298,7 @@ declare interface IOrbis {
   updateContext: () => void;
   updateGroup: (
     stream_id: string,
-    content: { pfp: string; name: string; description: string },
+    content: { pfp: string; name: string; description: string }
   ) => Promise<{
     status: number;
     doc: string;
@@ -324,7 +327,7 @@ declare interface IOrbis {
     content: any,
     tags: string[],
     schema: string,
-    family?: string,
+    family?: string
   ) => Promise<{
     status: number;
     doc?: string;
@@ -466,6 +469,11 @@ interface IOrbisCredential {
   creator?: string;
   subject_id?: string;
   type?: string;
+}
+
+interface IOrbisEncryptionPostRules {
+  type: "token-gated" | "custom";
+  accessControlConditions?: object;
 }
 
 interface IOrbisEncryptionRules {

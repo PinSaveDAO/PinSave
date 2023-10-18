@@ -4,6 +4,12 @@ import { getCurrentChain } from "@/utils/chains";
 import { timeConverter } from "@/utils/time";
 import { checkType } from "@/utils/media";
 import { getContractInfo } from "@/utils/contracts";
+import {
+  sendMessage,
+  sendReaction,
+  getMessage,
+  loadData,
+} from "@/services/orbis";
 
 import { Player } from "@livepeer/react";
 import {
@@ -27,27 +33,25 @@ import { BiDislike } from "react-icons/bi";
 import { FaLaughSquint } from "react-icons/fa";
 import { ArrowLeft, Heart } from "tabler-icons-react";
 
-let orbis = new Orbis();
+const orbis: IOrbis = new Orbis();
 
 const context =
   "kjzl6cwe1jw147hcck185xfdlrxq9zv0y0hoa6shzskqfnio56lhf8190yaei7w";
 
 const PostPage = () => {
+  const router = useRouter();
+  const queryId = String(router.query.id);
+
   const [reaction, setReaction] = useState<string>();
   const [isEncrypted, setIsEncrypted] = useState(false);
 
-  const [newMessage, setNewMessage] = useState<string>();
+  const [newMessage, setNewMessage] = useState<string>("");
   const [messages, setMessages] = useState<any | undefined>();
-
-  const router = useRouter();
 
   const currentChain = getCurrentChain(250);
   const { address } = getContractInfo(250);
 
-  const { data: post, isLoading } = usePost(
-    currentChain,
-    router.query.id as string
-  );
+  const { data: post, isLoading } = usePost(currentChain, queryId);
 
   const idParsed = useMemo(
     () =>
@@ -56,77 +60,9 @@ const PostPage = () => {
     [post?.image]
   );
 
-  const sendMessage = async function (context: string) {
-    if (isEncrypted)
-      await orbis.createPost(
-        {
-          body: newMessage,
-          context: context,
-          tags: [{ slug: router.query.id, title: router.query.id }],
-        },
-        {
-          type: "custom",
-          accessControlConditions: [
-            {
-              contractAddress: address,
-              standardContractType: "ERC721",
-              chain: currentChain,
-              method: "balanceOf",
-              parameters: [":userAddress"],
-              returnValueTest: { comparator: ">=", value: "1" },
-            },
-          ],
-        }
-      );
-    if (!isEncrypted)
-      await orbis.createPost({
-        body: newMessage,
-        context: context,
-        tags: [{ slug: router.query.id, title: router.query.id }],
-      });
-  };
-
-  const sendReaction = async function (id: string, reaction: string) {
-    await orbis.react(id, reaction);
-    setReaction(id + reaction);
-  };
-
-  const getMessage = async function (content: any) {
-    if (content?.content?.body === "") {
-      let res = await orbis.decryptPost(content.content);
-      return res.result;
-    }
-    return content?.content?.body;
-  };
-
   useEffect(() => {
-    async function loadData() {
-      let res = await orbis.isConnected();
-
-      if (!router.isReady) return;
-
-      if (!res) {
-        res = await orbis.connect();
-      }
-
-      let result = await orbis.getPosts({
-        context: context,
-        tag: router.query.id,
-      });
-
-      const messagesData = await Promise.all(
-        result.data.map(async (obj: object) => {
-          return {
-            ...obj,
-            newData: await getMessage(obj),
-          };
-        })
-      );
-
-      setMessages(messagesData);
-    }
-    loadData();
-  }, [router.isReady, router.query.id, newMessage, reaction]);
+    loadData(orbis, router, context, queryId, setMessages);
+  }, [router.isReady, queryId, newMessage, reaction]);
 
   return (
     <div>
@@ -227,7 +163,14 @@ const PostPage = () => {
                     component="a"
                     radius="sm"
                     rightIcon={<Heart fill="white" />}
-                    onClick={() => sendReaction(message.stream_id, "like")}
+                    onClick={() =>
+                      sendReaction(
+                        message.stream_id,
+                        "like",
+                        orbis,
+                        setReaction
+                      )
+                    }
                   >
                     {message.count_likes}
                   </Button>
@@ -237,7 +180,14 @@ const PostPage = () => {
                     radius="sm"
                     rightIcon={<FaLaughSquint size={22} />}
                     ml={4}
-                    onClick={() => sendReaction(message.stream_id, "haha")}
+                    onClick={() =>
+                      sendReaction(
+                        message.stream_id,
+                        "haha",
+                        orbis,
+                        setReaction
+                      )
+                    }
                   >
                     {message.count_haha}
                   </Button>
@@ -248,7 +198,14 @@ const PostPage = () => {
                     radius="sm"
                     ml={4}
                     rightIcon={<BiDislike size={22} />}
-                    onClick={() => sendReaction(message.stream_id, "downvote")}
+                    onClick={() =>
+                      sendReaction(
+                        message.stream_id,
+                        "downvote",
+                        orbis,
+                        setReaction
+                      )
+                    }
                   >
                     {message.count_downvotes}
                   </Button>
@@ -273,7 +230,17 @@ const PostPage = () => {
               <Button
                 component="a"
                 radius="lg"
-                onClick={() => sendMessage(context)}
+                onClick={() =>
+                  sendMessage(
+                    context,
+                    isEncrypted,
+                    orbis,
+                    newMessage,
+                    queryId,
+                    address,
+                    currentChain
+                  )
+                }
               >
                 Send Message
               </Button>
