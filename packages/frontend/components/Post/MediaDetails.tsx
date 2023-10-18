@@ -26,13 +26,12 @@ import { useRouter } from "next/router";
 interface IMyProps {
   post: IndividualPost;
   currentChain: ChainName;
+  context: string;
 }
 
 const orbis: IOrbis = new Orbis();
-const context =
-  "kjzl6cwe1jw147hcck185xfdlrxq9zv0y0hoa6shzskqfnio56lhf8190yaei7w";
 
-const MediaDetails: React.FC<IMyProps> = ({ post, currentChain }) => {
+const MediaDetails: React.FC<IMyProps> = ({ post, currentChain, context }) => {
   const router = useRouter();
   const queryId = String(router.query.id);
   const [isEncrypted, setIsEncrypted] = useState(false);
@@ -45,7 +44,7 @@ const MediaDetails: React.FC<IMyProps> = ({ post, currentChain }) => {
 
   useEffect(() => {
     loadData(orbis, router, context, queryId, setMessages);
-  }, [router, router.isReady, queryId, orbisResponse]);
+  }, [router, router.isReady, queryId, orbisResponse, context]);
 
   return (
     <Paper shadow="sm" p="md" withBorder>
