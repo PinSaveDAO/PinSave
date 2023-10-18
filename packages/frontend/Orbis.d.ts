@@ -191,7 +191,8 @@ declare interface IOrbis {
       tag?: string;
       algorithm?: keyof typeof IOrbisGetPostsAlgorithm | null;
     },
-    page?: number
+    page?: number,
+    limit?: number
   ) => Promise<{
     data: IOrbisPost[];
     error: any;

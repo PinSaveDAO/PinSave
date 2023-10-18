@@ -8,10 +8,12 @@ export const sendMessage = async function (
   newMessage: string,
   queryId: string,
   address: `0x${string}`,
-  currentChain: ChainName
+  currentChain: ChainName,
+  setOrbisResponse: React.Dispatch<any>
 ) {
-  if (isEncrypted)
-    await orbis.createPost(
+  let response: any;
+  if (isEncrypted) {
+    response = await orbis.createPost(
       {
         body: newMessage,
         context: context,
@@ -31,22 +33,31 @@ export const sendMessage = async function (
         ],
       }
     );
-  if (!isEncrypted)
-    await orbis.createPost({
+  }
+  if (!isEncrypted) {
+    response = await orbis.createPost({
       body: newMessage,
       context: context,
       tags: [{ slug: queryId, title: queryId }],
     });
+  }
+  setTimeout(() => {
+    setOrbisResponse(response);
+  }, 3000);
+
+  return true;
 };
 
 export const sendReaction = async function (
   id: string,
   reaction: string,
   orbis: IOrbis,
-  setReaction: React.Dispatch<React.SetStateAction<string | undefined>>
+  setOrbisResponse: React.Dispatch<any>
 ) {
-  await orbis.react(id, reaction);
-  setReaction(id + reaction);
+  const response = await orbis.react(id, reaction);
+  setTimeout(() => {
+    setOrbisResponse(response);
+  }, 1000);
 };
 
 export const getMessage = async function (content: any, orbis: IOrbis) {
@@ -72,10 +83,14 @@ export async function loadData(
     res = await orbis.connect();
   }
 
-  let result = await orbis.getPosts({
-    context: context,
-    tag: queryId,
-  });
+  let result = await orbis.getPosts(
+    {
+      context: context,
+      tag: queryId,
+    },
+    0,
+    5
+  );
 
   const messagesData = await Promise.all(
     result.data.map(async (obj: object) => {

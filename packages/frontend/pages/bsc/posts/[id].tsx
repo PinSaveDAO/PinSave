@@ -2,7 +2,7 @@ import { usePost } from "@/hooks/api";
 import { parseArweaveTxId, parseCid } from "@/services/parseCid";
 import { getCurrentChain } from "@/utils/chains";
 import { timeConverter } from "@/utils/time";
-import { checkType } from "@/utils/media";
+import { IsNotMp4 } from "@/utils/media";
 
 import { Player } from "@livepeer/react";
 import {
@@ -149,7 +149,7 @@ const PostPage = () => {
               { maxWidth: "md", cols: 1, spacing: "md" },
             ]}
           >
-            {checkType(post.image) === false ? (
+            {IsNotMp4(post.image) ? (
               <Image
                 height={550}
                 fit="contain"

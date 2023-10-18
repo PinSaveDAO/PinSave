@@ -1,4 +1,4 @@
-import { UploadPost, PostData } from "@/services/upload";
+import { UploadPost, PostData, PostDataUpload } from "@/services/upload";
 import {
   Text,
   Paper,
@@ -86,7 +86,7 @@ const UploadForm = () => {
   const [image, setImage] = useState<File | undefined>();
   const [postReceiver, setPostReceiver] = useState<string>("");
 
-  const [metadata, setMetadata] = useState<PostData[]>([]);
+  const [metadata, setMetadata] = useState<PostDataUpload[]>([]);
   const [upload, setUpload] = useState<boolean>(false);
 
   const [provider, setProvider] = useState<string>("NFT.Storage");
@@ -138,7 +138,7 @@ const UploadForm = () => {
     }
   }, [upload, metadata, provider, address, chain, walletClient, postReceiver]);
 
-  function savePost(data: PostData) {
+  function savePost(data: PostDataUpload) {
     if (data.description !== "" && data.name !== "" && data.image) {
       setMetadata((e) => [...e, data]);
 
@@ -151,7 +151,7 @@ const UploadForm = () => {
   function savePostBeforeUpload(
     name: string,
     description: string,
-    image?: File,
+    image?: File
   ) {
     if (description !== "" && name !== "" && image) {
       setMetadata((e) => [

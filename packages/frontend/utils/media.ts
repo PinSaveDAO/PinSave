@@ -1,6 +1,6 @@
-export function checkType(id: string | undefined) {
+export function IsNotMp4(id: string | undefined) {
   if (id?.slice(-3) === "mp4") {
-    return true;
+    return false;
   }
-  return false;
+  return true;
 }

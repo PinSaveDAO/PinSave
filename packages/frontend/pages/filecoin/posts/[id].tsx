@@ -2,7 +2,7 @@ import { usePost } from "@/hooks/api";
 import { parseArweaveTxId, parseCid } from "@/services/parseCid";
 import { getCurrentChain } from "@/utils/chains";
 import { timeConverter } from "@/utils/time";
-import { checkType } from "@/utils/media";
+import { IsNotMp4 } from "@/utils/media";
 
 import { Player } from "@livepeer/react";
 import {
@@ -42,14 +42,14 @@ const PostPage = () => {
   const currentChain = getCurrentChain(314);
   const { data: post, isLoading } = usePost(
     currentChain,
-    router.query.id as string,
+    router.query.id as string
   );
 
   const idParsed = useMemo(
     () =>
       parseCid(post?.image as string) ??
       parseArweaveTxId(post?.image as string),
-    [post?.image],
+    [post?.image]
   );
 
   const sendMessage = async function (context: string) {
@@ -72,7 +72,7 @@ const PostPage = () => {
               returnValueTest: { comparator: ">=", value: "1" },
             },
           ],
-        },
+        }
       );
     if (!isEncrypted)
       await orbis.createPost({
@@ -116,7 +116,7 @@ const PostPage = () => {
             ...obj,
             newData: await getMessage(obj),
           };
-        }),
+        })
       );
 
       setMessages(messagesData);
@@ -145,7 +145,7 @@ const PostPage = () => {
               { maxWidth: "md", cols: 1, spacing: "md" },
             ]}
           >
-            {checkType(post.image) === false ? (
+            {IsNotMp4(post.image) ? (
               <Image
                 height={550}
                 fit="contain"
@@ -205,13 +205,13 @@ const PostPage = () => {
                     <Text mt={3}>
                       <a
                         href={`https://evm.pinsave.app/profile/${message.creator.substring(
-                          message.creator.indexOf(":0x") + 1,
+                          message.creator.indexOf(":0x") + 1
                         )}`}
                         style={{ color: "#198b6eb9" }}
                       >
                         {message.creator_details.profile?.username ??
                           message.creator.substring(
-                            message.creator.indexOf(":0x") + 1,
+                            message.creator.indexOf(":0x") + 1
                           )}
                       </a>
                       : {message.newData}

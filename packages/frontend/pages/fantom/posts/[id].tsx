@@ -1,73 +1,25 @@
+import MediaDetails from "@/components/Post/MediaDetails";
+import DisplayMedia from "@/components/Post/DisplayMedia";
 import { usePost } from "@/hooks/api";
-import { parseArweaveTxId, parseCid } from "@/services/parseCid";
 import { getCurrentChain } from "@/utils/chains";
-import { timeConverter } from "@/utils/time";
-import { checkType } from "@/utils/media";
-import { getContractInfo } from "@/utils/contracts";
-import {
-  sendMessage,
-  sendReaction,
-  getMessage,
-  loadData,
-} from "@/services/orbis";
 
-import { Player } from "@livepeer/react";
-import {
-  ActionIcon,
-  Paper,
-  SimpleGrid,
-  Image,
-  LoadingOverlay,
-  Button,
-  TextInput,
-  Text,
-  Group,
-  Avatar,
-  Switch,
-  Title,
-} from "@mantine/core";
-import { Orbis } from "@orbisclub/orbis-sdk";
+import { ActionIcon, SimpleGrid, LoadingOverlay } from "@mantine/core";
 import { useRouter } from "next/router";
-import React, { useState, useEffect, useMemo } from "react";
-import { BiDislike } from "react-icons/bi";
-import { FaLaughSquint } from "react-icons/fa";
-import { ArrowLeft, Heart } from "tabler-icons-react";
 
-const orbis: IOrbis = new Orbis();
-
-const context =
-  "kjzl6cwe1jw147hcck185xfdlrxq9zv0y0hoa6shzskqfnio56lhf8190yaei7w";
+import { ArrowLeft } from "tabler-icons-react";
+import { ChainName } from "@/constants/chains";
 
 const PostPage = () => {
   const router = useRouter();
   const queryId = String(router.query.id);
 
-  const [reaction, setReaction] = useState<string>();
-  const [isEncrypted, setIsEncrypted] = useState(false);
+  const currentChain: ChainName = getCurrentChain(250);
 
-  const [newMessage, setNewMessage] = useState<string>("");
-  const [messages, setMessages] = useState<any | undefined>();
-
-  const currentChain = getCurrentChain(250);
-  const { address } = getContractInfo(250);
-
-  const { data: post, isLoading } = usePost(currentChain, queryId);
-
-  const idParsed = useMemo(
-    () =>
-      parseCid(post?.image as string) ??
-      parseArweaveTxId(post?.image as string),
-    [post?.image]
-  );
-
-  useEffect(() => {
-    loadData(orbis, router, context, queryId, setMessages);
-  }, [router.isReady, queryId, newMessage, reaction]);
-
+  const { data: postQueried, isLoading } = usePost(currentChain, queryId);
   return (
     <div>
       <LoadingOverlay visible={isLoading} />
-      {post && (
+      {postQueried && (
         <>
           <ActionIcon
             onClick={() => router.back()}
@@ -85,166 +37,8 @@ const PostPage = () => {
               { maxWidth: "md", cols: 1, spacing: "md" },
             ]}
           >
-            {checkType(post.image) === false ? (
-              <Image
-                height={550}
-                fit="contain"
-                src={post.image ?? "https://evm.pinsave.app/PinSaveCard.png"}
-                alt={post.name}
-              />
-            ) : (
-              <Player
-                title={idParsed}
-                src={post.image}
-                autoPlay
-                muted
-                autoUrlUpload={{
-                  fallback: true,
-                  ipfsGateway: "https://w3s.link",
-                }}
-              />
-            )}
-            <Paper shadow="sm" p="md" withBorder>
-              <Title mb="1.4rem">{post.name}</Title>
-              <Paper
-                shadow="xs"
-                withBorder
-                px="xs"
-                sx={{ backgroundColor: "#82c7fc1d" }}
-              >
-                <Text my={2}>{post.description}</Text>
-              </Paper>
-              <p style={{ fontSize: "small", color: "#0000008d" }}>
-                Owned by:{" "}
-                <a
-                  style={{ color: "#198b6eb9" }}
-                  href={`https://evm.pinsave.app/profile/${post.owner}`}
-                >
-                  {post.owner}
-                </a>
-              </p>
-              {messages?.map((message: any, i: number) => (
-                <Paper
-                  key={i}
-                  shadow="xs"
-                  mt={4}
-                  sx={{ backgroundColor: "#80c7fc1d" }}
-                  withBorder
-                  px="xl"
-                >
-                  <Group spacing="xs">
-                    <Avatar size={25} color="blue">
-                      <Image
-                        src={
-                          message.creator_details.profile?.pfp ??
-                          "https://evm.pinsave.app/PinSaveCard.png"
-                        }
-                        alt="profile"
-                      />
-                    </Avatar>
-                    <Text mt={3}>
-                      <a
-                        href={`https://evm.pinsave.app/profile/${message.creator.substring(
-                          message.creator.indexOf(":0x") + 1
-                        )}`}
-                        style={{ color: "#198b6eb9" }}
-                      >
-                        {message.creator_details.profile?.username ??
-                          message.creator.substring(
-                            message.creator.indexOf(":0x") + 1
-                          )}
-                      </a>
-                      : {message.newData}
-                    </Text>
-                  </Group>
-                  <Button
-                    color="red"
-                    size="xs"
-                    component="a"
-                    radius="sm"
-                    rightIcon={<Heart fill="white" />}
-                    onClick={() =>
-                      sendReaction(
-                        message.stream_id,
-                        "like",
-                        orbis,
-                        setReaction
-                      )
-                    }
-                  >
-                    {message.count_likes}
-                  </Button>
-                  <Button
-                    size="xs"
-                    component="a"
-                    radius="sm"
-                    rightIcon={<FaLaughSquint size={22} />}
-                    ml={4}
-                    onClick={() =>
-                      sendReaction(
-                        message.stream_id,
-                        "haha",
-                        orbis,
-                        setReaction
-                      )
-                    }
-                  >
-                    {message.count_haha}
-                  </Button>
-                  <Button
-                    color="blue"
-                    size="xs"
-                    component="a"
-                    radius="sm"
-                    ml={4}
-                    rightIcon={<BiDislike size={22} />}
-                    onClick={() =>
-                      sendReaction(
-                        message.stream_id,
-                        "downvote",
-                        orbis,
-                        setReaction
-                      )
-                    }
-                  >
-                    {message.count_downvotes}
-                  </Button>
-                  <Text sx={{ float: "right" }}>
-                    {timeConverter(message.timestamp)}
-                  </Text>
-                </Paper>
-              ))}
-              <Group>
-                <TextInput
-                  my="lg"
-                  onChange={(e) => setNewMessage(e.target.value)}
-                  value={newMessage}
-                  placeholder="Enter your message"
-                  sx={{ maxWidth: "240px" }}
-                />
-                <Text>Only for PinSave holders:</Text>
-                <Switch
-                  onClick={() => setIsEncrypted((prevCheck) => !prevCheck)}
-                />
-              </Group>
-              <Button
-                component="a"
-                radius="lg"
-                onClick={() =>
-                  sendMessage(
-                    context,
-                    isEncrypted,
-                    orbis,
-                    newMessage,
-                    queryId,
-                    address,
-                    currentChain
-                  )
-                }
-              >
-                Send Message
-              </Button>
-            </Paper>
+            <DisplayMedia {...postQueried} />
+            <MediaDetails post={postQueried} currentChain={currentChain} />
           </SimpleGrid>
         </>
       )}

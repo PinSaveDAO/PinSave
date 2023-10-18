@@ -5,20 +5,29 @@ import { randomBytes, zeroPadValue, hexlify, toUtf8Bytes } from "ethers";
 import { NFTStorage } from "nft.storage";
 import { useContractWrite } from "wagmi";
 
-export type PostData = {
+export type PostDataUpload = {
   name: string;
   description: string;
   image: File;
 };
 
-export type Post = PostData & {
+export type PostData = {
+  name: string;
+  description: string;
   image: string;
+};
+
+export type Post = PostData & {
   token_id: number;
+};
+
+export type IndividualPost = Post & {
+  owner: string;
 };
 
 export type UploadingPost = {
   receiverAddress: string;
-  data: PostData[];
+  data: PostDataUpload[];
   chain?: number;
   provider?: string;
 };
