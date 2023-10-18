@@ -45,7 +45,7 @@ const Home: NextPage = () => {
           <Loader size="xl" my={4} />
         </Center>
       )}
-      {posts && posts?.pages.length > 0 && (
+      {posts && posts.pages.length > 0 && (
         <Center my={8}>
           <Button
             mx="auto"
