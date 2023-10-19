@@ -1,7 +1,6 @@
 import { timeConverter } from "@/utils/time";
 import { getContractInfo } from "@/utils/contracts";
-import { sendMessage, sendReaction } from "@/services/orbis";
-import { loadData } from "@/services/orbis";
+import { sendMessage, sendReaction, loadData } from "@/services/orbis";
 import type { ChainName } from "@/constants/chains";
 import type { IndividualPost } from "@/services/upload";
 
@@ -26,14 +25,14 @@ import { useRouter } from "next/router";
 interface IMyProps {
   post: IndividualPost;
   currentChain: ChainName;
-  context: string;
 }
 
 const orbis: IOrbis = new Orbis();
+const context =
+  "kjzl6cwe1jw147hcck185xfdlrxq9zv0y0hoa6shzskqfnio56lhf8190yaei7w";
 
-const MediaDetails: React.FC<IMyProps> = ({ post, currentChain, context }) => {
+const MediaDetails: React.FC<IMyProps> = ({ post, currentChain }) => {
   const router = useRouter();
-  const queryId = String(router.query.id);
   const [isEncrypted, setIsEncrypted] = useState(false);
 
   const [newMessage, setNewMessage] = useState<string>("");
@@ -43,8 +42,8 @@ const MediaDetails: React.FC<IMyProps> = ({ post, currentChain, context }) => {
   const { address } = getContractInfo(250);
 
   useEffect(() => {
-    loadData(orbis, router, context, queryId, setMessages);
-  }, [router, router.isReady, queryId, orbisResponse, context]);
+    loadData(orbis, router, context, currentChain, setMessages);
+  }, [router, router.isReady, orbisResponse, context]);
 
   return (
     <Paper shadow="sm" p="md" withBorder>
@@ -88,14 +87,14 @@ const MediaDetails: React.FC<IMyProps> = ({ post, currentChain, context }) => {
             <Text mt={3}>
               <a
                 href={`https://evm.pinsave.app/profile/${message.creator.substring(
-                  message.creator.indexOf(":0x") + 1,
+                  message.creator.indexOf(":0x") + 1
                 )}`}
                 style={{ color: "#198b6eb9", fontSize: "smaller" }}
               >
                 {message.creator_details.profile?.username ??
                   message.creator.substring(
                     message.creator.indexOf(":0x") + 1,
-                    message.creator.indexOf(":0x") + 8,
+                    message.creator.indexOf(":0x") + 8
                   ) + "..."}
               </a>
               : {message.newData}
@@ -138,7 +137,7 @@ const MediaDetails: React.FC<IMyProps> = ({ post, currentChain, context }) => {
                   message.stream_id,
                   "downvote",
                   orbis,
-                  setOrbisResponse,
+                  setOrbisResponse
                 )
               }
             >
@@ -170,10 +169,10 @@ const MediaDetails: React.FC<IMyProps> = ({ post, currentChain, context }) => {
             isEncrypted,
             orbis,
             newMessage,
-            queryId,
+            currentChain,
             address,
             currentChain,
-            setOrbisResponse,
+            setOrbisResponse
           )) && setNewMessage("")
         }
       >

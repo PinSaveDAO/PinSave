@@ -2,18 +2,18 @@ import MediaDetails from "@/components/Post/MediaDetails";
 import DisplayMedia from "@/components/Post/DisplayMedia";
 import { usePost } from "@/hooks/api";
 import { getCurrentChain } from "@/utils/chains";
+import type { ChainName } from "@/constants/chains";
 
 import { ActionIcon, SimpleGrid, LoadingOverlay } from "@mantine/core";
 import { useRouter } from "next/router";
 import { ArrowLeft } from "tabler-icons-react";
-import { ChainName, ORBIS_CHAINS } from "@/constants/chains";
 
 const PostPage = () => {
   const router = useRouter();
   const queryId = String(router.query.id);
 
   const currentChain: ChainName = getCurrentChain(314);
-  const context = ORBIS_CHAINS[currentChain];
+
   const { data: postQueried, isLoading } = usePost(currentChain, queryId);
 
   return (
@@ -38,11 +38,7 @@ const PostPage = () => {
             ]}
           >
             <DisplayMedia post={postQueried} />
-            <MediaDetails
-              post={postQueried}
-              currentChain={currentChain}
-              context={context}
-            />
+            <MediaDetails post={postQueried} currentChain={currentChain} />
           </SimpleGrid>
         </>
       )}
