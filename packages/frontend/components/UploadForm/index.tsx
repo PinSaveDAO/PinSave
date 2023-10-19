@@ -151,7 +151,7 @@ const UploadForm = () => {
   function savePostBeforeUpload(
     name: string,
     description: string,
-    image?: File,
+    image?: File
   ) {
     if (description !== "" && name !== "" && image) {
       setMetadata((e) => [
@@ -237,7 +237,7 @@ const UploadForm = () => {
         >
           Upload Post
         </Button>
-        {chain?.id === 5001 || chain?.id === 314 || chain?.id === 5 ? (
+        {chain?.id === 314 ? (
           <Button
             component="a"
             radius="lg"
