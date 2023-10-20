@@ -13,8 +13,9 @@
     "frontend:eject": "yarn workspace @pinsav3/frontend eject",
     "frontend:dev": "yarn workspace @pinsav3/frontend dev",
     "frontend:test": "yarn workspace @pinsav3/frontend test",
-    "cypress:open": "dotenv -e .env -- synpress open --configFile cypress.json",
-    "cypress:run": "dotenv -e .env -- synpress run -b chromium --configFile cypress.json",
+    "frontend:prettier": "yarn workspace @pinsav3/frontend prettier:write",
+    "prettier": "yarn workspace @pinsav3/frontend prettier:write",
+    "dev": "yarn workspace @pinsav3/frontend dev",
     "build": "yarn workspace @pinsav3/frontend build",
     "install": "yarn workspace @pinsav3/frontend install",
     "chain": "yarn workspace @pinsav3/hardhat chain",
@@ -35,26 +36,13 @@
     "wallet": "cd packages/hardhat && npx hardhat wallet",
     "fundedwallet": "cd packages/hardhat && npx hardhat fundedwallet",
     "flatten": "cd packages/hardhat && npx hardhat flatten",
-    "clean": "cd packages/hardhat && npx hardhat clean",
-    "postinstall": "husky install"
+    "clean": "cd packages/hardhat && npx hardhat clean"
   },
   "workspaces": {
     "packages": [
       "packages/*"
-    ],
-    "nohoist": [
-      "**/@graphprotocol/graph-ts",
-      "**/@graphprotocol/graph-ts/**",
-      "**/hardhat",
-      "**/hardhat/**",
-      "**/hardhat-ts",
-      "**/hardhat-ts/**"
     ]
   },
   "dependencies": {},
-  "devDependencies": {
-    "@synthetixio/synpress": "^3.1.0",
-    "cypress-file-upload": "^5.0.8",
-    "husky": "^8.0.3"
-  }
+  "devDependencies": {}
 }

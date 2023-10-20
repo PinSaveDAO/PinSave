@@ -11,12 +11,17 @@ export default async function handler(
     const { id } = req.query;
     const { address, abi } = getContractInfo(80001);
 
-    let provider = new AlchemyProvider("maticmum", process.env.NEXT_ALCHEMY_ID);
+    let provider = new AlchemyProvider(
+      "maticmum",
+      process.env.NEXT_PUBLIC_ALCHEMY_ID,
+    );
 
     const contract = new Contract(address, abi, provider);
 
     const result = await contract.tokenURI(id);
     const owner = await contract.ownerOf(id);
+
+    console.log("CID:" + result);
 
     const output = await fetchDecodedPost(result);
 

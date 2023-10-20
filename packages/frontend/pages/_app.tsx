@@ -19,15 +19,7 @@ import type { AppProps as NextAppProps } from "next/app";
 import NextHead from "next/head";
 import { useState, useMemo } from "react";
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
-import {
-  Chain,
-  polygonMumbai,
-  hardhat,
-  bsc,
-  goerli,
-  fantom,
-  filecoin,
-} from "wagmi/chains";
+import { Chain, polygonMumbai, fantom, filecoin } from "wagmi/chains";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
 import { publicProvider } from "wagmi/providers/public";
@@ -44,17 +36,10 @@ export interface MyWalletOptions {
 }
 
 const { chains, publicClient } = configureChains(
-  [
-    ...(process.env.NEXT_PUBLIC_DEV === "true" ? [hardhat] : []),
-    polygonMumbai,
-    bsc,
-    fantom,
-    filecoin,
-    goerli,
-  ],
+  [polygonMumbai, fantom, filecoin],
   [
     alchemyProvider({
-      apiKey: process.env.NEXT_ALCHEMY_ID,
+      apiKey: process.env.NEXT_PUBLIC_ALCHEMY_ID,
     }),
     publicProvider(),
     jsonRpcProvider({

@@ -1,5 +1,5 @@
 import { getChainApiRouteName } from "@/utils/chains";
-import { checkType } from "@/utils/media";
+import { IsNotMp4 } from "@/utils/media";
 import type { Post } from "@/services/upload";
 
 import { Player } from "@livepeer/react";
@@ -8,7 +8,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { useNetwork, Chain } from "wagmi";
 
-const PostCard = (post: Post) => {
+interface IMyProps {
+  post: Post;
+}
+
+const PostCard: React.FC<IMyProps> = ({ post }) => {
   const { chain } = useNetwork();
 
   return (
@@ -29,7 +33,7 @@ const PostCard = (post: Post) => {
             height: 200,
           }}
         >
-          {checkType(post.image) === false ? (
+          {IsNotMp4(post.image) ? (
             <Image
               src={post.image}
               alt={post.name}

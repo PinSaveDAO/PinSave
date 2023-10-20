@@ -1,8 +1,7 @@
 // SPDX-License-Identifier: MIT
-
 import "@lukso/lsp-smart-contracts/contracts/LSP8IdentifiableDigitalAsset/LSP8IdentifiableDigitalAsset.sol";
 
-pragma solidity 0.8.19;
+pragma solidity 0.8.20;
 
 contract LSP8PinSave is LSP8IdentifiableDigitalAsset {
 
@@ -64,6 +63,10 @@ contract LSP8PinSave is LSP8IdentifiableDigitalAsset {
 
     function getCreator(uint id) public view returns(address){
       return postByTokenId[id].author;
+    }
+    
+    receive() external payable {
+        // Code to handle receiving Ether
     }
 
 }

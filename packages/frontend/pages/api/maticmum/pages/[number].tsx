@@ -12,7 +12,10 @@ export default async function handler(
     const pageNumber = Number(number) + 1;
 
     const { address, abi } = getContractInfo(80001);
-    let provider = new AlchemyProvider("maticmum", process.env.NEXT_ALCHEMY_ID);
+    let provider = new AlchemyProvider(
+      "maticmum",
+      process.env.NEXT_PUBLIC_ALCHEMY_ID,
+    );
 
     const contract = new Contract(address, abi, provider);
 

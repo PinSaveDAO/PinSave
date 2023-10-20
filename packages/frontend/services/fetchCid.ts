@@ -13,12 +13,10 @@ export async function fetchJson(resURL: string, resURL2: string) {
 export async function fetchImageUrls(resURL: string, resURL2: string) {
   let image = "https://evm.pinsave.app/PinSaveCard.png";
   try {
-    const response = await fetch(resURL);
-    //console.log(response.status);
+    await fetch(resURL);
     image = resURL;
   } catch {
-    const response = await fetch(resURL2);
-    //console.log(response.status);
+    await fetch(resURL2);
     image = resURL2;
   }
   return image;
@@ -53,13 +51,31 @@ export async function fetchImage(result: string) {
 }
 
 export async function fetchDecodedPost(result: string) {
-  const item = await fetchMetadata(result);
+  try {
+    const item = await fetchMetadata(result);
 
-  const decoded_image = await fetchImage(item.image);
-
-  const output = {
-    ...item,
-    image: decoded_image,
-  };
-  return output;
+    try {
+      const decoded_image = await fetchImage(item.image);
+      const output = {
+        ...item,
+        image: decoded_image,
+      };
+      return output;
+    } catch (e) {
+      console.log(e);
+      return {
+        ...item,
+        image:
+          "https://img.freepik.com/free-vector/failure-grunge-text_460848-9361.jpg",
+      };
+    }
+  } catch (e) {
+    console.log(e);
+    return {
+      name: "Failed",
+      description: "F for Failure",
+      image:
+        "https://img.freepik.com/free-vector/failure-grunge-text_460848-9361.jpg",
+    };
+  }
 }

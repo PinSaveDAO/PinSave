@@ -12,7 +12,7 @@ declare interface IOrbisConstructor {
 
 declare interface IOrbis {
   api: any;
-  connect: (provider: any, lit?: boolean) => Promise<IOrbisConnectReturns>;
+  connect: (provider?: any, lit?: boolean) => Promise<IOrbisConnectReturns>;
   connect_v2: (opts?: {
     provider?: any;
     chain?: string;
@@ -53,7 +53,10 @@ declare interface IOrbis {
     doc: string;
     result: string;
   }>;
-  createPost: (content: IOrbisPostContent) => Promise<{
+  createPost: (
+    content: IOrbisPostContent,
+    encryption?: IOrbisEncryptionPostRules,
+  ) => Promise<{
     status: number;
     doc: string;
     result: string;
@@ -189,6 +192,7 @@ declare interface IOrbis {
       algorithm?: keyof typeof IOrbisGetPostsAlgorithm | null;
     },
     page?: number,
+    limit?: number,
   ) => Promise<{
     data: IOrbisPost[];
     error: any;
@@ -466,6 +470,11 @@ interface IOrbisCredential {
   creator?: string;
   subject_id?: string;
   type?: string;
+}
+
+interface IOrbisEncryptionPostRules {
+  type: "token-gated" | "custom";
+  accessControlConditions?: object;
 }
 
 interface IOrbisEncryptionRules {

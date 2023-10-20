@@ -13,6 +13,7 @@ import {
 import { useDisclosure } from "@mantine/hooks";
 import React, { useState } from "react";
 import { ChevronDown, ChevronUp } from "tabler-icons-react";
+
 interface Dispute {
   label?: string;
   replies?: string[];

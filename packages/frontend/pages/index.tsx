@@ -36,7 +36,7 @@ const Home: NextPage = () => {
           key={i}
         >
           {page.items.map((post: Post) => {
-            return <PostCard {...post} key={post.token_id} />;
+            return <PostCard post={post} key={post.token_id} />;
           })}
         </Box>
       ))}
@@ -45,7 +45,7 @@ const Home: NextPage = () => {
           <Loader size="xl" my={4} />
         </Center>
       )}
-      {posts && posts?.pages.length > 0 && (
+      {posts && posts.pages.length > 0 && (
         <Center my={8}>
           <Button
             mx="auto"

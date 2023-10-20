@@ -1,5 +1,5 @@
 import { CHAINS, type ChainName } from "@/constants/chains";
-import { Chain } from "wagmi";
+import type { Chain } from "wagmi";
 
 export const getCurrentChain = (chainId: number) => {
   return Object.keys(CHAINS).find(
