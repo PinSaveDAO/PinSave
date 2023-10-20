@@ -1,4 +1,4 @@
-import { UploadPost, PostData, PostDataUpload } from "@/services/upload";
+import { UploadData } from "@/services/upload";
 import {
   Text,
   Paper,
@@ -13,12 +13,13 @@ import {
   NativeSelect,
 } from "@mantine/core";
 import { Dropzone, MIME_TYPES } from "@mantine/dropzone";
-import { showNotification, updateNotification } from "@mantine/notifications";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import ReactPlayer from "react-player";
 import { Upload, Replace } from "tabler-icons-react";
-import { useAccount, useNetwork, useWalletClient } from "wagmi";
+import { useAccount, useNetwork } from "wagmi";
+import { useContractWrite, usePrepareContractWrite } from "wagmi";
+import { getContractInfo } from "@/utils/contracts";
 
 export const dropzoneChildren = (image: File | undefined) => {
   if (image) {
@@ -80,90 +81,50 @@ export const dropzoneChildren = (image: File | undefined) => {
 const UploadForm = () => {
   const { address } = useAccount();
   const { chain } = useNetwork();
-  const { data: walletClient } = useWalletClient();
+
+  const { address: contractAddress, abi } = getContractInfo(chain?.id);
+
   const [name, setName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [image, setImage] = useState<File | undefined>();
   const [postReceiver, setPostReceiver] = useState<string>("");
 
-  const [metadata, setMetadata] = useState<PostDataUpload[]>([]);
-  const [upload, setUpload] = useState<boolean>(false);
+  // const [metadata, setMetadata] = useState<PostDataUpload[]>([]);
+
+  const [response, setResponse] = useState<string>("");
 
   const [provider, setProvider] = useState<string>("NFT.Storage");
 
-  useEffect(() => {
-    async function startUpload(storageProvider: string) {
-      showNotification({
-        id: "upload-post",
-        loading: true,
-        title: "Uploading post",
-        message: "Data will be loaded in a couple of seconds",
-        autoClose: false,
-        disallowClose: true,
-      });
+  const { config } = usePrepareContractWrite({
+    address: contractAddress,
+    abi: abi,
+    functionName: "mintPost",
+    args: [address, response],
+  });
 
-      if (walletClient && metadata && chain) {
-        if (postReceiver) {
-          UploadPost({
-            receiverAddress: postReceiver,
-            data: metadata,
-            chain: chain.id,
-            provider: storageProvider,
-          });
-        }
+  const { write: writeMintPost } = useContractWrite(config);
 
-        if (!postReceiver && address) {
-          UploadPost({
-            receiverAddress: address,
-            data: metadata,
-            chain: chain.id,
-            provider: storageProvider,
-          });
-        }
-        setMetadata([]);
-      }
-
-      if (!walletClient) {
-        updateNotification({
-          id: "upload-post",
-          color: "red",
-          title: "Failed to upload post",
-          message: "Check if you've connected the wallet",
-        });
-      }
-    }
-    if (upload) {
-      startUpload(provider);
-      setUpload(false);
-    }
-  }, [upload, metadata, provider, address, chain, walletClient, postReceiver]);
-
-  function savePost(data: PostDataUpload) {
-    if (data.description !== "" && data.name !== "" && data.image) {
-      setMetadata((e) => [...e, data]);
-
-      setImage(undefined);
-      setName("");
-      setDescription("");
-    }
-  }
-
-  function savePostBeforeUpload(
+  async function savePostBeforeUpload(
     name: string,
     description: string,
     image?: File
   ) {
-    if (description !== "" && name !== "" && image) {
-      setMetadata((e) => [
-        ...e,
-        { name: name, description: description, image: image },
-      ]);
+    if (description !== "" && name !== "" && image && address) {
+      const cid = await UploadData({
+        receiverAddress: address,
+        data: { name: name, description: description, image: image },
+        provider: provider,
+      });
 
+      setResponse(cid);
+      console.log(cid);
+      console.log(response);
       setImage(undefined);
       setName("");
       setDescription("");
+      return true;
     }
-    setUpload(true);
+    return false;
   }
 
   return (
@@ -233,23 +194,13 @@ const UploadForm = () => {
           component="a"
           radius="lg"
           mt="md"
-          onClick={() => savePostBeforeUpload(name, description, image)}
+          onClick={async () =>
+            (await savePostBeforeUpload(name, description, image)) &&
+            writeMintPost?.()
+          }
         >
           Upload Post
         </Button>
-        {chain?.id === 314 ? (
-          <Button
-            component="a"
-            radius="lg"
-            mt="md"
-            onClick={() =>
-              image &&
-              savePost({ name: name, description: description, image: image })
-            }
-          >
-            Add another
-          </Button>
-        ) : null}
       </Group>
       <Center>
         <NativeSelect

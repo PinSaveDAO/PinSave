@@ -9,7 +9,7 @@ export const sendMessage = async function (
   tag: string,
   address: `0x${string}`,
   currentChain: ChainName,
-  setOrbisResponse: React.Dispatch<any>
+  setOrbisResponse: React.Dispatch<any>,
 ) {
   let response: any;
   if (isEncrypted) {
@@ -31,7 +31,7 @@ export const sendMessage = async function (
             returnValueTest: { comparator: ">=", value: "1" },
           },
         ],
-      }
+      },
     );
   }
   if (!isEncrypted) {
@@ -52,7 +52,7 @@ export const sendReaction = async function (
   id: string,
   reaction: string,
   orbis: IOrbis,
-  setOrbisResponse: React.Dispatch<any>
+  setOrbisResponse: React.Dispatch<any>,
 ) {
   const response = await orbis.react(id, reaction);
   setTimeout(() => {
@@ -73,7 +73,7 @@ export async function loadData(
   router: NextRouter,
   context: string,
   tag: string,
-  setMessages: React.Dispatch<any>
+  setMessages: React.Dispatch<any>,
 ) {
   let res = await orbis.isConnected();
 
@@ -89,7 +89,7 @@ export async function loadData(
       tag: tag,
     },
     0,
-    5
+    5,
   );
 
   const messagesData = await Promise.all(
@@ -98,7 +98,7 @@ export async function loadData(
         ...obj,
         newData: await getMessage(obj, orbis),
       };
-    })
+    }),
   );
 
   setMessages(messagesData);

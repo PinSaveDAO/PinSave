@@ -39,7 +39,7 @@ const { chains, publicClient } = configureChains(
   [polygonMumbai, fantom, filecoin],
   [
     alchemyProvider({
-      apiKey: process.env.NEXT_ALCHEMY_ID,
+      apiKey: process.env.NEXT_PUBLIC_ALCHEMY_ID,
     }),
     publicProvider(),
     jsonRpcProvider({
@@ -47,7 +47,7 @@ const { chains, publicClient } = configureChains(
         return { http: chain.rpcUrls.default.http[0] };
       },
     }),
-  ]
+  ],
 );
 
 const { connectors } = getDefaultWallets({
