@@ -1,4 +1,6 @@
 import { UploadData } from "@/services/upload";
+import { getContractInfo } from "@/utils/contracts";
+
 import {
   Text,
   Paper,
@@ -13,13 +15,15 @@ import {
   NativeSelect,
 } from "@mantine/core";
 import { Dropzone, MIME_TYPES } from "@mantine/dropzone";
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ReactPlayer from "react-player";
 import { Upload, Replace } from "tabler-icons-react";
-import { useAccount, useNetwork } from "wagmi";
-import { useContractWrite, usePrepareContractWrite } from "wagmi";
-import { getContractInfo } from "@/utils/contracts";
+import {
+  useAccount,
+  useNetwork,
+  useContractWrite,
+  usePrepareContractWrite,
+} from "wagmi";
 
 export const dropzoneChildren = (image: File | undefined) => {
   if (image) {
@@ -91,6 +95,10 @@ const UploadForm = () => {
 
   // const [metadata, setMetadata] = useState<PostDataUpload[]>([]);
 
+  const [isPostUpdated, setIsPostUpdated] = useState<boolean>(false);
+  const [isPostLoading, setIsPostLoading] = useState<boolean>(false);
+  const [isPostLoaded, setIsPostLoaded] = useState<boolean>(false);
+
   const [response, setResponse] = useState<string>("");
 
   const [provider, setProvider] = useState<string>("NFT.Storage");
@@ -102,7 +110,9 @@ const UploadForm = () => {
     args: [address, response],
   });
 
-  const { write: writeMintPost } = useContractWrite(config);
+  const { data, write: writeMintPost } = useContractWrite(config);
+
+  const [lastHash, setLastHash] = useState<string>("");
 
   async function savePostBeforeUpload(
     name: string,
@@ -117,15 +127,30 @@ const UploadForm = () => {
       });
 
       setResponse(cid);
-      console.log(cid);
-      console.log(response);
       setImage(undefined);
       setName("");
       setDescription("");
+
+      setIsPostLoading(true);
       return true;
     }
     return false;
   }
+
+  useEffect(() => {
+    if (isPostLoading) {
+      setIsPostUpdated(true);
+      setIsPostLoading(false);
+
+      console.log("Updated response:" + response);
+    }
+
+    if (data?.hash && data?.hash !== lastHash && isPostUpdated) {
+      setLastHash(data.hash);
+      setIsPostLoaded(true);
+      setIsPostUpdated(false);
+    }
+  }, [isPostLoading, data]);
 
   return (
     <Paper
@@ -190,17 +215,30 @@ const UploadForm = () => {
         {() => dropzoneChildren(image)}
       </Dropzone>
       <Group position="center" sx={{ padding: 15 }}>
-        <Button
-          component="a"
-          radius="lg"
-          mt="md"
-          onClick={async () =>
-            (await savePostBeforeUpload(name, description, image)) &&
-            writeMintPost?.()
-          }
-        >
-          Upload Post
-        </Button>
+        {isPostLoading ? null : (
+          <Button
+            component="a"
+            radius="lg"
+            mt="md"
+            onClick={async () =>
+              await savePostBeforeUpload(name, description, image)
+            }
+          >
+            Save Post
+          </Button>
+        )}
+      </Group>
+      <Group position="center" sx={{ padding: 15 }}>
+        {isPostUpdated ? (
+          <Button
+            component="a"
+            radius="lg"
+            mt="md"
+            onClick={() => writeMintPost?.()}
+          >
+            Upload Post
+          </Button>
+        ) : null}
       </Group>
       <Center>
         <NativeSelect
