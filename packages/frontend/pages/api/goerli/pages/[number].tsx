@@ -12,6 +12,7 @@ export default async function handler(
     const pageNumber = Number(number) + 1;
 
     const { address, abi } = getContractInfo(5);
+    console.log("address:" + address);
     let provider = new AlchemyProvider(
       "goerli",
       process.env.NEXT_PUBLIC_ALCHEMY_ID
@@ -20,6 +21,8 @@ export default async function handler(
     const contract = new Contract(address, abi, provider);
 
     const totalSupply = Number(await contract.totalSupply());
+
+    console.log("address:" + address);
 
     let items = [];
     let result;
