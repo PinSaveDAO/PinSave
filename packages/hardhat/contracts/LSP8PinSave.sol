@@ -4,7 +4,6 @@ import "@lukso/lsp-smart-contracts/contracts/LSP8IdentifiableDigitalAsset/LSP8Id
 pragma solidity 0.8.20;
 
 contract LSP8PinSave is LSP8IdentifiableDigitalAsset {
-
     bool internal locked;
     modifier noReentrant() {
         require(!locked, "No re-entrancy");

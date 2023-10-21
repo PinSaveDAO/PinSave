@@ -1,4 +1,3 @@
-import { randomBytes, zeroPadValue, hexlify, toUtf8Bytes } from "ethers";
 import { NFTStorage } from "nft.storage";
 
 export type PostDataUpload = {
@@ -141,58 +140,4 @@ export async function UploadData(incomingData: UploadingPost) {
   return metadata_url;
 }
 
-/* export function UploadPost(
-  incomingData: UploadingPost,
-  metadata_url: string[]
-) {
-  const { address, abi } = getContractInfo(incomingData.chain);
-
-  const { write: writeCreatePost } = useContractWrite({
-    address: address,
-    abi: abi,
-    functionName: "createPost",
-  });
-
-  const { write: writeCreateBatchPosts } = useContractWrite({
-    address: address,
-    abi: abi,
-    functionName: "createBatchPosts",
-  });
-
-  const { config } = usePrepareContractWrite({
-    address: address,
-    abi: abi,
-    functionName: "mintPost",
-    args: [incomingData.receiverAddress, metadata_url[0]],
-  });
-
-  const { write: writeMintPost } = useContractWrite(config);
-  try {
-
-    if (incomingData.chain === 250) {
-      try {
-        const id = String(randomBytes(32));
-        const Id = zeroPadValue(hexlify(toUtf8Bytes(id)), 32);
-        writeCreatePost({
-          args: [incomingData.receiverAddress, metadata_url[0], Id],
-        });
-      } catch (e) {
-        console.log(e);
-      }
-    }
-
-    if (incomingData.chain === 314) {
-      let Ids: string[] = [];
-
-      for (let i = 0; metadata_url.length - 1 >= i; i++) {
-        const id = String(randomBytes(32));
-        const Id = zeroPadValue(hexlify(toUtf8Bytes(id)), 32);
-        Ids.push(Id);
-      }
-
-      writeCreateBatchPosts({
-        args: [incomingData.receiverAddress, metadata_url, Ids],
-      });
-    }
-
-} */
+//zeroPadValue(hexlify(randomBytes(32)), 32);

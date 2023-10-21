@@ -150,7 +150,7 @@ const UploadForm = () => {
       setIsPostLoaded(true);
       setIsPostUpdated(false);
     }
-  }, [isPostLoading, data]);
+  }, [isPostLoading, data, isPostLoaded, lastHash, response, isPostUpdated]);
 
   return (
     <Paper
