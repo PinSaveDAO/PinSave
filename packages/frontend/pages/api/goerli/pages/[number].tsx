@@ -13,7 +13,7 @@ export default async function handler(
 
     const { address, abi } = getContractInfo(5);
 
-    let provider = new InfuraProvider(
+    const provider = new InfuraProvider(
       "goerli",
       process.env.NEXT_PUBLIC_INFURA_GOERLI
     );

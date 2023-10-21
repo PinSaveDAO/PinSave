@@ -1,6 +1,6 @@
 import { fetchDecodedPost } from "@/services/fetchCid";
 import { getContractInfo } from "@/utils/contracts";
-import { Contract, JsonRpcProvider } from "ethers";
+import { Contract, InfuraProvider } from "ethers";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
@@ -10,9 +10,10 @@ export default async function handler(
   try {
     const { id } = req.query;
     const { address, abi } = getContractInfo(5);
-    const provider = new JsonRpcProvider(
-      "https://goerli.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161",
-      "goerli"
+
+    const provider = new InfuraProvider(
+      "goerli",
+      process.env.NEXT_PUBLIC_INFURA_GOERLI
     );
 
     const contract = new Contract(address, abi, provider);
