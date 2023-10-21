@@ -1,6 +1,6 @@
 import { fetchDecodedPost } from "@/services/fetchCid";
 import { getContractInfo } from "@/utils/contracts";
-import { AlchemyProvider, Contract } from "ethers";
+import { AlchemyProvider, Contract, getDefaultProvider } from "ethers";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
@@ -10,10 +10,7 @@ export default async function handler(
   try {
     const { id } = req.query;
     const { address, abi } = getContractInfo(5);
-    let provider = new AlchemyProvider(
-      "goerli",
-      process.env.NEXT_PUBLIC_ALCHEMY_ID
-    );
+    let provider = getDefaultProvider("goerli");
 
     const contract = new Contract(address, abi, provider);
 
