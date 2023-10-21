@@ -5,6 +5,9 @@ pragma solidity 0.8.20;
 
 contract LSP8PinSave is LSP8IdentifiableDigitalAsset {
     bool internal locked;
+    address public feeSetter;
+    uint public mintingFee;
+
     modifier noReentrant() {
         require(!locked, "No re-entrancy");
         locked = true;
@@ -27,17 +30,40 @@ contract LSP8PinSave is LSP8IdentifiableDigitalAsset {
         string memory name_,
         string memory symbol_,
         address newOwner_
-    ) LSP8IdentifiableDigitalAsset(name_, symbol_, newOwner_) {}
+    ) LSP8IdentifiableDigitalAsset(name_, symbol_, newOwner_) {
+        feeSetter = newOwner_;
+    }
 
+    function setFeeSetter(address _feeSetter) external {
+        require(msg.sender == feeSetter, 'FORBIDDEN');
+        feeSetter = _feeSetter;
+    }
 
-    function createPost(address receiver, string memory _cid, bytes32 tokenId) public noReentrant {
-      latestPost.cid = _cid;
-      latestPost.author = msg.sender;
-      latestPost.id = ++postsCounter;
-      latestPost.tokenId = tokenId;
-      postByTokenId[postsCounter] = latestPost;
+    function changeFee(uint newFee) external {
+        require(msg.sender == feeSetter, 'FORBIDDEN');
+        mintingFee = newFee;
+    }
 
-      _mint(receiver, tokenId , true, "");
+    function getContractBalance() public view returns (uint) {
+        return address(this).balance;
+    }
+
+    function withdrawFees() external {
+        require(msg.sender == feeSetter, "Only admin can withdraw fees");
+        uint amount = address(this).balance;
+        (bool success, ) = payable(feeSetter).call{value: amount}("");
+        require(success, "Failed to send fees");
+    }
+
+    function createPost(address receiver, string memory _cid, bytes32 tokenId) payable public noReentrant {
+        require(msg.value >= mintingFee, "Insufficient fee");
+        latestPost.cid = _cid;
+        latestPost.author = msg.sender;
+        latestPost.id = ++postsCounter;
+        latestPost.tokenId = tokenId;
+        postByTokenId[postsCounter] = latestPost;
+
+        _mint(receiver, tokenId , true, "");
     }
 
     function createBatchPosts(

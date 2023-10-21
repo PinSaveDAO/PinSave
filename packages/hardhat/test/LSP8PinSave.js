@@ -116,6 +116,40 @@ describe("LSP8", function () {
     expect(await nftContract.getPostAuthor(1)).to.equal(bob.address);
   });
 
+  it("checks fee Setter", async function () {
+    expect(await nftContract.feeSetter()).to.equal(bob.address);
+  });
+
+  it("checks fee Setter", async function () {
+    await nftContract.setFeeSetter(jane.address);
+    expect(await nftContract.feeSetter()).to.equal(jane.address);
+  });
+
+  it("checks minting fee", async function () {
+    expect(await nftContract.mintingFee()).to.equal(0);
+  });
+
+  it("changes fee", async function () {
+    await nftContract.changeFee(1);
+    expect(await nftContract.mintingFee()).to.equal(1);
+  });
+
+  it("Pays minting fee", async function () {
+    const mintingFee = 1;
+    await nftContract.changeFee(mintingFee);
+    expect(await nftContract.mintingFee()).to.equal(mintingFee);
+
+    await nftContract.createPost(bob.address, sampleLink, Id, {
+      value: 1,
+    });
+
+    expect(await nftContract.getPostAuthor(1)).to.equal(bob.address);
+    expect(Number(await nftContract.getContractBalance())).to.equal(mintingFee);
+
+    await nftContract.withdrawFees();
+    expect(Number(await nftContract.getContractBalance())).to.equal(0);
+  });
+
   it("mints multiple posts", async function () {
     await nftContract
       .connect(bob)
