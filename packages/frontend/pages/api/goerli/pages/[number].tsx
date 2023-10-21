@@ -1,6 +1,6 @@
 import { fetchDecodedPost } from "@/services/fetchCid";
 import { getContractInfo } from "@/utils/contracts";
-import { AlchemyProvider, Contract } from "ethers";
+import { Contract, InfuraProvider } from "ethers";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
@@ -12,17 +12,15 @@ export default async function handler(
     const pageNumber = Number(number) + 1;
 
     const { address, abi } = getContractInfo(5);
-    console.log("address:" + address);
-    let provider = new AlchemyProvider(
+
+    let provider = new InfuraProvider(
       "goerli",
-      process.env.NEXT_PUBLIC_ALCHEMY_ID
+      process.env.NEXT_PUBLIC_INFURA_GOERLI
     );
 
     const contract = new Contract(address, abi, provider);
 
     const totalSupply = Number(await contract.totalSupply());
-
-    console.log("address:" + address);
 
     let items = [];
     let result;
