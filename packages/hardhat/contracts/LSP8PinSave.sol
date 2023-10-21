@@ -56,11 +56,11 @@ contract LSP8PinSave is LSP8IdentifiableDigitalAsset {
       return tokenOwnerOf(postByTokenId[id].tokenId);
     }
 
-    function getPost(uint id) external view returns(string memory){
+    function getPostCid(uint id) external view returns(string memory){
       return postByTokenId[id].cid;
     }
 
-    function getCreator(uint id) public view returns(address){
+    function getPostAuthor(uint id) public view returns(address){
       return postByTokenId[id].author;
     }
     

@@ -90,7 +90,7 @@ describe("LSP8", function () {
 
   it("check cid", async function () {
     await nftContract.connect(bob).createPost(bob.address, sampleLink, Id);
-    const cid = await nftContract.getPost(1);
+    const cid = await nftContract.getPostCid(1);
     expect(cid).to.equal(sampleLink);
   });
 
@@ -113,7 +113,7 @@ describe("LSP8", function () {
     await nftContract
       .connect(bob)
       .transfer(bob.address, jane.address, Id, true, "0x00");
-    expect(await nftContract.getCreator(1)).to.equal(bob.address);
+    expect(await nftContract.getPostAuthor(1)).to.equal(bob.address);
   });
 
   it("mints multiple posts", async function () {

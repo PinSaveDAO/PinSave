@@ -1,4 +1,4 @@
-import ERC725 from "@/contracts/ERC725.json";
+/* import ERC725 from "@/contracts/ERC725.json";
 import { ContractFactory, providers, Wallet } from "ethers";
 
 export default async function handler(req, res) {
@@ -16,3 +16,4 @@ export default async function handler(req, res) {
     res.status(500).send({ error: "failed to fetch data" + err });
   }
 }
+ */

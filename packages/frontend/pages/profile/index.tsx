@@ -1,5 +1,4 @@
 import { dropzoneChildren } from "@/components/UploadForm";
-import { UpdateProfile } from "@/services/syncprofile";
 import {
   BackgroundImage,
   Box,
@@ -107,7 +106,7 @@ const Upload = () => {
     });
   }
 
-  async function syncProfile() {
+  /*   async function syncProfile() {
     if (walletClient && universalProfile) {
       await UpdateProfile({
         address: universalProfile,
@@ -117,7 +116,7 @@ const Upload = () => {
         backgroundImage: user?.details.profile?.cover,
       });
     }
-  }
+  } */
 
   /*   async function createProfile() {
     if (walletClient && address) {
@@ -363,7 +362,8 @@ const Upload = () => {
               }}
             />
             <Center>
-              <Button
+              {/*
+               <Button
                 my={12}
                 mt={20}
                 size="md"
@@ -372,7 +372,6 @@ const Upload = () => {
               >
                 Sync
               </Button>
-              {/*
               <Button
                 my={12}
                 mt={20}
