@@ -139,5 +139,3 @@ export async function UploadData(incomingData: UploadingPost) {
   }
   return metadata_url;
 }
-
-//zeroPadValue(hexlify(randomBytes(32)), 32);

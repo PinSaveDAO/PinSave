@@ -8,5 +8,5 @@ export const getCurrentChain = (chainId: number) => {
 };
 
 export function getChainApiRouteName(chain: Chain): ChainName {
-  return "maticmum";
+  return "goerli";
 }

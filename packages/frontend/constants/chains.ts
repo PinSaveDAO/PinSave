@@ -1,5 +1,5 @@
 export const CHAINS = {
-  maticmum: 80001,
+  goerli: 5,
 };
 
 export type ChainName = keyof typeof CHAINS;

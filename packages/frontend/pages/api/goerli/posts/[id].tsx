@@ -5,23 +5,23 @@ import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse,
+  res: NextApiResponse
 ) {
   try {
     const { id } = req.query;
-    const { address, abi } = getContractInfo(80001);
+    const { address, abi } = getContractInfo(5);
 
     let provider = new AlchemyProvider(
-      "maticmum",
-      process.env.NEXT_PUBLIC_ALCHEMY_ID,
+      "goerli",
+      process.env.NEXT_PUBLIC_ALCHEMY_ID
     );
 
     const contract = new Contract(address, abi, provider);
 
-    const result = await contract.tokenURI(id);
-    const owner = await contract.ownerOf(id);
+    const result = await contract.getPostCid(id);
+    const owner = await contract.getPostOwner(id);
 
-    console.log("CID:" + result);
+    //console.log("CID:" + result);
 
     const output = await fetchDecodedPost(result);
 

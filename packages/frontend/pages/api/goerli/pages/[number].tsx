@@ -5,16 +5,16 @@ import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse,
+  res: NextApiResponse
 ) {
   try {
     const { number } = req.query;
     const pageNumber = Number(number) + 1;
 
-    const { address, abi } = getContractInfo(80001);
+    const { address, abi } = getContractInfo(5);
     let provider = new AlchemyProvider(
-      "maticmum",
-      process.env.NEXT_PUBLIC_ALCHEMY_ID,
+      "goerli",
+      process.env.NEXT_PUBLIC_ALCHEMY_ID
     );
 
     const contract = new Contract(address, abi, provider);
@@ -34,7 +34,7 @@ export default async function handler(
 
     try {
       for (let i = lowerLimit; upperLimit >= i; i++) {
-        result = await contract.tokenURI(i);
+        result = await contract.getPostCid(i);
 
         const item = await fetchDecodedPost(result);
 
