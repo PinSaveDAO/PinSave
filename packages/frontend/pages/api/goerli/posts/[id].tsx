@@ -10,12 +10,12 @@ export default async function handler(
   try {
     const { id } = req.query;
     const { address, abi } = getContractInfo(5);
-
-    /*     let provider = new AlchemyProvider(
+    let provider = new AlchemyProvider(
       "goerli",
       process.env.NEXT_PUBLIC_ALCHEMY_ID
     );
 
+    /*     
     const contract = new Contract(address, abi, provider);
 
     const result = await contract.getPostCid(id);
