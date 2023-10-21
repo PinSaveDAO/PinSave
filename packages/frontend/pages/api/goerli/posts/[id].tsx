@@ -21,7 +21,7 @@ export default async function handler(
     const result = await contract.getPostCid(id);
     const owner = await contract.getPostOwner(id);
 
-    //console.log("CID:" + result);
+    console.log("CID:" + result);
 
     const output = await fetchDecodedPost(result);
 
