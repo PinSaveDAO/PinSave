@@ -1,5 +1,5 @@
 //import ERC725 from "@/contracts/ERC725.json";
-import { ethers } from "ethers";
+//import { ethers } from "ethers";
 
 /* export default async function handler(req, res) {
   try {
