@@ -15,10 +15,12 @@ export default async function handler(
       process.env.NEXT_PUBLIC_ALCHEMY_ID
     );
 
-    /*     
     const contract = new Contract(address, abi, provider);
 
     const result = await contract.getPostCid(id);
+
+    /*     
+
     const owner = await contract.getPostOwner(id);
 
     console.log("CID:" + result);
@@ -26,7 +28,7 @@ export default async function handler(
     const output = await fetchDecodedPost(result);
 
     res.status(200).json({ ...output, owner: owner }); */
-    res.status(200).json({ id, address });
+    res.status(200).json({ id, address, result });
   } catch (err) {
     res.status(500).send({ error: "failed to fetch data" + err });
   }

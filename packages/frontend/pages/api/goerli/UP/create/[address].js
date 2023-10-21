@@ -17,7 +17,3 @@ export default async function handler(req, res) {
   }
 }
  */
-
-export default async function handler(req, res) {
-  res.status(200).json("contract.address");
-}
