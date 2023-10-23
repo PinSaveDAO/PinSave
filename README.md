@@ -30,7 +30,7 @@ Pin Save is a decentralized image, video sharing and content aggregation platfor
 
 ## Features
 
-- Decentralized feed of NFTs on Filecoin, Polygon and Fantom chains with decentralized storage on IPFS with NFTPort, Estuary and Nft.storage:
+- Decentralized feed of NFTs on Optimism and Ethereum Goerli chains with decentralized storage on IPFS with NFTPort, Estuary and Nft.storage:
 
 ![decentralized feed](https://github.com/dspytdao/PinSave-EVM/blob/master/assets/feed.png)
 

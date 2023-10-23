@@ -10,7 +10,13 @@ module.exports = {
         version: "0.8.16",
       },
       {
+        version: "0.8.19",
+      },
+      {
         version: "0.8.20",
+        settings: {
+          evmVersion: "paris",
+        },
       },
     ],
     settings: {
@@ -78,6 +84,11 @@ module.exports = {
       url: "https://rpc.ankr.com/filecoin",
       accounts: [process.env.PRIVATE_KEY, process.env.UP_PK],
       chainId: 314,
+    },
+    optimism: {
+      url: "https://rpc.ankr.com/optimism",
+      accounts: [process.env.PRIVATE_KEY],
+      chainId: 10,
     },
   },
   gasReporter: {
