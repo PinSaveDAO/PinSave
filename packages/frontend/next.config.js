@@ -8,6 +8,7 @@ const nextConfig = {
       "arweave.net",
       "estuary.tech",
       "dweb.link",
+      "alchemy.com",
     ],
     remotePatterns: [
       {

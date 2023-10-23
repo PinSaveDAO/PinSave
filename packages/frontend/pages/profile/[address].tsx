@@ -21,7 +21,6 @@ function Post() {
   const { address } = router.query;
 
   const [user, setUser] = useState<IOrbisProfile | undefined>();
-  const [ens, setEns] = useState<string | undefined>("");
 
   useEffect(() => {
     async function loadData() {
@@ -42,12 +41,12 @@ function Post() {
 
   return (
     <>
-      {user || ens ? (
+      {user ? (
         <Box sx={{ maxWidth: 1200 }} mx="auto">
           <BackgroundImage
             src={
               user?.details.profile?.cover ??
-              "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=720&q=80"
+              "https://images.pexels.com/photos/1242348/pexels-photo-1242348.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&q=20"
             }
             radius="xs"
             style={{
@@ -86,7 +85,7 @@ function Post() {
               >
                 <Center>
                   <Title mx="auto" order={2}>
-                    {user?.details.profile?.username} {ens}
+                    {user?.details.profile?.username}
                   </Title>
                 </Center>
                 <Center mt={15}>

@@ -10,7 +10,13 @@ module.exports = {
         version: "0.8.16",
       },
       {
+        version: "0.8.19",
+      },
+      {
         version: "0.8.20",
+        settings: {
+          evmVersion: "paris",
+        },
       },
     ],
     settings: {
@@ -24,6 +30,9 @@ module.exports = {
     mumbai: {
       url: `https://polygon-mumbai.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY}`,
       accounts: [process.env.PRIVATE_KEY, process.env.UP_PK],
+      chainId: 80001,
+      gas: 8000000,
+      gasPrice: 1000000000,
     },
     goerli: {
       url: `https://eth-goerli.g.alchemy.com/v2/${process.env.GOERLI_ALCHEMY_API_KEY}`,
@@ -76,10 +85,18 @@ module.exports = {
       accounts: [process.env.PRIVATE_KEY, process.env.UP_PK],
       chainId: 314,
     },
+    optimism: {
+      url: "https://rpc.ankr.com/optimism",
+      accounts: [process.env.PRIVATE_KEY],
+      chainId: 10,
+    },
   },
   gasReporter: {
     enabled: true,
     currency: "CHF",
     gasPrice: 21,
+  },
+  etherscan: {
+    apiKey: process.env.ETHERSCAN_API_KEY,
   },
 };

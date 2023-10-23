@@ -1,25 +1,28 @@
 import { fetchDecodedPost } from "@/services/fetchCid";
 import { getContractInfo } from "@/utils/contracts";
-import { JsonRpcProvider, Contract } from "ethers";
+import { Contract, InfuraProvider } from "ethers";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse,
+  res: NextApiResponse
 ) {
   try {
     const { number } = req.query;
     const pageNumber = Number(number) + 1;
 
-    const { address, abi } = getContractInfo(250);
+    const { address, abi } = getContractInfo(5);
 
-    const provider = new JsonRpcProvider("https://rpc.ankr.com/fantom/");
+    const provider = new InfuraProvider(
+      "goerli",
+      process.env.NEXT_PUBLIC_INFURA_GOERLI
+    );
 
     const contract = new Contract(address, abi, provider);
 
     const totalSupply = Number(await contract.totalSupply());
 
-    var items = [];
+    let items = [];
     let result;
 
     var upperLimit = 6 * pageNumber;
@@ -32,21 +35,17 @@ export default async function handler(
 
     try {
       for (let i = lowerLimit; upperLimit >= i; i++) {
-        result = await contract.getPost(i);
+        result = await contract.getPostCid(i);
 
-        const output = await fetchDecodedPost(result);
+        const item = await fetchDecodedPost(result);
 
-        items.push({ token_id: i, ...output });
+        items.push({ token_id: i, ...item });
       }
     } catch {
-      res
-        .status(200)
-        .json({ items: items, totalSupply: totalSupply, error: "true" });
+      res.status(200).json({ items: items, totalSupply: totalSupply });
     }
 
-    res
-      .status(200)
-      .json({ items: items, totalSupply: totalSupply, error: "false" });
+    res.status(200).json({ items: items, totalSupply: totalSupply });
   } catch (err) {
     res.status(500).json({ error: "failed to fetch data" + err });
   }

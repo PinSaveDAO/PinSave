@@ -24,6 +24,7 @@ import {
   useContractWrite,
   usePrepareContractWrite,
 } from "wagmi";
+import { zeroPadValue, hexlify, randomBytes } from "ethers";
 
 export const dropzoneChildren = (image: File | undefined) => {
   if (image) {
@@ -93,6 +94,10 @@ const UploadForm = () => {
   const [image, setImage] = useState<File | undefined>();
   const [postReceiver, setPostReceiver] = useState<string>("");
 
+  const [randomBytes32, setRandomBytes32] = useState<string>(
+    "0x000000000000000000000000000000000000000000000000000000000000000a"
+  );
+
   // const [metadata, setMetadata] = useState<PostDataUpload[]>([]);
 
   const [isPostUpdated, setIsPostUpdated] = useState<boolean>(false);
@@ -106,8 +111,8 @@ const UploadForm = () => {
   const { config } = usePrepareContractWrite({
     address: contractAddress,
     abi: abi,
-    functionName: "mintPost",
-    args: [address, response],
+    functionName: "createPost",
+    args: [address, response, randomBytes32],
   });
 
   const { data, write: writeMintPost } = useContractWrite(config);
@@ -126,7 +131,11 @@ const UploadForm = () => {
         provider: provider,
       });
 
+      //console.log(cid);
+
       setResponse(cid);
+      setRandomBytes32(zeroPadValue(hexlify(randomBytes(32)), 32));
+
       setImage(undefined);
       setName("");
       setDescription("");
@@ -150,7 +159,7 @@ const UploadForm = () => {
       setIsPostLoaded(true);
       setIsPostUpdated(false);
     }
-  }, [isPostLoading, data]);
+  }, [isPostLoading, data, isPostLoaded, lastHash, response, isPostUpdated]);
 
   return (
     <Paper

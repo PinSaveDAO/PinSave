@@ -1,5 +1,4 @@
 import { dropzoneChildren } from "@/components/UploadForm";
-import { UpdateProfile } from "@/services/syncprofile";
 import {
   BackgroundImage,
   Box,
@@ -20,21 +19,17 @@ import { showNotification, updateNotification } from "@mantine/notifications";
 import { Orbis } from "@orbisclub/orbis-sdk";
 import { NFTStorage } from "nft.storage";
 import React, { useState, useEffect } from "react";
-import { useWalletClient, useAccount } from "wagmi";
 
 let orbis = new Orbis();
 
 const Upload = () => {
-  const { address } = useAccount();
-  const { data: walletClient } = useWalletClient();
-
   const [cover, setCover] = useState<File | undefined>();
   const [image, setImage] = useState<File | undefined>();
   const [description, setDescription] = useState<string>();
   const [user, setUser] = useState<IOrbisProfile>();
   const [username, setUsername] = useState<string>();
 
-  const [universalProfile, setUniversalProfile] = useState<`0x${string}`>();
+  const [orbisLogoutState, setOrbisLogoutState] = useState<boolean>(false);
 
   useEffect(() => {
     async function loadData() {
@@ -45,14 +40,22 @@ const Upload = () => {
       }
       setUser(res);
     }
-    loadData();
-  }, [user]);
+    async function orbisLogout() {
+      await orbis.logout();
+    }
+    if (!orbisLogoutState) {
+      loadData();
+    }
+    if (orbisLogoutState) {
+      orbisLogout();
+    }
+  }, [user, orbisLogoutState]);
 
   async function updateProfile() {
     showNotification({
       id: "upload-post",
       loading: true,
-      title: "Uploading post",
+      title: "Uploading Data",
       message: "Data will be loaded in a couple of seconds",
       autoClose: false,
       disallowClose: true,
@@ -107,7 +110,7 @@ const Upload = () => {
     });
   }
 
-  async function syncProfile() {
+  /*   async function syncProfile() {
     if (walletClient && universalProfile) {
       await UpdateProfile({
         address: universalProfile,
@@ -117,7 +120,7 @@ const Upload = () => {
         backgroundImage: user?.details.profile?.cover,
       });
     }
-  }
+  } */
 
   /*   async function createProfile() {
     if (walletClient && address) {
@@ -131,7 +134,7 @@ const Upload = () => {
 
   async function logout() {
     setUser(undefined);
-    await orbis.logout();
+    setOrbisLogoutState(true);
   }
 
   return (
@@ -343,7 +346,9 @@ const Upload = () => {
                 Submit
               </Button>
             </Center>
-            <TextInput
+            <Center>
+              {/*
+              <TextInput
               my={12}
               size="md"
               label="Universal Profile"
@@ -362,8 +367,7 @@ const Upload = () => {
                 background: "green",
               }}
             />
-            <Center>
-              <Button
+               <Button
                 my={12}
                 mt={20}
                 size="md"
@@ -372,7 +376,6 @@ const Upload = () => {
               >
                 Sync
               </Button>
-              {/*
               <Button
                 my={12}
                 mt={20}

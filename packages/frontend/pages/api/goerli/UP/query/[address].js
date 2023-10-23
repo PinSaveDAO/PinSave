@@ -1,7 +1,7 @@
-import ERC725 from "@/contracts/ERC725.json";
-import { ethers } from "ethers";
+//import ERC725 from "@/contracts/ERC725.json";
+//import { ethers } from "ethers";
 
-export default async function handler(req, res) {
+/* export default async function handler(req, res) {
   try {
     const { address } = req.query;
 
@@ -36,4 +36,4 @@ export default async function handler(req, res) {
   } catch (err) {
     res.status(500).send({ error: "failed to fetch data" + err });
   }
-}
+} */

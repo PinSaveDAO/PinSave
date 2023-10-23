@@ -1,8 +1,6 @@
-import ERC725 from "@/contracts/ERC725.json";
 import { updateNotification } from "@mantine/notifications";
 import { ContractFactory, keccak256, toUtf8Bytes, hexlify } from "ethers";
 import { NFTStorage, Blob } from "nft.storage";
-import { WalletClient } from "wagmi";
 import { useContractWrite, useWalletClient } from "wagmi";
 
 const client = new NFTStorage({ token: process.env.NEXT_PUBLIC_TOKEN });
@@ -15,7 +13,7 @@ export type SyncingProfile = {
   address: `0x${string}`;
 };
 
-export async function UpdateProfile(incomingData: SyncingProfile) {
+/* export async function UpdateProfile(incomingData: SyncingProfile) {
   try {
     const { write } = useContractWrite({
       address: incomingData.address,
@@ -26,7 +24,7 @@ export async function UpdateProfile(incomingData: SyncingProfile) {
     //keep substr
     const hashFunction = keccak256(toUtf8Bytes("keccak256(utf8)")).substr(
       0,
-      10,
+      10
     );
 
     const json = JSON.stringify({
@@ -77,7 +75,7 @@ export async function UpdateProfile(incomingData: SyncingProfile) {
       message: `${error}`,
     });
   }
-}
+} */
 
 /* export async function CreateProfile(incomingData: Wallet) {
   try {

@@ -10,11 +10,12 @@ import { ChainName } from "@/constants/chains";
 
 const PostPage = () => {
   const router = useRouter();
-  const queryId = String(router.query.id);
+  const currentChain: ChainName = getCurrentChain(5);
 
-  const currentChain: ChainName = getCurrentChain(80001);
-
-  const { data: postQueried, isLoading } = usePost(currentChain, queryId);
+  const { data: postQueried, isLoading } = usePost(
+    currentChain,
+    String(router.query.id)
+  );
 
   return (
     <div>
