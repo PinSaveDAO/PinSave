@@ -28,7 +28,7 @@
     "@typechain/hardhat": "^6.1.2",
     "@types/mocha": "^10.0.1",
     "eslint": "^8.37.0",
-    "eslint-config-prettier": "^8.8.0",
+    "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-babel": "^5.3.1",
     "eslint-plugin-prettier": "^5.0.0",
     "hardhat-gas-reporter": "^1.0.9",
