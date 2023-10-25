@@ -9,19 +9,16 @@ import {
 import { MantineProvider } from "@mantine/core";
 import { NotificationsProvider } from "@mantine/notifications";
 import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
-import {
-  Hydrate,
-  QueryClient,
-  QueryClientProvider,
-} from "@tanstack/react-query";
-import type { NextComponentType } from "next";
-import type { AppProps as NextAppProps } from "next/app";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import NextHead from "next/head";
 import { useState, useMemo } from "react";
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
 import { Chain, goerli, optimism } from "wagmi/chains";
 import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
 import { publicProvider } from "wagmi/providers/public";
+import type { NextComponentType } from "next";
+import type { AppProps as NextAppProps } from "next/app";
 
 type AppProps<P = any> = NextAppProps & {
   pageProps: P;
@@ -43,7 +40,7 @@ const { chains, publicClient } = configureChains(
         return { http: chain.rpcUrls.default.http[0] };
       },
     }),
-  ],
+  ]
 );
 
 const { connectors } = getDefaultWallets({
@@ -75,8 +72,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         primaryColor: "green",
       }}
     >
-      <QueryClientProvider client={queryClient} contextSharing={true}>
-        <Hydrate state={pageProps.dehydratedState} />
+      <QueryClientProvider client={queryClient}>
         <WagmiConfig config={wagmiConfig}>
           <NextHead>
             <title>Pin Save - decentralized Pinterest</title>
@@ -109,7 +105,7 @@ function MyApp({ Component, pageProps }: AppProps) {
             </RainbowKitProvider>
           </NotificationsProvider>
         </WagmiConfig>
-        {/*<ReactQueryDevtools initialIsOpen={false} />*/}
+        <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </MantineProvider>
   );
