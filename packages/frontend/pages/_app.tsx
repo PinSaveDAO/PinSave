@@ -10,14 +10,15 @@ import { MantineProvider } from "@mantine/core";
 import { NotificationsProvider } from "@mantine/notifications";
 import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import type { NextComponentType } from "next";
-import type { AppProps as NextAppProps } from "next/app";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import NextHead from "next/head";
 import { useState, useMemo } from "react";
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
 import { Chain, goerli, optimism } from "wagmi/chains";
 import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
 import { publicProvider } from "wagmi/providers/public";
+import type { NextComponentType } from "next";
+import type { AppProps as NextAppProps } from "next/app";
 
 type AppProps<P = any> = NextAppProps & {
   pageProps: P;
@@ -104,7 +105,7 @@ function MyApp({ Component, pageProps }: AppProps) {
             </RainbowKitProvider>
           </NotificationsProvider>
         </WagmiConfig>
-        {/*<ReactQueryDevtools initialIsOpen={false} />*/}
+        <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </MantineProvider>
   );
