@@ -9,7 +9,7 @@ export default async function handler(
 ) {
   try {
     const { number } = req.query;
-    const pageNumber = Number(number) + 1;
+    const pageNumber = Number(number);
 
     const { address, abi } = getContractInfo(5);
 
