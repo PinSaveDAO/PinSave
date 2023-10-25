@@ -8,7 +8,7 @@ export const postKeys = {
 
 export const fetchPosts = async (
   chain: ChainName,
-  { pageParam = 0 }: { pageParam?: number } = {}
+  { pageParam = 1 }: { pageParam?: number } = {}
 ) => {
   try {
     return await fetcher(`/api/${chain}/pages/${pageParam}`);
