@@ -95,7 +95,7 @@ const UploadForm = () => {
   const [postReceiver, setPostReceiver] = useState<string>("");
 
   const [randomBytes32, setRandomBytes32] = useState<string>(
-    "0x000000000000000000000000000000000000000000000000000000000000000a"
+    "0x000000000000000000000000000000000000000000000000000000000000000a",
   );
 
   // const [metadata, setMetadata] = useState<PostDataUpload[]>([]);
@@ -122,7 +122,7 @@ const UploadForm = () => {
   async function savePostBeforeUpload(
     name: string,
     description: string,
-    image?: File
+    image?: File,
   ) {
     if (description !== "" && name !== "" && image && address) {
       const cid = await UploadData({

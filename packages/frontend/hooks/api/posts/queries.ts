@@ -6,10 +6,23 @@ export const postKeys = {
   single: (chain: ChainName, id: string) => [chain, id] as const,
 };
 
-export const fetchPosts = async (chain: string, { pageParam = 0 }) => {
-  return await fetcher(`/api/${chain}/pages/${pageParam}`);
+export const fetchPosts = async (
+  chain: ChainName,
+  { pageParam = 1 }: { pageParam?: number } = {},
+) => {
+  try {
+    return await fetcher(`/api/${chain}/pages/${pageParam}`);
+  } catch (error) {
+    console.error("Error fetching posts:", error);
+    throw error;
+  }
 };
 
 export const fetchPost = async (chain: ChainName, id: string) => {
-  return await fetcher(`/api/${chain}/posts/${id}`);
+  try {
+    return await fetcher(`/api/${chain}/posts/${id}`);
+  } catch (error) {
+    console.error("Error fetching post:", error);
+    throw error;
+  }
 };

@@ -5,17 +5,17 @@ import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
   try {
     const { number } = req.query;
-    const pageNumber = Number(number) + 1;
+    const pageNumber = Number(number);
 
     const { address, abi } = getContractInfo(10);
 
     const provider = new InfuraProvider(
       "optimism",
-      process.env.NEXT_PUBLIC_INFURA_OPTIMISM
+      process.env.NEXT_PUBLIC_INFURA_OPTIMISM,
     );
 
     const contract = new Contract(address, abi, provider);

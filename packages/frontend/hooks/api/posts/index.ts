@@ -1,6 +1,7 @@
 import { postKeys, fetchPosts, fetchPost } from "./queries";
 import type { ChainName } from "@/constants/chains";
 import type { IndividualPost } from "@/services/upload";
+
 import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
 
 export const usePosts = (chain: ChainName) => {
