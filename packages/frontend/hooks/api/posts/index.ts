@@ -11,7 +11,7 @@ export const usePosts = (chain: ChainName) => {
       const data = await fetchPosts(chain, { pageParam });
       return data;
     },
-
+    initialPageParam: undefined,
     getNextPageParam: (lastPage: any, pages: any) => {
       if (lastPage.items[5]?.token_id < lastPage.totalSupply) {
         return pages.length;
@@ -21,7 +21,8 @@ export const usePosts = (chain: ChainName) => {
 };
 
 export const usePost = (chain: ChainName, id: string) => {
-  return useQuery<IndividualPost>(postKeys.single(chain, id), () =>
-    fetchPost(chain, id)
-  );
+  return useQuery({
+    queryKey: [chain, id],
+    queryFn: () => fetchPost(chain, id),
+  });
 };

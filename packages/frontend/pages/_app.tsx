@@ -9,11 +9,7 @@ import {
 import { MantineProvider } from "@mantine/core";
 import { NotificationsProvider } from "@mantine/notifications";
 import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
-import {
-  Hydrate,
-  QueryClient,
-  QueryClientProvider,
-} from "@tanstack/react-query";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import type { NextComponentType } from "next";
 import type { AppProps as NextAppProps } from "next/app";
 import NextHead from "next/head";
@@ -43,7 +39,7 @@ const { chains, publicClient } = configureChains(
         return { http: chain.rpcUrls.default.http[0] };
       },
     }),
-  ],
+  ]
 );
 
 const { connectors } = getDefaultWallets({
@@ -75,8 +71,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         primaryColor: "green",
       }}
     >
-      <QueryClientProvider client={queryClient} contextSharing={true}>
-        <Hydrate state={pageProps.dehydratedState} />
+      <QueryClientProvider client={queryClient}>
         <WagmiConfig config={wagmiConfig}>
           <NextHead>
             <title>Pin Save - decentralized Pinterest</title>
