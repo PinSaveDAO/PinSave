@@ -19,7 +19,7 @@ import type { AppProps as NextAppProps } from "next/app";
 import NextHead from "next/head";
 import { useState, useMemo } from "react";
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
-import { Chain, goerli } from "wagmi/chains";
+import { Chain, goerli, optimism } from "wagmi/chains";
 import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
 import { publicProvider } from "wagmi/providers/public";
 
@@ -35,7 +35,7 @@ export interface MyWalletOptions {
 }
 
 const { chains, publicClient } = configureChains(
-  [goerli],
+  [optimism, goerli],
   [
     publicProvider(),
     jsonRpcProvider({
