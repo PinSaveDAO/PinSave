@@ -4,7 +4,7 @@ import type { IndividualPost } from "@/services/upload";
 import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
 
 export const usePosts = (chain: ChainName) => {
-  return useInfiniteQuery(["posts", chain], ({ pageParam }) =>
+  return useInfiniteQuery(postKeys.byChain(chain), ({ pageParam }) =>
     fetchPosts(chain, { pageParam })
   );
 };
