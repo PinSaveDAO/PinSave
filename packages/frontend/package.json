@@ -35,7 +35,7 @@
     "wagmi": "^1.4.3"
   },
   "devDependencies": {
-    "@types/isomorphic-fetch": "^0.0.36",
+    "@types/isomorphic-fetch": "^0.0.38",
     "@types/node": "^20.1.2",
     "@types/react": "^18.2.5",
     "eslint": "^8.37.0",
