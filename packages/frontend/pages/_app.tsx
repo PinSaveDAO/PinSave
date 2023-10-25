@@ -43,7 +43,7 @@ const { chains, publicClient } = configureChains(
         return { http: chain.rpcUrls.default.http[0] };
       },
     }),
-  ]
+  ],
 );
 
 const { connectors } = getDefaultWallets({

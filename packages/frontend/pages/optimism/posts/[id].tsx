@@ -14,7 +14,7 @@ const PostPage = () => {
   console.log(currentChain);
   const { data: postQueried, isLoading } = usePost(
     currentChain,
-    String(router.query.id)
+    String(router.query.id),
   );
 
   return (

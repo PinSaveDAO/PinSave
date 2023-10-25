@@ -5,7 +5,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
   try {
     const { number } = req.query;
@@ -15,7 +15,7 @@ export default async function handler(
 
     const provider = new InfuraProvider(
       "optimism",
-      process.env.NEXT_PUBLIC_INFURA_OPTIMISM
+      process.env.NEXT_PUBLIC_INFURA_OPTIMISM,
     );
 
     const contract = new Contract(address, abi, provider);
