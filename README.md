@@ -69,5 +69,3 @@ Some interesting links that we keep returning to include and not limited to:
 - [Universal Profiles](https://docs.lukso.tech/standards/universal-profile/introduction)
 - [Working with Lit Access Control](https://litproject.substack.com/p/working-with-access-control)
 - [Lit Supported Blockchains](https://developer.litprotocol.com/support/supportedchains/)
-- [Livepeer docs](https://docs.livepeer.org/)
-- [Defi Llama ChainList](https://chainlist.org/)
