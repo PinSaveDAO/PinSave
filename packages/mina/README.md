@@ -12,7 +12,6 @@ npm run build
 
 ```sh
 npm run test
-npm run testw # watch mode
 ```
 
 ## How to run coverage
