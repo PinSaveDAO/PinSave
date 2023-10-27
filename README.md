@@ -52,11 +52,11 @@ Pin Save is a decentralized image, video sharing and content aggregation platfor
 
 ## Setup
 
-To run this project and start the project in development mode, install it locally using `yarn` and run `yarn frontend:dev`:
+To run this project and start the project in development mode, install it locally using `yarn` and run `yarn dev`:
 
 ```bash
 yarn
-yarn frontend:dev
+yarn dev
 ```
 
 ## Further Resources
