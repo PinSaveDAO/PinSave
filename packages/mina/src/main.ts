@@ -3,9 +3,9 @@ import { Field, Mina, PrivateKey, AccountUpdate } from 'o1js';
 
 console.log('o1js loaded');
 
-const useProof = false;
+const proofsEnabled = false;
 
-const Local = Mina.LocalBlockchain({ proofsEnabled: useProof });
+const Local = Mina.LocalBlockchain({ proofsEnabled: proofsEnabled });
 
 Mina.setActiveInstance(Local);
 
@@ -20,7 +20,11 @@ const { privateKey: senderKey, publicKey: senderAccount } =
 
 // ----------------------------------------------------
 
-let { verificationKey } = await Square.compile();
+let verificationKey: any;
+
+if (proofsEnabled) {
+  ({ verificationKey } = await Square.compile());
+}
 
 console.log('compiled');
 
@@ -38,17 +42,13 @@ const deployTxn = await Mina.transaction(deployerAccount, () => {
 
 await deployTxn.prove();
 
-const txPromise = await deployTxn.sign([deployerKey]).send();
-
-//await txPromise.wait();
+await deployTxn.sign([deployerKey]).send();
 
 // get the initial state of Square after deployment
 const num0 = zkAppInstance.totalAmountInCirculation.get();
 console.log('state after init:', num0.toString());
 
 // ----------------------------------------------------
-
-console.log('initializing...');
 
 const init_txn = await Mina.transaction(deployerAccount, () => {
   zkAppInstance.update();

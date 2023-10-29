@@ -16,7 +16,6 @@ export class Square extends SmartContract {
     super.deploy(args);
 
     const permissionToEdit = Permissions.proof();
-    //const permissionToEdit = Permissions.none();
 
     this.account.permissions.set({
       ...Permissions.default(),
@@ -25,11 +24,15 @@ export class Square extends SmartContract {
       send: permissionToEdit,
       receive: permissionToEdit,
     });
-    this.totalAmountInCirculation.set(UInt64.from(63));
+  }
+
+  @method init() {
+    super.init();
+    this.account.tokenSymbol.set('SBML');
+    this.totalAmountInCirculation.set(UInt64.zero);
   }
 
   @method update() {
-    this.account.tokenSymbol.set('BLA');
     this.totalAmountInCirculation.set(UInt64.from(100));
   }
 }
