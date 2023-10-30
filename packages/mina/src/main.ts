@@ -1,7 +1,5 @@
 import { Square } from './Square.js';
-import { Field, Mina, PrivateKey, AccountUpdate } from 'o1js';
-
-console.log('o1js loaded');
+import { Field, Mina, PrivateKey, AccountUpdate, MerkleMap } from 'o1js';
 
 const proofsEnabled = false;
 
@@ -46,18 +44,51 @@ await deployTxn.sign([deployerKey]).send();
 
 // get the initial state of Square after deployment
 const num0 = zkAppInstance.totalAmountInCirculation.get();
-console.log('state after init:', num0.toString());
+const mapRoot = zkAppInstance.mapRoot.get();
 
+console.log('state after init:', num0.toString());
+console.log('state after init rootMap:', mapRoot.toString());
 // ----------------------------------------------------
 
+const map = new MerkleMap();
+
+const key = Field(100);
+const value = Field(50);
+
+map.set(key, value);
+
+console.log('value for key', key.toString() + ':', map.get(key).toString());
+
+const rootBefore = map.getRoot();
+
+console.log(rootBefore.toString());
+
+const witness = map.getWitness(key);
+
 const init_txn = await Mina.transaction(deployerAccount, () => {
-  zkAppInstance.update();
+  zkAppInstance.initRoot(rootBefore);
 });
 
 await init_txn.prove();
 await init_txn.sign([deployerKey, zkAppPrivateKey]).send();
 
-console.log('initialized');
+console.log('initialized root');
 
-const num1 = zkAppInstance.totalAmountInCirculation.get();
-console.log('state after txn1:', num1.toString());
+const mapRoot1 = zkAppInstance.mapRoot.get();
+const treeRoot1 = zkAppInstance.treeRoot.get();
+
+console.log('state after init rootMap: ', mapRoot1.toString());
+console.log('state after init treeRoot: ', treeRoot1.toString());
+// update the smart contract
+const txn2 = await Mina.transaction(deployerAccount, () => {
+  zkAppInstance.update(witness, key, Field(50), Field(5));
+});
+
+await txn2.prove();
+await txn2.sign([deployerKey, zkAppPrivateKey]).send();
+
+const mapRoot2 = zkAppInstance.mapRoot.get();
+const treeRoot2 = zkAppInstance.treeRoot.get();
+
+console.log('state after init tx2: ', mapRoot2.toString());
+console.log('state after init tx2: ', treeRoot2.toString());

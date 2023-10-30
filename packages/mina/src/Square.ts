@@ -7,10 +7,13 @@ import {
   Permissions,
   DeployArgs,
   UInt64,
+  MerkleMapWitness,
 } from 'o1js';
 
 export class Square extends SmartContract {
   @state(UInt64) totalAmountInCirculation = State<UInt64>();
+  @state(Field) mapRoot = State<Field>();
+  @state(Field) treeRoot = State<Field>();
 
   deploy(args: DeployArgs) {
     super.deploy(args);
@@ -28,11 +31,35 @@ export class Square extends SmartContract {
 
   @method init() {
     super.init();
-    this.account.tokenSymbol.set('SBML');
     this.totalAmountInCirculation.set(UInt64.zero);
   }
 
-  @method update() {
-    this.totalAmountInCirculation.set(UInt64.from(100));
+  @method initRoot(initialRoot: Field) {
+    this.mapRoot.set(initialRoot);
+  }
+
+  @method update(
+    keyWitness: MerkleMapWitness,
+    keyToChange: Field,
+    valueBefore: Field,
+    incrementAmount: Field
+  ) {
+    const initialRoot = this.mapRoot.get();
+    // keep, otherwise error
+    this.mapRoot.assertEquals(initialRoot);
+
+    // check the initial state matches what we expect
+    const [rootBefore, key] = keyWitness.computeRootAndKey(valueBefore);
+    rootBefore.assertEquals(initialRoot);
+
+    key.assertEquals(keyToChange);
+
+    // compute the root after incrementing
+    const [rootAfter, _] = keyWitness.computeRootAndKey(
+      valueBefore.add(incrementAmount)
+    );
+
+    // set the new root
+    this.treeRoot.set(rootAfter);
   }
 }
