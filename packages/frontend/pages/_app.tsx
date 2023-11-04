@@ -10,22 +10,21 @@ import { MantineProvider } from "@mantine/core";
 import { NotificationsProvider } from "@mantine/notifications";
 import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import NextHead from "next/head";
-import { useState, useMemo } from "react";
+import { useMemo } from "react";
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
 import { Chain, goerli, optimism } from "wagmi/chains";
 import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
 import { publicProvider } from "wagmi/providers/public";
 import type { NextComponentType } from "next";
-import type { AppProps as NextAppProps } from "next/app";
+import type AppProps from "next/app";
 
-type AppProps<P = any> = NextAppProps & {
+type NextAppProps<P = any> = AppProps & {
   pageProps: P;
   Component: NextComponentType & {
     getLayout?: (page: React.ReactElement) => React.ReactNode;
   };
-} & Omit<NextAppProps<P>, "pageProps">;
+} & Omit<AppProps<P>, "pageProps">;
 
 export interface MyWalletOptions {
   chains: Chain[];
@@ -49,8 +48,8 @@ const { connectors } = getDefaultWallets({
   chains,
 });
 
-function MyApp({ Component, pageProps }: AppProps) {
-  const [queryClient] = useState(() => new QueryClient());
+function MyApp({ Component, pageProps }: NextAppProps) {
+  const queryClient = new QueryClient();
   const livepeerClient = useMemo(() => {
     return createReactClient({
       provider: studioProvider({
@@ -83,9 +82,9 @@ function MyApp({ Component, pageProps }: AppProps) {
             <link rel="icon" href="/favicon.svg" />
             <meta
               property="og:image"
-              content="https://evm.pinsave.app/CardBlack.png"
+              content="https://pinsave.app/TwitterIconWords.png"
             />
-            <meta property="og:url" content="https://evm.pinsave.app/" />
+            <meta property="og:url" content="https://pinsave.app/" />
             <meta
               property="og:title"
               content="Pin Save - decentralized Pinterest"
@@ -105,7 +104,6 @@ function MyApp({ Component, pageProps }: AppProps) {
             </RainbowKitProvider>
           </NotificationsProvider>
         </WagmiConfig>
-        <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </MantineProvider>
   );
