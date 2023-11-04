@@ -5,9 +5,6 @@
 </p>
 
 <p align="center">
-    <a href="https://discord.gg/GzhgdRmbM8">
-        <img src="https://img.shields.io/discord/915204325771444234?style=flat-square"
-            alt="chat on Discord"></a>
     <a href="https://twitter.com/intent/follow?screen_name=pinsav3">
         <img src="https://img.shields.io/twitter/follow/pinsav3?style=social"
             alt="follow on Twitter"></a>
@@ -42,13 +39,13 @@ Pin Save is a decentralized image, video sharing and content aggregation platfor
 
 ![decentralized Profile](https://github.com/dspytdao/PinSave-EVM/blob/master/assets/profile.png)
 
+- Video and Image posting:
+
+![Upload](https://bafybeiaj46fxgxax6z3nd45n7p42rh7dbyweyssi3dunr3wfewh7ys2d7y.ipfs.nftstorage.link/)
+
 - Livepeer Video Player:
 
 ![Video Player](https://bafybeiacg6yoxvxvk2ayugwlcfnnjpm5kcchvy3t2fl7mu64ft4zt4fs6m.ipfs.nftstorage.link/)
-
-- Video and Image batch posting:
-
-![Upload](https://bafybeiaj46fxgxax6z3nd45n7p42rh7dbyweyssi3dunr3wfewh7ys2d7y.ipfs.nftstorage.link/)
 
 ## Setup
 
