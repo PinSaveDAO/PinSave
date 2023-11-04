@@ -22,7 +22,7 @@ Pin Save is a decentralized image, video sharing and content aggregation platfor
 
 1. The decentralized feed reinforces the discovery of content and feedback.
 2. Decentralized Identity (ERC-725), which provides anonymity and data protection.
-3. Upgradeable, resilient, and more open decentralized storage.
+3. Upgradeable, resilient, and open decentralized storage.
 4. Smart contracts to securely serve web experiences directly to users.
 
 ## Features

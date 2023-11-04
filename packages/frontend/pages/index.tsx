@@ -30,7 +30,7 @@ const Home: NextPage = () => {
             maxWidth: 1500,
             gap: 20,
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(200px, 5fr))",
+            gridTemplateColumns: "repeat(auto-fill, minmax(220px, 5fr))",
             gridTemplateRows: "masonry",
           }}
           key={i}
@@ -46,7 +46,7 @@ const Home: NextPage = () => {
         </Center>
       )}
       {posts && posts.pages.length > 0 && (
-        <Center my={8}>
+        <Center my={14}>
           <Button
             mx="auto"
             onClick={() => fetchNextPage()}
