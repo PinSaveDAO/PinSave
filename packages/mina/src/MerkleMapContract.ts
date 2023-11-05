@@ -10,7 +10,7 @@ import {
   MerkleMapWitness,
 } from 'o1js';
 
-export class Square extends SmartContract {
+export class MerkleMapContract extends SmartContract {
   @state(UInt64) totalAmountInCirculation = State<UInt64>();
   @state(Field) mapRoot = State<Field>();
   @state(Field) treeRoot = State<Field>();
@@ -45,7 +45,6 @@ export class Square extends SmartContract {
     incrementAmount: Field
   ) {
     const initialRoot = this.mapRoot.get();
-    // keep, otherwise error
     this.mapRoot.assertEquals(initialRoot);
 
     // check the initial state matches what we expect

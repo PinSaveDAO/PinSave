@@ -1,3 +1,3 @@
-import { Square } from './Square.js';
+import { MerkleMapContract } from './MerkleMapContract.js';
 
-export { Square };
+export { MerkleMapContract };
