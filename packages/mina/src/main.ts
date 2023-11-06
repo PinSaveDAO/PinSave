@@ -77,10 +77,11 @@ console.log('initialized root');
 const mapRoot1 = zkAppInstance.mapRoot.get();
 const treeRoot1 = zkAppInstance.treeRoot.get();
 
-console.log('mapRoot state after init rootMap: ', mapRoot1.toString());
-console.log('state after init treeRoot: ', treeRoot1.toString());
+console.log('mapRoot state after init: ', mapRoot1.toString());
+console.log('treeRoot state after init: ', treeRoot1.toString());
 
 // update the smart contract
+// we do not update the status locally
 const txn2 = await Mina.transaction(deployerAccount, () => {
   zkAppInstance.update(witness, key, Field(50), Field(5));
 });

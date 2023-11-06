@@ -56,7 +56,19 @@ yarn
 yarn dev
 ```
 
+## Latest Update
+
+- Abstracted orbis and ipfs fetching in the application code.
+- We added more ipfs public servers to improve the loading of CIDs.
+- Removed faulty ipfs servers.
+- Added Optimism mainnet blockchain.
+- Upgraded solidity contract to set the minting fee.
+- Migrated to [https://pinsave.app](https://pinsave.app).
+- Experimenting with Mina merkle trees.
+
 ## Further Resources
+
+[PinSave Figma Resources](https://www.figma.com/community/file/1102944149244783025)
 
 Some interesting links that we keep returning to include and not limited to:
 
