@@ -6,12 +6,10 @@ import {
   method,
   Permissions,
   DeployArgs,
-  UInt64,
   MerkleMapWitness,
 } from 'o1js';
 
 export class MerkleMapContract extends SmartContract {
-  @state(UInt64) totalAmountInCirculation = State<UInt64>();
   @state(Field) mapRoot = State<Field>();
   @state(Field) treeRoot = State<Field>();
 
@@ -29,11 +27,6 @@ export class MerkleMapContract extends SmartContract {
     });
   }
 
-  @method init() {
-    super.init();
-    this.totalAmountInCirculation.set(UInt64.zero);
-  }
-
   @method initRoot(initialRoot: Field) {
     this.mapRoot.set(initialRoot);
   }
@@ -44,13 +37,12 @@ export class MerkleMapContract extends SmartContract {
     valueBefore: Field,
     incrementAmount: Field
   ) {
-    const initialRoot = this.mapRoot.get();
-    this.mapRoot.assertEquals(initialRoot);
+    const initialRoot = this.mapRoot.getAndAssertEquals();
 
     // check the initial state matches what we expect
     const [rootBefore, key] = keyWitness.computeRootAndKey(valueBefore);
-    rootBefore.assertEquals(initialRoot);
 
+    rootBefore.assertEquals(initialRoot);
     key.assertEquals(keyToChange);
 
     // compute the root after incrementing
