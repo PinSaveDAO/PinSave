@@ -8,6 +8,14 @@
       "feepayerAlias": "deployer",
       "fee": "0.1",
       "smartContract": "MerkleMapContract"
+    },
+    "merklemap2": {
+      "url": "https://proxy.berkeley.minaexplorer.com/graphql",
+      "keyPath": "keys/merklemap2.json",
+      "feepayerKeyPath": "keys/deployer.json",
+      "feepayerAlias": "deployer",
+      "fee": "0.1",
+      "smartContract": "MerkleMapContract"
     }
   }
 }

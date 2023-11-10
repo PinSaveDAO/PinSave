@@ -15,16 +15,7 @@ export class MerkleMapContract extends SmartContract {
 
   deploy(args: DeployArgs) {
     super.deploy(args);
-
-    const permissionToEdit = Permissions.proof();
-
-    this.account.permissions.set({
-      ...Permissions.default(),
-      editState: permissionToEdit,
-      setTokenSymbol: permissionToEdit,
-      send: permissionToEdit,
-      receive: permissionToEdit,
-    });
+    this.mapRoot.set(Field(123));
   }
 
   @method initRoot(initialRoot: Field) {
