@@ -1,7 +1,7 @@
 import { MerkleMapContract } from './MerkleMapContract.js';
 import { Field, Mina, PrivateKey, AccountUpdate, MerkleMap } from 'o1js';
 
-const proofsEnabled = false;
+const proofsEnabled = true;
 
 const Local = Mina.LocalBlockchain({ proofsEnabled: proofsEnabled });
 
@@ -13,15 +13,13 @@ const { privateKey: deployerKey, publicKey: deployerAccount } =
 console.log('deployerPrivateKey: ' + deployerKey.toBase58());
 console.log('deployerAccount: ' + deployerAccount.toBase58());
 
-const { privateKey: senderKey, publicKey: senderAccount } =
-  Local.testAccounts[1];
-
 // ----------------------------------------------------
 
 let verificationKey: any;
 
 if (proofsEnabled) {
   ({ verificationKey } = await MerkleMapContract.compile());
+  console.log(verificationKey.hash);
 }
 
 console.log('compiled');
@@ -69,7 +67,6 @@ const init_txn = await Mina.transaction(deployerAccount, () => {
 
 await init_txn.prove();
 await init_txn.sign([deployerKey]).send();
-//await init_txn.sign([deployerKey, zkAppPrivateKey]).send();
 
 console.log('initialized root');
 
@@ -86,7 +83,7 @@ const txn2 = await Mina.transaction(deployerAccount, () => {
 });
 
 await txn2.prove();
-await txn2.sign([deployerKey, zkAppPrivateKey]).send();
+await txn2.sign([deployerKey]).send();
 
 const mapRoot2 = zkAppInstance.mapRoot.get();
 const treeRoot2 = zkAppInstance.treeRoot.get();
@@ -101,7 +98,7 @@ const txn3 = await Mina.transaction(deployerAccount, () => {
 });
 
 await txn3.prove();
-await txn3.sign([deployerKey, zkAppPrivateKey]).send();
+await txn3.sign([deployerKey]).send();
 
 const mapRoot3 = zkAppInstance.mapRoot.get();
 const treeRoot3 = zkAppInstance.treeRoot.get();
@@ -124,10 +121,21 @@ const txn4 = await Mina.transaction(deployerAccount, () => {
 });
 
 await txn4.prove();
-await txn4.sign([deployerKey, zkAppPrivateKey]).send();
+await txn4.sign([deployerKey]).send();
 
 const mapRoot4 = zkAppInstance.mapRoot.get();
 const treeRoot4 = zkAppInstance.treeRoot.get();
 
 console.log('mapRoot state after init tx4: ', mapRoot4.toString());
 console.log('treeRoot state after init tx4: ', treeRoot4.toString());
+
+try {
+  const fail_txn = await Mina.transaction(deployerAccount, () => {
+    zkAppInstance.initRoot(rootBefore);
+  });
+
+  await fail_txn.prove();
+  await fail_txn.sign([deployerKey]).send();
+} catch {
+  console.log('failed sucessfully');
+}

@@ -1,13 +1,15 @@
 import { MerkleMapContract } from './MerkleMapContract.js';
 import { Field, Mina, PrivateKey, AccountUpdate, MerkleMap } from 'o1js';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const proofsEnabled = true;
-import dotenv from 'dotenv';
-dotenv.config();
 
 const Berkeley = Mina.Network(
   'https://proxy.berkeley.minaexplorer.com/graphql'
 );
+
 Mina.setActiveInstance(Berkeley);
 
 let verificationKey: any;
@@ -48,7 +50,7 @@ console.log(rootBefore.toString());
 const witness = map.getWitness(key);
 
 const init_txn = await Mina.transaction(
-  { sender: deployerAccount, fee: replaceFee },
+  { sender: deployerAccount, fee: transactionFee },
   () => {
     zkAppInstance.initRoot(rootBefore);
   }

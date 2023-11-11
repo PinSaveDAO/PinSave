@@ -13,12 +13,22 @@ export class MerkleMapContract extends SmartContract {
   @state(Field) mapRoot = State<Field>();
   @state(Field) treeRoot = State<Field>();
 
-  deploy(args: DeployArgs) {
+  deploy(args?: DeployArgs) {
     super.deploy(args);
-    this.mapRoot.set(Field(123));
+
+    const permissionToEdit = Permissions.proof();
+
+    this.account.permissions.set({
+      ...Permissions.default(),
+      editState: permissionToEdit,
+      setTokenSymbol: permissionToEdit,
+      send: permissionToEdit,
+      receive: permissionToEdit,
+    });
   }
 
   @method initRoot(initialRoot: Field) {
+    this.mapRoot.assertEquals(Field.from(''));
     this.mapRoot.set(initialRoot);
   }
 
