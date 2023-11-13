@@ -24,11 +24,9 @@ if (proofsEnabled) {
 
 console.log('compiled');
 
-// Create a public/private key pair. The public key is your address and where you deploy the zkApp to
 const zkAppPrivateKey = PrivateKey.random();
 const zkAppAddress = zkAppPrivateKey.toPublicKey();
 
-// create an instance of MerkleMapContract - and deploy it to zkAppAddress
 const zkAppInstance = new MerkleMapContract(zkAppAddress);
 
 const deployTxn = await Mina.transaction(deployerAccount, () => {
@@ -40,11 +38,9 @@ await deployTxn.prove();
 
 await deployTxn.sign([deployerKey]).send();
 
-// get the initial state of SmartContract after deployment
 const mapRoot = zkAppInstance.mapRoot.get();
 
 console.log('state after deploy rootMap:', mapRoot.toString());
-// ----------------------------------------------------
 
 const map = new MerkleMap();
 
@@ -76,8 +72,6 @@ const treeRoot1 = zkAppInstance.treeRoot.get();
 console.log('mapRoot state after init: ', mapRoot1.toString());
 console.log('treeRoot state after init: ', treeRoot1.toString());
 
-// update the smart contract
-// we do not update the status locally
 const txn2 = await Mina.transaction(deployerAccount, () => {
   zkAppInstance.update(witness, key, value, Field(5));
 });
@@ -91,8 +85,6 @@ const treeRoot2 = zkAppInstance.treeRoot.get();
 console.log('mapRoot state after init tx2: ', mapRoot2.toString());
 console.log('treeRoot state after init tx2: ', treeRoot2.toString());
 
-// update the smart contract
-// we do not update the status locally
 const txn3 = await Mina.transaction(deployerAccount, () => {
   zkAppInstance.update(witness, key, value, Field(5));
 });
@@ -105,9 +97,6 @@ const treeRoot3 = zkAppInstance.treeRoot.get();
 
 console.log('mapRoot state after init tx3: ', mapRoot3.toString());
 console.log('treeRoot state after init tx3: ', treeRoot3.toString());
-
-// update the smart contract
-// we do not update the status locally
 
 const key2 = Field(10);
 const value2 = Field(0);

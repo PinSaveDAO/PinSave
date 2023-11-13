@@ -24,8 +24,8 @@ const Home = () => {
       // Show first 6 and last 4 characters of user's Mina account.
       setWallet(`${accounts[0].slice(0, 6)}...${accounts[0].slice(-4)}`);
 
-      /* const zkAppAddressPrivateKey = PrivateKey.fromBase58(
-        ""
+      const zkAppAddressPrivateKey = PrivateKey.fromBase58(
+        "EKFBLaFhnoxqbCCmnVLyutJr5Nhr8Kert8ofpUBt9sSRyRPyjSLP"
       );
       const zkAppAddress = zkAppAddressPrivateKey.toPublicKey();
 
@@ -34,11 +34,12 @@ const Home = () => {
       );
       Mina.setActiveInstance(Berkeley);
 
+      // can acess state in app st
       console.log(await fetchAccount({ publicKey: zkAppAddress }));
 
       const MySmartContractInstance = new MerkleMapContract(zkAppAddress);
 
-      console.log(await MySmartContractInstance.mapRoot.fetch()); */
+      console.log(MySmartContractInstance);
 
       /*       const tx = await Mina.transaction(() => {
         const YourSmartContractInstance = new MerkleMapContract(zkAppAddress);

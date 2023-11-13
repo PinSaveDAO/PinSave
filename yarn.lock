@@ -7446,7 +7446,7 @@ dotenv-parse-variables@^2.0.0:
     debug "^4.3.1"
     is-string-and-not-blank "^0.0.2"
 
-dotenv@^16.0.3:
+dotenv@^16.0.3, dotenv@^16.3.1:
   version "16.3.1"
   resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-16.3.1.tgz#369034de7d7e5b120972693352a3bf112172cc3e"
   integrity sha512-IPzF4w4/Rd94bA9imS68tZBaYyBWSCE47V1RGuMrB94iyTOIEwRmVL2x/4An+6mETpLrKJ5hQkB8W4kFAadeIQ==
@@ -12701,19 +12701,7 @@ nyc@15.1.0:
     test-exclude "^6.0.0"
     yargs "^15.0.2"
 
-o1js@0.12.1:
-  version "0.12.1"
-  resolved "https://registry.yarnpkg.com/o1js/-/o1js-0.12.1.tgz#2dd236439c2bfcb861de9a348a788e00e8551614"
-  integrity sha512-1Z7+FUzARe+1pSLpeaWqzb2kXbPRbZBLBp9MgzIkNJTIFYFAijVdSyqnBJulYyidq7BNCd0R91+hX8sVGQlhnw==
-  dependencies:
-    blakejs "1.2.1"
-    detect-gpu "^5.0.5"
-    isomorphic-fetch "^3.0.0"
-    js-sha256 "^0.9.0"
-    reflect-metadata "^0.1.13"
-    tslib "^2.3.0"
-
-o1js@^0.14.0:
+o1js@0.14.1, o1js@^0.14.0:
   version "0.14.1"
   resolved "https://registry.yarnpkg.com/o1js/-/o1js-0.14.1.tgz#492bf8e8614539246a085a88e99702719545eb77"
   integrity sha512-ro01Ez5kUqREGoQpvvmsWhIEZAy4lt1PHNn90rIaBCTzi41mlfynw6WDRVhkw5PAW8J9YeC9iLTaddbCNAzX5g==
@@ -13286,19 +13274,12 @@ pify@^5.0.0:
   resolved "https://registry.yarnpkg.com/pify/-/pify-5.0.0.tgz#1f5eca3f5e87ebec28cc6d54a0e4aaf00acc127f"
   integrity sha512-eW/gHNMlxdSP6dmG6uJip6FXN0EQBwm2clYYd8Wul42Cwu/DK8HEftzsapcNdYe2MfLiIwZqsDk2RDEsTE79hA==
 
-pin-mina@0.1.1:
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/pin-mina/-/pin-mina-0.1.1.tgz#70054e7e13a71ed4a512847dac83a3e89ae301dc"
-  integrity sha512-lS0ZQCMm9My7ywBEY5ZV9vAO6KtSXNkgXw+mER67sTzogaAqaeFCVITn5vxTZWWX6pbC4SWGkktPI8MH1C2aow==
+pin-mina@0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/pin-mina/-/pin-mina-0.1.2.tgz#289d40f163fbea4c98cb9d6036611cc1ea7ab324"
+  integrity sha512-KGFZq30P302rVC+qZHDoQbWbMEjlii3t5LGDITXIC6DxaHwtlYuUfLD0L2KexvXgauBnhkfJMGFgjgjKIDbChw==
   dependencies:
-    o1js "^0.14.0"
-    pin-mina "^0.1.0"
-
-pin-mina@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/pin-mina/-/pin-mina-0.1.0.tgz#36f18ce8a0e32574aa16229f2ea94aa16f66c6f1"
-  integrity sha512-LKK8tTbNw0lMa7dsKCCNaou/YO+mLjgG3jCQYYj0qchSovqxBfLDX5az53AcRCH0SgydUd38HVfl8GG79VpAlQ==
-  dependencies:
+    dotenv "^16.3.1"
     o1js "^0.14.0"
 
 pinkie-promise@^2.0.0:
