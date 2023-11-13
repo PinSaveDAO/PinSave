@@ -1,5 +1,13 @@
 import { MerkleMapContract } from './MerkleMapContract.js';
-import { Field, Mina, PrivateKey, AccountUpdate, MerkleMap } from 'o1js';
+import {
+  Field,
+  Mina,
+  PrivateKey,
+  AccountUpdate,
+  MerkleMap,
+  CircuitString,
+  Poseidon,
+} from 'o1js';
 
 const proofsEnabled = false;
 
@@ -119,6 +127,26 @@ const treeRoot4 = zkAppInstance.treeRoot.get();
 
 console.log('mapRoot state after init tx4: ', mapRoot4.toString());
 console.log('treeRoot state after init tx4: ', treeRoot4.toString());
+
+const key3 = Poseidon.hash(CircuitString.fromString('qwert').toFields());
+const value3 = Field(0);
+
+const witness3 = map.getWitness(key3);
+
+console.log('value for key', key3.toString() + ':', map.get(key3).toString());
+
+const txn5 = await Mina.transaction(deployerAccount, () => {
+  zkAppInstance.update(witness3, key3, value3, Field(5));
+});
+
+await txn5.prove();
+await txn5.sign([deployerKey]).send();
+
+const mapRoot5 = zkAppInstance.mapRoot.get();
+const treeRoot5 = zkAppInstance.treeRoot.get();
+
+console.log('mapRoot state after init tx5: ', mapRoot5.toString());
+console.log('treeRoot state after init tx5: ', treeRoot5.toString());
 
 try {
   const fail_txn = await Mina.transaction(deployerAccount, () => {

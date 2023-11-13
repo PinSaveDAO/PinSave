@@ -1,19 +1,27 @@
-import { Box, Button, Center, Loader } from "@mantine/core";
+import { Box, Button, Center, Loader, TextInput, Group } from "@mantine/core";
 import React, { useState, useEffect } from "react";
 import {
   Field,
   Mina,
   PrivateKey,
-  AccountUpdate,
   MerkleMap,
-  PublicKey,
   fetchAccount,
+  CircuitString,
+  Poseidon,
 } from "o1js";
-
+import { useForm } from "@mantine/form";
 import { MerkleMapContract } from "pin-mina";
 
 const Home = () => {
-  const [wallet, setWallet] = useState("none");
+  const [wallet, setWallet] = useState("not connected");
+  const [hash, setHash] = useState("");
+
+  const form = useForm({
+    initialValues: {
+      key: "",
+      value: "",
+    },
+  });
 
   async function displayWallet() {
     try {
@@ -42,20 +50,30 @@ const Home = () => {
       const zkAppInstance = new MerkleMapContract(zkAppAddress);
 
       const map = new MerkleMap();
-
       const key = Field(100);
       const value = Field(50);
-
       map.set(key, value);
-      const witness = map.getWitness(key);
+
+      const keyToChange = Poseidon.hash(
+        CircuitString.fromString(form.values.key).toFields()
+      );
+      const newValue = Poseidon.hash(
+        CircuitString.fromString(form.values.value).toFields()
+      );
+      let prevValue = Field("");
+      if (key === keyToChange) {
+        prevValue = key;
+      }
+      if (key !== keyToChange) {
+        map.set(keyToChange, Field(""));
+      }
+      const witness = map.getWitness(keyToChange);
 
       const tx = await Mina.transaction(() => {
-        zkAppInstance.update(witness, key, value, Field(5));
+        zkAppInstance.update(witness, keyToChange, prevValue, newValue);
       });
 
       await tx.prove();
-
-      //tx.sign([zkAppAddressPrivateKey]);
 
       const { hash } = await window.mina.sendTransaction({
         transaction: tx.toJSON(),
@@ -65,18 +83,43 @@ const Home = () => {
         },
       });
 
+      form.reset();
+      setHash(hash);
+
       console.log(hash);
     } catch (err) {
-      // If the user has a wallet installed but has not created an account, an
-      // exception will be thrown. Consider showing "not connected" in your UI.
       console.log(err?.message);
     }
   }
 
   return (
     <>
-      <Button onClick={displayWallet}>Button</Button>
+      <Center>address:</Center>
       <Center>{wallet}</Center>
+
+      <form onSubmit={form.onSubmit((values) => console.log(values))}>
+        <Center>
+          <Group>
+            <TextInput
+              label="key"
+              placeholder=""
+              {...form.getInputProps("key")}
+            />
+            <TextInput
+              label="value"
+              placeholder=""
+              {...form.getInputProps("value")}
+            />
+          </Group>
+        </Center>
+
+        <Center>
+          <Button type="submit" onClick={displayWallet} mt={10}>
+            Submit new Key-Value
+          </Button>
+        </Center>
+        <Center>{hash}</Center>
+      </form>
     </>
   );
 };
