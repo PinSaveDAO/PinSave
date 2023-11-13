@@ -1,7 +1,7 @@
 import { MerkleMapContract } from './MerkleMapContract.js';
 import { Field, Mina, PrivateKey, AccountUpdate, MerkleMap } from 'o1js';
 
-const proofsEnabled = true;
+const proofsEnabled = false;
 
 const Local = Mina.LocalBlockchain({ proofsEnabled: proofsEnabled });
 
@@ -9,6 +9,8 @@ Mina.setActiveInstance(Local);
 
 const { privateKey: deployerKey, publicKey: deployerAccount } =
   Local.testAccounts[0];
+const { privateKey: deployerKey2, publicKey: deployerAccount2 } =
+  Local.testAccounts[1];
 
 console.log('deployerPrivateKey: ' + deployerKey.toBase58());
 console.log('deployerAccount: ' + deployerAccount.toBase58());
@@ -19,7 +21,7 @@ let verificationKey: any;
 
 if (proofsEnabled) {
   ({ verificationKey } = await MerkleMapContract.compile());
-  console.log(verificationKey.hash);
+  //console.log(verificationKey.hash);
 }
 
 console.log('compiled');
@@ -85,12 +87,12 @@ const treeRoot2 = zkAppInstance.treeRoot.get();
 console.log('mapRoot state after init tx2: ', mapRoot2.toString());
 console.log('treeRoot state after init tx2: ', treeRoot2.toString());
 
-const txn3 = await Mina.transaction(deployerAccount, () => {
+const txn3 = await Mina.transaction(deployerAccount2, () => {
   zkAppInstance.update(witness, key, value, Field(5));
 });
 
 await txn3.prove();
-await txn3.sign([deployerKey]).send();
+await txn3.sign([deployerKey2]).send();
 
 const mapRoot3 = zkAppInstance.mapRoot.get();
 const treeRoot3 = zkAppInstance.treeRoot.get();

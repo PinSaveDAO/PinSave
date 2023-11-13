@@ -42,7 +42,7 @@ export default async function handler(req, res) {
 
     map.set(key, value);
 
-    console.log("value for key", key.toString() + ":", map.get(key).toString());
+    //console.log("value for key", key.toString() + ":", map.get(key).toString());
 
     const rootBefore = map.getRoot();
 
@@ -54,10 +54,9 @@ export default async function handler(req, res) {
 
     const rootUpdated = map.getRoot();
 
-    console.log("value for key", key.toString() + ":", map.get(key).toString());
+    //console.log("value for key", key.toString() + ":", map.get(key).toString());
 
     /*     
-    const witness = map.getWitness(key);
     const init_txn = await Mina.transaction(
       { sender: deployerAccount, fee: 800_000_000 },
       () => {
@@ -67,7 +66,8 @@ export default async function handler(req, res) {
 
     await init_txn.prove();
 
-    let bla = await init_txn.sign([deployerKey]).send(); */
+    let bla = await init_txn.sign([deployerKey]).send(); 
+    */
     res.status(200).json({
       rootBefore: rootBefore,
       rootUpdated: rootUpdated,
