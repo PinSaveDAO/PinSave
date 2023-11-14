@@ -1,54 +1,39 @@
-import { Square } from './Square.js';
-import { Field, Mina, PrivateKey, AccountUpdate, MerkleMap } from 'o1js';
+import { MerkleMapContract } from './MerkleMapContract.js';
+import { Field, Mina, PrivateKey, MerkleMap, fetchAccount } from 'o1js';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const proofsEnabled = false;
 
-const Local = Mina.LocalBlockchain({ proofsEnabled: proofsEnabled });
+const Berkeley = Mina.Network(
+  'https://proxy.berkeley.minaexplorer.com/graphql'
+);
 
-Mina.setActiveInstance(Local);
-
-const { privateKey: deployerKey, publicKey: deployerAccount } =
-  Local.testAccounts[0];
-
-console.log('deployerKey: ' + deployerKey.toBase58());
-console.log('deployerAccount: ' + deployerAccount.toBase58());
-
-const { privateKey: senderKey, publicKey: senderAccount } =
-  Local.testAccounts[1];
-
-// ----------------------------------------------------
+Mina.setActiveInstance(Berkeley);
 
 let verificationKey: any;
 
 if (proofsEnabled) {
-  ({ verificationKey } = await Square.compile());
+  ({ verificationKey } = await MerkleMapContract.compile());
 }
 
-console.log('compiled');
-
 // Create a public/private key pair. The public key is your address and where you deploy the zkApp to
-const zkAppPrivateKey = PrivateKey.random();
+const zkAppPrivateKey = PrivateKey.fromBase58(
+  process.env.zkAppPrivateKey as string
+);
 const zkAppAddress = zkAppPrivateKey.toPublicKey();
 
-// create an instance of Square - and deploy it to zkAppAddress
-const zkAppInstance = new Square(zkAppAddress);
+const deployerKey = PrivateKey.fromBase58(process.env.deployerKey as string);
 
-const deployTxn = await Mina.transaction(deployerAccount, () => {
-  AccountUpdate.fundNewAccount(deployerAccount);
-  zkAppInstance.deploy({ verificationKey, zkappKey: zkAppPrivateKey });
-});
+const deployerAccount = deployerKey.toPublicKey();
 
-await deployTxn.prove();
+// create an instance of MerkleMapContract - and deploy it to zkAppAddress
+const zkAppInstance = new MerkleMapContract(zkAppAddress);
 
-await deployTxn.sign([deployerKey]).send();
+console.log(await fetchAccount({ publicKey: zkAppAddress }));
 
-// get the initial state of Square after deployment
-const num0 = zkAppInstance.totalAmountInCirculation.get();
-const mapRoot = zkAppInstance.mapRoot.get();
-
-console.log('state after init:', num0.toString());
-console.log('state after init rootMap:', mapRoot.toString());
-// ----------------------------------------------------
+const transactionFee = 800_000_000;
 
 const map = new MerkleMap();
 
@@ -63,32 +48,19 @@ const rootBefore = map.getRoot();
 
 console.log(rootBefore.toString());
 
-const witness = map.getWitness(key);
-
-const init_txn = await Mina.transaction(deployerAccount, () => {
-  zkAppInstance.initRoot(rootBefore);
-});
+/* const init_txn = await Mina.transaction(
+  { sender: deployerAccount, fee: transactionFee },
+  () => {
+    zkAppInstance.initRoot(rootBefore);
+  }
+);
 
 await init_txn.prove();
-await init_txn.sign([deployerKey, zkAppPrivateKey]).send();
 
-console.log('initialized root');
+await init_txn.sign([deployerKey]).send();
+ */
 
-const mapRoot1 = zkAppInstance.mapRoot.get();
-const treeRoot1 = zkAppInstance.treeRoot.get();
+// get the initial state of SmartContract after deployment
+const mapRoot = zkAppInstance.mapRoot.get();
 
-console.log('state after init rootMap: ', mapRoot1.toString());
-console.log('state after init treeRoot: ', treeRoot1.toString());
-// update the smart contract
-const txn2 = await Mina.transaction(deployerAccount, () => {
-  zkAppInstance.update(witness, key, Field(50), Field(5));
-});
-
-await txn2.prove();
-await txn2.sign([deployerKey, zkAppPrivateKey]).send();
-
-const mapRoot2 = zkAppInstance.mapRoot.get();
-const treeRoot2 = zkAppInstance.treeRoot.get();
-
-console.log('state after init tx2: ', mapRoot2.toString());
-console.log('state after init tx2: ', treeRoot2.toString());
+console.log('state after deploy rootMap:', mapRoot.toString());

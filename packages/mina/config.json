@@ -1,4 +1,13 @@
 {
   "version": 1,
-  "deployAliases": {}
+  "deployAliases": {
+    "pinsave": {
+      "url": "https://proxy.berkeley.minaexplorer.com/graphql",
+      "keyPath": "keys/pinsave.json",
+      "feepayerKeyPath": "C:\\Users\\fedor/.cache/zkapp-cli/keys/deployer.json",
+      "feepayerAlias": "deployer",
+      "fee": "0.1",
+      "smartContract": "MerkleMapContract"
+    }
+  }
 }

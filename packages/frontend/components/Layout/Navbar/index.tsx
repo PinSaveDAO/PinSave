@@ -126,7 +126,7 @@ export function Navbar({ links }: NavbarProps) {
   return (
     <div>
       {isClient ? (
-        <Header height={largeScreen ? 60 : 90} mb={10} className={classes.root}>
+        <Header height={80} mb={10} className={classes.root}>
           <Container className={classes.header}>
             <Link href="/">
               <Image

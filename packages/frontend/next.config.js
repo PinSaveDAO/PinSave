@@ -1,21 +1,32 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
+  reactStrictMode: false,
+
   images: {
-    domains: [
-      "evm.pinsave.app",
-      "ipfs.io",
-      "arweave.net",
-      "estuary.tech",
-      "dweb.link",
-      "alchemy.com",
-    ],
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "**",
+        hostname: "*",
       },
     ],
+  },
+
+  async headers() {
+    return [
+      {
+        source: "/(.*)",
+        headers: [
+          {
+            key: "Cross-Origin-Opener-Policy",
+            value: "same-origin",
+          },
+          {
+            key: "Cross-Origin-Embedder-Policy",
+            value: "require-corp",
+          },
+        ],
+      },
+    ];
   },
 };
 

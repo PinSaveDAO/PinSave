@@ -40,7 +40,8 @@
   },
   "workspaces": {
     "packages": [
-      "packages/*"
+      "packages/hardhat",
+      "packages/frontend"
     ]
   },
   "dependencies": {},
