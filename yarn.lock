@@ -12714,6 +12714,19 @@ nyc@15.1.0:
     test-exclude "^6.0.0"
     yargs "^15.0.2"
 
+o1js@0.14.0:
+  version "0.14.0"
+  resolved "https://registry.yarnpkg.com/o1js/-/o1js-0.14.0.tgz#815778d46ccefabe1879420741da0e2c8d102868"
+  integrity sha512-Yio5b80PiwyU6eDg9FKIMC6igATRvoNlCijg07cxbn+q5zHv0LvlU+hi2+ZYrZBho6AIJVMQ22cBznFfYy7mrQ==
+  dependencies:
+    blakejs "1.2.1"
+    cachedir "^2.4.0"
+    detect-gpu "^5.0.5"
+    isomorphic-fetch "^3.0.0"
+    js-sha256 "^0.9.0"
+    reflect-metadata "^0.1.13"
+    tslib "^2.3.0"
+
 o1js@0.14.1, o1js@^0.14.0:
   version "0.14.1"
   resolved "https://registry.yarnpkg.com/o1js/-/o1js-0.14.1.tgz#492bf8e8614539246a085a88e99702719545eb77"
@@ -15526,6 +15539,14 @@ tr46@~0.0.3:
   version "0.0.3"
   resolved "https://registry.yarnpkg.com/tr46/-/tr46-0.0.3.tgz#8184fd347dac9cdc185992f3a6622e14b9d9ab6a"
   integrity sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==
+
+tradecoin@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/tradecoin/-/tradecoin-1.1.1.tgz#af709acfb067fb95404e52b50e53099996bf2514"
+  integrity sha512-LBQJu5SFhpu6q7Sf63FGARTsb00tz4BK1Vfusx128DE0whN9S0seRvFFmxD4ftuA1LX/boa0x0bJ78N3kFouEA==
+  dependencies:
+    dotenv "^16.3.1"
+    o1js "0.14.0"
 
 trim-newlines@^3.0.0:
   version "3.0.1"

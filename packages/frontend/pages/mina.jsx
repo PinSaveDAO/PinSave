@@ -1,5 +1,5 @@
-import { Box, Button, Center, Loader, TextInput, Group } from "@mantine/core";
-import React, { useState, useEffect } from "react";
+import { Button, Center, TextInput, Group } from "@mantine/core";
+import React, { useState } from "react";
 import {
   Field,
   Mina,
