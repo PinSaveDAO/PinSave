@@ -7,7 +7,19 @@ import {
   Permissions,
   DeployArgs,
   MerkleMapWitness,
+  Struct,
 } from 'o1js';
+
+export class NFT extends Struct({
+  name: Field,
+  description: Field,
+  cid: Field,
+  owner: Field,
+}) {
+  newOwner(address: Field) {
+    this.owner = address;
+  }
+}
 
 export class MerkleMapContract extends SmartContract {
   @state(Field) treeRoot = State<Field>();
