@@ -8,15 +8,18 @@ import {
   DeployArgs,
   MerkleMapWitness,
   Struct,
+  PublicKey,
+  Poseidon,
 } from 'o1js';
 
 export class NFT extends Struct({
   name: Field,
   description: Field,
+  id: Field,
   cid: Field,
-  owner: Field,
+  owner: PublicKey,
 }) {
-  newOwner(address: Field) {
+  newOwner(address: PublicKey) {
     this.owner = address;
   }
 }
@@ -43,23 +46,30 @@ export class MerkleMapContract extends SmartContract {
     this.treeRoot.set(initialRoot);
   }
 
-  @method update(
-    keyWitness: MerkleMapWitness,
-    keyToChange: Field,
-    valueBefore: Field,
-    incrementAmount: Field
+  @method transferOwner(
+    item: NFT,
+    newOwner: PublicKey,
+    keyWitness: MerkleMapWitness
   ) {
     const initialRoot = this.treeRoot.getAndAssertEquals();
 
+    // check the owner
+    const sender = this.sender;
+    sender.assertEquals(item.owner);
+
     // check the initial state matches what we expect
-    const [rootBefore, key] = keyWitness.computeRootAndKey(valueBefore);
+    const [rootBefore, key] = keyWitness.computeRootAndKey(
+      Poseidon.hash(NFT.toFields(item))
+    );
 
     rootBefore.assertEquals(initialRoot);
-    key.assertEquals(keyToChange);
+    key.assertEquals(item.id);
+
+    item.newOwner(newOwner);
 
     // compute the root after incrementing
     const [rootAfter, _] = keyWitness.computeRootAndKey(
-      valueBefore.add(incrementAmount)
+      Poseidon.hash(NFT.toFields(item))
     );
 
     // set the new root
