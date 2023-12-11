@@ -8,10 +8,14 @@ const nextConfig = {
         protocol: "https",
         hostname: "*",
       },
+      {
+        protocol: "http",
+        hostname: "*",
+      },
     ],
   },
 
-  async headers() {
+  /*   async headers() {
     return [
       {
         source: "/(.*)",
@@ -27,7 +31,7 @@ const nextConfig = {
         ],
       },
     ];
-  },
+  }, */
 };
 
 module.exports = nextConfig;

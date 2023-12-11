@@ -21,7 +21,7 @@ function Post() {
   const { address } = router.query;
 
   const [user, setUser] = useState<IOrbisProfile | undefined>();
-
+  console.log(user?.details.profile?.cover);
   useEffect(() => {
     async function loadData() {
       let res = await orbis.isConnected();
@@ -48,7 +48,7 @@ function Post() {
               typeof user.details.profile?.cover === "string" &&
               user.details.profile?.cover !== ""
                 ? user.details.profile?.cover
-                : "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=720&q=80"
+                : "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=720&q=10"
             }
             radius="xs"
             style={{
@@ -66,6 +66,7 @@ function Post() {
                 <Image
                   height={600}
                   width={550}
+                  loading="lazy"
                   src={
                     user.details.profile?.pfp ??
                     "https://pinsave.app/PinSaveCard.png"
@@ -95,10 +96,7 @@ function Post() {
                     </Title>
                   </Center>
                   <Center mt={15}>
-                    <Text mx="auto">
-                      {" "}
-                      {user?.details.profile?.description}{" "}
-                    </Text>
+                    <Text mx="auto">{user?.details.profile?.description}</Text>
                   </Center>
                   <Group mt={10} position="center">
                     <Group position="center" mt="md" mb="xs">
@@ -108,11 +106,11 @@ function Post() {
                         width="24"
                         height="24"
                         viewBox="0 0 24 24"
-                        stroke-width="2"
+                        strokeWidth="2"
                         stroke="currentColor"
                         fill="none"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
                       >
                         <path
                           stroke="none"
