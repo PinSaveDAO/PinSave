@@ -65,3 +65,8 @@ yarn-error.log*
 /doc
 cypress/videos/*
 cypress/screenshots/*
+
+# sitemap
+*robots.txt
+*sitemap.xml
+*sitemap-0.xml
