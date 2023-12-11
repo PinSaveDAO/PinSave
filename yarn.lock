@@ -446,6 +446,11 @@
   resolved "https://registry.yarnpkg.com/@colors/colors/-/colors-1.5.0.tgz#bb504579c1cae923e6576a4f5da43d25f97bdbd9"
   integrity sha512-ooWCrlZP11i8GImSjTHYHLkvFDP48nS4+204nGb1RiX/WXYHmJA2III9/e2DWVabCESdW7hBAEzHRqUn9OUVvQ==
 
+"@corex/deepmerge@^4.0.43":
+  version "4.0.43"
+  resolved "https://registry.yarnpkg.com/@corex/deepmerge/-/deepmerge-4.0.43.tgz#9bd42559ebb41cc5a7fb7cfeea5f231c20977dca"
+  integrity sha512-N8uEMrMPL0cu/bdboEWpQYb/0i2K5Qn8eCsxzOmxSggJbbQte7ljMRoXm917AbntqTGOzdTu+vP3KOOzoC70HQ==
+
 "@cspotcode/source-map-support@^0.8.0":
   version "0.8.1"
   resolved "https://registry.yarnpkg.com/@cspotcode/source-map-support/-/source-map-support-0.8.1.tgz#00629c35a688e05a88b1cda684fb9d5e73f000a1"
@@ -821,6 +826,15 @@
   version "6.0.0"
   resolved "https://registry.yarnpkg.com/@erc725/smart-contracts/-/smart-contracts-6.0.0.tgz#9e94a78fe8fffe6b85cd4503f9a106cbf035725b"
   integrity sha512-6okutGGL9xbg/MSgAof2FU1UcSNE/z3p9TORlROVGaM3gi1A6FQQ7fDqtBYkPtvHureX8yS9gP7xPt3PRbP43Q==
+  dependencies:
+    "@openzeppelin/contracts" "^4.9.3"
+    "@openzeppelin/contracts-upgradeable" "^4.9.3"
+    solidity-bytes-utils "0.8.0"
+
+"@erc725/smart-contracts@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@erc725/smart-contracts/-/smart-contracts-7.0.0.tgz#60f90dc24f61b13105b49194fa2d41624c53495f"
+  integrity sha512-O/Ki+0JqRStPUHXjdU4JhDUzncLdC33c0xjTRiwWwBYbxL77LlWaPfG96fWp2hF2kdR0zNYvcsnZZds+uj2QMg==
   dependencies:
     "@openzeppelin/contracts" "^4.9.3"
     "@openzeppelin/contracts-upgradeable" "^4.9.3"
@@ -1593,6 +1607,17 @@
     "@openzeppelin/contracts-upgradeable" "^4.9.2"
     solidity-bytes-utils "0.8.0"
 
+"@lukso/lsp-smart-contracts@^0.13.0":
+  version "0.13.0"
+  resolved "https://registry.yarnpkg.com/@lukso/lsp-smart-contracts/-/lsp-smart-contracts-0.13.0.tgz#bf300bce7230827a9a6e537376917ca69d3bc894"
+  integrity sha512-67+ny+sMBAB46Hv3o8jkjNIgkHT/gEN4O68OYpfTANPVm4D8T8cB0+Mef7a+mTuzd6mNkDo82ZqGgWRQMDNDpg==
+  dependencies:
+    "@account-abstraction/contracts" "^0.6.0"
+    "@erc725/smart-contracts" "^7.0.0"
+    "@openzeppelin/contracts" "^4.9.2"
+    "@openzeppelin/contracts-upgradeable" "^4.9.2"
+    solidity-bytes-utils "0.8.0"
+
 "@mantine/core@^4.2.12":
   version "4.2.12"
   resolved "https://registry.yarnpkg.com/@mantine/core/-/core-4.2.12.tgz#7c07a352e7f2ea13f693ddd0d1b77d8898593e6c"
@@ -1779,6 +1804,11 @@
   version "14.0.1"
   resolved "https://registry.yarnpkg.com/@next/env/-/env-14.0.1.tgz#7d03c9042c205a320aef2ea3f83c2d16b6825563"
   integrity sha512-Ms8ZswqY65/YfcjrlcIwMPD7Rg/dVjdLapMcSHG26W6O67EJDF435ShW4H4LXi1xKO1oRc97tLXUpx8jpLe86A==
+
+"@next/env@^13.4.3":
+  version "13.5.6"
+  resolved "https://registry.yarnpkg.com/@next/env/-/env-13.5.6.tgz#c1148e2e1aa166614f05161ee8f77ded467062bc"
+  integrity sha512-Yac/bV5sBGkkEXmAX5FWPS9Mmo2rthrOPRQQNfycJPkjUAUclomCPH7QFVCDQ4Mp2k2K1SSM6m0zrxYrOwtFQw==
 
 "@next/eslint-plugin-next@14.0.1":
   version "14.0.1"
@@ -3332,10 +3362,10 @@
   resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-4.36.1.tgz#79f8c1a539d47c83104210be2388813a7af2e524"
   integrity sha512-DJSilV5+ytBP1FbFcEJovv4rnnm/CokuVvrBEtW/Va9DvuJ3HksbXUJEpI0aV1KtuL4ZoO9AVE6PyNLzF7tLeA==
 
-"@tanstack/query-core@5.8.3":
-  version "5.8.3"
-  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-5.8.3.tgz#7c6d62721518223e8b27f1a0b5e9bd4e3bb7ecd8"
-  integrity sha512-SWFMFtcHfttLYif6pevnnMYnBvxKf3C+MHMH7bevyYfpXpTMsLB9O6nNGBdWSoPwnZRXFNyNeVZOw25Wmdasow==
+"@tanstack/query-core@5.12.1":
+  version "5.12.1"
+  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-5.12.1.tgz#2e04b8ab7a04b2f2cfe77c2b0c9b982477373e06"
+  integrity sha512-WbZztNmKq0t6QjdNmHzezbi/uifYo9j6e2GLJkodsYaYUlzMbAp91RDyeHkIZrm7EfO4wa6Sm5sxJZm5SPlh6w==
 
 "@tanstack/query-persist-client-core@4.29.23":
   version "4.29.23"
@@ -3380,12 +3410,12 @@
     "@tanstack/query-core" "4.29.23"
     use-sync-external-store "^1.2.0"
 
-"@tanstack/react-query@5.8.3":
-  version "5.8.3"
-  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-5.8.3.tgz#3d5db417a4c62b0e04a9b4091ac748cac1bac06c"
-  integrity sha512-EDRrsMgUtKM+SjVmhDYBd4jwWWyHAw3kCaurKLIO90OfPQr/UhpwcqM2l/eQOaUYon9lfDB2ejQi1edHK7zEdA==
+"@tanstack/react-query@5.12.2":
+  version "5.12.2"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-5.12.2.tgz#42b39a1ccc2bdf44137921c2395902ed4239d7eb"
+  integrity sha512-BeWZu8zVFH20oRc+S/K9ADPgWjEzP/XQCGBNz5IbApUwPQAdwkQYbXODVL5AyAlWiSxhx+P2xlARPBApj2Yrog==
   dependencies:
-    "@tanstack/query-core" "5.8.3"
+    "@tanstack/query-core" "5.12.1"
 
 "@tanstack/react-query@^4.28.0":
   version "4.36.1"
@@ -8706,7 +8736,7 @@ fast-fifo@^1.0.0:
   resolved "https://registry.yarnpkg.com/fast-fifo/-/fast-fifo-1.3.2.tgz#286e31de96eb96d38a97899815740ba2a4f3640c"
   integrity sha512-/d9sfos4yxzpwkDkuN7k2SqFKtYNmCTzgfEpz82x34IM9/zc8KGxQoXg1liNC/izpRM/MBdt44Nmx41ZWqk+FQ==
 
-fast-glob@^3.0.3, fast-glob@^3.1.1, fast-glob@^3.2.9, fast-glob@^3.3.0, fast-glob@^3.3.1:
+fast-glob@^3.0.3, fast-glob@^3.1.1, fast-glob@^3.2.12, fast-glob@^3.2.9, fast-glob@^3.3.0, fast-glob@^3.3.1:
   version "3.3.2"
   resolved "https://registry.yarnpkg.com/fast-glob/-/fast-glob-3.3.2.tgz#a904501e57cfdd2ffcded45e99a54fef55e46129"
   integrity sha512-oX2ruAFQwf/Orj8m737Y5adxDQO0LAB7/S5MnxCdTNDd4p6BsyIVsv9JQsATbTSq8KHRpLwIHbVlUNatxd+1Ow==
@@ -9641,10 +9671,10 @@ hardhat-gas-reporter@^1.0.9:
     eth-gas-reporter "^0.2.25"
     sha1 "^1.1.1"
 
-hardhat@2.19.0:
-  version "2.19.0"
-  resolved "https://registry.yarnpkg.com/hardhat/-/hardhat-2.19.0.tgz#1e08658863550ba351788ea128e544ff80584a31"
-  integrity sha512-kMpwovOEfrFRQXEopCP+JTcKVwSYVj8rnXE0LynxDqnh06yvyKCQknmXL6IVYTHQL6Csysc/yNbCHQbjSeJGpA==
+hardhat@2.19.1:
+  version "2.19.1"
+  resolved "https://registry.yarnpkg.com/hardhat/-/hardhat-2.19.1.tgz#5e09e8070ecfc6109ba9d3a4a117ec2b0643032a"
+  integrity sha512-bsWa63g1GB78ZyMN08WLhFElLPA+J+pShuKD1BFO2+88g3l+BL3R07vj9deIi9dMbssxgE714Gof1dBEDGqnCw==
   dependencies:
     "@ethersproject/abi" "^5.1.2"
     "@metamask/eth-sig-util" "^4.0.0"
@@ -12474,6 +12504,16 @@ neo-async@^2.6.2:
   resolved "https://registry.yarnpkg.com/neo-async/-/neo-async-2.6.2.tgz#b4aafb93e3aeb2d8174ca53cf163ab7d7308305f"
   integrity sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==
 
+next-sitemap@^4.2.3:
+  version "4.2.3"
+  resolved "https://registry.yarnpkg.com/next-sitemap/-/next-sitemap-4.2.3.tgz#5db3f650351a51e84b9fd6b58c5af2f9257b5058"
+  integrity sha512-vjdCxeDuWDzldhCnyFCQipw5bfpl4HmZA7uoo3GAaYGjGgfL4Cxb1CiztPuWGmS+auYs7/8OekRS8C2cjdAsjQ==
+  dependencies:
+    "@corex/deepmerge" "^4.0.43"
+    "@next/env" "^13.4.3"
+    fast-glob "^3.2.12"
+    minimist "^1.2.8"
+
 next-tick@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/next-tick/-/next-tick-1.1.0.tgz#1836ee30ad56d67ef281b22bd199f709449b35eb"
@@ -12714,7 +12754,20 @@ nyc@15.1.0:
     test-exclude "^6.0.0"
     yargs "^15.0.2"
 
-o1js@0.14.1, o1js@^0.14.0:
+o1js@0.14.2:
+  version "0.14.2"
+  resolved "https://registry.yarnpkg.com/o1js/-/o1js-0.14.2.tgz#a7b26c832d0a329bccfab63137c5ce251026de79"
+  integrity sha512-xU0NfbaOeooT5G7sQbVD0uDKpViLKwfVeCk+3U4rJk7HRq2KtHkdc7rlA0/86AtLUSRQpD5OZlJbVGW4daDvfQ==
+  dependencies:
+    blakejs "1.2.1"
+    cachedir "^2.4.0"
+    detect-gpu "^5.0.5"
+    isomorphic-fetch "^3.0.0"
+    js-sha256 "^0.9.0"
+    reflect-metadata "^0.1.13"
+    tslib "^2.3.0"
+
+o1js@^0.14.0:
   version "0.14.1"
   resolved "https://registry.yarnpkg.com/o1js/-/o1js-0.14.1.tgz#492bf8e8614539246a085a88e99702719545eb77"
   integrity sha512-ro01Ez5kUqREGoQpvvmsWhIEZAy4lt1PHNn90rIaBCTzi41mlfynw6WDRVhkw5PAW8J9YeC9iLTaddbCNAzX5g==

@@ -39,7 +39,7 @@ const { chains, publicClient } = configureChains(
         return { http: chain.rpcUrls.default.http[0] };
       },
     }),
-  ],
+  ]
 );
 
 const { connectors } = getDefaultWallets({
@@ -75,24 +75,6 @@ function MyApp({ Component, pageProps }: NextAppProps) {
         <WagmiConfig config={wagmiConfig}>
           <NextHead>
             <title>Pin Save - decentralized Pinterest</title>
-            <meta
-              name="description"
-              content="Pin Save is a platform for decentralized content aggregation and image sharing where users have content ownership."
-            />
-            <link rel="icon" href="/favicon.svg" />
-            <meta
-              property="og:image"
-              content="https://pinsave.app/TwitterIconWords.png"
-            />
-            <meta property="og:url" content="https://pinsave.app/" />
-            <meta
-              property="og:title"
-              content="Pin Save - decentralized Pinterest"
-            />
-            <meta property="og:type" content="website" />
-            <meta name="twitter:card" content="summary" />
-            <meta name="twitter:site" content="@pinsav3" />
-            <meta name="twitter:creator" content="@pfedprog" />
           </NextHead>
           <NotificationsProvider>
             <RainbowKitProvider chains={chains}>

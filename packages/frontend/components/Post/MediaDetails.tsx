@@ -7,7 +7,6 @@ import type { IndividualPost } from "@/services/upload";
 import { useState, useEffect } from "react";
 import {
   Paper,
-  Image,
   Button,
   TextInput,
   Text,
@@ -21,6 +20,7 @@ import { FaLaughSquint } from "react-icons/fa";
 import { Heart } from "tabler-icons-react";
 import { Orbis } from "@orbisclub/orbis-sdk";
 import { useRouter } from "next/router";
+import Image from "next/image";
 
 interface IMyProps {
   post: IndividualPost;
@@ -60,7 +60,7 @@ const MediaDetails: React.FC<IMyProps> = ({ post, currentChain }) => {
         Owned by:{" "}
         <a
           style={{ color: "#198b6eb9" }}
-          href={`https://evm.pinsave.app/profile/${post.owner}`}
+          href={`https://pinsave.app/profile/${post.owner}`}
         >
           {post.owner}
         </a>
@@ -77,24 +77,26 @@ const MediaDetails: React.FC<IMyProps> = ({ post, currentChain }) => {
           <Group spacing="xs">
             <Avatar size={40} color="blue">
               <Image
+                width={40}
+                height={32}
                 src={
                   message.creator_details.profile?.pfp ??
-                  "https://evm.pinsave.app/PinSaveCard.png"
+                  "https://pinsave.app/PinSaveCard.png"
                 }
                 alt="profile"
               />
             </Avatar>
             <Text mt={3}>
               <a
-                href={`https://evm.pinsave.app/profile/${message.creator.substring(
-                  message.creator.indexOf(":0x") + 1,
+                href={`https://pinsave.app/profile/${message.creator.substring(
+                  message.creator.indexOf(":0x") + 1
                 )}`}
                 style={{ color: "#198b6eb9", fontSize: "smaller" }}
               >
                 {message.creator_details.profile?.username ??
                   message.creator.substring(
                     message.creator.indexOf(":0x") + 1,
-                    message.creator.indexOf(":0x") + 8,
+                    message.creator.indexOf(":0x") + 8
                   ) + "..."}
               </a>
               : {message.newData}
@@ -137,7 +139,7 @@ const MediaDetails: React.FC<IMyProps> = ({ post, currentChain }) => {
                   message.stream_id,
                   "downvote",
                   orbis,
-                  setOrbisResponse,
+                  setOrbisResponse
                 )
               }
             >
@@ -172,7 +174,7 @@ const MediaDetails: React.FC<IMyProps> = ({ post, currentChain }) => {
             currentChain,
             address,
             currentChain,
-            setOrbisResponse,
+            setOrbisResponse
           )) && setNewMessage("")
         }
       >

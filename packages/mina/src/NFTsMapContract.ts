@@ -46,6 +46,31 @@ export class MerkleMapContract extends SmartContract {
     this.treeRoot.set(initialRoot);
   }
 
+  @method mintNFT(item: NFT, keyWitness: MerkleMapWitness) {
+    const initialRoot = this.treeRoot.getAndAssertEquals();
+
+    // check the owner
+    const sender = this.sender;
+    sender.assertEquals(item.owner);
+
+    // check the initial state matches what we expect
+    // should be empty
+    const [rootBefore, key] = keyWitness.computeRootAndKey(
+      Poseidon.hash([Field.from('')])
+    );
+
+    rootBefore.assertEquals(initialRoot);
+    key.assertEquals(item.id);
+
+    // compute the root after incrementing
+    const [rootAfter, _] = keyWitness.computeRootAndKey(
+      Poseidon.hash(NFT.toFields(item))
+    );
+
+    // set the new root
+    this.treeRoot.set(rootAfter);
+  }
+
   @method transferOwner(
     item: NFT,
     newOwner: PublicKey,
