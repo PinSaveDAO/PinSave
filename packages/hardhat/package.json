@@ -5,7 +5,7 @@
   "license": "MIT",
   "dependencies": {
     "@lukso/lsp-factory.js": "^3.1.1",
-    "@lukso/lsp-smart-contracts": "^0.13.0",
+    "@lukso/lsp-smart-contracts": "^0.14.0",
     "@nomicfoundation/hardhat-toolbox": "^2.0.2",
     "@openzeppelin/contracts": "^5.0.0",
     "@synthetixio/synpress": "^3.1.0",
