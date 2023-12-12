@@ -58,10 +58,7 @@ const MediaDetails: React.FC<IMyProps> = ({ post, currentChain }) => {
       </Paper>
       <p style={{ fontSize: "small", color: "#0000008d" }}>
         Owned by:{" "}
-        <a
-          style={{ color: "#198b6eb9" }}
-          href={`https://pinsave.app/profile/${post.owner}`}
-        >
+        <a style={{ color: "#198b6eb9" }} href={`/profile/${post.owner}`}>
           {post.owner}
         </a>
       </p>
@@ -79,16 +76,13 @@ const MediaDetails: React.FC<IMyProps> = ({ post, currentChain }) => {
               <Image
                 width={40}
                 height={32}
-                src={
-                  message.creator_details.profile?.pfp ??
-                  "https://pinsave.app/PinSaveCard.png"
-                }
+                src={message.creator_details.profile?.pfp ?? "/PinSaveCard.png"}
                 alt="profile"
               />
             </Avatar>
             <Text mt={3}>
               <a
-                href={`https://pinsave.app/profile/${message.creator.substring(
+                href={`/profile/${message.creator.substring(
                   message.creator.indexOf(":0x") + 1
                 )}`}
                 style={{ color: "#198b6eb9", fontSize: "smaller" }}

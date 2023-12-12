@@ -36,8 +36,9 @@ const Upload = () => {
       let res = await orbis.isConnected();
 
       if (!res) {
-        res = await orbis.connect();
+        res = await orbis.connect_v2({ chain: "ethereum" });
       }
+
       setUser(res);
     }
     async function orbisLogout() {
@@ -165,10 +166,7 @@ const Upload = () => {
                   <Image
                     height={600}
                     width={550}
-                    src={
-                      user.details.profile?.pfp ??
-                      "https://pinsave.app/PinSaveCard.png"
-                    }
+                    src={user.details.profile?.pfp ?? "/PinSaveCard.png"}
                     alt={user.details.profile?.username ?? "user"}
                     style={{
                       width: "auto",
