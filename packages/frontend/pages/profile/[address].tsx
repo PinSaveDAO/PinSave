@@ -21,20 +21,11 @@ function Post() {
   const { address } = router.query;
 
   const [user, setUser] = useState<IOrbisProfile | undefined>();
-  console.log(user?.details.profile?.cover);
+
   useEffect(() => {
     async function loadData() {
-      let res = await orbis.isConnected();
-
-      if (res) {
-        let { data } = await orbis.getDids(address);
-        setUser(data[0]);
-      }
-
-      if (!res) {
-        let res = await orbis.connect();
-        setUser(res);
-      }
+      let { data } = await orbis.getDids(address);
+      setUser(data[0]);
     }
     loadData();
   }, [address]);
@@ -67,10 +58,7 @@ function Post() {
                   height={600}
                   width={550}
                   loading="lazy"
-                  src={
-                    user.details.profile?.pfp ??
-                    "https://pinsave.app/PinSaveCard.png"
-                  }
+                  src={user.details.profile?.pfp ?? "/PinSaveCard.png"}
                   alt={user.details.profile?.username ?? "user"}
                   style={{
                     width: "auto",

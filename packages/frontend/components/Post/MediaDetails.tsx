@@ -19,6 +19,7 @@ import { BiDislike } from "react-icons/bi";
 import { FaLaughSquint } from "react-icons/fa";
 import { Heart } from "tabler-icons-react";
 import { Orbis } from "@orbisclub/orbis-sdk";
+import { useAccount } from "wagmi";
 import { useRouter } from "next/router";
 import Image from "next/image";
 
@@ -40,6 +41,8 @@ const MediaDetails: React.FC<IMyProps> = ({ post, currentChain }) => {
   const [orbisResponse, setOrbisResponse] = useState<any>();
 
   const { address } = getContractInfo(250);
+
+  const { isConnected, connector } = useAccount();
 
   useEffect(() => {
     loadData(orbis, router, context, currentChain, setMessages);
@@ -156,24 +159,30 @@ const MediaDetails: React.FC<IMyProps> = ({ post, currentChain }) => {
         <Text>Only for PinSave holders:</Text>
         <Switch onClick={() => setIsEncrypted((prevCheck) => !prevCheck)} />
       </Group>
-      <Button
-        component="a"
-        radius="lg"
-        onClick={async () =>
-          (await sendMessage(
-            context,
-            isEncrypted,
-            orbis,
-            newMessage,
-            currentChain,
-            address,
-            currentChain,
-            setOrbisResponse
-          )) && setNewMessage("")
-        }
-      >
-        Send Message
-      </Button>
+      {isConnected ? (
+        <Button
+          component="a"
+          radius="lg"
+          onClick={async () =>
+            (await sendMessage(
+              context,
+              isEncrypted,
+              orbis,
+              newMessage,
+              currentChain,
+              address,
+              currentChain,
+              setOrbisResponse
+            )) && setNewMessage("")
+          }
+        >
+          Send Message
+        </Button>
+      ) : (
+        <Text sx={{ marginLeft: "20px" }}>
+          Connect Wallet to send messages and reactions
+        </Text>
+      )}
     </Paper>
   );
 };
