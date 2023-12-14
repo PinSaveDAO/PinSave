@@ -37,6 +37,8 @@ function Post() {
         setUsername(data[0].details.profile?.username);
         setPfp(data[0].details.profile?.pfp);
 
+        console.log(data[0].details.profile?.pfp);
+
         if (
           typeof data[0].details.profile?.cover === "string" &&
           data[0].details.profile?.cover !== ""
