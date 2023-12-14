@@ -60,7 +60,7 @@ const Upload = () => {
     if (orbisLogoutState) {
       orbisLogout();
     }
-  }, [orbisLogoutState]);
+  }, [orbisLogoutState, isConnected, connector]);
 
   async function updateProfile() {
     showNotification({
