@@ -19,9 +19,9 @@ let orbis = new Orbis();
 function Post() {
   const router = useRouter();
   const { address } = router.query;
+
   const [loaded, setLoaded] = useState<boolean>(false);
 
-  //const [user, setUser] = useState<IOrbisProfile | undefined>();
   const [username, setUsername] = useState<string>("New User");
   const [pfp, setPfp] = useState<string>("/PinSaveCard.png");
   const [cover, setCover] = useState<string>("/PinSaveCard.png");
@@ -80,6 +80,7 @@ function Post() {
                   width={550}
                   src={pfp}
                   alt={username}
+                  unoptimized={true}
                   style={{
                     width: "auto",
                     height: "50%",
