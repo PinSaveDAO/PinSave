@@ -19,28 +19,47 @@ let orbis = new Orbis();
 function Post() {
   const router = useRouter();
   const { address } = router.query;
+  const [loaded, setLoaded] = useState<boolean>(false);
 
-  const [user, setUser] = useState<IOrbisProfile | undefined>();
+  //const [user, setUser] = useState<IOrbisProfile | undefined>();
+  const [username, setUsername] = useState<string>("New User");
+  const [pfp, setPfp] = useState<string>("/PinSaveCard.png");
+  const [cover, setCover] = useState<string>("/PinSaveCard.png");
+  const [description, setDescription] = useState<string>("");
+  const [followers, setFollowers] = useState<number>(0);
+  const [following, setFollowing] = useState<number>(0);
 
   useEffect(() => {
     async function loadData() {
       let { data } = await orbis.getDids(address);
-      setUser(data[0]);
+      console.log(data);
+      if (data[0].address !== undefined) {
+        setUsername(data[0].details.profile?.username);
+        setPfp(data[0].details.profile?.pfp);
+
+        if (
+          typeof data[0].details.profile?.cover === "string" &&
+          data[0].details.profile?.cover !== ""
+        ) {
+          setCover(data[0].details.profile?.cover);
+        }
+
+        setDescription(data[0].details.profile?.description);
+        setFollowers(data[0].details.count_followers);
+        setFollowing(data[0].details.count_following);
+        setLoaded(true);
+      }
     }
+
     loadData();
   }, [address]);
 
   return (
     <>
-      {user?.did ? (
+      {loaded === true ? (
         <Box sx={{ maxWidth: 1200, textAlign: "center" }} mx="auto">
           <BackgroundImage
-            src={
-              typeof user.details.profile?.cover === "string" &&
-              user.details.profile?.cover !== ""
-                ? user.details.profile?.cover
-                : "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=720&q=10"
-            }
+            src={cover}
             radius="xs"
             style={{
               height: "auto",
@@ -57,9 +76,8 @@ function Post() {
                 <Image
                   height={600}
                   width={550}
-                  loading="lazy"
-                  src={user.details.profile?.pfp ?? "/PinSaveCard.png"}
-                  alt={user.details.profile?.username ?? "user"}
+                  src={pfp}
+                  alt={username}
                   style={{
                     width: "auto",
                     height: "50%",
@@ -80,11 +98,11 @@ function Post() {
                 >
                   <Center>
                     <Title mx="auto" order={2}>
-                      {user?.details.profile?.username}
+                      {username}
                     </Title>
                   </Center>
                   <Center mt={15}>
-                    <Text mx="auto">{user?.details.profile?.description}</Text>
+                    <Text mx="auto">{description}</Text>
                   </Center>
                   <Group mt={10} position="center">
                     <Group position="center" mt="md" mb="xs">
@@ -107,8 +125,8 @@ function Post() {
                         ></path>
                         <path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0m-2 14v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2m1 -17.87a4 4 0 0 1 0 7.75m5 10.12v-2a4 4 0 0 0 -3 -3.85"></path>
                       </svg>
-                      <Text> Followers: {user?.details.count_followers} </Text>
-                      <Text> Following: {user?.details.count_following} </Text>
+                      <Text> Followers: {followers} </Text>
+                      <Text> Following: {following} </Text>
                     </Group>
                   </Group>
                 </Card>

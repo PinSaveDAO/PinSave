@@ -77,10 +77,13 @@ const MediaDetails: React.FC<IMyProps> = ({ post, currentChain }) => {
           <Group spacing="xs">
             <Avatar size={40} color="blue">
               <Image
-                width={40}
-                height={32}
-                src={message.creator_details.profile?.pfp ?? "/PinSaveCard.png"}
+                width={36}
+                height={30}
+                src={message.creator_details.profile?.pfp}
                 alt="profile"
+                style={{
+                  borderRadius: "5px",
+                }}
               />
             </Avatar>
             <Text mt={3}>
