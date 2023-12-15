@@ -1,5 +1,4 @@
 import { useProfile } from "@/hooks/api";
-import { IsNotMp4 } from "@/utils/media";
 
 import {
   BackgroundImage,
@@ -21,6 +20,8 @@ function Post() {
 
   const { data: profileQueried, isLoading } = useProfile(String(address));
 
+  console.log(profileQueried);
+
   return (
     <>
       {profileQueried ? (
@@ -40,21 +41,19 @@ function Post() {
                   height: 400,
                 }}
               >
-                {IsNotMp4(profileQueried.pfp) ? (
-                  <Image
-                    height={600}
-                    width={550}
-                    src={profileQueried.pfp}
-                    alt={profileQueried.username}
-                    style={{
-                      width: "auto",
-                      height: "50%",
-                      borderRadius: "10px",
-                      marginTop: "10px",
-                    }}
-                  />
-                ) : null}
-
+                <Image
+                  height={600}
+                  width={550}
+                  src={profileQueried.pfp}
+                  alt={profileQueried.username}
+                  style={{
+                    width: "auto",
+                    height: "50%",
+                    borderRadius: "10px",
+                    marginTop: "10px",
+                  }}
+                  onError={(e) => console.log(e)}
+                />
                 <Card
                   shadow="sm"
                   p="lg"
