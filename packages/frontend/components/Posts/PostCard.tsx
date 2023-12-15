@@ -37,7 +37,6 @@ const PostCard: React.FC<IMyProps> = ({ post }) => {
             <Image
               src={post.image}
               alt={post.name}
-              placeholder="blur"
               fill
               sizes="200px"
               style={{ objectFit: "cover" }}

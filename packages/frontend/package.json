@@ -35,6 +35,7 @@
     "react-icons": "^4.7.1",
     "react-player": "^2.11.2",
     "react-query": "^3.39.3",
+    "sharp": "^0.33.0",
     "tabler-icons-react": "^1.56.0",
     "viem": "^1.16.6",
     "wagmi": "^1.4.3"

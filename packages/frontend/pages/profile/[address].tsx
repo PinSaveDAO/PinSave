@@ -1,3 +1,6 @@
+import { useProfile } from "@/hooks/api";
+import { IsNotMp4 } from "@/utils/media";
+
 import {
   BackgroundImage,
   Box,
@@ -10,8 +13,7 @@ import {
   LoadingOverlay,
 } from "@mantine/core";
 import { useRouter } from "next/router";
-import Image from "next/legacy/image";
-import { useProfile } from "@/hooks/api";
+import Image from "next/image";
 
 function Post() {
   const router = useRouter();
@@ -38,18 +40,21 @@ function Post() {
                   height: 400,
                 }}
               >
-                <Image
-                  height={600}
-                  width={550}
-                  src={profileQueried.pfp}
-                  alt={profileQueried.username}
-                  style={{
-                    width: "auto",
-                    height: "50%",
-                    borderRadius: "10px",
-                    marginTop: "10px",
-                  }}
-                />
+                {IsNotMp4(profileQueried.pfp) ? (
+                  <Image
+                    height={600}
+                    width={550}
+                    src={profileQueried.pfp}
+                    alt={profileQueried.username}
+                    style={{
+                      width: "auto",
+                      height: "50%",
+                      borderRadius: "10px",
+                      marginTop: "10px",
+                    }}
+                  />
+                ) : null}
+
                 <Card
                   shadow="sm"
                   p="lg"

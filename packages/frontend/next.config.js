@@ -9,6 +9,7 @@ const nextConfig = {
         hostname: "**.nftstorage.link",
       },
     ],
+    minimumCacheTTL: 31536000,
   },
 };
 
