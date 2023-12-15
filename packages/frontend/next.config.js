@@ -8,6 +8,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "**.nftstorage.link",
       },
+      {
+        protocol: "https",
+        hostname: "pinsave.app",
+      },
     ],
     minimumCacheTTL: 31536000,
   },

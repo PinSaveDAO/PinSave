@@ -46,6 +46,7 @@ function Post() {
                   width={550}
                   src={profileQueried.pfp}
                   alt={profileQueried.username}
+                  priority={true}
                   style={{
                     width: "auto",
                     height: "50%",
