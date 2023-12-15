@@ -10,7 +10,7 @@ import {
   LoadingOverlay,
 } from "@mantine/core";
 import { useRouter } from "next/router";
-import Image from "next/image";
+import Image from "next/legacy/image";
 import { useProfile } from "@/hooks/api";
 
 function Post() {
@@ -43,7 +43,6 @@ function Post() {
                   width={550}
                   src={profileQueried.pfp}
                   alt={profileQueried.username}
-                  unoptimized={true}
                   style={{
                     width: "auto",
                     height: "50%",

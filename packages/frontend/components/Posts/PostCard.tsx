@@ -39,7 +39,6 @@ const PostCard: React.FC<IMyProps> = ({ post }) => {
               alt={post.name}
               placeholder="blur"
               fill
-              blurDataURL={post.image}
               sizes="200px"
               style={{ objectFit: "cover" }}
             />

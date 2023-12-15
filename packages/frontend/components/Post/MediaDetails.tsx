@@ -1,8 +1,9 @@
 import { timeConverter } from "@/utils/time";
 import { getContractInfo } from "@/utils/contracts";
-import { sendMessage, sendReaction, loadData } from "@/services/orbis";
+import { sendMessage, sendReaction } from "@/services/orbis";
 import type { ChainName } from "@/constants/chains";
 import type { IndividualPost } from "@/services/upload";
+import { useMessages } from "@/hooks/api";
 
 import { useState } from "react";
 import {
@@ -20,9 +21,7 @@ import { FaLaughSquint } from "react-icons/fa";
 import { Heart } from "tabler-icons-react";
 import { Orbis } from "@orbisclub/orbis-sdk";
 import { useAccount } from "wagmi";
-
 import Image from "next/image";
-import { useMessages } from "@/hooks/api";
 
 const context =
   "kjzl6cwe1jw147hcck185xfdlrxq9zv0y0hoa6shzskqfnio56lhf8190yaei7w";
