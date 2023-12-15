@@ -20,7 +20,7 @@ const PostPage = () => {
   return (
     <div>
       <LoadingOverlay visible={isLoading} />
-      {isLoading === false && (
+      {postQueried && (
         <>
           <ActionIcon
             onClick={() => router.back()}
