@@ -10,7 +10,6 @@ import {
   Title,
   Text,
   TextInput,
-  LoadingOverlay,
   Stack,
 } from "@mantine/core";
 import Image from "next/image";
@@ -18,6 +17,7 @@ import { Dropzone, MIME_TYPES } from "@mantine/dropzone";
 import { showNotification, updateNotification } from "@mantine/notifications";
 import { Orbis } from "@orbisclub/orbis-sdk";
 import { NFTStorage } from "nft.storage";
+import { useAccount } from "wagmi";
 import React, { useState, useEffect } from "react";
 
 let orbis = new Orbis();
@@ -31,15 +31,26 @@ const Upload = () => {
 
   const [orbisLogoutState, setOrbisLogoutState] = useState<boolean>(false);
 
+  const { isConnected, connector } = useAccount();
+
   useEffect(() => {
     async function loadData() {
-      let res = await orbis.isConnected();
+      if (isConnected) {
+        const provider = await connector?.getProvider();
 
-      if (!res) {
-        res = await orbis.connect();
+        let res = await orbis.isConnected();
+
+        if (!res) {
+          res = await orbis.connect_v2({
+            chain: "ethereum",
+            provider: provider,
+            lit: false,
+          });
+        }
+        setUser(res);
       }
-      setUser(res);
     }
+
     async function orbisLogout() {
       await orbis.logout();
     }
@@ -49,7 +60,7 @@ const Upload = () => {
     if (orbisLogoutState) {
       orbisLogout();
     }
-  }, [user, orbisLogoutState]);
+  }, [orbisLogoutState, isConnected, connector]);
 
   async function updateProfile() {
     showNotification({
@@ -139,7 +150,7 @@ const Upload = () => {
 
   return (
     <>
-      {user?.did ? (
+      {isConnected && user?.did ? (
         <>
           <Box sx={{ maxWidth: 1200, textAlign: "center" }} mx="auto">
             <BackgroundImage
@@ -165,10 +176,7 @@ const Upload = () => {
                   <Image
                     height={600}
                     width={550}
-                    src={
-                      user.details.profile?.pfp ??
-                      "https://pinsave.app/PinSaveCard.png"
-                    }
+                    src={user.details.profile?.pfp ?? "/PinSaveCard.png"}
                     alt={user.details.profile?.username ?? "user"}
                     style={{
                       width: "auto",
@@ -396,9 +404,10 @@ const Upload = () => {
             */}
           </Paper>
         </>
-      ) : (
-        <LoadingOverlay visible />
-      )}
+      ) : null}
+      {!isConnected ? (
+        <Text> Connect to wallet to edit your profile</Text>
+      ) : null}
     </>
   );
 };

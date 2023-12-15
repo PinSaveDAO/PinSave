@@ -1,10 +1,11 @@
 import { timeConverter } from "@/utils/time";
 import { getContractInfo } from "@/utils/contracts";
-import { sendMessage, sendReaction, loadData } from "@/services/orbis";
+import { sendMessage, sendReaction } from "@/services/orbis";
 import type { ChainName } from "@/constants/chains";
 import type { IndividualPost } from "@/services/upload";
+import { useMessages } from "@/hooks/api";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   Paper,
   Button,
@@ -19,8 +20,11 @@ import { BiDislike } from "react-icons/bi";
 import { FaLaughSquint } from "react-icons/fa";
 import { Heart } from "tabler-icons-react";
 import { Orbis } from "@orbisclub/orbis-sdk";
-import { useRouter } from "next/router";
+import { useAccount } from "wagmi";
 import Image from "next/image";
+
+const context =
+  "kjzl6cwe1jw147hcck185xfdlrxq9zv0y0hoa6shzskqfnio56lhf8190yaei7w";
 
 interface IMyProps {
   post: IndividualPost;
@@ -28,22 +32,19 @@ interface IMyProps {
 }
 
 const orbis: IOrbis = new Orbis();
-const context =
-  "kjzl6cwe1jw147hcck185xfdlrxq9zv0y0hoa6shzskqfnio56lhf8190yaei7w";
 
 const MediaDetails: React.FC<IMyProps> = ({ post, currentChain }) => {
-  const router = useRouter();
   const [isEncrypted, setIsEncrypted] = useState(false);
 
   const [newMessage, setNewMessage] = useState<string>("");
-  const [messages, setMessages] = useState<any | undefined>();
+
   const [orbisResponse, setOrbisResponse] = useState<any>();
 
-  const { address } = getContractInfo(250);
+  const { address } = getContractInfo();
 
-  useEffect(() => {
-    loadData(orbis, router, context, currentChain, setMessages);
-  }, [router, router.isReady, orbisResponse, currentChain]);
+  const { isConnected } = useAccount();
+
+  const { data: messagesQueried, isLoading } = useMessages("0");
 
   return (
     <Paper shadow="sm" p="md" withBorder>
@@ -58,14 +59,16 @@ const MediaDetails: React.FC<IMyProps> = ({ post, currentChain }) => {
       </Paper>
       <p style={{ fontSize: "small", color: "#0000008d" }}>
         Owned by:{" "}
-        <a
-          style={{ color: "#198b6eb9" }}
-          href={`https://pinsave.app/profile/${post.owner}`}
-        >
-          {post.owner}
+        <a style={{ color: "#198b6eb9" }} href={`/profile/${post.owner}`}>
+          {post.owner.substring(
+            post.owner.indexOf(":0x") + 1,
+            post.owner.indexOf(":0x") + 8
+          ) +
+            "..." +
+            post.owner.substring(35)}
         </a>
       </p>
-      {messages?.map((message: any, i: number) => (
+      {messagesQueried?.data.map((message: any, i: number) => (
         <Paper
           key={i}
           shadow="xs"
@@ -77,18 +80,18 @@ const MediaDetails: React.FC<IMyProps> = ({ post, currentChain }) => {
           <Group spacing="xs">
             <Avatar size={40} color="blue">
               <Image
-                width={40}
-                height={32}
-                src={
-                  message.creator_details.profile?.pfp ??
-                  "https://pinsave.app/PinSaveCard.png"
-                }
+                width={36}
+                height={30}
+                src={message.creator_details.profile?.pfp}
                 alt="profile"
+                style={{
+                  borderRadius: "5px",
+                }}
               />
             </Avatar>
             <Text mt={3}>
               <a
-                href={`https://pinsave.app/profile/${message.creator.substring(
+                href={`/profile/${message.creator.substring(
                   message.creator.indexOf(":0x") + 1
                 )}`}
                 style={{ color: "#198b6eb9", fontSize: "smaller" }}
@@ -99,7 +102,7 @@ const MediaDetails: React.FC<IMyProps> = ({ post, currentChain }) => {
                     message.creator.indexOf(":0x") + 8
                   ) + "..."}
               </a>
-              : {message.newData}
+              : {message.content.body}
             </Text>
           </Group>
           <Group>
@@ -162,24 +165,30 @@ const MediaDetails: React.FC<IMyProps> = ({ post, currentChain }) => {
         <Text>Only for PinSave holders:</Text>
         <Switch onClick={() => setIsEncrypted((prevCheck) => !prevCheck)} />
       </Group>
-      <Button
-        component="a"
-        radius="lg"
-        onClick={async () =>
-          (await sendMessage(
-            context,
-            isEncrypted,
-            orbis,
-            newMessage,
-            currentChain,
-            address,
-            currentChain,
-            setOrbisResponse
-          )) && setNewMessage("")
-        }
-      >
-        Send Message
-      </Button>
+      {isConnected ? (
+        <Button
+          component="a"
+          radius="lg"
+          onClick={async () =>
+            (await sendMessage(
+              context,
+              isEncrypted,
+              orbis,
+              newMessage,
+              currentChain,
+              address,
+              currentChain,
+              setOrbisResponse
+            )) && setNewMessage("")
+          }
+        >
+          Send Message
+        </Button>
+      ) : (
+        <Text sx={{ marginLeft: "20px" }}>
+          Connect Wallet to send messages and reactions
+        </Text>
+      )}
     </Paper>
   );
 };
