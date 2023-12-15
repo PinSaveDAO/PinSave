@@ -4,7 +4,7 @@ import { sendMessage, sendReaction, loadData } from "@/services/orbis";
 import type { ChainName } from "@/constants/chains";
 import type { IndividualPost } from "@/services/upload";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   Paper,
   Button,
@@ -20,8 +20,12 @@ import { FaLaughSquint } from "react-icons/fa";
 import { Heart } from "tabler-icons-react";
 import { Orbis } from "@orbisclub/orbis-sdk";
 import { useAccount } from "wagmi";
-import { useRouter } from "next/router";
+
 import Image from "next/image";
+import { useMessages } from "@/hooks/api";
+
+const context =
+  "kjzl6cwe1jw147hcck185xfdlrxq9zv0y0hoa6shzskqfnio56lhf8190yaei7w";
 
 interface IMyProps {
   post: IndividualPost;
@@ -29,24 +33,19 @@ interface IMyProps {
 }
 
 const orbis: IOrbis = new Orbis();
-const context =
-  "kjzl6cwe1jw147hcck185xfdlrxq9zv0y0hoa6shzskqfnio56lhf8190yaei7w";
 
 const MediaDetails: React.FC<IMyProps> = ({ post, currentChain }) => {
-  const router = useRouter();
   const [isEncrypted, setIsEncrypted] = useState(false);
 
   const [newMessage, setNewMessage] = useState<string>("");
-  const [messages, setMessages] = useState<any | undefined>();
+
   const [orbisResponse, setOrbisResponse] = useState<any>();
 
-  const { address } = getContractInfo(250);
+  const { address } = getContractInfo();
 
-  const { isConnected, connector } = useAccount();
+  const { isConnected } = useAccount();
 
-  useEffect(() => {
-    loadData(orbis, router, context, currentChain, setMessages);
-  }, [router, router.isReady, orbisResponse, currentChain]);
+  const { data: messagesQueried, isLoading } = useMessages("0");
 
   return (
     <Paper shadow="sm" p="md" withBorder>
@@ -62,95 +61,111 @@ const MediaDetails: React.FC<IMyProps> = ({ post, currentChain }) => {
       <p style={{ fontSize: "small", color: "#0000008d" }}>
         Owned by:{" "}
         <a style={{ color: "#198b6eb9" }} href={`/profile/${post.owner}`}>
-          {post.owner}
+          {post.owner.substring(
+            post.owner.indexOf(":0x") + 1,
+            post.owner.indexOf(":0x") + 8
+          ) +
+            "..." +
+            post.owner.substring(35)}
         </a>
       </p>
-      {messages?.map((message: any, i: number) => (
-        <Paper
-          key={i}
-          shadow="xs"
-          mt={4}
-          sx={{ backgroundColor: "#80c7fc1d" }}
-          withBorder
-          px="xl"
-        >
-          <Group spacing="xs">
-            <Avatar size={40} color="blue">
-              <Image
-                width={36}
-                height={30}
-                src={message.creator_details.profile?.pfp}
-                alt="profile"
-                style={{
-                  borderRadius: "5px",
-                }}
-              />
-            </Avatar>
-            <Text mt={3}>
-              <a
-                href={`/profile/${message.creator.substring(
-                  message.creator.indexOf(":0x") + 1
-                )}`}
-                style={{ color: "#198b6eb9", fontSize: "smaller" }}
+      {isLoading === false &&
+        messagesQueried?.data.map((message: any, i: number) => (
+          <Paper
+            key={i}
+            shadow="xs"
+            mt={4}
+            sx={{ backgroundColor: "#80c7fc1d" }}
+            withBorder
+            px="xl"
+          >
+            <Group spacing="xs">
+              <Avatar size={40} color="blue">
+                <Image
+                  width={36}
+                  height={30}
+                  src={message.creator_details.profile?.pfp}
+                  alt="profile"
+                  style={{
+                    borderRadius: "5px",
+                  }}
+                />
+              </Avatar>
+              <Text mt={3}>
+                <a
+                  href={`/profile/${message.creator.substring(
+                    message.creator.indexOf(":0x") + 1
+                  )}`}
+                  style={{ color: "#198b6eb9", fontSize: "smaller" }}
+                >
+                  {message.creator_details.profile?.username ??
+                    message.creator.substring(
+                      message.creator.indexOf(":0x") + 1,
+                      message.creator.indexOf(":0x") + 8
+                    ) + "..."}
+                </a>
+                : {message.content.body}
+              </Text>
+            </Group>
+            <Group>
+              <Button
+                color="red"
+                size="xs"
+                component="a"
+                radius="sm"
+                rightIcon={<Heart fill="white" />}
+                onClick={() =>
+                  sendReaction(
+                    message.stream_id,
+                    "like",
+                    orbis,
+                    setOrbisResponse
+                  )
+                }
               >
-                {message.creator_details.profile?.username ??
-                  message.creator.substring(
-                    message.creator.indexOf(":0x") + 1,
-                    message.creator.indexOf(":0x") + 8
-                  ) + "..."}
-              </a>
-              : {message.newData}
-            </Text>
-          </Group>
-          <Group>
-            <Button
-              color="red"
-              size="xs"
-              component="a"
-              radius="sm"
-              rightIcon={<Heart fill="white" />}
-              onClick={() =>
-                sendReaction(message.stream_id, "like", orbis, setOrbisResponse)
-              }
-            >
-              {message.count_likes}
-            </Button>
-            <Button
-              size="xs"
-              component="a"
-              radius="sm"
-              rightIcon={<FaLaughSquint size={22} />}
-              ml={4}
-              onClick={() =>
-                sendReaction(message.stream_id, "haha", orbis, setOrbisResponse)
-              }
-            >
-              {message.count_haha}
-            </Button>
-            <Button
-              color="blue"
-              size="xs"
-              component="a"
-              radius="sm"
-              ml={4}
-              rightIcon={<BiDislike size={22} />}
-              onClick={() =>
-                sendReaction(
-                  message.stream_id,
-                  "downvote",
-                  orbis,
-                  setOrbisResponse
-                )
-              }
-            >
-              {message.count_downvotes}
-            </Button>
-            <Text sx={{ fontSize: "small" }}>
-              {timeConverter(message.timestamp)}
-            </Text>
-          </Group>
-        </Paper>
-      ))}
+                {message.count_likes}
+              </Button>
+              <Button
+                size="xs"
+                component="a"
+                radius="sm"
+                rightIcon={<FaLaughSquint size={22} />}
+                ml={4}
+                onClick={() =>
+                  sendReaction(
+                    message.stream_id,
+                    "haha",
+                    orbis,
+                    setOrbisResponse
+                  )
+                }
+              >
+                {message.count_haha}
+              </Button>
+              <Button
+                color="blue"
+                size="xs"
+                component="a"
+                radius="sm"
+                ml={4}
+                rightIcon={<BiDislike size={22} />}
+                onClick={() =>
+                  sendReaction(
+                    message.stream_id,
+                    "downvote",
+                    orbis,
+                    setOrbisResponse
+                  )
+                }
+              >
+                {message.count_downvotes}
+              </Button>
+              <Text sx={{ fontSize: "small" }}>
+                {timeConverter(message.timestamp)}
+              </Text>
+            </Group>
+          </Paper>
+        ))}
       <Group>
         <TextInput
           my="lg"

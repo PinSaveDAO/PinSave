@@ -6,62 +6,25 @@ import {
   Group,
   Title,
   Text,
-  LoadingOverlay,
   Stack,
+  LoadingOverlay,
 } from "@mantine/core";
-import { Orbis } from "@orbisclub/orbis-sdk";
 import { useRouter } from "next/router";
-import React, { useState, useEffect } from "react";
 import Image from "next/image";
-
-let orbis = new Orbis();
+import { useProfile } from "@/hooks/api";
 
 function Post() {
   const router = useRouter();
   const { address } = router.query;
 
-  const [loaded, setLoaded] = useState<boolean>(false);
-
-  const [username, setUsername] = useState<string>("New User");
-  const [pfp, setPfp] = useState<string>("/PinSaveCard.png");
-  const [cover, setCover] = useState<string>("/PinSaveCard.png");
-  const [description, setDescription] = useState<string>("");
-  const [followers, setFollowers] = useState<number>(0);
-  const [following, setFollowing] = useState<number>(0);
-
-  useEffect(() => {
-    async function loadData() {
-      let { data } = await orbis.getDids(address);
-      console.log(data);
-      if (data[0].address !== undefined) {
-        setUsername(data[0].details.profile?.username);
-        setPfp(data[0].details.profile?.pfp);
-
-        console.log(data[0].details.profile?.pfp);
-
-        if (
-          typeof data[0].details.profile?.cover === "string" &&
-          data[0].details.profile?.cover !== ""
-        ) {
-          setCover(data[0].details.profile?.cover);
-        }
-
-        setDescription(data[0].details.profile?.description);
-        setFollowers(data[0].details.count_followers);
-        setFollowing(data[0].details.count_following);
-        setLoaded(true);
-      }
-    }
-
-    loadData();
-  }, [address]);
+  const { data: profileQueried, isLoading } = useProfile(String(address));
 
   return (
     <>
-      {loaded === true ? (
+      {profileQueried ? (
         <Box sx={{ maxWidth: 1200, textAlign: "center" }} mx="auto">
           <BackgroundImage
-            src={cover}
+            src={profileQueried.cover}
             radius="xs"
             style={{
               height: "auto",
@@ -78,8 +41,8 @@ function Post() {
                 <Image
                   height={600}
                   width={550}
-                  src={pfp}
-                  alt={username}
+                  src={profileQueried.pfp}
+                  alt={profileQueried.username}
                   unoptimized={true}
                   style={{
                     width: "auto",
@@ -101,11 +64,11 @@ function Post() {
                 >
                   <Center>
                     <Title mx="auto" order={2}>
-                      {username}
+                      {profileQueried.username}
                     </Title>
                   </Center>
                   <Center mt={15}>
-                    <Text mx="auto">{description}</Text>
+                    <Text mx="auto">{profileQueried.description}</Text>
                   </Center>
                   <Group mt={10} position="center">
                     <Group position="center" mt="md" mb="xs">
@@ -128,8 +91,8 @@ function Post() {
                         ></path>
                         <path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0m-2 14v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2m1 -17.87a4 4 0 0 1 0 7.75m5 10.12v-2a4 4 0 0 0 -3 -3.85"></path>
                       </svg>
-                      <Text> Followers: {followers} </Text>
-                      <Text> Following: {following} </Text>
+                      <Text> Followers: {profileQueried.followers} </Text>
+                      <Text> Following: {profileQueried.following} </Text>
                     </Group>
                   </Group>
                 </Card>
@@ -138,7 +101,7 @@ function Post() {
           </BackgroundImage>
         </Box>
       ) : (
-        <LoadingOverlay visible />
+        <LoadingOverlay visible={isLoading} />
       )}
     </>
   );
