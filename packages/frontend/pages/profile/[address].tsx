@@ -10,19 +10,17 @@ import {
   Text,
   Stack,
   LoadingOverlay,
-  //Image,
+  Image,
 } from "@mantine/core";
 import { useRouter } from "next/router";
 
-import Image from "next/image";
+//import Image from "next/image";
 
 function Post() {
   const router = useRouter();
   const { address } = router.query;
 
   const { data: profileQueried, isLoading } = useProfile(String(address));
-
-  console.log(profileQueried);
 
   return (
     <>
