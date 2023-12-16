@@ -12,7 +12,6 @@ import {
   LoadingOverlay,
 } from "@mantine/core";
 import { useRouter } from "next/router";
-
 import Image from "next/image";
 
 function Post() {
@@ -38,6 +37,8 @@ function Post() {
                 spacing="xs"
                 sx={{
                   height: 400,
+                  justifyContent: "center",
+                  alignItems: "center",
                 }}
               >
                 <Image
@@ -47,10 +48,12 @@ function Post() {
                   alt={profileQueried.username}
                   unoptimized={true}
                   style={{
-                    width: "auto",
+                    width: "80%",
                     height: "50%",
                     borderRadius: "10px",
                     marginTop: "10px",
+                    marginLeft: "5px",
+                    marginRight: "5px",
                   }}
                 />
                 <Card
@@ -60,14 +63,11 @@ function Post() {
                   withBorder
                   mx="auto"
                   style={{
-                    minWidth: 400,
-                    minHeight: 200,
+                    minHeight: 120,
                   }}
                 >
                   <Center>
-                    <Title mx="auto" order={2}>
-                      {profileQueried.username}
-                    </Title>
+                    <Title order={2}>{profileQueried.username}</Title>
                   </Center>
                   <Center mt={15}>
                     <Text mx="auto">{profileQueried.description}</Text>
