@@ -10,11 +10,11 @@ import {
   Text,
   Stack,
   LoadingOverlay,
-  Image,
+  //Image,
 } from "@mantine/core";
 import { useRouter } from "next/router";
 
-//import Image from "next/image";
+import Image from "next/image";
 
 function Post() {
   const router = useRouter();
@@ -46,16 +46,6 @@ function Post() {
                 <Image
                   height={600}
                   width={550}
-                  src={profileQueried.pfp}
-                  alt={profileQueried.username}
-                  style={{
-                    width: "auto",
-                    height: "50%",
-                    borderRadius: "10px",
-                    marginTop: "10px",
-                  }}
-                />
-                <img
                   src={profileQueried.pfp}
                   alt={profileQueried.username}
                   style={{

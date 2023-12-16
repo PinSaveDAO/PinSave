@@ -84,7 +84,6 @@ const MediaDetails: React.FC<IMyProps> = ({ post, currentChain }) => {
                 height={30}
                 src={message.creator_details.profile?.pfp}
                 alt="profile"
-                unoptimized={true}
                 style={{
                   borderRadius: "5px",
                 }}
