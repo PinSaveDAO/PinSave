@@ -10,11 +10,10 @@ import {
   Text,
   Stack,
   LoadingOverlay,
-  Image,
 } from "@mantine/core";
 import { useRouter } from "next/router";
 
-//import Image from "next/image";
+import Image from "next/image";
 
 function Post() {
   const router = useRouter();
@@ -46,6 +45,7 @@ function Post() {
                   width={550}
                   src={profileQueried.pfp}
                   alt={profileQueried.username}
+                  unoptimized={true}
                   style={{
                     width: "auto",
                     height: "50%",
@@ -86,11 +86,7 @@ function Post() {
                         strokeLinecap="round"
                         strokeLinejoin="round"
                       >
-                        <path
-                          stroke="none"
-                          d="M0 0h24v24H0z"
-                          fill="none"
-                        ></path>
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                         <path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0m-2 14v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2m1 -17.87a4 4 0 0 1 0 7.75m5 10.12v-2a4 4 0 0 0 -3 -3.85"></path>
                       </svg>
                       <Text> Followers: {profileQueried.followers} </Text>
