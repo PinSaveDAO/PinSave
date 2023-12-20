@@ -4,7 +4,7 @@ import { getChainApiRouteName } from "@/utils/chains";
 import type { Post } from "@/services/upload";
 import type { ChainName } from "@/constants/chains";
 
-import { Box, Button, Center, Loader } from "@mantine/core";
+import { Box, Button, Center, Title, Text, Stack } from "@mantine/core";
 import { useNetwork, Chain } from "wagmi";
 import type { NextPage } from "next";
 
@@ -40,9 +40,12 @@ const Home: NextPage = () => {
           })}
         </Box>
       ))}
-      {(isLoading || isFetchingNextPage) && (
+      {!posts && isLoading && (
         <Center>
-          <Loader size="xl" my={4} />
+          <Stack>
+            <Title order={1}> PinSave Home Page</Title>
+            <Text> Loading decentralized PinSave Posts</Text>
+          </Stack>
         </Center>
       )}
       {posts && posts.pages.length > 0 && (

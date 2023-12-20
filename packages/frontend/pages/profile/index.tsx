@@ -406,7 +406,12 @@ const Upload = () => {
         </>
       ) : null}
       {!isConnected ? (
-        <Text> Connect to wallet to edit your profile</Text>
+        <Center>
+          <Stack>
+            <Title order={1}> PinSave profile Section</Title>
+            <Text> Connect to wallet to edit your profile</Text>
+          </Stack>
+        </Center>
       ) : null}
     </>
   );
