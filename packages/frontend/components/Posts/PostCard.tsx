@@ -39,7 +39,7 @@ const PostCard: React.FC<IMyProps> = ({ post }) => {
               alt={post.name}
               fill
               sizes="200px"
-              style={{ objectFit: "cover" }}
+              style={{ objectFit: "cover", borderRadius: "10px" }}
             />
           ) : (
             <Player

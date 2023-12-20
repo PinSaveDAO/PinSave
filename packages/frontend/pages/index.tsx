@@ -22,24 +22,26 @@ const Home: NextPage = () => {
   } = usePosts(initialChain);
 
   return (
-    <>
-      {posts?.pages.map((page, i: number) => (
-        <Box
-          mx="auto"
-          sx={{
-            maxWidth: 1500,
-            gap: 20,
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(220px, 5fr))",
-            gridTemplateRows: "masonry",
-          }}
-          key={i}
-        >
-          {page.items.map((post: Post) => {
-            return <PostCard post={post} key={post.token_id} />;
-          })}
-        </Box>
-      ))}
+    <div>
+      <Center>
+        {posts?.pages.map((page, i: number) => (
+          <Box
+            mx="auto"
+            sx={{
+              maxWidth: 1500,
+              gap: 20,
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fill, minmax(220px, 5fr))",
+              gridTemplateRows: "masonry",
+            }}
+            key={i}
+          >
+            {page.items.map((post: Post) => {
+              return <PostCard post={post} key={post.token_id} />;
+            })}
+          </Box>
+        ))}
+      </Center>
       {!posts && isLoading && (
         <Center>
           <Stack>
@@ -63,7 +65,7 @@ const Home: NextPage = () => {
           </Button>
         </Center>
       )}
-    </>
+    </div>
   );
 };
 
