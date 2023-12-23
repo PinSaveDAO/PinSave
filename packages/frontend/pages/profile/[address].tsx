@@ -1,5 +1,4 @@
 import { useProfile } from "@/hooks/api";
-import { IsNotMp4 } from "@/utils/media";
 
 import {
   BackgroundImage,
@@ -38,23 +37,25 @@ function Post() {
                 spacing="xs"
                 sx={{
                   height: 400,
+                  justifyContent: "center",
+                  alignItems: "center",
                 }}
               >
-                {IsNotMp4(profileQueried.pfp) ? (
-                  <Image
-                    height={600}
-                    width={550}
-                    src={profileQueried.pfp}
-                    alt={profileQueried.username}
-                    style={{
-                      width: "auto",
-                      height: "50%",
-                      borderRadius: "10px",
-                      marginTop: "10px",
-                    }}
-                  />
-                ) : null}
-
+                <Image
+                  height={600}
+                  width={550}
+                  src={profileQueried.pfp}
+                  alt={profileQueried.username}
+                  unoptimized={true}
+                  style={{
+                    width: "80%",
+                    height: "50%",
+                    borderRadius: "10px",
+                    marginTop: "10px",
+                    marginLeft: "5px",
+                    marginRight: "5px",
+                  }}
+                />
                 <Card
                   shadow="sm"
                   p="lg"
@@ -62,14 +63,11 @@ function Post() {
                   withBorder
                   mx="auto"
                   style={{
-                    minWidth: 400,
-                    minHeight: 200,
+                    minHeight: 120,
                   }}
                 >
                   <Center>
-                    <Title mx="auto" order={2}>
-                      {profileQueried.username}
-                    </Title>
+                    <Title order={2}>{profileQueried.username}</Title>
                   </Center>
                   <Center mt={15}>
                     <Text mx="auto">{profileQueried.description}</Text>
@@ -88,11 +86,7 @@ function Post() {
                         strokeLinecap="round"
                         strokeLinejoin="round"
                       >
-                        <path
-                          stroke="none"
-                          d="M0 0h24v24H0z"
-                          fill="none"
-                        ></path>
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                         <path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0m-2 14v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2m1 -17.87a4 4 0 0 1 0 7.75m5 10.12v-2a4 4 0 0 0 -3 -3.85"></path>
                       </svg>
                       <Text> Followers: {profileQueried.followers} </Text>

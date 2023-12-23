@@ -11,7 +11,7 @@ export async function fetchJson(resURL: string, resURL2: string) {
 }
 
 export async function fetchImageUrls(resURL: string, resURL2: string) {
-  let image = "https://evm.pinsave.app/PinSaveCard.png";
+  let image = "https://pinsave.app/PinSaveCard.png";
   try {
     await fetch(resURL);
     image = resURL;

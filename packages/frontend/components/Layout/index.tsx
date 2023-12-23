@@ -14,7 +14,6 @@ const LayoutApp = ({ children }: LayoutProps) => {
             { label: "Home", link: "/" },
             { label: "Upload", link: "/upload" },
             { label: "Profile", link: "/profile" },
-            { label: "Mina", link: "/mina" },
           ]}
         />
       }

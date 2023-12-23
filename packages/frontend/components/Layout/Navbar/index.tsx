@@ -15,7 +15,6 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useState, useEffect } from "react";
 
 const useStyles = createStyles((theme) => ({
   root: {
@@ -105,11 +104,6 @@ export function Navbar({ links }: NavbarProps) {
   const { classes, cx } = useStyles();
   const router = useRouter();
   const largeScreen = useMediaQuery("(min-width: 600px)");
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
 
   const items = links.map((link) => (
     <Link key={link.label} href={link.link} passHref>
@@ -125,50 +119,48 @@ export function Navbar({ links }: NavbarProps) {
 
   return (
     <div>
-      {isClient ? (
-        <Header height={80} mb={10} className={classes.root}>
-          <Container className={classes.header}>
-            <Link href="/">
-              <Image
-                src={largeScreen ? "/PinSaveL.png" : "/Pin.png"}
-                alt="Pin Save EVM"
-                width={largeScreen ? 140 : 30}
-                height={largeScreen ? 35 : 30}
-                priority
-              />
-            </Link>
-            <Group spacing={5} className={classes.links}>
-              {items}
-            </Group>
-            <Group spacing={5}>
-              <ConnectButton
-                accountStatus={{
-                  smallScreen: "avatar",
-                  largeScreen: "full",
-                }}
-              />
-              <Burger
-                opened={opened}
-                onClick={() => toggleOpened()}
-                className={classes.burger}
-                size="sm"
-              />
-            </Group>
+      <Header height={80} mb={10} className={classes.root}>
+        <Container className={classes.header}>
+          <Link href="/">
+            <Image
+              src={largeScreen ? "/PinSaveL.png" : "/Pin.png"}
+              alt="Pin Save EVM"
+              width={largeScreen ? 140 : 30}
+              height={largeScreen ? 35 : 30}
+              priority
+            />
+          </Link>
+          <Group spacing={5} className={classes.links}>
+            {items}
+          </Group>
+          <Group spacing={5}>
+            <ConnectButton
+              accountStatus={{
+                smallScreen: "avatar",
+                largeScreen: "full",
+              }}
+            />
+            <Burger
+              opened={opened}
+              onClick={() => toggleOpened()}
+              className={classes.burger}
+              size="sm"
+            />
+          </Group>
 
-            <Transition
-              transition="pop-top-right"
-              duration={200}
-              mounted={opened}
-            >
-              {(styles) => (
-                <Paper className={classes.dropdown} withBorder style={styles}>
-                  {items}
-                </Paper>
-              )}
-            </Transition>
-          </Container>
-        </Header>
-      ) : null}
+          <Transition
+            transition="pop-top-right"
+            duration={200}
+            mounted={opened}
+          >
+            {(styles) => (
+              <Paper className={classes.dropdown} withBorder style={styles}>
+                {items}
+              </Paper>
+            )}
+          </Transition>
+        </Container>
+      </Header>
     </div>
   );
 }
