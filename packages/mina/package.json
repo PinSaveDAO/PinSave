@@ -19,6 +19,7 @@
     "coverage": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage",
     "format": "prettier --write --ignore-unknown **/*",
     "test": "tsc && node build/src/MerkleMapContract.test.js",
+    "testNFTs": "tsc && node build/src/NFTsMapContract.test.js",
     "runMain": "tsc && node build/src/main.js",
     "lint": "npx eslint src/* --fix"
   },

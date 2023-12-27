@@ -18,11 +18,7 @@ export class NFT extends Struct({
   id: Field,
   cid: Field,
   owner: PublicKey,
-}) {
-  newOwner(address: PublicKey) {
-    this.owner = address;
-  }
-}
+}) {}
 
 export class MerkleMapContract extends SmartContract {
   @state(Field) treeRoot = State<Field>();
@@ -46,7 +42,8 @@ export class MerkleMapContract extends SmartContract {
     this.treeRoot.set(initialRoot);
   }
 
-  @method mintNFT(item: NFT, keyWitness: MerkleMapWitness) {
+  // inits nft collection at once
+  @method initNFT(item: NFT, keyWitness: MerkleMapWitness) {
     const initialRoot = this.treeRoot.getAndAssertEquals();
 
     // check the owner
@@ -55,9 +52,8 @@ export class MerkleMapContract extends SmartContract {
 
     // check the initial state matches what we expect
     // should be empty
-    const [rootBefore, key] = keyWitness.computeRootAndKey(
-      Poseidon.hash([Field.from('')])
-    );
+
+    const [rootBefore, key] = keyWitness.computeRootAndKey(Field(0));
 
     rootBefore.assertEquals(initialRoot);
     key.assertEquals(item.id);
@@ -65,6 +61,33 @@ export class MerkleMapContract extends SmartContract {
     // compute the root after incrementing
     const [rootAfter, _] = keyWitness.computeRootAndKey(
       Poseidon.hash(NFT.toFields(item))
+    );
+
+    // set the new root
+    this.treeRoot.set(rootAfter);
+  }
+
+  // mints nft
+  @method mintNFT(item: NFT, newItem: NFT, keyWitness: MerkleMapWitness) {
+    const initialRoot = this.treeRoot.getAndAssertEquals();
+
+    // check the owner
+    const sender = this.sender;
+    sender.assertEquals(item.owner);
+
+    // check the initial state matches what we expect
+    // should be empty
+
+    const [rootBefore, key] = keyWitness.computeRootAndKey(
+      Poseidon.hash(NFT.toFields(item))
+    );
+
+    rootBefore.assertEquals(initialRoot);
+    key.assertEquals(item.id);
+
+    // compute the root after incrementing
+    const [rootAfter, _] = keyWitness.computeRootAndKey(
+      Poseidon.hash(NFT.toFields(newItem))
     );
 
     // set the new root
@@ -90,7 +113,7 @@ export class MerkleMapContract extends SmartContract {
     rootBefore.assertEquals(initialRoot);
     key.assertEquals(item.id);
 
-    item.newOwner(newOwner);
+    //item.newOwner(newOwner);
 
     // compute the root after incrementing
     const [rootAfter, _] = keyWitness.computeRootAndKey(

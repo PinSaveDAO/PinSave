@@ -1727,10 +1727,10 @@
     "@openzeppelin/contracts-upgradeable" "^4.9.2"
     solidity-bytes-utils "0.8.0"
 
-"@lukso/lsp-smart-contracts@^0.13.0":
-  version "0.13.0"
-  resolved "https://registry.yarnpkg.com/@lukso/lsp-smart-contracts/-/lsp-smart-contracts-0.13.0.tgz#bf300bce7230827a9a6e537376917ca69d3bc894"
-  integrity sha512-67+ny+sMBAB46Hv3o8jkjNIgkHT/gEN4O68OYpfTANPVm4D8T8cB0+Mef7a+mTuzd6mNkDo82ZqGgWRQMDNDpg==
+"@lukso/lsp-smart-contracts@^0.14.0":
+  version "0.14.0"
+  resolved "https://registry.yarnpkg.com/@lukso/lsp-smart-contracts/-/lsp-smart-contracts-0.14.0.tgz#1fb639be057012d4582306c4c76c52de650257d9"
+  integrity sha512-HjMpO/DfcAnL2YAoGSq4TazwsKof3CClyi33cwkOIdH7b81DMP5Z4LLjOjAGURrJlMj8wH4cLp5+4nvZ4NVSIA==
   dependencies:
     "@account-abstraction/contracts" "^0.6.0"
     "@erc725/smart-contracts" "^7.0.0"
@@ -3482,10 +3482,10 @@
   resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-4.36.1.tgz#79f8c1a539d47c83104210be2388813a7af2e524"
   integrity sha512-DJSilV5+ytBP1FbFcEJovv4rnnm/CokuVvrBEtW/Va9DvuJ3HksbXUJEpI0aV1KtuL4ZoO9AVE6PyNLzF7tLeA==
 
-"@tanstack/query-core@5.12.1":
-  version "5.12.1"
-  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-5.12.1.tgz#2e04b8ab7a04b2f2cfe77c2b0c9b982477373e06"
-  integrity sha512-WbZztNmKq0t6QjdNmHzezbi/uifYo9j6e2GLJkodsYaYUlzMbAp91RDyeHkIZrm7EfO4wa6Sm5sxJZm5SPlh6w==
+"@tanstack/query-core@5.14.2":
+  version "5.14.2"
+  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-5.14.2.tgz#ef0c1a93e142d5cce90b0ac2d0333a88fc0fbb95"
+  integrity sha512-QmoJvC72sSWs3hgGis8JdmlDvqLfYGWUK4UG6OR9Q6t28JMN9m2FDwKPqoSJ9YVocELCSjMt/FGjEiLfk8000Q==
 
 "@tanstack/query-persist-client-core@4.29.23":
   version "4.29.23"
@@ -3530,12 +3530,12 @@
     "@tanstack/query-core" "4.29.23"
     use-sync-external-store "^1.2.0"
 
-"@tanstack/react-query@5.12.2":
-  version "5.12.2"
-  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-5.12.2.tgz#42b39a1ccc2bdf44137921c2395902ed4239d7eb"
-  integrity sha512-BeWZu8zVFH20oRc+S/K9ADPgWjEzP/XQCGBNz5IbApUwPQAdwkQYbXODVL5AyAlWiSxhx+P2xlARPBApj2Yrog==
+"@tanstack/react-query@5.14.2":
+  version "5.14.2"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-5.14.2.tgz#b66c9710609118c07bfe6fca0147c6735a4c95a5"
+  integrity sha512-SbOzV7UBW8ED3tOnyn6kqNGscnOAfoxShYlbvaQo/5528mDZKpvrwoL/1du1/ukSC6RMAiKmx95SrYqlwPzWDw==
   dependencies:
-    "@tanstack/query-core" "5.12.1"
+    "@tanstack/query-core" "5.14.2"
 
 "@tanstack/react-query@^4.28.0":
   version "4.36.1"
@@ -9812,10 +9812,10 @@ hardhat-gas-reporter@^1.0.9:
     eth-gas-reporter "^0.2.25"
     sha1 "^1.1.1"
 
-hardhat@2.19.1:
-  version "2.19.1"
-  resolved "https://registry.yarnpkg.com/hardhat/-/hardhat-2.19.1.tgz#5e09e8070ecfc6109ba9d3a4a117ec2b0643032a"
-  integrity sha512-bsWa63g1GB78ZyMN08WLhFElLPA+J+pShuKD1BFO2+88g3l+BL3R07vj9deIi9dMbssxgE714Gof1dBEDGqnCw==
+hardhat@2.19.2:
+  version "2.19.2"
+  resolved "https://registry.yarnpkg.com/hardhat/-/hardhat-2.19.2.tgz#815819e4efd234941d495decb718b358d572e2c8"
+  integrity sha512-CRU3+0Cc8Qh9UpxKd8cLADDPes7ZDtKj4dTK+ERtLBomEzhRPLWklJn4VKOwjre9/k8GNd/e9DYxpfuzcxbXPQ==
   dependencies:
     "@ethersproject/abi" "^5.1.2"
     "@metamask/eth-sig-util" "^4.0.0"
@@ -12900,10 +12900,10 @@ nyc@15.1.0:
     test-exclude "^6.0.0"
     yargs "^15.0.2"
 
-o1js@0.14.2:
-  version "0.14.2"
-  resolved "https://registry.yarnpkg.com/o1js/-/o1js-0.14.2.tgz#a7b26c832d0a329bccfab63137c5ce251026de79"
-  integrity sha512-xU0NfbaOeooT5G7sQbVD0uDKpViLKwfVeCk+3U4rJk7HRq2KtHkdc7rlA0/86AtLUSRQpD5OZlJbVGW4daDvfQ==
+o1js@0.15.1:
+  version "0.15.1"
+  resolved "https://registry.yarnpkg.com/o1js/-/o1js-0.15.1.tgz#135a89099d8ff377a42cdda4aa9c01b9ded15316"
+  integrity sha512-B5GHUNfwOW3uc9clgCKktZDlZUJ2052QiG8ZF/VX8IK2lo4nZKe4C5wJOExgj1o+T0d/NKrBpLRS9LqIvDW6Ug==
   dependencies:
     blakejs "1.2.1"
     cachedir "^2.4.0"
