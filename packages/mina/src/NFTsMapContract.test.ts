@@ -7,6 +7,7 @@ import {
   MerkleMap,
   CircuitString,
   Poseidon,
+  PublicKey,
 } from 'o1js';
 
 function logStates() {
@@ -84,9 +85,14 @@ const newNFT: NFT = {
   id: key,
   cid: Poseidon.hash(CircuitString.fromString(songName).toFields()),
   owner: deployerAccount,
+  changeOwner: function (newAddress: PublicKey): void {
+    throw new Error('Function not implemented.');
+  },
 };
 
-//console.log(Poseidon.hash(NFT.toFields(newNFT)));
+const value = Poseidon.hash(NFT.toFields(newNFT));
+
+map.set(key, value);
 
 const mint_txn = await Mina.transaction(deployerAccount, () => {
   zkAppInstance.initNFT(newNFT, witness);
@@ -98,3 +104,68 @@ await mint_txn.sign([deployerKey]).send();
 logStates();
 
 console.log('inited NFT');
+
+try {
+  const fail_txn = await Mina.transaction(deployerAccount, () => {
+    zkAppInstance.initNFT(newNFT, witness);
+  });
+
+  await fail_txn.prove();
+  await fail_txn.sign([deployerKey]).send();
+} catch {
+  console.log('failed sucessfully');
+}
+
+const key2 = Field(2);
+
+const witness2 = map.getWitness(key2);
+
+var NFT2: NFT = {
+  name: Poseidon.hash(CircuitString.fromString(songName).toFields()),
+  description: Poseidon.hash(CircuitString.fromString(songName).toFields()),
+  id: key2,
+  cid: Poseidon.hash(CircuitString.fromString(songName).toFields()),
+  owner: deployerAccount,
+  changeOwner: function (newAddress: PublicKey): void {
+    throw new Error('Function not implemented.');
+  },
+};
+
+const value2 = Poseidon.hash(NFT.toFields(NFT2));
+map.set(key2, value2);
+
+const mint2_txn = await Mina.transaction(deployerAccount, () => {
+  zkAppInstance.initNFT(NFT2, witness2);
+});
+
+await mint2_txn.prove();
+await mint2_txn.sign([deployerKey]).send();
+
+console.log('inited NFT - 2 sucessfully');
+
+const mint_transfer_txn = await Mina.transaction(deployerAccount, () => {
+  zkAppInstance.mintNFT(NFT2, witness2);
+});
+
+await mint_transfer_txn.prove();
+await mint_transfer_txn.sign([deployerKey]).send();
+
+console.log('mints sucessfully');
+
+const nft_transfer_txn = await Mina.transaction(deployerAccount, () => {
+  zkAppInstance.transferOwner(NFT2, deployerAccount2, witness2);
+});
+
+await nft_transfer_txn.prove();
+await nft_transfer_txn.sign([deployerKey]).send();
+
+logStates();
+
+NFT2.owner = deployerAccount2;
+
+const value2New = Poseidon.hash(NFT.toFields(NFT2));
+map.set(key2, value2New);
+
+console.log(map.getRoot().toString());
+
+console.log('transfer ownership sucessfully');

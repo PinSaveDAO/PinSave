@@ -18,7 +18,11 @@ export class NFT extends Struct({
   id: Field,
   cid: Field,
   owner: PublicKey,
-}) {}
+}) {
+  changeOwner(newAddress: PublicKey) {
+    this.owner = newAddress;
+  }
+}
 
 export class MerkleMapContract extends SmartContract {
   @state(Field) treeRoot = State<Field>();
@@ -68,7 +72,7 @@ export class MerkleMapContract extends SmartContract {
   }
 
   // mints nft
-  @method mintNFT(item: NFT, newItem: NFT, keyWitness: MerkleMapWitness) {
+  @method mintNFT(item: NFT, keyWitness: MerkleMapWitness) {
     const initialRoot = this.treeRoot.getAndAssertEquals();
 
     // check the owner
@@ -85,13 +89,7 @@ export class MerkleMapContract extends SmartContract {
     rootBefore.assertEquals(initialRoot);
     key.assertEquals(item.id);
 
-    // compute the root after incrementing
-    const [rootAfter, _] = keyWitness.computeRootAndKey(
-      Poseidon.hash(NFT.toFields(newItem))
-    );
-
-    // set the new root
-    this.treeRoot.set(rootAfter);
+    //add transfer
   }
 
   @method transferOwner(
@@ -113,7 +111,7 @@ export class MerkleMapContract extends SmartContract {
     rootBefore.assertEquals(initialRoot);
     key.assertEquals(item.id);
 
-    //item.newOwner(newOwner);
+    item.changeOwner(newOwner);
 
     // compute the root after incrementing
     const [rootAfter, _] = keyWitness.computeRootAndKey(
