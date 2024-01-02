@@ -1,20 +1,8 @@
-import { MerkleMapContract, NFT } from './NFTsMapContract.js';
-import {
-  Field,
-  Mina,
-  PrivateKey,
-  AccountUpdate,
-  MerkleMap,
-  CircuitString,
-  Poseidon,
-  PublicKey,
-} from 'o1js';
+import { MerkleMapContract } from './NFTsMapContract.js';
+import { createNFT, NFTtoHash } from './components/NFT.js';
+import { logStates } from './components/AppState.js';
 
-function logStates() {
-  const treeRoot = zkAppInstance.treeRoot.get();
-
-  console.log('treeRoot state : ', treeRoot.toString());
-}
+import { Field, Mina, PrivateKey, AccountUpdate, MerkleMap } from 'o1js';
 
 const proofsEnabled = false;
 
@@ -27,19 +15,12 @@ const { privateKey: deployerKey, publicKey: deployerAccount } =
 const { privateKey: deployerKey2, publicKey: deployerAccount2 } =
   Local.testAccounts[1];
 
-console.log('deployerPrivateKey: ' + deployerKey.toBase58());
-console.log('deployerAccount: ' + deployerAccount.toBase58());
-
-// ----------------------------------------------------
-
 let verificationKey: any;
 
 if (proofsEnabled) {
   ({ verificationKey } = await MerkleMapContract.compile());
-  //console.log(verificationKey.hash);
+  console.log('compiled');
 }
-
-console.log('compiled');
 
 const zkAppPrivateKey = PrivateKey.random();
 const zkAppAddress = zkAppPrivateKey.toPublicKey();
@@ -54,7 +35,7 @@ const deployTxn = await Mina.transaction(deployerAccount, () => {
 await deployTxn.prove();
 await deployTxn.sign([deployerKey]).send();
 
-logStates();
+logStates(zkAppInstance);
 
 console.log('deployed app');
 
@@ -69,28 +50,19 @@ const init_txn = await Mina.transaction(deployerAccount, () => {
 await init_txn.prove();
 await init_txn.sign([deployerKey]).send();
 
-logStates();
+logStates(zkAppInstance);
 
 console.log('initialized root');
 
 const key = Field(1);
-
 const witness = map.getWitness(key);
 
-const songName = 'name';
+const nftName = 'name';
+const nftDescription = 'some random words';
+const nftCid = '1244324dwfew1';
 
-const newNFT: NFT = {
-  name: Poseidon.hash(CircuitString.fromString(songName).toFields()),
-  description: Poseidon.hash(CircuitString.fromString(songName).toFields()),
-  id: key,
-  cid: Poseidon.hash(CircuitString.fromString(songName).toFields()),
-  owner: deployerAccount,
-  changeOwner: function (newAddress: PublicKey): void {
-    throw new Error('Function not implemented.');
-  },
-};
-
-const value = Poseidon.hash(NFT.toFields(newNFT));
+const newNFT = createNFT(nftName, nftDescription, key, nftCid, deployerAccount);
+const value = NFTtoHash(newNFT);
 
 map.set(key, value);
 
@@ -101,7 +73,7 @@ const mint_txn = await Mina.transaction(deployerAccount, () => {
 await mint_txn.prove();
 await mint_txn.sign([deployerKey]).send();
 
-logStates();
+logStates(zkAppInstance);
 
 console.log('inited NFT');
 
@@ -120,18 +92,9 @@ const key2 = Field(2);
 
 const witness2 = map.getWitness(key2);
 
-var NFT2: NFT = {
-  name: Poseidon.hash(CircuitString.fromString(songName).toFields()),
-  description: Poseidon.hash(CircuitString.fromString(songName).toFields()),
-  id: key2,
-  cid: Poseidon.hash(CircuitString.fromString(songName).toFields()),
-  owner: deployerAccount,
-  changeOwner: function (newAddress: PublicKey): void {
-    throw new Error('Function not implemented.');
-  },
-};
+var NFT2 = createNFT(nftName, nftDescription, key2, nftCid, deployerAccount);
 
-const value2 = Poseidon.hash(NFT.toFields(NFT2));
+const value2 = NFTtoHash(NFT2);
 map.set(key2, value2);
 
 const mint2_txn = await Mina.transaction(deployerAccount, () => {
@@ -159,11 +122,12 @@ const nft_transfer_txn = await Mina.transaction(deployerAccount, () => {
 await nft_transfer_txn.prove();
 await nft_transfer_txn.sign([deployerKey]).send();
 
-logStates();
+logStates(zkAppInstance);
 
 NFT2.owner = deployerAccount2;
 
-const value2New = Poseidon.hash(NFT.toFields(NFT2));
+const value2New = NFTtoHash(NFT2);
+
 map.set(key2, value2New);
 
 console.log(map.getRoot().toString());
