@@ -17,7 +17,7 @@ export function createNFT(
     cid: Poseidon.hash(CircuitString.fromString(nftCid).toFields()),
     owner: owner,
     changeOwner: function (newAddress: PublicKey): void {
-      throw new Error('Function not implemented.');
+      this.owner = newAddress;
     },
   };
   return newNFT;
