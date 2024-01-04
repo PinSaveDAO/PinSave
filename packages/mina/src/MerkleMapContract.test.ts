@@ -9,6 +9,14 @@ import {
   Poseidon,
 } from 'o1js';
 
+function logStates() {
+  const mapRoot = zkAppInstance.mapRoot.get();
+  const treeRoot = zkAppInstance.treeRoot.get();
+
+  console.log('mapRoot state : ', mapRoot.toString());
+  console.log('treeRoot state : ', treeRoot.toString());
+}
+
 const proofsEnabled = false;
 
 const Local = Mina.LocalBlockchain({ proofsEnabled: proofsEnabled });
@@ -48,9 +56,7 @@ await deployTxn.prove();
 
 await deployTxn.sign([deployerKey]).send();
 
-const mapRoot = zkAppInstance.mapRoot.get();
-
-console.log('state after deploy rootMap:', mapRoot.toString());
+logStates();
 
 const map = new MerkleMap();
 
@@ -76,11 +82,7 @@ await init_txn.sign([deployerKey]).send();
 
 console.log('initialized root');
 
-const mapRoot1 = zkAppInstance.mapRoot.get();
-const treeRoot1 = zkAppInstance.treeRoot.get();
-
-console.log('mapRoot state after init: ', mapRoot1.toString());
-console.log('treeRoot state after init: ', treeRoot1.toString());
+logStates();
 
 const txn2 = await Mina.transaction(deployerAccount, () => {
   zkAppInstance.update(witness, key, value, Field(5));
@@ -89,11 +91,7 @@ const txn2 = await Mina.transaction(deployerAccount, () => {
 await txn2.prove();
 await txn2.sign([deployerKey]).send();
 
-const mapRoot2 = zkAppInstance.mapRoot.get();
-const treeRoot2 = zkAppInstance.treeRoot.get();
-
-console.log('mapRoot state after init tx2: ', mapRoot2.toString());
-console.log('treeRoot state after init tx2: ', treeRoot2.toString());
+logStates();
 
 const txn3 = await Mina.transaction(deployerAccount2, () => {
   zkAppInstance.update(witness, key, value, Field(5));
@@ -102,11 +100,7 @@ const txn3 = await Mina.transaction(deployerAccount2, () => {
 await txn3.prove();
 await txn3.sign([deployerKey2]).send();
 
-const mapRoot3 = zkAppInstance.mapRoot.get();
-const treeRoot3 = zkAppInstance.treeRoot.get();
-
-console.log('mapRoot state after init tx3: ', mapRoot3.toString());
-console.log('treeRoot state after init tx3: ', treeRoot3.toString());
+logStates();
 
 const key2 = Field(10);
 const value2 = Field(0);
@@ -122,11 +116,7 @@ const txn4 = await Mina.transaction(deployerAccount, () => {
 await txn4.prove();
 await txn4.sign([deployerKey]).send();
 
-const mapRoot4 = zkAppInstance.mapRoot.get();
-const treeRoot4 = zkAppInstance.treeRoot.get();
-
-console.log('mapRoot state after init tx4: ', mapRoot4.toString());
-console.log('treeRoot state after init tx4: ', treeRoot4.toString());
+logStates();
 
 const key3 = Poseidon.hash(CircuitString.fromString('qwert').toFields());
 const value3 = Field(0);
@@ -135,18 +125,11 @@ const witness3 = map.getWitness(key3);
 
 console.log('value for key', key3.toString() + ':', map.get(key3).toString());
 
-const txn5 = await Mina.transaction(deployerAccount, () => {
+await Mina.transaction(deployerAccount, () => {
   zkAppInstance.update(witness3, key3, value3, Field(5));
 });
 
-await txn5.prove();
-await txn5.sign([deployerKey]).send();
-
-const mapRoot5 = zkAppInstance.mapRoot.get();
-const treeRoot5 = zkAppInstance.treeRoot.get();
-
-console.log('mapRoot state after init tx5: ', mapRoot5.toString());
-console.log('treeRoot state after init tx5: ', treeRoot5.toString());
+logStates();
 
 try {
   const fail_txn = await Mina.transaction(deployerAccount, () => {

@@ -10,6 +10,7 @@ import {
   Struct,
   PublicKey,
   Poseidon,
+  UInt64,
 } from 'o1js';
 
 export class NFT extends Struct({
@@ -19,13 +20,14 @@ export class NFT extends Struct({
   cid: Field,
   owner: PublicKey,
 }) {
-  newOwner(address: PublicKey) {
-    this.owner = address;
+  changeOwner(newAddress: PublicKey) {
+    this.owner = newAddress;
   }
 }
 
 export class MerkleMapContract extends SmartContract {
   @state(Field) treeRoot = State<Field>();
+  @state(UInt64) totalSupply = State<UInt64>();
 
   deploy(args?: DeployArgs) {
     super.deploy(args);
@@ -42,22 +44,22 @@ export class MerkleMapContract extends SmartContract {
   }
 
   @method initRoot(initialRoot: Field) {
+    // ensures we can only initialize once
     this.treeRoot.assertEquals(Field.from(''));
     this.treeRoot.set(initialRoot);
   }
 
-  @method mintNFT(item: NFT, keyWitness: MerkleMapWitness) {
-    const initialRoot = this.treeRoot.getAndAssertEquals();
-
-    // check the owner
+  // inits nft
+  @method initNFT(item: NFT, keyWitness: MerkleMapWitness) {
     const sender = this.sender;
     sender.assertEquals(item.owner);
 
+    const initialRoot = this.treeRoot.getAndAssertEquals();
+
     // check the initial state matches what we expect
     // should be empty
-    const [rootBefore, key] = keyWitness.computeRootAndKey(
-      Poseidon.hash([Field.from('')])
-    );
+
+    const [rootBefore, key] = keyWitness.computeRootAndKey(Field(0));
 
     rootBefore.assertEquals(initialRoot);
     key.assertEquals(item.id);
@@ -69,6 +71,32 @@ export class MerkleMapContract extends SmartContract {
 
     // set the new root
     this.treeRoot.set(rootAfter);
+  }
+
+  // mints nft
+  // Unlike init expects the NFT metadata to be in place
+  @method mintNFT(item: NFT, keyWitness: MerkleMapWitness) {
+    //const sender = this.sender;
+    //sender.assertEquals(item.owner);
+
+    const initialRoot = this.treeRoot.getAndAssertEquals();
+
+    // check the leaf state
+    // should contain correct metadata
+
+    const [rootBefore, key] = keyWitness.computeRootAndKey(
+      Poseidon.hash(NFT.toFields(item))
+    );
+
+    rootBefore.assertEquals(initialRoot);
+    key.assertEquals(item.id);
+
+    this.token.mint({ address: item.owner, amount: UInt64.one });
+
+    // update liquidity supply
+    let liquidity = this.totalSupply.getAndAssertEquals();
+
+    this.totalSupply.set(liquidity.add(1));
   }
 
   @method transferOwner(
@@ -76,11 +104,10 @@ export class MerkleMapContract extends SmartContract {
     newOwner: PublicKey,
     keyWitness: MerkleMapWitness
   ) {
-    const initialRoot = this.treeRoot.getAndAssertEquals();
-
-    // check the owner
     const sender = this.sender;
     sender.assertEquals(item.owner);
+
+    const initialRoot = this.treeRoot.getAndAssertEquals();
 
     // check the initial state matches what we expect
     const [rootBefore, key] = keyWitness.computeRootAndKey(
@@ -90,14 +117,15 @@ export class MerkleMapContract extends SmartContract {
     rootBefore.assertEquals(initialRoot);
     key.assertEquals(item.id);
 
-    item.newOwner(newOwner);
+    item.changeOwner(newOwner);
 
     // compute the root after incrementing
     const [rootAfter, _] = keyWitness.computeRootAndKey(
       Poseidon.hash(NFT.toFields(item))
     );
 
-    // set the new root
     this.treeRoot.set(rootAfter);
+
+    this.token.send({ from: sender, to: newOwner, amount: UInt64.one });
   }
 }
