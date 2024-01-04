@@ -1,14 +1,14 @@
-import { PublicKey } from 'o1js';
+import { PublicKey, Mina } from 'o1js';
 
 import { MerkleMapContract } from '../NFTsMapContract.js';
 
-export function logTokenBalances(
-  Mina: any,
-  address: PublicKey,
-  dexApp: MerkleMapContract
-) {
-  console.log(
-    address.toBase58() + ' zkApp tokens:',
-    Mina.getBalance(address, dexApp.token.id).value.toBigInt()
-  );
+export function logTokenBalances(address: PublicKey, zkApp: MerkleMapContract) {
+  let balance = 0n;
+  try {
+    balance = Mina.getBalance(address, zkApp.token.id).value.toBigInt();
+  } catch (e) {
+    //console.log(e);
+  }
+
+  console.log(address.toBase58() + ' zkApp tokens:', balance);
 }

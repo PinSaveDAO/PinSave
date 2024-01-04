@@ -44,11 +44,12 @@ export class MerkleMapContract extends SmartContract {
   }
 
   @method initRoot(initialRoot: Field) {
+    // ensures we can only initialize once
     this.treeRoot.assertEquals(Field.from(''));
     this.treeRoot.set(initialRoot);
   }
 
-  // inits nft collection at once
+  // inits nft
   @method initNFT(item: NFT, keyWitness: MerkleMapWitness) {
     const sender = this.sender;
     sender.assertEquals(item.owner);
@@ -73,16 +74,15 @@ export class MerkleMapContract extends SmartContract {
   }
 
   // mints nft
-  // should be separate from init?
-  // can mint alone? check for root
+  // Unlike init expects the NFT metadata to be in place
   @method mintNFT(item: NFT, keyWitness: MerkleMapWitness) {
-    const sender = this.sender;
-    sender.assertEquals(item.owner);
+    //const sender = this.sender;
+    //sender.assertEquals(item.owner);
 
     const initialRoot = this.treeRoot.getAndAssertEquals();
 
-    // check the initial state matches what we expect
-    // should be empty
+    // check the leaf state
+    // should contain correct metadata
 
     const [rootBefore, key] = keyWitness.computeRootAndKey(
       Poseidon.hash(NFT.toFields(item))
@@ -91,7 +91,7 @@ export class MerkleMapContract extends SmartContract {
     rootBefore.assertEquals(initialRoot);
     key.assertEquals(item.id);
 
-    this.token.mint({ address: sender, amount: UInt64.one });
+    this.token.mint({ address: item.owner, amount: UInt64.one });
 
     // update liquidity supply
     let liquidity = this.totalSupply.getAndAssertEquals();
