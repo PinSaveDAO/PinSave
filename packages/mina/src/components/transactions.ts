@@ -112,3 +112,32 @@ export async function initAppRoot(
 
   logStates(zkAppInstance, merkleMap);
 }
+
+export async function deployApp(pk: PrivateKey, proofsEnabled: boolean) {
+  let verificationKey: any;
+
+  if (proofsEnabled) {
+    ({ verificationKey } = await MerkleMapContract.compile());
+    console.log('compiled');
+  }
+
+  const zkAppPrivateKey = PrivateKey.random();
+  const zkAppAddress = zkAppPrivateKey.toPublicKey();
+
+  const zkAppInstance = new MerkleMapContract(zkAppAddress);
+
+  const merkleMap: MerkleMap = new MerkleMap();
+  const pubKey = pk.toPublicKey();
+
+  const deployTxn = await Mina.transaction(pubKey, () => {
+    AccountUpdate.fundNewAccount(pubKey);
+    zkAppInstance.deploy({ verificationKey, zkappKey: zkAppPrivateKey });
+  });
+
+  await deployTxn.prove();
+  await deployTxn.sign([pk]).send();
+
+  logStates(zkAppInstance, merkleMap);
+
+  return { merkleMap: merkleMap, zkAppInstance: zkAppInstance };
+}
