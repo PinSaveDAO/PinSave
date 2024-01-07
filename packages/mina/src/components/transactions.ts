@@ -45,13 +45,22 @@ export async function mintNFT(
   const nftId = _NFT.id;
   const witnessNFT: MerkleMapWitness = merkleMap.getWitness(Field(nftId));
 
-  const mint_txn = await Mina.transaction(pubKey, () => {
-    AccountUpdate.fundNewAccount(pubKey);
-    zkAppInstance.mintNFT(_NFT, witnessNFT);
-  });
+  try {
+    const mint_txn = await Mina.transaction(pubKey, () => {
+      AccountUpdate.fundNewAccount(pubKey);
+      zkAppInstance.mintNFT(_NFT, witnessNFT);
+    });
 
-  await mint_txn.prove();
-  await mint_txn.sign([pk]).send();
+    await mint_txn.prove();
+    await mint_txn.sign([pk]).send();
+  } catch (e) {
+    const mint_txn = await Mina.transaction(pubKey, () => {
+      zkAppInstance.mintNFT(_NFT, witnessNFT);
+    });
+
+    await mint_txn.prove();
+    await mint_txn.sign([pk]).send();
+  }
 
   logTokenBalances(pubKey, zkAppInstance);
   logStates(zkAppInstance, merkleMap);

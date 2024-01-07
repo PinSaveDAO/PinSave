@@ -1,4 +1,4 @@
-import { createNFT } from './components/NFT.js';
+import { createNFT, storeNFT } from './components/NFT.js';
 import {
   deployApp,
   initAppRoot,
@@ -30,16 +30,46 @@ const { merkleMap: map, zkAppInstance: zkAppInstance } = await deployApp(
 
 console.log('deployed app');
 
-await initAppRoot(pubKey1, pk1, zkAppInstance, map);
-
-console.log('initialized root');
+// add some initial values into the map
 
 const nftName = 'name';
 const nftDescription = 'some random words';
 const nftCid = '1244324dwfew1';
 
-const newNFT = createNFT(nftName, nftDescription, Field(1), nftCid, pubKey1);
+const NFT10 = storeNFT(
+  nftName,
+  nftDescription,
+  Field(10),
+  nftCid,
+  pubKey1,
+  map
+);
+const NFT11 = storeNFT(
+  nftName,
+  nftDescription,
+  Field(11),
+  nftCid,
+  pubKey1,
+  map
+);
+const NFT12 = storeNFT(
+  nftName,
+  nftDescription,
+  Field(12),
+  nftCid,
+  pubKey1,
+  map
+);
 
+await initAppRoot(pubKey1, pk1, zkAppInstance, map);
+
+console.log('initialized root');
+
+await mintNFT(pubKey1, pk1, NFT10, zkAppInstance, map);
+
+console.log('minted NFT');
+
+const newNFT = createNFT(nftName, nftDescription, Field(1), nftCid, pubKey1);
 await initNFT(pubKey1, pk1, newNFT, zkAppInstance, map);
 
 console.log('inited NFT');
