@@ -44,6 +44,7 @@ const NFT10 = storeNFT(
   pubKey1,
   map
 );
+
 const NFT11 = storeNFT(
   nftName,
   nftDescription,
@@ -52,6 +53,7 @@ const NFT11 = storeNFT(
   pubKey1,
   map
 );
+
 const NFT12 = storeNFT(
   nftName,
   nftDescription,

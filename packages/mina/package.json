@@ -20,7 +20,8 @@
     "format": "prettier --write --ignore-unknown **/*",
     "test": "tsc && node build/src/MerkleMapContract.test.js",
     "testNFTs": "tsc && node build/src/NFTsMapContract.test.js",
-    "runMain": "tsc && node build/src/main.js",
+    "deploy": "tsc && node build/src/scripts/deploy.js",
+    "query": "tsc && node build/src/scripts/queryContract.js",
     "lint": "npx eslint src/* --fix"
   },
   "devDependencies": {
