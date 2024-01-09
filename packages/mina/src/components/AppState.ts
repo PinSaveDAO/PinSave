@@ -1,9 +1,9 @@
 import { MerkleMapContract } from '../NFTsMapContract.js';
 
-import { MerkleMap } from 'o1js';
+import { Field, MerkleMap, UInt64 } from 'o1js';
 
 export function logStates(zkAppInstance: MerkleMapContract, map: MerkleMap) {
-  const localMapRoot = map.getRoot().toString();
+  const localMapRoot: string = map.getRoot().toString();
 
   logAppStates(zkAppInstance);
 
@@ -11,8 +11,8 @@ export function logStates(zkAppInstance: MerkleMapContract, map: MerkleMap) {
 }
 
 export function logAppStates(zkAppInstance: MerkleMapContract) {
-  const treeRoot = zkAppInstance.treeRoot.get();
-  const totalSupply = zkAppInstance.totalSupply.get();
+  const treeRoot: Field = zkAppInstance.treeRoot.get();
+  const totalSupply: UInt64 = zkAppInstance.totalSupply.get();
 
   console.log('totalSupply state: ', totalSupply.toString());
   console.log('treeRoot state: ', treeRoot.toString());

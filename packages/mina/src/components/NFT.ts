@@ -7,7 +7,7 @@ export function createNFT(
   nftId: Field,
   nftCid: string,
   owner: PublicKey
-) {
+): NFT {
   const newNFT: NFT = {
     name: Poseidon.hash(CircuitString.fromString(nftName).toFields()),
     description: Poseidon.hash(
@@ -23,7 +23,7 @@ export function createNFT(
   return newNFT;
 }
 
-export function NFTtoHash(_NFT: NFT) {
+export function NFTtoHash(_NFT: NFT): Field {
   return Poseidon.hash(NFT.toFields(_NFT));
 }
 
@@ -34,8 +34,8 @@ export function storeNFT(
   nftCid: string,
   owner: PublicKey,
   map: MerkleMap
-) {
-  const _NFT = createNFT(nftName, nftDescription, nftId, nftCid, owner);
+): NFT {
+  const _NFT: NFT = createNFT(nftName, nftDescription, nftId, nftCid, owner);
 
   map.set(nftId, NFTtoHash(_NFT));
 

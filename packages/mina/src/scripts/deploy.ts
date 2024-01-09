@@ -1,4 +1,4 @@
-import { deployAppLive } from '../components/transactions.js';
+import { deployApp } from '../components/transactions.js';
 
 import { Mina, PrivateKey } from 'o1js';
 import dotenv from 'dotenv';
@@ -19,7 +19,8 @@ const deployerKey: PrivateKey = PrivateKey.fromBase58(
 
 console.log(deployerKey.toPublicKey().toBase58());
 
-const { merkleMap: map, zkAppInstance: zkAppInstance } = await deployAppLive(
+const { merkleMap: map, zkAppInstance: zkAppInstance } = await deployApp(
   deployerKey,
-  proofsEnabled
+  proofsEnabled,
+  true
 );
