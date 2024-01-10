@@ -112,19 +112,33 @@ export async function transferNFT(
   logStates(zkAppInstance, merkleMap);
 }
 
-export async function initAppRoot(
-  pubKey: PublicKey,
+export async function initRootWithApp(
   pk: PrivateKey,
-  zkAppInstance: MerkleMapContract,
+  zkAppPub: PublicKey,
   merkleMap: MerkleMap
 ) {
+  await MerkleMapContract.compile();
+  const zkAppInstance: MerkleMapContract = new MerkleMapContract(zkAppPub);
+
+  await initAppRoot(pk, zkAppInstance, merkleMap, true);
+}
+
+export async function initAppRoot(
+  pk: PrivateKey,
+  zkAppInstance: MerkleMapContract,
+  merkleMap: MerkleMap,
+  live?: boolean
+) {
+  const pubKey: PublicKey = pk.toPublicKey();
   const rootBefore: Field = merkleMap.getRoot();
-  const init_tx: Mina.Transaction = await Mina.transaction(pubKey, () => {
+
+  const txOptions = createTxOptions(pubKey, live);
+
+  const init_tx: Mina.Transaction = await Mina.transaction(txOptions, () => {
     zkAppInstance.initRoot(rootBefore);
   });
 
-  await init_tx.prove();
-  await init_tx.sign([pk]).send();
+  await sendWaitTx(init_tx, pk);
 
   logStates(zkAppInstance, merkleMap);
 }
@@ -148,12 +162,7 @@ export async function deployApp(
   const merkleMap: MerkleMap = new MerkleMap();
   const pubKey: PublicKey = pk.toPublicKey();
 
-  const deployTxnOptions: { sender: PublicKey; fee?: number } = {
-    sender: pubKey,
-  };
-  if (live) {
-    deployTxnOptions.fee = 11_000_000;
-  }
+  const deployTxnOptions = createTxOptions(pubKey, live);
 
   const deployTx: Mina.Transaction = await Mina.transaction(
     deployTxnOptions,
@@ -163,14 +172,7 @@ export async function deployApp(
     }
   );
 
-  await deployTx.prove();
-  deployTx.sign([pk]);
-
-  let pendingTx = await deployTx.send();
-  console.log(`Got pending transaction with hash ${pendingTx.hash()}`);
-
-  // Wait until transaction is included in a block
-  await pendingTx.wait();
+  await sendWaitTx(deployTx, pk);
 
   if (live) {
     await fetchAccount({ publicKey: zkAppAddress });
@@ -179,4 +181,32 @@ export async function deployApp(
   logStates(zkAppInstance, merkleMap);
 
   return { merkleMap: merkleMap, zkAppInstance: zkAppInstance };
+}
+
+async function sendWaitTx(tx: Mina.Transaction, pk: PrivateKey) {
+  await tx.prove();
+  tx.sign([pk]);
+
+  let pendingTx = await tx.send();
+  console.log(`Got pending transaction with hash ${pendingTx.hash()}`);
+
+  // Wait until transaction is included in a block
+  await pendingTx.wait();
+  if (!pendingTx.isSuccess) {
+    throw new Error();
+  }
+}
+
+function createTxOptions(
+  pubKey: PublicKey,
+  live?: boolean,
+  fee: number = 10_000_000
+) {
+  const txOptions: { sender: PublicKey; fee?: number } = {
+    sender: pubKey,
+  };
+  if (live) {
+    txOptions.fee = fee;
+  }
+  return txOptions;
 }

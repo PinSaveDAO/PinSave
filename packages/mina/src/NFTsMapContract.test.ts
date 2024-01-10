@@ -63,7 +63,7 @@ const NFT12 = storeNFT(
   map
 );
 
-await initAppRoot(pubKey1, pk1, zkAppInstance, map);
+await initAppRoot(pk1, zkAppInstance, map);
 
 console.log('initialized root');
 

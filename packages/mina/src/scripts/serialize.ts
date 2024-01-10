@@ -1,18 +1,15 @@
-import { initRootWithApp } from '../components/transactions.js';
 import { storeNFT } from '../components/NFT.js';
-import { serializeMerkleMapToJson } from '../components/serialize.js';
-
 import {
-  Mina,
-  PrivateKey,
-  Field,
-  MerkleMap,
-  MerkleTree,
-  PublicKey,
-} from 'o1js';
+  deserializeJsonToMerkleMap,
+  serializeMerkleMapToJson,
+} from '../components/serialize.js';
+
+import { Mina, PrivateKey, Field, MerkleMap, MerkleTree } from 'o1js';
 import dotenv from 'dotenv';
 
 dotenv.config();
+
+const proofsEnabled: boolean = true;
 
 const Berkeley = Mina.Network(
   'https://proxy.berkeley.minaexplorer.com/graphql'
@@ -26,15 +23,15 @@ const deployerKey: PrivateKey = PrivateKey.fromBase58(
 
 const pubKey = deployerKey.toPublicKey();
 
-const zkAppAddress: PublicKey = PublicKey.fromBase58(
-  'B62qkWDJWuPz1aLzwcNNCiEZNFnveQa2DEstF7vtiVJBTbkzi7nhGLm'
-);
-
 const nftName = 'name';
 const nftDescription = 'some random words';
 const nftCid = '1244324dwfew1';
 
 const merkleMap: MerkleMap = new MerkleMap();
+console.log('MerkleMap()', merkleMap.getRoot().toString());
+
+const merkleTree = new MerkleTree(256);
+console.log('MerkleTree(256)', merkleTree.getRoot().toString());
 
 const NFT10 = storeNFT(
   nftName,
@@ -63,8 +60,10 @@ const NFT12 = storeNFT(
   merkleMap
 );
 
-await initRootWithApp(deployerKey, zkAppAddress, merkleMap);
+console.log(merkleMap.getRoot().toString());
 
-const mapJson = serializeMerkleMapToJson(merkleMap);
+const serializedJson = serializeMerkleMapToJson(merkleMap);
 
-console.log(mapJson);
+const map = deserializeJsonToMerkleMap(serializedJson);
+
+console.log(map.getRoot().toString());
