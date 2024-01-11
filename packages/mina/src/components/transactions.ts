@@ -8,11 +8,47 @@ import {
   Field,
   fetchAccount,
 } from 'o1js';
+import dotenv from 'dotenv';
 
 import { MerkleMapContract, NFT } from '../NFTsMapContract.js';
 import { logStates } from './AppState.js';
 import { logTokenBalances } from './TokenBalances.js';
 import { NFTtoHash } from './NFT.js';
+
+export function getEnvAddresses() {
+  const deployerKey: PrivateKey = PrivateKey.fromBase58(
+    process.env.deployerKey as string
+  );
+
+  const pubKey: PublicKey = deployerKey.toPublicKey();
+
+  console.log('deployer address', pubKey.toBase58());
+  return { pubKey: pubKey, deployerKey: deployerKey };
+}
+
+export async function startBerkeleyClient(
+  endpoint: string = 'https://proxy.berkeley.minaexplorer.com/graphql'
+) {
+  dotenv.config();
+
+  const Berkeley = Mina.Network(endpoint);
+
+  Mina.setActiveInstance(Berkeley);
+}
+
+export async function startLocalBlockchainClient(
+  proofsEnabled: boolean = false,
+  enforceTransactionLimits: boolean = false
+) {
+  const Local = Mina.LocalBlockchain({
+    proofsEnabled: proofsEnabled,
+    enforceTransactionLimits: enforceTransactionLimits,
+  });
+
+  Mina.setActiveInstance(Local);
+  const accounts = Local.testAccounts;
+  return accounts;
+}
 
 export async function initNFT(
   pubKey: PublicKey,
@@ -145,12 +181,11 @@ export async function initAppRoot(
 
 export async function deployApp(
   pk: PrivateKey,
-  proofsEnabled: boolean,
   live?: boolean
 ): Promise<{ merkleMap: MerkleMap; zkAppInstance: MerkleMapContract }> {
   let verificationKey: any | undefined;
 
-  if (proofsEnabled) {
+  if (live) {
     ({ verificationKey } = await MerkleMapContract.compile());
     console.log('compiled');
   }

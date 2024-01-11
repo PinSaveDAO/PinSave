@@ -1,13 +1,13 @@
-import { MerkleMapContract } from '../NFTsMapContract.js';
-
 import { Field, MerkleMap, UInt64 } from 'o1js';
+
+import { MerkleMapContract } from '../NFTsMapContract.js';
 
 export function logStates(zkAppInstance: MerkleMapContract, map: MerkleMap) {
   const localMapRoot: string = map.getRoot().toString();
 
   logAppStates(zkAppInstance);
 
-  console.log('compare to local map: ' + localMapRoot);
+  console.log('compare to local map: ', localMapRoot);
 }
 
 export function logAppStates(zkAppInstance: MerkleMapContract) {

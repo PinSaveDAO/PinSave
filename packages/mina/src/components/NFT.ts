@@ -1,5 +1,6 @@
-import { NFT } from '../NFTsMapContract.js';
 import { Field, CircuitString, Poseidon, PublicKey, MerkleMap } from 'o1js';
+
+import { NFT } from '../NFTsMapContract.js';
 
 export function createNFT(
   nftName: string,
@@ -40,4 +41,21 @@ export function storeNFT(
   map.set(nftId, NFTtoHash(_NFT));
 
   return _NFT;
+}
+
+export function generateNftCollection(
+  pubKey: PublicKey,
+  map: MerkleMap
+): MerkleMap {
+  const nftName = 'name';
+  const nftDescription = 'some random words';
+  const nftCid = '1244324dwfew1';
+
+  storeNFT(nftName, nftDescription, Field(10), nftCid, pubKey, map);
+
+  storeNFT(nftName, nftDescription, Field(11), nftCid, pubKey, map);
+
+  storeNFT(nftName, nftDescription, Field(12), nftCid, pubKey, map);
+
+  return map;
 }

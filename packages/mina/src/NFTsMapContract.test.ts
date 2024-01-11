@@ -1,27 +1,26 @@
+import { Field } from 'o1js';
+
 import { createNFT, storeNFT } from './components/NFT.js';
 import {
   deployApp,
   initAppRoot,
   initNFT,
   mintNFT,
+  startLocalBlockchainClient,
   transferNFT,
 } from './components/transactions.js';
-
-import { Field, Mina } from 'o1js';
 
 const proofsEnabled: boolean = false;
 const enforceTransactionLimits: boolean = true;
 
-const Local = Mina.LocalBlockchain({
-  proofsEnabled: proofsEnabled,
-  enforceTransactionLimits: enforceTransactionLimits,
-});
+const testAccounts = await startLocalBlockchainClient(
+  proofsEnabled,
+  enforceTransactionLimits
+);
 
-Mina.setActiveInstance(Local);
-
-const { privateKey: pk1, publicKey: pubKey1 } = Local.testAccounts[0];
-const { privateKey: pk2, publicKey: pubKey2 } = Local.testAccounts[1];
-const { privateKey: pk3, publicKey: pubKey3 } = Local.testAccounts[2];
+const { privateKey: pk1, publicKey: pubKey1 } = testAccounts[0];
+const { privateKey: pk2, publicKey: pubKey2 } = testAccounts[1];
+const { privateKey: pk3, publicKey: pubKey3 } = testAccounts[2];
 
 const { merkleMap: map, zkAppInstance: zkAppInstance } = await deployApp(
   pk1,

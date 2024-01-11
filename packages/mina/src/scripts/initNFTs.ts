@@ -1,30 +1,16 @@
+import { Field, MerkleMap, PublicKey } from 'o1js';
+
 import { initRootWithApp } from '../components/transactions.js';
 import { storeNFT } from '../components/NFT.js';
 import { serializeMerkleMapToJson } from '../components/serialize.js';
-
 import {
-  Mina,
-  PrivateKey,
-  Field,
-  MerkleMap,
-  MerkleTree,
-  PublicKey,
-} from 'o1js';
-import dotenv from 'dotenv';
+  getEnvAddresses,
+  startBerkeleyClient,
+} from '../components/transactions.js';
 
-dotenv.config();
+await startBerkeleyClient();
 
-const Berkeley = Mina.Network(
-  'https://proxy.berkeley.minaexplorer.com/graphql'
-);
-
-Mina.setActiveInstance(Berkeley);
-
-const deployerKey: PrivateKey = PrivateKey.fromBase58(
-  process.env.deployerKey as string
-);
-
-const pubKey = deployerKey.toPublicKey();
+const { pubKey: pubKey, deployerKey: deployerKey } = getEnvAddresses();
 
 const zkAppAddress: PublicKey = PublicKey.fromBase58(
   'B62qkWDJWuPz1aLzwcNNCiEZNFnveQa2DEstF7vtiVJBTbkzi7nhGLm'
