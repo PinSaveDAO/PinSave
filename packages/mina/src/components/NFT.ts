@@ -28,6 +28,7 @@ export function NFTtoHash(_NFT: NFT): Field {
   return Poseidon.hash(NFT.toFields(_NFT));
 }
 
+// works only for merkle map
 export function storeNFT(
   nftName: string,
   nftDescription: string,
@@ -43,13 +44,14 @@ export function storeNFT(
   return _NFT;
 }
 
+// works only for merkle map
 export function generateNftCollection(
   pubKey: PublicKey,
   map: MerkleMap
 ): MerkleMap {
-  const nftName = 'name';
-  const nftDescription = 'some random words';
-  const nftCid = '1244324dwfew1';
+  const nftName: string = 'name';
+  const nftDescription: string = 'some random words';
+  const nftCid: string = '1244324dwfew1';
 
   storeNFT(nftName, nftDescription, Field(10), nftCid, pubKey, map);
 

@@ -3,6 +3,7 @@ import { MerkleMap, MerkleTree } from 'o1js';
 import {
   deserializeJsonToMerkleMap,
   serializeMerkleMapToJson,
+  serializeMerkleTreeToJson,
 } from '../components/serialize.js';
 import { generateNftCollection } from '../components/NFT.js';
 import {
@@ -17,15 +18,25 @@ const { pubKey: pubKey, deployerKey: deployerKey } = getEnvAddresses();
 const merkleMap: MerkleMap = new MerkleMap();
 console.log('MerkleMap()', merkleMap.getRoot().toString());
 
-const merkleTree = new MerkleTree(256);
-console.log('MerkleTree(256)', merkleTree.getRoot().toString());
+const merkleTree: MerkleTree = new MerkleTree(10);
+console.log('MerkleTree(10)', merkleTree.getRoot().toString());
+
+console.log('merkle tree height', merkleTree.height);
+
+console.log('merkle tree leaf count', merkleTree.leafCount);
+
+console.log('merkle tree get node', merkleTree.getNode(0, 0n).toBigInt());
 
 generateNftCollection(pubKey, merkleMap);
 
-console.log(merkleMap.getRoot().toString());
+console.log('merkleMap root', merkleMap.getRoot().toString());
 
-const serializedJson = serializeMerkleMapToJson(merkleMap);
+const serializedJson: string = serializeMerkleMapToJson(merkleMap);
 
-const map = deserializeJsonToMerkleMap(serializedJson);
+const map: MerkleMap = deserializeJsonToMerkleMap(serializedJson);
 
-console.log(map.getRoot().toString());
+console.log('after serialize-deserialize', map.getRoot().toString());
+
+const exampleMerkleTree = serializeMerkleTreeToJson(merkleTree);
+
+console.log(exampleMerkleTree);

@@ -10,7 +10,7 @@ const zkAppAddress: PublicKey = PublicKey.fromBase58(
   'B62qkWDJWuPz1aLzwcNNCiEZNFnveQa2DEstF7vtiVJBTbkzi7nhGLm'
 );
 
-const zkAppInstance = new MerkleMapContract(zkAppAddress);
+const zkAppInstance: MerkleMapContract = new MerkleMapContract(zkAppAddress);
 
 await fetchAccount({ publicKey: zkAppAddress });
 
