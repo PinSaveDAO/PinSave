@@ -1,5 +1,6 @@
-import { NFT } from '../NFTsMapContract.js';
 import { Field, CircuitString, Poseidon, PublicKey, MerkleMap } from 'o1js';
+
+import { NFT } from '../NFTsMapContract.js';
 
 export function createNFT(
   nftName: string,
@@ -7,7 +8,7 @@ export function createNFT(
   nftId: Field,
   nftCid: string,
   owner: PublicKey
-) {
+): NFT {
   const newNFT: NFT = {
     name: Poseidon.hash(CircuitString.fromString(nftName).toFields()),
     description: Poseidon.hash(
@@ -23,10 +24,11 @@ export function createNFT(
   return newNFT;
 }
 
-export function NFTtoHash(_NFT: NFT) {
+export function NFTtoHash(_NFT: NFT): Field {
   return Poseidon.hash(NFT.toFields(_NFT));
 }
 
+// works only for merkle map
 export function storeNFT(
   nftName: string,
   nftDescription: string,
@@ -34,10 +36,28 @@ export function storeNFT(
   nftCid: string,
   owner: PublicKey,
   map: MerkleMap
-) {
-  const _NFT = createNFT(nftName, nftDescription, nftId, nftCid, owner);
+): NFT {
+  const _NFT: NFT = createNFT(nftName, nftDescription, nftId, nftCid, owner);
 
   map.set(nftId, NFTtoHash(_NFT));
 
   return _NFT;
+}
+
+// works only for merkle map
+export function generateNftCollection(
+  pubKey: PublicKey,
+  map: MerkleMap
+): MerkleMap {
+  const nftName: string = 'name';
+  const nftDescription: string = 'some random words';
+  const nftCid: string = '1244324dwfew1';
+
+  storeNFT(nftName, nftDescription, Field(10), nftCid, pubKey, map);
+
+  storeNFT(nftName, nftDescription, Field(11), nftCid, pubKey, map);
+
+  storeNFT(nftName, nftDescription, Field(12), nftCid, pubKey, map);
+
+  return map;
 }

@@ -1,3 +1,3 @@
-import { MerkleMapContract } from './MerkleMapContract.js';
+import { MerkleMapContract } from './NFTsMapContract.js';
 
 export { MerkleMapContract };

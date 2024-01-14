@@ -3,7 +3,7 @@ import { PublicKey, Mina } from 'o1js';
 import { MerkleMapContract } from '../NFTsMapContract.js';
 
 export function logTokenBalances(address: PublicKey, zkApp: MerkleMapContract) {
-  let balance = 0n;
+  let balance: bigint = 0n;
   try {
     balance = Mina.getBalance(address, zkApp.token.id).value.toBigInt();
   } catch (e) {

@@ -1,6 +1,6 @@
 {
   "name": "pin-mina",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "",
   "author": "",
   "license": "Apache-2.0",
@@ -18,10 +18,11 @@
     "buildw": "tsc --watch",
     "coverage": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage",
     "format": "prettier --write --ignore-unknown **/*",
-    "test": "tsc && node build/src/MerkleMapContract.test.js",
-    "testNFTs": "tsc && node build/src/NFTsMapContract.test.js",
+    "test": "tsc && node build/src/NFTsMapContract.test.js",
     "deploy": "tsc && node build/src/scripts/deploy.js",
     "query": "tsc && node build/src/scripts/queryContract.js",
+    "initNFTs": "tsc && node build/src/scripts/initNFTs.js",
+    "serialize": "tsc && node build/src/scripts/serialize.js",
     "lint": "npx eslint src/* --fix"
   },
   "devDependencies": {
