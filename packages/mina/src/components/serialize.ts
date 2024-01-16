@@ -113,12 +113,12 @@ export function serializeMerkleTreeToJsonFast(
       highWaterMark: 16 * 1024,
     });
     const leafCount: number = Number(merkleTree.leafCount);
-    let currentIndex = 0;
-    const batchSize = 1000; // Size for processing
+    let currentIndex: number = 0;
+    const batchSize: number = 1000; // Size for processing
 
-    stream.write('{'); // Start of the JSON object
+    const processBatch = async () => {
+      stream.write('{'); // Start of the JSON object
 
-    const writeNextBatch = () => {
       while (currentIndex < leafCount) {
         for (let i = 0; i < batchSize && currentIndex < leafCount; i++) {
           if (i > 0) {
@@ -126,24 +126,21 @@ export function serializeMerkleTreeToJsonFast(
           }
           const value = merkleTree.getNode(0, BigInt(currentIndex)).toString();
           const serialized = `"${currentIndex}": "${value}"`;
-          const isLastItem = currentIndex === leafCount - 1;
-          stream.write(serialized + (isLastItem ? '}' : ''));
+          stream.write(serialized);
           currentIndex++;
         }
-
         if (currentIndex < leafCount) {
-          // Schedule the next batch processing in the next tick to prevent stack overflow
-          setImmediate(writeNextBatch);
-          return;
+          await new Promise((res) => stream.write('', res));
         }
       }
 
+      stream.write('}'); // End of the JSON object
       stream.end();
       resolve('Serialization complete');
     };
 
     stream.on('error', (error) => reject(error));
-    writeNextBatch();
+    processBatch().catch(reject);
   });
 }
 
