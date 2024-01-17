@@ -110,8 +110,6 @@ export async function serializeMerkleToJsonOptimized(merkleTree: MerkleTree) {
   const leafCount = Number(merkleTree.leafCount);
   const writeStream = createWriteStream('serializedMerkleTree.json');
 
-  writeStream.write('{'); // Start of the JSON object
-
   for (let i = 0; i < leafCount; i += batchSize) {
     const batchEnd = Math.min(i + batchSize, leafCount);
     const batchData: { [index: string]: string } = {};
@@ -124,7 +122,7 @@ export async function serializeMerkleToJsonOptimized(merkleTree: MerkleTree) {
     const isLastBatch = batchEnd >= leafCount;
 
     if (
-      !writeStream.write(JSON.stringify(batchData) + (isLastBatch ? '}' : ','))
+      !writeStream.write(JSON.stringify(batchData) + (isLastBatch ? '' : ','))
     ) {
       await new Promise((resolve) => {
         writeStream.once('drain', resolve);
