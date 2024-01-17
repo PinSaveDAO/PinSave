@@ -2,14 +2,8 @@ import { MerkleMap, MerkleTree } from 'o1js';
 
 import {
   deserializeJsonToMerkleMap,
-  getZerosMerkleTree,
   serializeMerkleMapToJson,
-  serializeMerkleTreeToJson,
-  serializeMerkleTreeToJsonFull,
-  deserializeJsonToMerkleTree,
-  deserializeJsonToMerkleTreeFull,
-  serializeMerkleTreeToJson2,
-  serializeMerkleTreeToJsonFast,
+  serializeMerkleToJsonOptimized,
 } from '../components/serialize.js';
 import { generateNftCollection } from '../components/NFT.js';
 import {
@@ -24,7 +18,7 @@ const { pubKey: pubKey, deployerKey: deployerKey } = getEnvAddresses();
 const merkleMap: MerkleMap = new MerkleMap();
 console.log('MerkleMap()', merkleMap.getRoot().toString());
 
-const merkleTree: MerkleTree = new MerkleTree(29);
+const merkleTree: MerkleTree = new MerkleTree(3);
 console.log('MerkleTree', merkleTree.getRoot().toString());
 
 console.log('merkle tree height', merkleTree.height);
@@ -58,7 +52,7 @@ console.log(
   exampleMerkleTree.getRoot().toString()
 ); */
 
-serializeMerkleTreeToJsonFast(merkleTree);
+await serializeMerkleToJsonOptimized(merkleTree);
 
 //console.log(getZerosMerkleTree(merkleTree.height).toString());
 
