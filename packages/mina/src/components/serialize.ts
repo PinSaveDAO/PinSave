@@ -1,5 +1,4 @@
 import { Field, MerkleMap, MerkleTree, Poseidon } from 'o1js';
-import { Worker, isMainThread, parentPort, workerData } from 'worker_threads';
 import { createWriteStream } from 'fs';
 
 export function serializeMerkleMapToJson(merkleMap: MerkleMap): string {
@@ -36,6 +35,7 @@ export function deserializeJsonToMerkleMap(serializedJson: string): MerkleMap {
   return deserializedMerkleMap;
 }
 
+// for testing purposes
 export function serializeMerkleTreeToJsonFull(merkleTree: MerkleTree): string {
   const serializedData: { [key: number]: string[] } = {};
   const height: number = merkleTree.height;
