@@ -85,8 +85,10 @@ export async function mintNFTfromMap(
 
   await mintNFT(pk, _NFT, zkAppInstance, witnessNFT, live);
 
-  logTokenBalances(pubKey, zkAppInstance);
-  logStates(zkAppInstance, merkleMap);
+  if (!live) {
+    logTokenBalances(pubKey, zkAppInstance);
+    logStates(zkAppInstance, merkleMap);
+  }
 }
 
 export async function mintNFT(
@@ -107,13 +109,13 @@ export async function mintNFT(
       zkAppInstance.mintNFT(_NFT, merkleMapWitness);
     });
 
-    await sendWaitTx(mint_tx, pk);
+    await sendWaitTx(mint_tx, pk, live);
   } catch (e) {
     const mint_tx: Mina.Transaction = await Mina.transaction(txOptions, () => {
       zkAppInstance.mintNFT(_NFT, merkleMapWitness);
     });
 
-    await sendWaitTx(mint_tx, pk);
+    await sendWaitTx(mint_tx, pk, live);
   }
 }
 
@@ -177,7 +179,7 @@ export async function initAppRoot(
   pk: PrivateKey,
   zkAppInstance: MerkleMapContract,
   merkleMap: MerkleMap,
-  live?: boolean
+  live: boolean = true
 ) {
   const pubKey: PublicKey = pk.toPublicKey();
   const rootBefore: Field = merkleMap.getRoot();
@@ -188,14 +190,14 @@ export async function initAppRoot(
     zkAppInstance.initRoot(rootBefore);
   });
 
-  await sendWaitTx(init_tx, pk);
+  await sendWaitTx(init_tx, pk, live);
 
   logStates(zkAppInstance, merkleMap);
 }
 
 export async function deployApp(
   pk: PrivateKey,
-  live?: boolean
+  live: boolean = true
 ): Promise<{ merkleMap: MerkleMap; zkAppInstance: MerkleMapContract }> {
   let verificationKey: any | undefined;
 
@@ -221,7 +223,7 @@ export async function deployApp(
     }
   );
 
-  await sendWaitTx(deployTx, pk);
+  await sendWaitTx(deployTx, pk, live);
 
   if (live) {
     await fetchAccount({ publicKey: zkAppAddress });
@@ -232,17 +234,23 @@ export async function deployApp(
   return { merkleMap: merkleMap, zkAppInstance: zkAppInstance };
 }
 
-async function sendWaitTx(tx: Mina.Transaction, pk: PrivateKey) {
+async function sendWaitTx(
+  tx: Mina.Transaction,
+  pk: PrivateKey,
+  live: boolean = true
+) {
   await tx.prove();
   tx.sign([pk]);
 
   let pendingTx = await tx.send();
-  console.log(`Got pending transaction with hash ${pendingTx.hash()}`);
+  if (live) {
+    console.log(`Got pending transaction with hash ${pendingTx.hash()}`);
 
-  // Wait until transaction is included in a block
-  await pendingTx.wait();
-  if (!pendingTx.isSuccess) {
-    throw new Error();
+    // Wait until transaction is included in a block
+    await pendingTx.wait();
+    if (!pendingTx.isSuccess) {
+      throw new Error();
+    }
   }
 }
 

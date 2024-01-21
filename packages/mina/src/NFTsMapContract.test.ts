@@ -13,6 +13,8 @@ import {
 const proofsEnabled: boolean = false;
 const enforceTransactionLimits: boolean = true;
 
+const live: boolean = false;
+
 const testAccounts = await startLocalBlockchainClient(
   proofsEnabled,
   enforceTransactionLimits
@@ -33,11 +35,11 @@ console.log('deployed app');
 
 const nftArray = generateCollection(pubKey1, map);
 
-await initAppRoot(pk1, zkAppInstance, map);
+await initAppRoot(pk1, zkAppInstance, map, live);
 
 console.log('initialized root');
 
-await mintNFTfromMap(pk1, nftArray[0], zkAppInstance, map);
+await mintNFTfromMap(pk1, nftArray[0], zkAppInstance, map, live);
 
 console.log('minted NFT');
 
@@ -64,11 +66,11 @@ await initNFT(pubKey2, pk2, NFT2, zkAppInstance, map);
 
 console.log('inited NFT - 2 sucessfully');
 
-await mintNFTfromMap(pk1, newNFT, zkAppInstance, map);
+await mintNFTfromMap(pk1, newNFT, zkAppInstance, map, live);
 
 console.log('mints sucessfully');
 
-await mintNFTfromMap(pk2, NFT2, zkAppInstance, map);
+await mintNFTfromMap(pk2, NFT2, zkAppInstance, map, live);
 
 console.log('mints sucessfully');
 
