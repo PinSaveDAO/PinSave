@@ -1,5 +1,13 @@
 .env
 *.log
 keys/*
+coverage/*
+src/*
+build/src/scripts/*
 config.json
+tsconfig.json
+*.cjs
 .prettierrc
+.gitattributes
+.prettierignore
+serializedMerkleTree.json

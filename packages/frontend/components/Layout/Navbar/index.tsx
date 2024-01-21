@@ -1,4 +1,3 @@
-// import { UauthButton } from "@/components/auth/UAuthButton";
 import {
   createStyles,
   Text,
@@ -11,7 +10,6 @@ import {
 } from "@mantine/core";
 import { useBooleanToggle } from "@mantine/hooks";
 import { useMediaQuery } from "@mantine/hooks";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -134,12 +132,12 @@ export function Navbar({ links }: NavbarProps) {
             {items}
           </Group>
           <Group spacing={5}>
-            <ConnectButton
+            {/* <ConnectButton
               accountStatus={{
                 smallScreen: "avatar",
                 largeScreen: "full",
               }}
-            />
+            /> */}
             <Burger
               opened={opened}
               onClick={() => toggleOpened()}

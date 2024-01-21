@@ -28,9 +28,8 @@
   "include": [
     "next-env.d.ts",
     "environment.d.ts",
-    "Orbis.d.ts",
     "**/*.ts",
-    "**/*.tsx", 
+    "**/*.tsx",
     "pages/mina.jsx"
   ],
   "exclude": ["node_modules"]
