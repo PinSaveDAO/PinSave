@@ -1,4 +1,5 @@
-import { Field, MerkleMap, MerkleTree } from 'o1js';
+import { Field, MerkleMap, MerkleTree, Poseidon } from 'o1js';
+import { createWriteStream } from 'fs';
 
 export function serializeMerkleMapToJson(merkleMap: MerkleMap): string {
   const serializedData: { [key: number]: string } = {};
@@ -22,24 +23,25 @@ export function deserializeJsonToMerkleMap(serializedJson: string): MerkleMap {
 
   // Iterate through the deserialized data and add key-value pairs to the Merkle Map
   for (let i = 0; i < 256; i++) {
-    if (deserializedData[i] !== '0') {
+    let data = deserializedData[i];
+    if (data !== '0') {
       const key: Field = Field(i);
 
-      const value: Field = Field(deserializedData[i]); // Assuming the JSON contains string representations of the original values
+      const value: Field = Field(data); // Assuming the JSON contains string representations of the original values
 
       deserializedMerkleMap.set(key, value);
     }
   }
-
   return deserializedMerkleMap;
 }
 
-export function serializeMerkleTreeToJson(merkleTree: MerkleTree): string {
+// for testing purposes
+export function serializeMerkleTreeToJsonFull(merkleTree: MerkleTree): string {
   const serializedData: { [key: number]: string[] } = {};
   const height: number = merkleTree.height;
 
   // Iterate through the Merkle Tree to convert each key-value pair to JSON
-  for (let level = 0; level < height - 1; level++) {
+  for (let level = 0; level < height; level++) {
     const maxLeaf: number = 2 ** level;
     const levelData: string[] = [];
     for (let key = 0; key < maxLeaf; key++) {
@@ -48,6 +50,150 @@ export function serializeMerkleTreeToJson(merkleTree: MerkleTree): string {
     }
     serializedData[level] = levelData;
   }
+  return JSON.stringify(serializedData);
+}
+
+export function serializeMerkleTreeToJson(merkleTree: MerkleTree): string {
+  const serializedData: { [index: number]: string } = {};
+  const leafCount: bigint = merkleTree.leafCount;
+
+  // Iterate through the Merkle Tree to convert each key-value pair to JSON
+  for (let index = 0; index < leafCount; index++) {
+    const value: string = merkleTree.getNode(0, BigInt(index)).toString();
+    serializedData[index] = value;
+  }
 
   return JSON.stringify(serializedData);
+}
+
+export function serializeMerkleTreeToJsonWithStream(
+  merkleTree: MerkleTree
+): Promise<string> {
+  return new Promise((resolve, reject) => {
+    // Create a write stream to write the serialized data
+    const stream = createWriteStream('serializedMerkleTree.json');
+
+    let index = 0;
+    const leafCount: bigint = merkleTree.leafCount;
+
+    // Define the function to serialize a single data point
+    const serializedData = (currentIndex: bigint): string => {
+      if (index > 0) {
+        stream.write(',');
+      }
+      const value: string = merkleTree.getNode(0, currentIndex).toString();
+      return `"${index}": "${value}"`;
+    };
+
+    // Define serialization function for processing a chunk of data and writing to the stream
+    const processChunk = () => {
+      while (index < leafCount && stream.write(serializedData(BigInt(index)))) {
+        index++;
+      }
+      if (index < leafCount) {
+        stream.once('drain', processChunk); // Wait for the drain event to continue processing
+      } else {
+        stream.write('}'); // End of the JSON object
+        stream.end();
+        resolve('Serialization complete');
+      }
+    };
+
+    stream.on('error', (error) => reject(error));
+    stream.write('{'); // Start of the JSON object
+    processChunk(); // Start processing the chunks
+  });
+}
+
+export async function serializeMerkleToJsonOptimized(merkleTree: MerkleTree) {
+  const batchSize = 10000; // Adjust batch size as needed
+  const leafCount = Number(merkleTree.leafCount);
+  const writeStream = createWriteStream('serializedMerkleTree.json');
+
+  for (let i = 0; i < leafCount; i += batchSize) {
+    const batchEnd = Math.min(i + batchSize, leafCount);
+    const batchData: { [index: string]: string } = {};
+
+    for (let j = i; j < batchEnd; j++) {
+      const value = merkleTree.getNode(0, BigInt(j)).toString();
+      batchData[j.toString()] = value;
+    }
+
+    const isLastBatch = batchEnd >= leafCount;
+
+    if (
+      !writeStream.write(JSON.stringify(batchData) + (isLastBatch ? '' : ','))
+    ) {
+      await new Promise((resolve) => {
+        writeStream.once('drain', resolve);
+      });
+    }
+  }
+
+  writeStream.end(); // End the JSON object
+
+  return 'Serialization complete';
+}
+
+export function getZerosMerkleTree(height: number): Field[] {
+  if (height < 1) {
+    throw Error('height starts at 1');
+  }
+  const zeroes: Field[] = new Array(height);
+  zeroes[0] = Field(0);
+  for (let i = 1; i < height; i += 1) {
+    zeroes[i] = Poseidon.hash([zeroes[i - 1], zeroes[i - 1]]);
+  }
+  return zeroes;
+}
+
+export function deserializeJsonToMerkleTree(
+  serializedJson: string
+): MerkleTree {
+  const deserializedData: { [index: number]: string } =
+    JSON.parse(serializedJson); // Parse the serialized JSON into an object
+
+  const leafCount: number = Object.keys(deserializedData).length;
+
+  const height = Math.log2(Number(leafCount)) + 1;
+
+  const merkleTree: MerkleTree = new MerkleTree(height);
+
+  const defaultValue = getZerosMerkleTree(height)[height - 1].toString();
+
+  for (let index = 0; index < leafCount; index++) {
+    let iterValue = deserializedData[index];
+    if (defaultValue === iterValue) {
+      merkleTree.setLeaf(BigInt(index), Field(iterValue));
+    }
+  }
+
+  return merkleTree;
+}
+
+export function deserializeJsonToMerkleTreeFull(
+  serializedJson: string
+): MerkleTree {
+  const serializedData: { [key: number]: string[] } =
+    JSON.parse(serializedJson);
+
+  const height = Object.keys(serializedData).length;
+
+  const merkleTree: MerkleTree = new MerkleTree(height);
+
+  let currentIndex = 0;
+
+  for (let level = 0; level < height; level++) {
+    const maxLeaf: number = 2 ** level;
+    for (let index = 0; index < maxLeaf; index++) {
+      let value = Field(serializedData[level][index]);
+      console.log(value.toBigInt());
+      merkleTree.setLeaf(BigInt(index), value);
+      currentIndex++;
+    }
+  }
+
+  console.log(currentIndex);
+
+  return merkleTree;
 }
