@@ -1,5 +1,9 @@
 .env
 *.log
 keys/*
+coverage/*
+src/scripts/*
 config.json
+*.cjs
 .prettierrc
+serializedMerkleTree.json
