@@ -5,7 +5,7 @@ import {
   serializeMerkleMapToJson,
   serializeMerkleToJsonOptimized,
 } from '../components/serialize.js';
-import { generateNftCollection } from '../components/NFT.js';
+import { generateCollection } from '../components/NFT.js';
 import {
   startBerkeleyClient,
   getEnvAddresses,
@@ -27,7 +27,7 @@ console.log('merkle tree leaf count', merkleTree.leafCount);
 
 console.log('merkle tree get node', merkleTree.getNode(0, 0n).toBigInt());
 
-generateNftCollection(pubKey, merkleMap);
+generateCollection(pubKey, merkleMap);
 
 console.log('merkleMap root', merkleMap.getRoot().toString());
 

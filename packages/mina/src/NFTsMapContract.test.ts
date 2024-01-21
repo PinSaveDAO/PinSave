@@ -1,11 +1,11 @@
 import { Field } from 'o1js';
 
-import { createNFT, storeNFT } from './components/NFT.js';
+import { createNFT, generateCollection } from './components/NFT.js';
 import {
   deployApp,
   initAppRoot,
   initNFT,
-  mintNFT,
+  mintNFTfromMap,
   startLocalBlockchainClient,
   transferNFT,
 } from './components/transactions.js';
@@ -31,46 +31,23 @@ console.log('deployed app');
 
 // add some initial values into the map
 
-const nftName = 'name';
-const nftDescription = 'some random words';
-const nftCid = '1244324dwfew1';
-
-const NFT10 = storeNFT(
-  nftName,
-  nftDescription,
-  Field(10),
-  nftCid,
-  pubKey1,
-  map
-);
-
-const NFT11 = storeNFT(
-  nftName,
-  nftDescription,
-  Field(11),
-  nftCid,
-  pubKey1,
-  map
-);
-
-const NFT12 = storeNFT(
-  nftName,
-  nftDescription,
-  Field(12),
-  nftCid,
-  pubKey1,
-  map
-);
+const nftArray = generateCollection(pubKey1, map);
 
 await initAppRoot(pk1, zkAppInstance, map);
 
 console.log('initialized root');
 
-await mintNFT(pubKey1, pk1, NFT10, zkAppInstance, map);
+await mintNFTfromMap(pk1, nftArray[0], zkAppInstance, map);
 
 console.log('minted NFT');
 
+// init nft on the contract
+const nftName: string = 'name';
+const nftDescription: string = 'some random words';
+const nftCid: string = '1244324dwfew1';
+
 const newNFT = createNFT(nftName, nftDescription, Field(1), nftCid, pubKey1);
+
 await initNFT(pubKey1, pk1, newNFT, zkAppInstance, map);
 
 console.log('inited NFT');
@@ -87,11 +64,11 @@ await initNFT(pubKey2, pk2, NFT2, zkAppInstance, map);
 
 console.log('inited NFT - 2 sucessfully');
 
-await mintNFT(pubKey1, pk1, newNFT, zkAppInstance, map);
+await mintNFTfromMap(pk1, newNFT, zkAppInstance, map);
 
 console.log('mints sucessfully');
 
-await mintNFT(pubKey2, pk2, NFT2, zkAppInstance, map);
+await mintNFTfromMap(pk2, NFT2, zkAppInstance, map);
 
 console.log('mints sucessfully');
 
