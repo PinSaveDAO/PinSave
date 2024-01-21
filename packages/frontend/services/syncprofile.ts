@@ -1,7 +1,4 @@
-import { updateNotification } from "@mantine/notifications";
-import { ContractFactory, keccak256, toUtf8Bytes, hexlify } from "ethers";
 import { NFTStorage, Blob } from "nft.storage";
-import { useContractWrite, useWalletClient } from "wagmi";
 
 const client = new NFTStorage({ token: process.env.NEXT_PUBLIC_TOKEN });
 

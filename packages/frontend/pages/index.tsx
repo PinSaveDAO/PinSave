@@ -1,25 +1,18 @@
 import PostCard from "@/components/Posts/PostCard";
 import { usePosts } from "@/hooks/api";
-import { getChainApiRouteName } from "@/utils/chains";
 import type { Post } from "@/services/upload";
-import type { ChainName } from "@/constants/chains";
 
 import { Box, Button, Center, Title, Text, Stack } from "@mantine/core";
-import { useNetwork, Chain } from "wagmi";
 import type { NextPage } from "next";
 
 const Home: NextPage = () => {
-  const { chain } = useNetwork();
-
-  const initialChain: ChainName = getChainApiRouteName(chain as Chain);
-
   const {
     data: posts,
     isFetching: isLoading,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = usePosts(initialChain);
+  } = usePosts();
 
   return (
     <div>

@@ -12,8 +12,7 @@ const LayoutApp = ({ children }: LayoutProps) => {
         <Navbar
           links={[
             { label: "Home", link: "/" },
-            { label: "Upload", link: "/upload" },
-            { label: "Profile", link: "/profile" },
+            /* { label: "Upload", link: "/upload" }, */
           ]}
         />
       }

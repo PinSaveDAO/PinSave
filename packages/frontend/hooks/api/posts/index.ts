@@ -1,13 +1,11 @@
 import { fetchPosts, fetchPost } from "./queries";
-import type { ChainName } from "@/constants/chains";
-
 import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
 
-export const usePosts = (chain: ChainName) => {
+export const usePosts = () => {
   return useInfiniteQuery({
-    queryKey: [chain],
+    queryKey: ["mina"],
     queryFn: async ({ pageParam }: { pageParam?: number | undefined }) => {
-      const data = await fetchPosts(chain, { pageParam });
+      const data = await fetchPosts({ pageParam });
       return data;
     },
     initialPageParam: undefined,
@@ -19,9 +17,9 @@ export const usePosts = (chain: ChainName) => {
   });
 };
 
-export const usePost = (chain: ChainName, id: string) => {
+export const usePost = (id: string) => {
   return useQuery({
-    queryKey: [chain, id],
-    queryFn: () => fetchPost(chain, id),
+    queryKey: [id],
+    queryFn: () => fetchPost(id),
   });
 };
