@@ -1,6 +1,7 @@
-import { fetchDecodedPost } from "@/services/fetchCid";
-import { Contract, InfuraProvider } from "ethers";
+import { generateCollectionWithMap } from "pin-mina";
 import type { NextApiRequest, NextApiResponse } from "next";
+
+import { PublicKey, Field } from "o1js";
 
 export default async function handler(
   req: NextApiRequest,
@@ -9,14 +10,17 @@ export default async function handler(
   try {
     const { id } = req.query;
 
-    /*     const result = await contract.getPostCid(id);
+    const index = Number(id);
 
-    const output = await fetchDecodedPost(result);
+    const pubKey: PublicKey = PublicKey.fromBase58(
+      "B62qqpPjKKgp8G2kuB82g9NEgfg85vmEAZ84to3FfyQeL4MuFm5Ybc9"
+    );
 
-    const owner = await contract.getPostOwner(id);
+    const { map: map, nftArray: nftArray } = generateCollectionWithMap(pubKey);
 
-    res.status(200).json({ ...output, owner: owner }); */
-    res.status(200).json({});
+    const output = map.get(Field(index));
+
+    res.status(200).json({ output });
   } catch (err) {
     res.status(500).send({ error: "failed to fetch data" + err });
   }

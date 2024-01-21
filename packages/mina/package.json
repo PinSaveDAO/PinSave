@@ -1,6 +1,6 @@
 {
   "name": "pin-mina",
-  "version": "0.1.5",
+  "version": "0.1.7",
   "description": "",
   "author": "pavel fedotov pfedprog",
   "license": "Apache-2.0",
@@ -50,6 +50,6 @@
   },
   "dependencies": {
     "dotenv": "^16.3.1",
-    "o1js": "^0.14.0"
+    "o1js": "0.15.2"
   }
 }
