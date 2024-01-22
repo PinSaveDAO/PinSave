@@ -18,9 +18,9 @@ export default async function handler(
 
     const { map: map, nftArray: nftArray } = generateCollectionWithMap(pubKey);
 
-    const output = map.get(Field(index));
+    const output = nftArray[index].nftMetadata;
 
-    res.status(200).json({ output });
+    res.status(200).json({ ...output });
   } catch (err) {
     res.status(500).send({ error: "failed to fetch data" + err });
   }

@@ -1,6 +1,6 @@
 import { MerkleMapContract, NFT } from './NFTsMapContract.js';
 
-import { generateCollectionWithMap, storeNFT } from './components/NFT.js';
+import { generateCollectionWithMap, storeNftMap } from './components/NFT.js';
 
 import {
   getEnvAddresses,
@@ -19,7 +19,7 @@ export {
   MerkleMapContract,
   NFT,
   generateCollectionWithMap,
-  storeNFT,
+  storeNftMap,
   getEnvAddresses,
   startBerkeleyClient,
   mintNFTfromMap,

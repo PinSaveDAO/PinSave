@@ -9,25 +9,27 @@ import {
 
 import { NFT } from '../NFTsMapContract.js';
 
+export type nftMetadata = {
+  name: string;
+  description: string;
+  id: Field;
+  cid: string;
+  owner: PublicKey;
+};
+
 export function NFTtoHash(_NFT: NFT): Field {
   return Poseidon.hash(NFT.toFields(_NFT));
 }
 
-export function createNFT(
-  nftName: string,
-  nftDescription: string,
-  nftId: Field,
-  nftCid: string,
-  owner: PublicKey
-): NFT {
+export function createNft(nftMetadata: nftMetadata): NFT {
   const newNFT: NFT = {
-    name: Poseidon.hash(CircuitString.fromString(nftName).toFields()),
+    name: Poseidon.hash(CircuitString.fromString(nftMetadata.name).toFields()),
     description: Poseidon.hash(
-      CircuitString.fromString(nftDescription).toFields()
+      CircuitString.fromString(nftMetadata.description).toFields()
     ),
-    id: nftId,
-    cid: Poseidon.hash(CircuitString.fromString(nftCid).toFields()),
-    owner: owner,
+    id: nftMetadata.id,
+    cid: Poseidon.hash(CircuitString.fromString(nftMetadata.cid).toFields()),
+    owner: nftMetadata.owner,
     changeOwner: function (newAddress: PublicKey): void {
       this.owner = newAddress;
     },
@@ -35,74 +37,57 @@ export function createNFT(
   return newNFT;
 }
 
-// works only for merkle map
-export function createNFTwithWitness(
-  nftName: string,
-  nftDescription: string,
-  nftId: Field,
-  nftCid: string,
-  owner: PublicKey
-): { nft: NFT; nftWitness: MerkleMapWitness } {
+export function createNftWithMapWitness(nftMetadata: nftMetadata): {
+  nft: NFT;
+  nftWitness: MerkleMapWitness;
+} {
   const merkleMap: MerkleMap = new MerkleMap();
-  const _NFT: NFT = createNFT(nftName, nftDescription, nftId, nftCid, owner);
-  const nftWitness: MerkleMapWitness = merkleMap.getWitness(nftId);
+  const _NFT: NFT = createNft(nftMetadata);
+  const nftWitness: MerkleMapWitness = merkleMap.getWitness(nftMetadata.id);
   return { nft: _NFT, nftWitness: nftWitness };
 }
 
-// works only for merkle map
-export function storeNFT(
-  nftName: string,
-  nftDescription: string,
-  nftId: Field,
-  nftCid: string,
-  owner: PublicKey,
+export function storeNftMap(
+  nftMetadata: nftMetadata,
   map: MerkleMap
-): NFT {
-  const _NFT: NFT = createNFT(nftName, nftDescription, nftId, nftCid, owner);
+): { nft: NFT; nftMetadata: nftMetadata } {
+  const _NFT: NFT = createNft(nftMetadata);
 
-  map.set(nftId, NFTtoHash(_NFT));
+  map.set(nftMetadata.id, NFTtoHash(_NFT));
 
-  return _NFT;
+  return { nft: _NFT, nftMetadata: nftMetadata };
 }
 
-// works only for merkle map
-export function generateCollection(pubKey: PublicKey, map: MerkleMap) {
-  const nftName: string = 'name';
-  const nftDescription: string = 'some random words';
-  const nftCid: string = '1244324dwfew1';
+export function generateCollectionMap(pubKey: PublicKey, map: MerkleMap) {
+  var nftMetadata = generateDummyNftMetadata(10, pubKey);
 
-  const NFT1 = storeNFT(
-    nftName,
-    nftDescription,
-    Field(10),
-    nftCid,
-    pubKey,
-    map
-  );
+  const NFT1 = storeNftMap(nftMetadata, map);
 
-  const NFT2 = storeNFT(
-    nftName,
-    nftDescription,
-    Field(11),
-    nftCid,
-    pubKey,
-    map
-  );
+  nftMetadata.id = Field(11);
+  const NFT2 = storeNftMap(nftMetadata, map);
 
-  const NFT3 = storeNFT(
-    nftName,
-    nftDescription,
-    Field(12),
-    nftCid,
-    pubKey,
-    map
-  );
+  nftMetadata.id = Field(12);
+  const NFT3 = storeNftMap(nftMetadata, map);
 
   return [NFT1, NFT2, NFT3];
 }
 
 export function generateCollectionWithMap(pubKey: PublicKey) {
   const map: MerkleMap = new MerkleMap();
-  const nftArray = generateCollection(pubKey, map);
+  const nftArray = generateCollectionMap(pubKey, map);
   return { map: map, nftArray: nftArray };
+}
+
+export function generateDummyNftMetadata(
+  id: number,
+  pubKey: PublicKey
+): nftMetadata {
+  const nftMetadata = {
+    name: 'name',
+    description: 'some random words',
+    id: Field(id),
+    cid: '1244324dwfew1',
+    owner: pubKey,
+  };
+  return nftMetadata;
 }

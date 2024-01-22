@@ -1,9 +1,7 @@
 import { PublicKey } from 'o1js';
 
 import { mintNFTfromMap } from '../components/transactions.js';
-
 import { generateCollectionWithMap } from '../components/NFT.js';
-
 import {
   getEnvAddresses,
   startBerkeleyClient,
@@ -24,4 +22,4 @@ const { map: map, nftArray: nfts } = generateCollectionWithMap(pubKey);
 
 // change to init App root
 
-await mintNFTfromMap(deployerKey, nfts[0], zkApp, map);
+await mintNFTfromMap(deployerKey, nfts[0].nft, zkApp, map);

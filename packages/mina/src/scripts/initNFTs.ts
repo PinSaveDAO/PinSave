@@ -1,7 +1,7 @@
-import { Field, MerkleMap, PublicKey } from 'o1js';
+import { PublicKey } from 'o1js';
 
 import { initRootWithApp } from '../components/transactions.js';
-import { storeNFT } from '../components/NFT.js';
+import { generateCollectionWithMap } from '../components/NFT.js';
 import { serializeMerkleMapToJson } from '../components/serialize.js';
 import {
   getEnvAddresses,
@@ -16,38 +16,7 @@ const zkAppAddress: PublicKey = PublicKey.fromBase58(
   'B62qkWDJWuPz1aLzwcNNCiEZNFnveQa2DEstF7vtiVJBTbkzi7nhGLm'
 );
 
-const nftName = 'name';
-const nftDescription = 'some random words';
-const nftCid = '1244324dwfew1';
-
-const merkleMap: MerkleMap = new MerkleMap();
-
-const NFT10 = storeNFT(
-  nftName,
-  nftDescription,
-  Field(10),
-  nftCid,
-  pubKey,
-  merkleMap
-);
-
-const NFT11 = storeNFT(
-  nftName,
-  nftDescription,
-  Field(11),
-  nftCid,
-  pubKey,
-  merkleMap
-);
-
-const NFT12 = storeNFT(
-  nftName,
-  nftDescription,
-  Field(12),
-  nftCid,
-  pubKey,
-  merkleMap
-);
+const { map: merkleMap } = generateCollectionWithMap(pubKey);
 
 await initRootWithApp(deployerKey, zkAppAddress, merkleMap);
 
