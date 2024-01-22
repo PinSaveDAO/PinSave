@@ -12,9 +12,7 @@ function logAppStates(zkAppInstance: MerkleMapContract) {
 
 export function logStates(zkAppInstance: MerkleMapContract, map: MerkleMap) {
   const localMapRoot: string = map.getRoot().toString();
-
   logAppStates(zkAppInstance);
-
   console.log('compare to local map:', localMapRoot);
 }
 
@@ -23,9 +21,16 @@ export async function logAppStatesContract(
   live: boolean = true
 ) {
   const zkAppInstance: MerkleMapContract = new MerkleMapContract(zkAppAddress);
-
   if (live) {
     await fetchAccount({ publicKey: zkAppAddress });
   }
   logAppStates(zkAppInstance);
+}
+
+export async function getTotalSupplyLive(
+  zkAppInstance: MerkleMapContract
+): Promise<UInt64> {
+  await fetchAccount({ publicKey: zkAppInstance.address });
+  const totalSupply: UInt64 = zkAppInstance.totalSupply.get();
+  return totalSupply;
 }

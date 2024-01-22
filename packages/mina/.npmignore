@@ -11,5 +11,5 @@ tsconfig.json
 .gitattributes
 .prettierignore
 serializedMerkleTree.json
-
+*.map
 NFTsMapContract.test*

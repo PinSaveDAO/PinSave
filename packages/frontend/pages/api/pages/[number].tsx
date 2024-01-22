@@ -1,5 +1,11 @@
 import { fetchDecodedPost } from "@/services/fetchCid";
 import type { NextApiRequest, NextApiResponse } from "next";
+import {
+  MerkleMapContract,
+  startBerkeleyClient,
+  getTotalSupplyLive,
+} from "pin-mina";
+import { PublicKey, fetchAccount, UInt64, Field } from "o1js";
 
 export default async function handler(
   req: NextApiRequest,
@@ -8,11 +14,15 @@ export default async function handler(
   try {
     const { number } = req.query;
     const pageNumber = Number(number);
+    startBerkeleyClient();
+    const pubKey: PublicKey = PublicKey.fromBase58(
+      "B62qkWDJWuPz1aLzwcNNCiEZNFnveQa2DEstF7vtiVJBTbkzi7nhGLm"
+    );
+    const zkAppInstance: MerkleMapContract = new MerkleMapContract(pubKey);
 
-    //const totalSupply = Number(await contract.totalSupply());
-    const totalSupply = 0;
+    const totalSupply = await getTotalSupplyLive(zkAppInstance);
 
-    let items = [];
+    /*     let items = [];
     let result;
 
     var upperLimit = 6 * pageNumber;
@@ -22,7 +32,7 @@ export default async function handler(
     if (totalSupply < upperLimit) {
       upperLimit = totalSupply;
     }
-
+ */
     /*     try {
       for (let i = lowerLimit; upperLimit >= i; i++) {
         result = await contract.getPostCid(i);

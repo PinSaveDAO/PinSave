@@ -10,7 +10,10 @@ export const usePosts = () => {
     },
     initialPageParam: undefined,
     getNextPageParam: (lastPage: any, pages: any) => {
-      if (lastPage.items[5]?.token_id < lastPage.totalSupply) {
+      if (
+        lastPage.items &&
+        lastPage.items[5]?.token_id < lastPage.totalSupply
+      ) {
         return pages.length;
       }
     },

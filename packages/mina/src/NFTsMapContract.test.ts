@@ -35,13 +35,16 @@ console.log('deployed app');
 
 // add some initial values into the map
 
-const nftArray = generateCollectionMap(pubKey1, map);
+const { nftArray: nftArray, nftMetadata: nftMetadata } = generateCollectionMap(
+  pubKey1,
+  map
+);
 
 await initAppRoot(pk1, zkAppInstance, map, live);
 
 console.log('initialized root');
 
-await mintNFTfromMap(pk1, nftArray[0].nft, zkAppInstance, map, live);
+await mintNFTfromMap(pk1, nftArray[0], zkAppInstance, map, live);
 
 console.log('minted NFT');
 

@@ -1,7 +1,7 @@
 import { generateCollectionWithMap } from "pin-mina";
 import type { NextApiRequest, NextApiResponse } from "next";
 
-import { PublicKey, Field } from "o1js";
+import { PublicKey } from "o1js";
 
 export default async function handler(
   req: NextApiRequest,
@@ -18,7 +18,7 @@ export default async function handler(
 
     const { map: map, nftArray: nftArray } = generateCollectionWithMap(pubKey);
 
-    const output = nftArray[index].nftMetadata;
+    const output = nftArray.nftMetadata[index];
 
     res.status(200).json({ ...output });
   } catch (err) {

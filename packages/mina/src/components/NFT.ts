@@ -69,7 +69,10 @@ export function generateCollectionMap(pubKey: PublicKey, map: MerkleMap) {
   nftMetadata.id = Field(12);
   const NFT3 = storeNftMap(nftMetadata, map);
 
-  return [NFT1, NFT2, NFT3];
+  return {
+    nftArray: [NFT1.nft, NFT2.nft, NFT3.nft],
+    nftMetadata: [NFT1.nftMetadata, NFT2.nftMetadata, NFT3.nftMetadata],
+  };
 }
 
 export function generateCollectionWithMap(pubKey: PublicKey) {

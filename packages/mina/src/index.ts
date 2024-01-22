@@ -13,7 +13,7 @@ import {
   deserializeJsonToMerkleMap,
 } from './components/serialize.js';
 
-import { logAppStatesContract } from './components/AppState.js';
+import { getTotalSupplyLive } from './components/AppState.js';
 
 export {
   MerkleMapContract,
@@ -25,5 +25,5 @@ export {
   mintNFTfromMap,
   serializeMerkleMapToJson,
   deserializeJsonToMerkleMap,
-  logAppStatesContract,
+  getTotalSupplyLive,
 };

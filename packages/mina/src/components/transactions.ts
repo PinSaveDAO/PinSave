@@ -7,6 +7,7 @@ import {
   MerkleMapWitness,
   Field,
   fetchAccount,
+  VerificationKey,
 } from 'o1js';
 import dotenv from 'dotenv';
 
@@ -199,7 +200,7 @@ export async function deployApp(
   pk: PrivateKey,
   live: boolean = true
 ): Promise<{ merkleMap: MerkleMap; zkAppInstance: MerkleMapContract }> {
-  let verificationKey: any | undefined;
+  let verificationKey: VerificationKey | undefined;
 
   if (live) {
     ({ verificationKey } = await MerkleMapContract.compile());
