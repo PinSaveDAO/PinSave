@@ -1,6 +1,5 @@
 import { generateCollectionWithMap } from "pin-mina";
 import type { NextApiRequest, NextApiResponse } from "next";
-
 import { PublicKey } from "o1js";
 
 export default async function handler(

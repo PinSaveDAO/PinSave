@@ -19,12 +19,14 @@
     "@mantine/notifications": "^4.2.12",
     "@synthetixio/synpress": "^3.1.0",
     "@tanstack/react-query": "5.17.15",
+    "@vercel/kv": "^1.0.1",
     "filereader-stream": "^2.0.0",
     "isomorphic-fetch": "^3.0.0",
     "next": "^14.0.1",
     "next-sitemap": "^4.2.3",
     "nft.storage": "^7.0.0",
     "o1js": "0.15.2",
+    "pin-mina": "0.1.9",
     "postcss": "^8.4.22",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
@@ -32,8 +34,7 @@
     "react-player": "^2.11.2",
     "react-query": "^3.39.3",
     "sharp": "^0.33.0",
-    "tabler-icons-react": "^1.56.0",
-    "pin-mina": "0.1.9"
+    "tabler-icons-react": "^1.56.0"
   },
   "devDependencies": {
     "@tanstack/eslint-plugin-query": "^5.6.0",

@@ -30,7 +30,7 @@
     "environment.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "pages/mina.jsx"
+    "**/api/**.js"
   ],
   "exclude": ["node_modules"]
 }
