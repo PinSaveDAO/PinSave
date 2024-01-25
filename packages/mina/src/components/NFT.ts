@@ -94,3 +94,9 @@ export function generateDummyNftMetadata(
   };
   return nftMetadata;
 }
+
+export function generateDummyNft(id: number, pubKey: PublicKey): NFT {
+  const nftMetadata = generateDummyNftMetadata(id, pubKey);
+  const nft = createNft(nftMetadata);
+  return nft;
+}

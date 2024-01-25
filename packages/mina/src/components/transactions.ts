@@ -66,7 +66,7 @@ export async function startLocalBlockchainClient(
   return accounts;
 }
 
-export async function initNFT(
+export async function initNft(
   pubKey: PublicKey,
   pk: PrivateKey,
   _NFT: NFT,

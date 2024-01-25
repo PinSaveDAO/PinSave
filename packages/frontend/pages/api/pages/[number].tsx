@@ -57,8 +57,12 @@ export default async function handler(
 
         items.push({ ...itemOut });
       }
-    } catch {
-      res.status(200).json({ items: items, totalSupply: totalSupply });
+    } catch (err) {
+      res.status(200).json({
+        items: items,
+        totalSupply: totalSupply,
+        error: "failed to fetch data" + err,
+      });
     }
     res
       .status(200)
