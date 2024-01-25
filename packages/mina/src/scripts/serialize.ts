@@ -8,12 +8,12 @@ import {
 import { generateCollectionMap } from '../components/NFT.js';
 import {
   startBerkeleyClient,
-  getEnvAddresses,
+  getAppPublic,
 } from '../components/transactions.js';
 
 startBerkeleyClient();
 
-const { pubKey: pubKey, deployerKey: deployerKey } = getEnvAddresses();
+const { pubKey: pubKey, appPubKey: zkAppAddress } = getAppPublic();
 
 const merkleMap: MerkleMap = new MerkleMap();
 console.log('MerkleMap()', merkleMap.getRoot().toString());

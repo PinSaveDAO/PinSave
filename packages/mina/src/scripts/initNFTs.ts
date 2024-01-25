@@ -1,20 +1,16 @@
-import { PublicKey } from 'o1js';
-
 import { initRootWithApp } from '../components/transactions.js';
 import { generateCollectionWithMap } from '../components/NFT.js';
 import { serializeMerkleMapToJson } from '../components/serialize.js';
 import {
-  getEnvAddresses,
+  getEnvAccount,
   startBerkeleyClient,
+  getAppPublic,
 } from '../components/transactions.js';
 
-await startBerkeleyClient();
+startBerkeleyClient();
 
-const { pubKey: pubKey, deployerKey: deployerKey } = getEnvAddresses();
-
-const zkAppAddress: PublicKey = PublicKey.fromBase58(
-  'B62qkWDJWuPz1aLzwcNNCiEZNFnveQa2DEstF7vtiVJBTbkzi7nhGLm'
-);
+const { pk: deployerKey } = getEnvAccount();
+const { pubKey: pubKey, appPubKey: zkAppAddress } = getAppPublic();
 
 const { map: merkleMap } = generateCollectionWithMap(pubKey);
 

@@ -7,7 +7,7 @@ import {
   deployApp,
   initAppRoot,
   initNFT,
-  mintNFTfromMap,
+  mintNftFromMap,
   startLocalBlockchainClient,
   transferNFT,
 } from './components/transactions.js';
@@ -44,7 +44,7 @@ await initAppRoot(pk1, zkAppInstance, map, live);
 
 console.log('initialized root');
 
-await mintNFTfromMap(pk1, nftArray[0], zkAppInstance, map, live);
+await mintNftFromMap(pk1, nftArray[0], zkAppInstance, map, live);
 
 console.log('minted NFT');
 
@@ -69,11 +69,11 @@ await initNFT(pubKey2, pk2, nftStructNew, zkAppInstance, map);
 
 console.log('inited NFT - 2 sucessfully');
 
-await mintNFTfromMap(pk1, nftStruct, zkAppInstance, map, live);
+await mintNftFromMap(pk1, nftStruct, zkAppInstance, map, live);
 
 console.log('mints sucessfully');
 
-await mintNFTfromMap(pk2, nftStructNew, zkAppInstance, map, live);
+await mintNftFromMap(pk2, nftStructNew, zkAppInstance, map, live);
 
 console.log('mints sucessfully');
 

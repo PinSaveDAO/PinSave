@@ -4,8 +4,10 @@ import {
   MerkleMapContract,
   startBerkeleyClient,
   getTotalSupplyLive,
+  generateDummyNftMetadata,
+  nftMetadata,
+  getAppPublic,
 } from "pin-mina";
-import { PublicKey, fetchAccount, UInt64, Field } from "o1js";
 
 export default async function handler(
   req: NextApiRequest,
@@ -14,39 +16,53 @@ export default async function handler(
   try {
     const { number } = req.query;
     const pageNumber = Number(number);
+
+    console.log(pageNumber);
+
     startBerkeleyClient();
-    const pubKey: PublicKey = PublicKey.fromBase58(
-      "B62qkWDJWuPz1aLzwcNNCiEZNFnveQa2DEstF7vtiVJBTbkzi7nhGLm"
+
+    const { pubKey: pubKey, appPubKey: zkAppAddress } = getAppPublic();
+
+    const zkAppInstance: MerkleMapContract = new MerkleMapContract(
+      zkAppAddress
     );
-    const zkAppInstance: MerkleMapContract = new MerkleMapContract(pubKey);
 
-    const totalSupply = await getTotalSupplyLive(zkAppInstance);
+    const totalSupply = Number(await getTotalSupplyLive(zkAppInstance));
 
-    /*     let items = [];
-    let result;
+    console.log(totalSupply);
+    let items = [];
 
-    var upperLimit = 6 * pageNumber;
+    const perPage = 6;
+    var upperLimit = perPage * pageNumber;
 
-    const lowerLimit = upperLimit - 6 + 1;
+    const lowerLimit = upperLimit - perPage + 1;
 
     if (totalSupply < upperLimit) {
       upperLimit = totalSupply;
     }
- */
-    /*     try {
+
+    try {
       for (let i = lowerLimit; upperLimit >= i; i++) {
-        result = await contract.getPostCid(i);
+        const item: nftMetadata = generateDummyNftMetadata(i, pubKey);
 
-        const item = await fetchDecodedPost(result);
+        const decoded = await fetchDecodedPost(item.cid);
 
-        items.push({ token_id: i, ...item });
+        const itemOut = {
+          name: item.name,
+          description: item.description,
+          token_id: Number(item.id),
+          image: decoded.image,
+          owner: item.owner.toBase58(),
+        };
+
+        items.push({ ...itemOut });
       }
     } catch {
       res.status(200).json({ items: items, totalSupply: totalSupply });
-    } */
-
-    //res.status(200).json({ items: items, totalSupply: totalSupply });
-    res.status(200).json({ totalSupply: totalSupply });
+    }
+    res
+      .status(200)
+      .json({ items: items, totalSupply: totalSupply, page: pageNumber });
   } catch (err) {
     res.status(500).json({ error: "failed to fetch data" + err });
   }

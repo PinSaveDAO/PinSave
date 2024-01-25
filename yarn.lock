@@ -7542,10 +7542,10 @@ pify@^4.0.1:
   resolved "https://registry.yarnpkg.com/pify/-/pify-4.0.1.tgz#4b2cd25c50d598735c50292224fd8c6df41e3231"
   integrity sha512-uB80kBFb/tfd68bVleG9T5GGsGPjJrLAUpR5PZIrhBnIaRTQRjqdJSsIKkOP6OAIFbj7GOrcudc5pNjZ+geV2g==
 
-pin-mina@0.1.9:
-  version "0.1.9"
-  resolved "https://registry.yarnpkg.com/pin-mina/-/pin-mina-0.1.9.tgz#51cbf80580e527e6d40d3eee905ced2b9cf7f7f9"
-  integrity sha512-HyCdxZCd76J0/27rCb55co/RxGaNBevbrtmYv7jCwXqdh0a/cq9/v9NUXTiWXLPSsYY9ScMrNWEaXa1ZJA0v7w==
+pin-mina@0.1.14:
+  version "0.1.14"
+  resolved "https://registry.yarnpkg.com/pin-mina/-/pin-mina-0.1.14.tgz#205627a7007a724691d272dfe4bc41789f48c0e1"
+  integrity sha512-1UwJMTOfWAGHRPGEROMZ7rnuCLkBjVtWTUP34Ep9zEZDS4rHYlmlVtubLs2HzWtoYWEOjsL/MCI5zywIBvQQqQ==
   dependencies:
     dotenv "^16.3.1"
     o1js "0.15.2"

@@ -1,11 +1,17 @@
 import { MerkleMapContract, NFT } from './NFTsMapContract.js';
 
-import { generateCollectionWithMap, storeNftMap } from './components/NFT.js';
+import {
+  generateCollectionWithMap,
+  generateDummyNftMetadata,
+  storeNftMap,
+  nftMetadata,
+} from './components/NFT.js';
 
 import {
-  getEnvAddresses,
+  getEnvAccount,
+  getAppPublic,
   startBerkeleyClient,
-  mintNFTfromMap,
+  mintNftFromMap,
 } from './components/transactions.js';
 
 import {
@@ -18,11 +24,14 @@ import { getTotalSupplyLive } from './components/AppState.js';
 export {
   MerkleMapContract,
   NFT,
+  nftMetadata,
   generateCollectionWithMap,
+  generateDummyNftMetadata,
   storeNftMap,
-  getEnvAddresses,
+  getEnvAccount,
+  getAppPublic,
   startBerkeleyClient,
-  mintNFTfromMap,
+  mintNftFromMap,
   serializeMerkleMapToJson,
   deserializeJsonToMerkleMap,
   getTotalSupplyLive,

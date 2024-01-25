@@ -1,4 +1,5 @@
-import { generateCollectionWithMap } from "pin-mina";
+import { fetchDecodedPost } from "@/services/fetchCid";
+import { generateCollectionWithMap, nftMetadata } from "pin-mina";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { PublicKey } from "o1js";
 
@@ -17,9 +18,19 @@ export default async function handler(
 
     const { map: map, nftArray: nftArray } = generateCollectionWithMap(pubKey);
 
-    const output = nftArray.nftMetadata[index];
+    const item: nftMetadata = nftArray.nftMetadata[index];
 
-    res.status(200).json({ ...output });
+    const decoded = await fetchDecodedPost(item.cid);
+
+    const itemOut = {
+      name: item.name,
+      description: item.description,
+      token_id: Number(item.id),
+      image: decoded.image,
+      owner: item.owner.toBase58(),
+    };
+
+    res.status(200).json({ ...itemOut });
   } catch (err) {
     res.status(500).send({ error: "failed to fetch data" + err });
   }

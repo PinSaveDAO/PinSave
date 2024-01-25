@@ -16,18 +16,33 @@ import { logStates } from './AppState.js';
 import { logTokenBalances } from './TokenBalances.js';
 import { NFTtoHash } from './NFT.js';
 
-export function getEnvAddresses() {
-  const deployerKey: PrivateKey = PrivateKey.fromBase58(
+export function getEnvAccount() {
+  const pk: PrivateKey = PrivateKey.fromBase58(
     process.env.deployerKey as string
   );
 
-  const pubKey: PublicKey = deployerKey.toPublicKey();
+  const pubKey: PublicKey = pk.toPublicKey();
 
-  console.log('deployer address', pubKey.toBase58());
-  return { pubKey: pubKey, deployerKey: deployerKey };
+  return { pubKey: pubKey, pk: pk };
 }
 
-export async function startBerkeleyClient(
+export function getAppPublic() {
+  const pubKeyString: string =
+    process.env.NEXT_PUBLIC_KEY ??
+    'B62qqpPjKKgp8G2kuB82g9NEgfg85vmEAZ84to3FfyQeL4MuFm5Ybc9';
+
+  const pubKey: PublicKey = PublicKey.fromBase58(pubKeyString);
+
+  const appPubString: string =
+    process.env.NEXT_PUBLIC_APP_KEY ??
+    'B62qkWDJWuPz1aLzwcNNCiEZNFnveQa2DEstF7vtiVJBTbkzi7nhGLm';
+
+  const appPubKey: PublicKey = PublicKey.fromBase58(appPubString);
+
+  return { pubKey: pubKey, appPubKey: appPubKey };
+}
+
+export function startBerkeleyClient(
   endpoint: string = 'https://proxy.berkeley.minaexplorer.com/graphql'
 ) {
   dotenv.config();
@@ -73,7 +88,7 @@ export async function initNFT(
   logStates(zkAppInstance, merkleMap);
 }
 
-export async function mintNFTfromMap(
+export async function mintNftFromMap(
   pk: PrivateKey,
   _NFT: NFT,
   zkAppInstance: MerkleMapContract,
