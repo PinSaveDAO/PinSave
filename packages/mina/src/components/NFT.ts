@@ -5,6 +5,7 @@ import {
   PublicKey,
   MerkleMap,
   MerkleMapWitness,
+  Struct,
 } from 'o1js';
 
 import { NFT } from '../NFTsMapContract.js';
@@ -17,7 +18,17 @@ export type nftMetadata = {
   owner: PublicKey;
 };
 
-export function NFTtoHash(_NFT: NFT): Field {
+export class NftReduced extends Struct({
+  name: Field,
+  description: Field,
+  id: Field,
+  cid: Field,
+  owner: PublicKey,
+}) {}
+
+// const abcdef = new NFT()
+
+export function NFTtoHash(_NFT: NftReduced): Field {
   return Poseidon.hash(NFT.toFields(_NFT));
 }
 
@@ -58,7 +69,7 @@ export function storeNftMap(
   return { nft: _NFT, nftMetadata: nftMetadata };
 }
 
-export function generateCollectionMap(pubKey: PublicKey, map: MerkleMap) {
+export function generateDummyCollectionMap(pubKey: PublicKey, map: MerkleMap) {
   var nftMetadata = generateDummyNftMetadata(10, pubKey);
 
   const NFT1 = storeNftMap(nftMetadata, map);
@@ -75,9 +86,9 @@ export function generateCollectionMap(pubKey: PublicKey, map: MerkleMap) {
   };
 }
 
-export function generateCollectionWithMap(pubKey: PublicKey) {
+export function generateDummyCollectionWithMap(pubKey: PublicKey) {
   const map: MerkleMap = new MerkleMap();
-  const nftArray = generateCollectionMap(pubKey, map);
+  const nftArray = generateDummyCollectionMap(pubKey, map);
   return { map: map, nftArray: nftArray };
 }
 

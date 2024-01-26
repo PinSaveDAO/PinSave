@@ -43,6 +43,7 @@
     "@types/jest": "^27.0.3",
     "@typescript-eslint/eslint-plugin": "^5.5.0",
     "@typescript-eslint/parser": "^5.5.0",
+    "@vercel/kv": "^1.0.1",
     "eslint": "^8.7.0",
     "eslint-plugin-o1js": "^0.4.0",
     "jest": "^27.3.1",

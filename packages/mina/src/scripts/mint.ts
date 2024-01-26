@@ -1,5 +1,5 @@
 import { mintNftFromMap } from '../components/transactions.js';
-import { generateCollectionWithMap } from '../components/NFT.js';
+import { generateDummyCollectionWithMap } from '../components/NFT.js';
 import {
   getEnvAccount,
   startBerkeleyClient,
@@ -14,7 +14,7 @@ const { pubKey: pubKey, appPubKey: zkAppAddress } = getAppPublic();
 
 const zkApp: MerkleMapContract = new MerkleMapContract(zkAppAddress);
 
-const { map: map, nftArray: nfts } = generateCollectionWithMap(pubKey);
+const { map: map, nftArray: nfts } = generateDummyCollectionWithMap(pubKey);
 
 // change to init App root
 

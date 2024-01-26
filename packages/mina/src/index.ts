@@ -1,7 +1,7 @@
 import { MerkleMapContract, NFT } from './NFTsMapContract.js';
 
 import {
-  generateCollectionWithMap,
+  generateDummyCollectionWithMap,
   generateDummyNftMetadata,
   storeNftMap,
   nftMetadata,
@@ -25,7 +25,7 @@ export {
   MerkleMapContract,
   NFT,
   nftMetadata,
-  generateCollectionWithMap,
+  generateDummyCollectionWithMap,
   generateDummyNftMetadata,
   storeNftMap,
   getEnvAccount,

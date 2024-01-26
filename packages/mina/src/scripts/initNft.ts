@@ -1,6 +1,6 @@
 import { initNft } from '../components/transactions.js';
 import {
-  generateCollectionWithMap,
+  generateDummyCollectionWithMap,
   generateDummyNft,
 } from '../components/NFT.js';
 import { serializeMerkleMapToJson } from '../components/serialize.js';
@@ -17,7 +17,7 @@ const { pk: pk } = getEnvAccount();
 const { pubKey: pubKey, appPubKey: zkAppAddress } = getAppPublic();
 
 // instead obtain collection from db
-const { map: merkleMap } = generateCollectionWithMap(pubKey);
+const { map: merkleMap } = generateDummyCollectionWithMap(pubKey);
 
 const nft = generateDummyNft(1234, pubKey);
 
