@@ -9,6 +9,7 @@ import {
 } from 'o1js';
 
 import { NFT } from '../NFTsMapContract.js';
+import { VercelKV } from '@vercel/kv';
 
 export type nftMetadata = {
   name: string;
@@ -26,7 +27,13 @@ export class NftReduced extends Struct({
   owner: PublicKey,
 }) {}
 
-// const abcdef = new NFT()
+export type nftMetadataIn = {
+  name: string;
+  description: string;
+  id: string;
+  cid: string;
+  owner: string;
+} | null;
 
 export function NFTtoHash(_NFT: NftReduced): Field {
   return Poseidon.hash(NFT.toFields(_NFT));
@@ -67,6 +74,46 @@ export function storeNftMap(
   map.set(nftMetadata.id, NFTtoHash(_NFT));
 
   return { nft: _NFT, nftMetadata: nftMetadata };
+}
+
+export function setStringObjectToMap(data: nftMetadataIn, map: MerkleMap) {
+  if (data) {
+    const nftObject: NftReduced = {
+      name: Field(data.name),
+      description: Field(data.description),
+      cid: Field(data.cid),
+      id: Field(data.id),
+      owner: PublicKey.fromBase58(data.owner),
+    };
+
+    map.set(Field(data.id), NFTtoHash(nftObject));
+    return true;
+  }
+  return false;
+}
+
+export async function setMapFromVercel(nftArray: number[], client: VercelKV) {
+  const map: MerkleMap = new MerkleMap();
+  const arrayLength = nftArray.length;
+  for (let i = 0; i < arrayLength; i++) {
+    const nftId = nftArray[i];
+    const data: nftMetadataIn = await client.get(`nft: ${nftId}`);
+    setStringObjectToMap(data, map);
+  }
+  return map;
+}
+
+export async function setVercelNft(nftId: Field, client: VercelKV, nft: NFT) {
+  const _nftId = Number(nftId);
+  await client.set(`nft: ${_nftId}`, {
+    ...nft,
+  });
+}
+
+export async function setNftsToVercel(nftArray: NFT[], client: VercelKV) {
+  for (let i = 0; i < nftArray.length; i++) {
+    await setVercelNft(nftArray[i].id, client, nftArray[i]);
+  }
 }
 
 export function generateDummyCollectionMap(pubKey: PublicKey, map: MerkleMap) {

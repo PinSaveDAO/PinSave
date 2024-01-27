@@ -5,6 +5,10 @@ import {
   generateDummyNftMetadata,
   storeNftMap,
   nftMetadata,
+  setStringObjectToMap,
+  setMapFromVercel,
+  setVercelNft,
+  setNftsToVercel,
 } from './components/NFT.js';
 
 import {
@@ -32,7 +36,11 @@ export {
   getAppPublic,
   startBerkeleyClient,
   mintNftFromMap,
+  setStringObjectToMap,
   serializeMerkleMapToJson,
   deserializeJsonToMerkleMap,
   getTotalSupplyLive,
+  setMapFromVercel,
+  setVercelNft,
+  setNftsToVercel,
 };
