@@ -43,7 +43,7 @@ export function getAppPublic() {
 }
 
 export function startBerkeleyClient(
-  endpoint: string = 'https://proxy.berkeley.minaexplorer.com/graphql'
+  endpoint: string = 'https://api.minascan.io/node/berkeley/v1/graphql'
 ) {
   dotenv.config();
 
@@ -73,14 +73,15 @@ export async function initNft(
   zkAppInstance: MerkleMapContract,
   merkleMap: MerkleMap
 ) {
+  // await MerkleMapContract.compile();
   const nftId: Field = _NFT.id;
   const witnessNFT: MerkleMapWitness = merkleMap.getWitness(nftId);
+
   const init_mint_tx: Mina.Transaction = await Mina.transaction(pubKey, () => {
     zkAppInstance.initNFT(_NFT, witnessNFT);
   });
 
-  await init_mint_tx.prove();
-  await init_mint_tx.sign([pk]).send();
+  await sendWaitTx(init_mint_tx, pk);
 
   // the tx should execute before we set the map value
   merkleMap.set(nftId, NFTtoHash(_NFT));
@@ -259,21 +260,22 @@ async function sendWaitTx(
   tx.sign([pk]);
 
   let pendingTx = await tx.send();
+
   if (live) {
     console.log(`Got pending transaction with hash ${pendingTx.hash()}`);
 
     // Wait until transaction is included in a block
     await pendingTx.wait();
     if (!pendingTx.isSuccess) {
-      throw new Error();
+      throw new Error('tx not successful');
     }
   }
 }
 
 function createTxOptions(
   pubKey: PublicKey,
-  live?: boolean,
-  fee: number = 10_000_000
+  live: boolean = true,
+  fee: number = 100_000_000
 ) {
   const txOptions: { sender: PublicKey; fee?: number } = {
     sender: pubKey,

@@ -6,7 +6,7 @@ import {
   storeNftMap,
   nftMetadata,
   setStringObjectToMap,
-  setMapFromVercel,
+  getMapFromVercelNfts,
   setVercelNft,
   setNftsToVercel,
 } from './components/NFT.js';
@@ -40,7 +40,7 @@ export {
   serializeMerkleMapToJson,
   deserializeJsonToMerkleMap,
   getTotalSupplyLive,
-  setMapFromVercel,
+  getMapFromVercelNfts,
   setVercelNft,
   setNftsToVercel,
 };

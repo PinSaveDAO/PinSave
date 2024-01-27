@@ -1,8 +1,9 @@
 import { initRootWithApp } from '../components/transactions.js';
 import {
   generateDummyCollectionWithMap,
-  setMapFromVercel,
+  getMapFromVercelNfts,
   setNftsToVercel,
+  setMetadatasToVercel,
 } from '../components/NFT.js';
 
 import {
@@ -31,8 +32,9 @@ const client = createClient({
 });
 
 await setNftsToVercel(nftArray.nftArray, client);
+await setMetadatasToVercel(nftArray.nftMetadata, client);
 
-const storedTree = await setMapFromVercel([10, 11, 12], client);
+const storedTree = await getMapFromVercelNfts([10, 11, 12], client);
 
 const storedTreeRoot = storedTree.getRoot().toString();
 
@@ -40,4 +42,4 @@ console.log(storedTreeRoot);
 
 console.log('matches subbed tree', storedTreeRoot === generateTreeRoot);
 
-//await initRootWithApp(deployerKey, zkAppAddress, merkleMap);
+await initRootWithApp(deployerKey, zkAppAddress, merkleMap);

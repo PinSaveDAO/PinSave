@@ -26,7 +26,9 @@ export class NFT extends Struct({
 }
 
 export class MerkleMapContract extends SmartContract {
+  // add state for inited nfts
   @state(Field) treeRoot = State<Field>();
+  // amount minted
   @state(UInt64) totalSupply = State<UInt64>();
 
   deploy(args?: DeployArgs) {
@@ -75,6 +77,8 @@ export class MerkleMapContract extends SmartContract {
 
   // mints nft
   // Unlike init expects the NFT metadata to be in place
+
+  // change NFT to Field
   @method mintNFT(item: NFT, keyWitness: MerkleMapWitness) {
     //const sender = this.sender;
     //sender.assertEquals(item.owner);
@@ -98,6 +102,10 @@ export class MerkleMapContract extends SmartContract {
 
     this.totalSupply.set(liquidity.add(1));
   }
+
+  // we can also pass only a hash here
+  // but we use struct to change an owner unlike in mint method
+  // we should ensure that the ownership is saved on the local db
 
   @method transferOwner(
     item: NFT,
