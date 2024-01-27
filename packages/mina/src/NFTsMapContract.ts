@@ -52,6 +52,9 @@ export class MerkleMapContract extends SmartContract {
   }
 
   // inits nft
+  // we do not change NFT to Field
+  // because we want to ensure that sender inits to own account
+
   @method initNFT(item: NFT, keyWitness: MerkleMapWitness) {
     const sender = this.sender;
     sender.assertEquals(item.owner);
@@ -79,6 +82,7 @@ export class MerkleMapContract extends SmartContract {
   // Unlike init expects the NFT metadata to be in place
 
   // change NFT to Field
+  // so that anybody can sponsor mint
   @method mintNFT(item: NFT, keyWitness: MerkleMapWitness) {
     //const sender = this.sender;
     //sender.assertEquals(item.owner);

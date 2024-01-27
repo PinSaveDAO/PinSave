@@ -50,12 +50,12 @@ console.log('minted NFT');
 const nft = generateDummyNftMetadata(1, pubKey1);
 const nftStruct = createNft(nft);
 
-await initNft(pubKey1, pk1, nftStruct, zkAppInstance, map);
+await initNft(pubKey1, pk1, nftStruct, zkAppInstance, map, live);
 
 console.log('inited NFT');
 
 try {
-  await initNft(pubKey1, pk1, nftStruct, zkAppInstance, map);
+  await initNft(pubKey1, pk1, nftStruct, zkAppInstance, map, live);
 } catch {
   console.log('failed sucessfully to initialize NFT which already exists');
 }
@@ -63,7 +63,7 @@ try {
 const nftNew = generateDummyNftMetadata(2, pubKey2);
 const nftStructNew = createNft(nftNew);
 
-await initNft(pubKey2, pk2, nftStructNew, zkAppInstance, map);
+await initNft(pubKey2, pk2, nftStructNew, zkAppInstance, map, live);
 
 console.log('inited NFT - 2 sucessfully');
 

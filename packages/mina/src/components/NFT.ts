@@ -26,7 +26,7 @@ export type NftReduced = {
   owner: PublicKey;
 };
 
-export type nftMetadataIn = {
+export type nftDataIn = {
   name: string;
   description: string;
   id: string;
@@ -69,13 +69,11 @@ export function storeNftMap(
   map: MerkleMap
 ): { nft: NFT; nftMetadata: nftMetadata } {
   const _NFT: NFT = createNft(nftMetadata);
-
   map.set(nftMetadata.id, NFTtoHash(_NFT));
-
   return { nft: _NFT, nftMetadata: nftMetadata };
 }
 
-export function stringObjectToNftMetadata(data: nftMetadataIn) {
+export function stringObjectToNftMetadata(data: nftDataIn) {
   const nftMetadata: nftMetadata = {
     name: data.name,
     description: data.description,
@@ -83,13 +81,11 @@ export function stringObjectToNftMetadata(data: nftMetadataIn) {
     id: Field(data.id),
     owner: PublicKey.fromBase58(data.owner),
   };
-
   const nft = createNft(nftMetadata);
-
   return nft;
 }
 
-export function setStringObjectToMap(data: nftMetadataIn, map: MerkleMap) {
+export function setStringObjectToMap(data: nftDataIn, map: MerkleMap) {
   const nftObject = stringObjectToNftMetadata(data);
   map.set(nftObject.id, NFTtoHash(nftObject));
 }
@@ -98,7 +94,7 @@ export function setHashedObjectToMap(data: NftReduced, map: MerkleMap) {
   map.set(data.id, NFTtoHash(data));
 }
 
-export function deserializeNft(data: nftMetadataIn) {
+export function deserializeNft(data: nftDataIn) {
   const dataOut = {
     name: Field(data.name),
     description: Field(data.description),
@@ -122,7 +118,7 @@ export async function getMapFromVercelNfts(
   for (let i = 0; i < arrayLength; i++) {
     const nftId = nftArray[i];
 
-    const data: nftMetadataIn = await getVercelNft(nftId, client);
+    const data: nftDataIn = await getVercelNft(nftId, client);
 
     const dataOut = deserializeNft(data);
 
@@ -140,7 +136,7 @@ export async function getMapFromVercelMetadata(
   for (let i = 0; i < arrayLength; i++) {
     const nftId = nftArray[i];
 
-    const data: nftMetadataIn = await getVercelMetadata(nftId, client);
+    const data: nftDataIn = await getVercelMetadata(nftId, client);
     setStringObjectToMap(data, map);
   }
   return map;
@@ -159,7 +155,7 @@ export async function setNftsToVercel(nftArray: NFT[], client: VercelKV) {
 }
 
 export async function getVercelNft(nftId: number | string, client: VercelKV) {
-  const nft: nftMetadataIn | null = await client.get(`nft: ${nftId}`);
+  const nft: nftDataIn | null = await client.get(`nft: ${nftId}`);
   if (nft) {
     return nft;
   }
@@ -180,7 +176,7 @@ export async function getVercelMetadata(
   nftId: number | string,
   client: VercelKV
 ) {
-  const nftMetadata: nftMetadataIn | null = await client.hgetall(
+  const nftMetadata: nftDataIn | null = await client.hgetall(
     `nft metadata: ${nftId}`
   );
   if (nftMetadata) {
@@ -219,6 +215,7 @@ export function generateDummyCollectionWithMap(pubKey: PublicKey) {
   return { map: map, nftArray: nftArray };
 }
 
+// change to working cid on ipfs
 export function generateDummyNftMetadata(
   id: number,
   pubKey: PublicKey

@@ -23,7 +23,6 @@ const client = createClient({
 const { pk: pk } = getEnvAccount();
 const { pubKey: pubKey, appPubKey: zkAppAddress } = getAppPublic();
 
-// instead obtain collection from db
 const { map: merkleMap } = generateDummyCollectionWithMap(pubKey);
 
 const nft = generateDummyNft(13, pubKey);
