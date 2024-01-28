@@ -11,11 +11,11 @@ interface IMyProps {
 const DisplayMedia: React.FC<IMyProps> = ({ post }) => {
   return (
     <>
-      {IsNotMp4(post?.image) ? (
+      {IsNotMp4(post?.cid) ? (
         <Image
           height={600}
           width={550}
-          src={post.image}
+          src={post.cid}
           alt={post.name}
           style={{
             width: "99%",

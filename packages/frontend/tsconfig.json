@@ -25,12 +25,6 @@
       "@/constants/*": ["constants/*"]
     }
   },
-  "include": [
-    "next-env.d.ts",
-    "environment.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    "**/api/**.js"
-  ],
+  "include": ["next-env.d.ts", "environment.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]
 }

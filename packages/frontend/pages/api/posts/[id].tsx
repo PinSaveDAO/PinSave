@@ -1,6 +1,7 @@
 import { getVercelMetadata } from "pin-mina";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { kv } from "@vercel/kv";
+import { fetchImage } from "@/services/fetchCid";
 
 export default async function handler(
   req: NextApiRequest,
@@ -11,7 +12,9 @@ export default async function handler(
 
     const index = Number(id);
 
-    const data = await getVercelMetadata(index, kv);
+    var data = await getVercelMetadata(index, kv);
+
+    data.cid = await fetchImage(data.cid);
 
     res.status(200).json({ ...data });
   } catch (err) {

@@ -1,13 +1,15 @@
-import { fetchDecodedPost } from "@/services/fetchCid";
+import { fetchImage } from "@/services/fetchCid";
 import type { NextApiRequest, NextApiResponse } from "next";
+import { kv } from "@vercel/kv";
 import {
   MerkleMapContract,
   startBerkeleyClient,
   getTotalSupplyLive,
-  generateDummyNftMetadata,
-  nftMetadata,
+  getVercelMetadata,
   getAppPublic,
 } from "pin-mina";
+
+const index = 10;
 
 export default async function handler(
   req: NextApiRequest,
@@ -16,8 +18,6 @@ export default async function handler(
   try {
     const { number } = req.query;
     const pageNumber = Number(number);
-
-    console.log(pageNumber);
 
     startBerkeleyClient();
 
@@ -29,33 +29,24 @@ export default async function handler(
 
     const totalSupply = Number(await getTotalSupplyLive(zkAppInstance));
 
-    console.log(totalSupply);
     let items = [];
 
     const perPage = 6;
     var upperLimit = perPage * pageNumber;
 
-    const lowerLimit = upperLimit - perPage + 1;
-
     if (totalSupply < upperLimit) {
       upperLimit = totalSupply;
     }
 
+    const lowerLimit = upperLimit - perPage + 1;
+
     try {
       for (let i = lowerLimit; upperLimit >= i; i++) {
-        const item: nftMetadata = generateDummyNftMetadata(i, pubKey);
+        var data = await getVercelMetadata(index, kv);
 
-        const decoded = await fetchDecodedPost(item.cid);
+        data.cid = await fetchImage(data.cid);
 
-        const itemOut = {
-          name: item.name,
-          description: item.description,
-          token_id: Number(item.id),
-          image: decoded.image,
-          owner: item.owner.toBase58(),
-        };
-
-        items.push({ ...itemOut });
+        items.push({ ...data });
       }
     } catch (err) {
       res.status(200).json({

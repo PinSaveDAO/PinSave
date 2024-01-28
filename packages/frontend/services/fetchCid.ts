@@ -16,8 +16,12 @@ export async function fetchImageUrls(resURL: string, resURL2: string) {
     await fetch(resURL);
     image = resURL;
   } catch {
-    await fetch(resURL2);
-    image = resURL2;
+    try {
+      await fetch(resURL2);
+      image = resURL2;
+    } catch (e) {
+      return image;
+    }
   }
   return image;
 }
