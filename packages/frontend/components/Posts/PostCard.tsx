@@ -27,9 +27,9 @@ const PostCard: React.FC<IMyProps> = ({ post }) => {
             height: 200,
           }}
         >
-          {IsNotMp4(post.image) ? (
+          {IsNotMp4(post.cid) ? (
             <Image
-              src={post.image}
+              src={post.cid}
               alt={post.name}
               fill
               sizes="200px"
@@ -37,7 +37,7 @@ const PostCard: React.FC<IMyProps> = ({ post }) => {
             />
           ) : (
             <Player
-              src={post.image}
+              src={post.cid}
               muted
               autoUrlUpload={{
                 fallback: true,
