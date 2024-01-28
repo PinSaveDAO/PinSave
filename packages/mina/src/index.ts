@@ -7,8 +7,10 @@ import {
   nftMetadata,
   setStringObjectToMap,
   getMapFromVercelNfts,
+  getVercelMetadata,
   setVercelNft,
   setNftsToVercel,
+  setMetadatasToVercel,
 } from './components/NFT.js';
 
 import {
@@ -16,6 +18,7 @@ import {
   getAppPublic,
   startBerkeleyClient,
   mintNftFromMap,
+  initRootWithApp,
 } from './components/transactions.js';
 
 import {
@@ -35,12 +38,15 @@ export {
   getEnvAccount,
   getAppPublic,
   startBerkeleyClient,
+  initRootWithApp,
   mintNftFromMap,
   setStringObjectToMap,
   serializeMerkleMapToJson,
   deserializeJsonToMerkleMap,
   getTotalSupplyLive,
   getMapFromVercelNfts,
+  getVercelMetadata,
   setVercelNft,
   setNftsToVercel,
+  setMetadatasToVercel,
 };

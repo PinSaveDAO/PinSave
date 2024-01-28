@@ -10,6 +10,8 @@ const PostPage = () => {
 
   const { data: postQueried, isLoading } = usePost(String(router.query.id));
 
+  console.log(postQueried);
+
   return (
     <div>
       <LoadingOverlay visible={isLoading} />
