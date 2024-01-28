@@ -16,25 +16,24 @@ const Home: NextPage = () => {
 
   return (
     <div>
-      <Center>
-        {posts?.pages.map((page, i: number) => (
-          <Box
-            mx="auto"
-            sx={{
-              maxWidth: 1500,
-              gap: 20,
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(220px, 5fr))",
-              gridTemplateRows: "masonry",
-            }}
-            key={i}
-          >
-            {page.items?.map((post: Post) => {
-              return <PostCard post={post} key={post.id} />;
-            })}
-          </Box>
-        ))}
-      </Center>
+      {posts?.pages.map((page, i: number) => (
+        <Box
+          mx="auto"
+          sx={{
+            maxWidth: 1500,
+            gap: 20,
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(220px, 5fr))",
+            gridTemplateRows: "masonry",
+          }}
+          key={i}
+        >
+          {page.items?.map((post: Post) => {
+            return <PostCard post={post} key={post.id} />;
+          })}
+        </Box>
+      ))}
+
       {!posts && isLoading && (
         <Center>
           <Stack>

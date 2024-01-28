@@ -1,6 +1,6 @@
 import { getVercelMetadata } from "pin-mina";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { kv } from "@vercel/kv";
+import { kv, createClient } from "@vercel/kv";
 import { fetchImage } from "@/services/fetchCid";
 
 export default async function handler(

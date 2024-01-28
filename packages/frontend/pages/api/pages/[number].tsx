@@ -1,6 +1,6 @@
 import { fetchImage } from "@/services/fetchCid";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { kv } from "@vercel/kv";
+import { kv, createClient } from "@vercel/kv";
 import {
   MerkleMapContract,
   startBerkeleyClient,
@@ -9,8 +9,6 @@ import {
   getAppPublic,
 } from "pin-mina";
 
-const index = 10;
-
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -18,7 +16,7 @@ export default async function handler(
   try {
     const { number } = req.query;
     const pageNumber = Number(number);
-
+    let index = 10;
     startBerkeleyClient();
 
     const { pubKey: pubKey, appPubKey: zkAppAddress } = getAppPublic();
@@ -33,20 +31,19 @@ export default async function handler(
 
     const perPage = 6;
     var upperLimit = perPage * pageNumber;
-
+    const lowerLimit = upperLimit - perPage + 1;
     if (totalSupply < upperLimit) {
       upperLimit = totalSupply;
     }
 
-    const lowerLimit = upperLimit - perPage + 1;
-
     try {
       for (let i = lowerLimit; upperLimit >= i; i++) {
-        var data = await getVercelMetadata(index, kv);
+        const data = await getVercelMetadata(index, kv);
 
         data.cid = await fetchImage(data.cid);
 
         items.push({ ...data });
+        index++;
       }
     } catch (err) {
       res.status(200).json({
