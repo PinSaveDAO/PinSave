@@ -30,7 +30,7 @@ const Home: NextPage = () => {
             key={i}
           >
             {page.items?.map((post: Post) => {
-              return <PostCard post={post} key={post.token_id} />;
+              return <PostCard post={post} key={post.id} />;
             })}
           </Box>
         ))}

@@ -13,7 +13,7 @@ export type PostData = {
 };
 
 export type Post = PostData & {
-  token_id: number;
+  id: number;
 };
 
 export type IndividualPost = Post & {
