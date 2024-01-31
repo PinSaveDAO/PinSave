@@ -8,6 +8,8 @@ import {
   Field,
   fetchAccount,
   VerificationKey,
+  UInt64,
+  Signature,
 } from 'o1js';
 import dotenv from 'dotenv';
 
@@ -66,6 +68,25 @@ export async function startLocalBlockchainClient(
   return accounts;
 }
 
+// improve further
+export async function setFee(
+  zkAppPrivateKey: PrivateKey,
+  deployerPk: PrivateKey,
+  contract: MerkleMapContract,
+  fee: UInt64 = UInt64.from(1)
+) {
+  const deployerAddress = deployerPk.toPublicKey();
+
+  const feeSignature = Signature.create(zkAppPrivateKey, fee.toFields());
+
+  const txn = await Mina.transaction(deployerAddress, () => {
+    //AccountUpdate.fundNewAccount(deployerAddress);
+    contract.setFee(fee, feeSignature);
+  });
+
+  await sendWaitTx(txn, deployerPk, false);
+}
+
 export async function initNft(
   pubKey: PublicKey,
   pk: PrivateKey,
@@ -74,7 +95,10 @@ export async function initNft(
   merkleMap: MerkleMap,
   live: boolean = true
 ) {
-  await MerkleMapContract.compile();
+  if (live) {
+    await MerkleMapContract.compile();
+  }
+
   const nftId: Field = _NFT.id;
   const witnessNFT: MerkleMapWitness = merkleMap.getWitness(nftId);
 
@@ -123,7 +147,9 @@ export async function mintNFT(
   merkleMapWitness: MerkleMapWitness,
   live = true
 ) {
-  await MerkleMapContract.compile();
+  if (live) {
+    await MerkleMapContract.compile();
+  }
   const pubKey: PublicKey = pk.toPublicKey();
 
   const txOptions = createTxOptions(pubKey, live);
@@ -223,7 +249,11 @@ export async function initAppRoot(
 export async function deployApp(
   pk: PrivateKey,
   live: boolean = true
-): Promise<{ merkleMap: MerkleMap; zkAppInstance: MerkleMapContract }> {
+): Promise<{
+  merkleMap: MerkleMap;
+  zkAppInstance: MerkleMapContract;
+  zkAppPk: PrivateKey;
+}> {
   let verificationKey: VerificationKey | undefined;
 
   if (live) {
@@ -256,7 +286,11 @@ export async function deployApp(
 
   logStates(zkAppInstance, merkleMap);
 
-  return { merkleMap: merkleMap, zkAppInstance: zkAppInstance };
+  return {
+    merkleMap: merkleMap,
+    zkAppInstance: zkAppInstance,
+    zkAppPk: zkAppPrivateKey,
+  };
 }
 
 async function sendWaitTx(

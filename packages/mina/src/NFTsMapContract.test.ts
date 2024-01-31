@@ -8,12 +8,13 @@ import {
   initAppRoot,
   initNft,
   mintNftFromMap,
+  setFee,
   startLocalBlockchainClient,
   transferNFT,
 } from './components/transactions.js';
 
 const proofsEnabled: boolean = false;
-const enforceTransactionLimits: boolean = true;
+const enforceTransactionLimits: boolean = false;
 
 const live: boolean = false;
 
@@ -26,12 +27,17 @@ const { privateKey: pk1, publicKey: pubKey1 } = testAccounts[0];
 const { privateKey: pk2, publicKey: pubKey2 } = testAccounts[1];
 const { privateKey: pk3, publicKey: pubKey3 } = testAccounts[2];
 
-const { merkleMap: map, zkAppInstance: zkAppInstance } = await deployApp(
-  pk1,
-  proofsEnabled
-);
+const {
+  merkleMap: map,
+  zkAppInstance: zkAppInstance,
+  zkAppPk: zkAppPrivateKey,
+} = await deployApp(pk1, proofsEnabled);
 
 console.log('deployed app');
+
+// set fee
+
+await setFee(zkAppPrivateKey, pk1, zkAppInstance);
 
 // add some initial values into the map
 

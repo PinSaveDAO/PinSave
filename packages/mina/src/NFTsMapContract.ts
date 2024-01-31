@@ -11,6 +11,7 @@ import {
   PublicKey,
   Poseidon,
   UInt64,
+  Signature,
 } from 'o1js';
 
 export class NFT extends Struct({
@@ -26,10 +27,16 @@ export class NFT extends Struct({
 }
 
 export class MerkleMapContract extends SmartContract {
-  // add state for inited nfts
+  // collection single tree root
   @state(Field) treeRoot = State<Field>();
   // amount minted
   @state(UInt64) totalSupply = State<UInt64>();
+  // amount initialized
+  // @state(UInt64) totalInited = State<UInt64>();
+  // fee for minting
+  @state(UInt64) fee = State<UInt64>();
+
+  // optional max amount
 
   deploy(args?: DeployArgs) {
     super.deploy(args);
@@ -45,10 +52,22 @@ export class MerkleMapContract extends SmartContract {
     });
   }
 
+  //
+  // test for other addresses
+  // if we need to
+  // add protection for admin with signature
+  //
+  // also get the number of leaves passed
+  // and store in totalInited
   @method initRoot(initialRoot: Field) {
     // ensures we can only initialize once
     this.treeRoot.requireEquals(Field.from(''));
     this.treeRoot.set(initialRoot);
+  }
+
+  @method setFee(amount: UInt64, adminSignature: Signature) {
+    adminSignature.verify(this.address, amount.toFields()).assertTrue();
+    this.fee.set(amount);
   }
 
   // inits nft
@@ -76,6 +95,10 @@ export class MerkleMapContract extends SmartContract {
 
     // set the new root
     this.treeRoot.set(rootAfter);
+
+    /*     // update liquidity supply
+    let initedAmount = this.totalInited.getAndRequireEquals();
+    this.totalInited.set(initedAmount.add(1)); */
   }
 
   // mints nft
