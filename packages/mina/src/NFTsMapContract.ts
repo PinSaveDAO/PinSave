@@ -47,7 +47,7 @@ export class MerkleMapContract extends SmartContract {
 
   @method initRoot(initialRoot: Field) {
     // ensures we can only initialize once
-    this.treeRoot.assertEquals(Field.from(''));
+    this.treeRoot.requireEquals(Field.from(''));
     this.treeRoot.set(initialRoot);
   }
 
@@ -59,7 +59,7 @@ export class MerkleMapContract extends SmartContract {
     const sender = this.sender;
     sender.assertEquals(item.owner);
 
-    const initialRoot = this.treeRoot.getAndAssertEquals();
+    const initialRoot = this.treeRoot.getAndRequireEquals();
 
     // check the initial state matches what we expect
     // should be empty
@@ -87,7 +87,7 @@ export class MerkleMapContract extends SmartContract {
     //const sender = this.sender;
     //sender.assertEquals(item.owner);
 
-    const initialRoot = this.treeRoot.getAndAssertEquals();
+    const initialRoot = this.treeRoot.getAndRequireEquals();
 
     // check the leaf state
     // should contain correct metadata
@@ -102,7 +102,7 @@ export class MerkleMapContract extends SmartContract {
     this.token.mint({ address: item.owner, amount: UInt64.one });
 
     // update liquidity supply
-    let liquidity = this.totalSupply.getAndAssertEquals();
+    let liquidity = this.totalSupply.getAndRequireEquals();
 
     this.totalSupply.set(liquidity.add(1));
   }
@@ -119,7 +119,7 @@ export class MerkleMapContract extends SmartContract {
     const sender = this.sender;
     sender.assertEquals(item.owner);
 
-    const initialRoot = this.treeRoot.getAndAssertEquals();
+    const initialRoot = this.treeRoot.getAndRequireEquals();
 
     // check the initial state matches what we expect
     const [rootBefore, key] = keyWitness.computeRootAndKey(
