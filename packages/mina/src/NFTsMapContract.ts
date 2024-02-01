@@ -24,9 +24,8 @@ export class MerkleMapContract extends SmartContract {
   @state(UInt64) totalInited = State<UInt64>();
   // fee for minting
   @state(UInt64) fee = State<UInt64>();
-
-  // optional max amount
-  @state(UInt64) maxSupply = new UInt64('255');
+  // max amount
+  @state(UInt64) maxSupply = new UInt64(255);
 
   deploy(args?: DeployArgs) {
     super.deploy(args);
@@ -53,6 +52,7 @@ export class MerkleMapContract extends SmartContract {
 
     this.treeRoot.set(initialRoot);
     this.totalInited.set(totalInited);
+    //this.maxSupply.set(new UInt64('255'));
   }
 
   @method setFee(amount: UInt64, adminSignature: Signature) {
@@ -61,9 +61,9 @@ export class MerkleMapContract extends SmartContract {
   }
 
   // inits nft
-  // we want to ensure that sender inits to own account
+  // ensures that sender inits to own account
 
-  @method initNFT(item: Nft, keyWitness: MerkleMapWitness) {
+  @method initNft(item: Nft, keyWitness: MerkleMapWitness) {
     let initedAmount = this.totalInited.getAndRequireEquals();
     initedAmount.assertLessThanOrEqual(this.maxSupply);
 
@@ -98,7 +98,7 @@ export class MerkleMapContract extends SmartContract {
   // Unlike init, expects metadata to be in place
   // anybody can sponsor mint
 
-  @method mintNFT(item: Nft, keyWitness: MerkleMapWitness) {
+  @method mintNft(item: Nft, keyWitness: MerkleMapWitness) {
     const initialRoot = this.treeRoot.getAndRequireEquals();
 
     // check the leaf state
@@ -122,7 +122,7 @@ export class MerkleMapContract extends SmartContract {
   // we use nft struct to change an owner
   // we should ensure that the ownership is saved on the local db
 
-  @method transferOwner(
+  @method transfer(
     item: Nft,
     newOwner: PublicKey,
     keyWitness: MerkleMapWitness,

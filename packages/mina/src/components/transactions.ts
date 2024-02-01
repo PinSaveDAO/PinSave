@@ -107,7 +107,7 @@ export async function initNft(
   const init_mint_tx: Mina.Transaction = await Mina.transaction(
     txOptions,
     () => {
-      zkAppInstance.initNFT(_NFT, witnessNFT);
+      zkAppInstance.initNft(_NFT, witnessNFT);
     }
   );
 
@@ -157,13 +157,13 @@ export async function mintNFT(
   try {
     const mint_tx: Mina.Transaction = await Mina.transaction(txOptions, () => {
       AccountUpdate.fundNewAccount(pubKey);
-      zkAppInstance.mintNFT(_NFT, merkleMapWitness);
+      zkAppInstance.mintNft(_NFT, merkleMapWitness);
     });
 
     await sendWaitTx(mint_tx, pk, live);
   } catch (e) {
     const mint_tx: Mina.Transaction = await Mina.transaction(txOptions, () => {
-      zkAppInstance.mintNFT(_NFT, merkleMapWitness);
+      zkAppInstance.mintNft(_NFT, merkleMapWitness);
     });
 
     await sendWaitTx(mint_tx, pk, live);
@@ -193,12 +193,7 @@ export async function transferNft(
       pubKey,
       () => {
         AccountUpdate.fundNewAccount(pubKey);
-        zkAppInstance.transferOwner(
-          _NFT,
-          recipient,
-          witnessNFT,
-          transferSignature
-        );
+        zkAppInstance.transfer(_NFT, recipient, witnessNFT, transferSignature);
       }
     );
     await sendWaitTx(nft_transfer_tx, pk, live);
@@ -207,12 +202,7 @@ export async function transferNft(
     const nft_transfer_tx: Mina.Transaction = await Mina.transaction(
       pubKey,
       () => {
-        zkAppInstance.transferOwner(
-          _NFT,
-          recipient,
-          witnessNFT,
-          transferSignature
-        );
+        zkAppInstance.transfer(_NFT, recipient, witnessNFT, transferSignature);
       }
     );
 
@@ -262,7 +252,9 @@ export async function initAppRoot(
 
   await sendWaitTx(init_tx, pk, live);
 
-  logStates(zkAppInstance, merkleMap);
+  if (!live) {
+    logStates(zkAppInstance, merkleMap);
+  }
 }
 
 export async function deployApp(
