@@ -75,11 +75,13 @@ export async function setFee(
   contract: MerkleMapContract,
   fee: UInt64 = UInt64.from(1)
 ) {
-  const deployerAddress = deployerPk.toPublicKey();
+  const deployerAddress: PublicKey = deployerPk.toPublicKey();
+  const feeSignature: Signature = Signature.create(
+    zkAppPrivateKey,
+    fee.toFields()
+  );
 
-  const feeSignature = Signature.create(zkAppPrivateKey, fee.toFields());
-
-  const txn = await Mina.transaction(deployerAddress, () => {
+  const txn: Mina.Transaction = await Mina.transaction(deployerAddress, () => {
     //AccountUpdate.fundNewAccount(deployerAddress);
     contract.setFee(fee, feeSignature);
   });
@@ -151,7 +153,6 @@ export async function mintNFT(
     await MerkleMapContract.compile();
   }
   const pubKey: PublicKey = pk.toPublicKey();
-
   const txOptions = createTxOptions(pubKey, live);
 
   try {
@@ -180,10 +181,10 @@ export async function transferNft(
   live: boolean = true
 ) {
   const pubKey: PublicKey = pk.toPublicKey();
-  const nftId = _NFT.id;
+  const nftId: Field = _NFT.id;
   const witnessNFT: MerkleMapWitness = merkleMap.getWitness(nftId);
 
-  const transferSignature = Signature.create(
+  const transferSignature: Signature = Signature.create(
     zkAppPrivateKey,
     Nft.toFields(_NFT)
   );
@@ -225,12 +226,14 @@ export async function initRootWithApp(
   pk: PrivateKey,
   zkAppPub: PublicKey,
   merkleMap: MerkleMap,
-  totalInited: number
+  totalInited: number,
+  live: boolean = true
 ) {
-  await MerkleMapContract.compile();
+  if (live) {
+    await MerkleMapContract.compile();
+  }
   const zkAppInstance: MerkleMapContract = new MerkleMapContract(zkAppPub);
-
-  await initAppRoot(pk, zkAppInstance, merkleMap, totalInited, true);
+  await initAppRoot(pk, zkAppInstance, merkleMap, totalInited, live);
 }
 
 export async function initAppRoot(

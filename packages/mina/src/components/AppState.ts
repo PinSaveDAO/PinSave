@@ -6,7 +6,7 @@ function logAppStates(zkAppInstance: MerkleMapContract) {
   const treeRoot: Field = zkAppInstance.treeRoot.get();
   const totalSupply: UInt64 = zkAppInstance.totalSupply.get();
   const totalInited: UInt64 = zkAppInstance.totalInited.get();
-  const maxSupply = zkAppInstance.maxSupply.toBigInt();
+  const maxSupply: bigint = zkAppInstance.maxSupply.toBigInt();
   console.log('max supply', maxSupply);
 
   console.log('totalSupply state:', totalSupply.toBigInt());

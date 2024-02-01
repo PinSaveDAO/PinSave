@@ -7,7 +7,6 @@ import {
   MerkleMapWitness,
   Struct,
 } from 'o1js';
-
 import { VercelKV } from '@vercel/kv';
 
 export class Nft extends Struct({
