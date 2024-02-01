@@ -2,7 +2,7 @@ import {
   createNft,
   generateDummyCollectionMap,
   generateDummyNftMetadata,
-} from './components/NFT.js';
+} from './components/Nft.js';
 import {
   deployApp,
   initAppRoot,
@@ -10,7 +10,7 @@ import {
   mintNftFromMap,
   setFee,
   startLocalBlockchainClient,
-  transferNFT,
+  transferNft,
 } from './components/transactions.js';
 
 const proofsEnabled: boolean = false;
@@ -44,7 +44,7 @@ await setFee(zkAppPrivateKey, pk1, zkAppInstance);
 const { nftArray: nftArray, nftMetadata: nftMetadata } =
   generateDummyCollectionMap(pubKey1, map);
 
-await initAppRoot(pk1, zkAppInstance, map, live);
+await initAppRoot(pk1, zkAppInstance, map, nftArray.length, live);
 
 console.log('initialized root');
 
@@ -81,10 +81,26 @@ await mintNftFromMap(pk2, nftStructNew, zkAppInstance, map, live);
 
 console.log('mints sucessfully');
 
-await transferNFT(pubKey1, pk1, pubKey2, pk2, nftStruct, zkAppInstance, map);
+await transferNft(
+  pk1,
+  pubKey2,
+  nftStruct,
+  zkAppInstance,
+  map,
+  zkAppPrivateKey,
+  live
+);
 
 console.log('transfered ownership sucessfully');
 
-await transferNFT(pubKey2, pk2, pubKey3, pk3, nftStructNew, zkAppInstance, map);
+await transferNft(
+  pk2,
+  pubKey3,
+  nftStructNew,
+  zkAppInstance,
+  map,
+  zkAppPrivateKey,
+  live
+);
 
 console.log('transfered ownership sucessfully');

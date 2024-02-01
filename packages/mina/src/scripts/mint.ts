@@ -1,17 +1,17 @@
-import { mintNftFromMap } from '../components/transactions.js';
+import { createClient } from '@vercel/kv';
+
 import {
   deserializeNft,
   getMapFromVercelNfts,
   getVercelNft,
-} from '../components/NFT.js';
+} from '../components/Nft.js';
 import {
+  mintNftFromMap,
   getEnvAccount,
   startBerkeleyClient,
   getAppPublic,
 } from '../components/transactions.js';
 import { MerkleMapContract } from '../NFTsMapContract.js';
-
-import { createClient } from '@vercel/kv';
 
 startBerkeleyClient();
 

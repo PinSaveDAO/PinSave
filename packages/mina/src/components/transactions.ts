@@ -13,10 +13,10 @@ import {
 } from 'o1js';
 import dotenv from 'dotenv';
 
-import { MerkleMapContract, NFT } from '../NFTsMapContract.js';
+import { MerkleMapContract } from '../NFTsMapContract.js';
 import { logStates } from './AppState.js';
 import { logTokenBalances } from './TokenBalances.js';
-import { NFTtoHash } from './NFT.js';
+import { NFTtoHash, Nft } from './Nft.js';
 
 export function getEnvAccount() {
   const pk: PrivateKey = PrivateKey.fromBase58(
@@ -90,7 +90,7 @@ export async function setFee(
 export async function initNft(
   pubKey: PublicKey,
   pk: PrivateKey,
-  _NFT: NFT,
+  _NFT: Nft,
   zkAppInstance: MerkleMapContract,
   merkleMap: MerkleMap,
   live: boolean = true
@@ -123,7 +123,7 @@ export async function initNft(
 
 export async function mintNftFromMap(
   pk: PrivateKey,
-  _NFT: NFT,
+  _NFT: Nft,
   zkAppInstance: MerkleMapContract,
   merkleMap: MerkleMap,
   live = true
@@ -142,7 +142,7 @@ export async function mintNftFromMap(
 
 export async function mintNFT(
   pk: PrivateKey,
-  _NFT: NFT,
+  _NFT: Nft,
   zkAppInstance: MerkleMapContract,
   merkleMapWitness: MerkleMapWitness,
   live = true
@@ -170,75 +170,94 @@ export async function mintNFT(
   }
 }
 
-export async function transferNFT(
-  pubKey: PublicKey,
+export async function transferNft(
   pk: PrivateKey,
   recipient: PublicKey,
-  recipientPk: PrivateKey,
-  _NFT: NFT,
+  _NFT: Nft,
   zkAppInstance: MerkleMapContract,
-  merkleMap: MerkleMap
+  merkleMap: MerkleMap,
+  zkAppPrivateKey: PrivateKey,
+  live: boolean = true
 ) {
+  const pubKey: PublicKey = pk.toPublicKey();
   const nftId = _NFT.id;
   const witnessNFT: MerkleMapWitness = merkleMap.getWitness(nftId);
+
+  const transferSignature = Signature.create(
+    zkAppPrivateKey,
+    Nft.toFields(_NFT)
+  );
 
   try {
     const nft_transfer_tx: Mina.Transaction = await Mina.transaction(
       pubKey,
       () => {
-        AccountUpdate.fundNewAccount(recipient);
-        zkAppInstance.transferOwner(_NFT, recipient, witnessNFT);
+        AccountUpdate.fundNewAccount(pubKey);
+        zkAppInstance.transferOwner(
+          _NFT,
+          recipient,
+          witnessNFT,
+          transferSignature
+        );
       }
     );
-
-    await nft_transfer_tx.prove();
-    await nft_transfer_tx.sign([pk, recipientPk]).send();
+    await sendWaitTx(nft_transfer_tx, pk, live);
   } catch (e) {
+    console.log('error', e);
     const nft_transfer_tx: Mina.Transaction = await Mina.transaction(
       pubKey,
       () => {
-        zkAppInstance.transferOwner(_NFT, recipient, witnessNFT);
+        zkAppInstance.transferOwner(
+          _NFT,
+          recipient,
+          witnessNFT,
+          transferSignature
+        );
       }
     );
 
-    await nft_transfer_tx.prove();
-    await nft_transfer_tx.sign([pk, recipientPk]).send();
+    await sendWaitTx(nft_transfer_tx, pk, live);
   }
 
   _NFT.changeOwner(recipient);
 
   merkleMap.set(nftId, NFTtoHash(_NFT));
 
-  logTokenBalances(pubKey, zkAppInstance);
-  logTokenBalances(recipient, zkAppInstance);
+  if (!live) {
+    logTokenBalances(pubKey, zkAppInstance);
+    logTokenBalances(recipient, zkAppInstance);
 
-  logStates(zkAppInstance, merkleMap);
+    logStates(zkAppInstance, merkleMap);
+  }
 }
 
 export async function initRootWithApp(
   pk: PrivateKey,
   zkAppPub: PublicKey,
-  merkleMap: MerkleMap
+  merkleMap: MerkleMap,
+  totalInited: number
 ) {
   await MerkleMapContract.compile();
   const zkAppInstance: MerkleMapContract = new MerkleMapContract(zkAppPub);
 
-  await initAppRoot(pk, zkAppInstance, merkleMap, true);
+  await initAppRoot(pk, zkAppInstance, merkleMap, totalInited, true);
 }
 
 export async function initAppRoot(
   pk: PrivateKey,
   zkAppInstance: MerkleMapContract,
   merkleMap: MerkleMap,
+  totalInited: number,
   live: boolean = true
 ) {
   const pubKey: PublicKey = pk.toPublicKey();
   const rootBefore: Field = merkleMap.getRoot();
+  const totalSupplied: UInt64 = UInt64.from(totalInited);
 
   const txOptions = createTxOptions(pubKey, live);
 
   const init_tx: Mina.Transaction = await Mina.transaction(txOptions, () => {
-    zkAppInstance.initRoot(rootBefore);
+    zkAppInstance.initRoot(rootBefore, totalSupplied);
   });
 
   await sendWaitTx(init_tx, pk, live);

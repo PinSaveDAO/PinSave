@@ -1,18 +1,17 @@
-import { initRootWithApp } from '../components/transactions.js';
+import { createClient } from '@vercel/kv';
+
 import {
   generateDummyCollectionWithMap,
   getMapFromVercelNfts,
   setNftsToVercel,
   setMetadatasToVercel,
-} from '../components/NFT.js';
-
+} from '../components/Nft.js';
 import {
+  initRootWithApp,
   getEnvAccount,
   startBerkeleyClient,
   getAppPublic,
 } from '../components/transactions.js';
-
-import { createClient } from '@vercel/kv';
 
 startBerkeleyClient();
 
@@ -42,4 +41,9 @@ console.log(storedTreeRoot);
 
 console.log('matches subbed tree', storedTreeRoot === generateTreeRoot);
 
-await initRootWithApp(deployerKey, zkAppAddress, merkleMap);
+await initRootWithApp(
+  deployerKey,
+  zkAppAddress,
+  merkleMap,
+  nftArray.nftArray.length
+);

@@ -1,10 +1,11 @@
+import { createClient } from '@vercel/kv';
+
 import { logAppStatesContract } from '../components/AppState.js';
-import { getMapFromVercelNfts } from '../components/NFT.js';
+import { getMapFromVercelNfts } from '../components/Nft.js';
 import {
   startBerkeleyClient,
   getAppPublic,
 } from '../components/transactions.js';
-import { createClient } from '@vercel/kv';
 
 startBerkeleyClient();
 

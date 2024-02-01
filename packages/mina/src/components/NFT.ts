@@ -5,24 +5,36 @@ import {
   PublicKey,
   MerkleMap,
   MerkleMapWitness,
+  Struct,
 } from 'o1js';
 
-import { NFT } from '../NFTsMapContract.js';
 import { VercelKV } from '@vercel/kv';
 
-export type nftMetadata = {
-  name: string;
-  description: string;
-  id: Field;
-  cid: string;
-  owner: PublicKey;
-};
+export class Nft extends Struct({
+  name: Field,
+  description: Field,
+  id: Field,
+  cid: Field,
+  owner: PublicKey,
+}) {
+  changeOwner(newAddress: PublicKey) {
+    this.owner = newAddress;
+  }
+}
 
 export type NftReduced = {
   name: Field;
   description: Field;
   id: Field;
   cid: Field;
+  owner: PublicKey;
+};
+
+export type nftMetadata = {
+  name: string;
+  description: string;
+  id: Field;
+  cid: string;
   owner: PublicKey;
 };
 
@@ -35,11 +47,11 @@ export type nftDataIn = {
 };
 
 export function NFTtoHash(_NFT: NftReduced): Field {
-  return Poseidon.hash(NFT.toFields(_NFT));
+  return Poseidon.hash(Nft.toFields(_NFT));
 }
 
-export function createNft(nftMetadata: nftMetadata): NFT {
-  const newNFT: NFT = {
+export function createNft(nftMetadata: nftMetadata): Nft {
+  const newNFT: Nft = {
     name: Poseidon.hash(CircuitString.fromString(nftMetadata.name).toFields()),
     description: Poseidon.hash(
       CircuitString.fromString(nftMetadata.description).toFields()
@@ -55,11 +67,11 @@ export function createNft(nftMetadata: nftMetadata): NFT {
 }
 
 export function createNftWithMapWitness(nftMetadata: nftMetadata): {
-  nft: NFT;
+  nft: Nft;
   nftWitness: MerkleMapWitness;
 } {
   const merkleMap: MerkleMap = new MerkleMap();
-  const _NFT: NFT = createNft(nftMetadata);
+  const _NFT: Nft = createNft(nftMetadata);
   const nftWitness: MerkleMapWitness = merkleMap.getWitness(nftMetadata.id);
   return { nft: _NFT, nftWitness: nftWitness };
 }
@@ -67,8 +79,8 @@ export function createNftWithMapWitness(nftMetadata: nftMetadata): {
 export function storeNftMap(
   nftMetadata: nftMetadata,
   map: MerkleMap
-): { nft: NFT; nftMetadata: nftMetadata } {
-  const _NFT: NFT = createNft(nftMetadata);
+): { nft: Nft; nftMetadata: nftMetadata } {
+  const _NFT: Nft = createNft(nftMetadata);
   map.set(nftMetadata.id, NFTtoHash(_NFT));
   return { nft: _NFT, nftMetadata: nftMetadata };
 }
@@ -142,13 +154,13 @@ export async function getMapFromVercelMetadata(
   return map;
 }
 
-export async function setVercelNft(nftId: Field, client: VercelKV, nft: NFT) {
+export async function setVercelNft(nftId: Field, client: VercelKV, nft: Nft) {
   await client.set(`nft: ${nftId}`, {
     ...nft,
   });
 }
 
-export async function setNftsToVercel(nftArray: NFT[], client: VercelKV) {
+export async function setNftsToVercel(nftArray: Nft[], client: VercelKV) {
   for (let i = 0; i < nftArray.length; i++) {
     await setVercelNft(nftArray[i].id, client, nftArray[i]);
   }
@@ -215,7 +227,6 @@ export function generateDummyCollectionWithMap(pubKey: PublicKey) {
   return { map: map, nftArray: nftArray };
 }
 
-// change to working cid on ipfs
 export function generateDummyNftMetadata(
   id: number,
   pubKey: PublicKey
@@ -224,13 +235,13 @@ export function generateDummyNftMetadata(
     name: 'name',
     description: 'some random words',
     id: Field(id),
-    cid: '1244324dwfew1',
+    cid: 'bafybeigispuqjylk3zric72nmnuzrpbkmeqzaennraw4crpyrjtdd3nguy',
     owner: pubKey,
   };
   return nftMetadata;
 }
 
-export function generateDummyNft(id: number, pubKey: PublicKey): NFT {
+export function generateDummyNft(id: number, pubKey: PublicKey): Nft {
   const nftMetadata = generateDummyNftMetadata(id, pubKey);
   const nft = createNft(nftMetadata);
   return nft;

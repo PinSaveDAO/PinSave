@@ -1,17 +1,18 @@
+import { createClient } from '@vercel/kv';
+import { Field } from 'o1js';
+
 import { initNft } from '../components/transactions.js';
 import {
   generateDummyCollectionWithMap,
   generateDummyNft,
   setVercelNft,
-} from '../components/NFT.js';
+} from '../components/Nft.js';
 import {
   getEnvAccount,
   startBerkeleyClient,
   getAppPublic,
 } from '../components/transactions.js';
 import { MerkleMapContract } from '../NFTsMapContract.js';
-import { createClient } from '@vercel/kv';
-import { Field } from 'o1js';
 
 startBerkeleyClient();
 

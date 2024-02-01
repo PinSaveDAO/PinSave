@@ -1,4 +1,4 @@
-import { MerkleMapContract, NFT } from './NFTsMapContract.js';
+import { MerkleMapContract } from './NFTsMapContract.js';
 
 import {
   generateDummyCollectionWithMap,
@@ -11,7 +11,8 @@ import {
   setVercelNft,
   setNftsToVercel,
   setMetadatasToVercel,
-} from './components/NFT.js';
+  Nft,
+} from './components/Nft.js';
 
 import {
   getEnvAccount,
@@ -30,7 +31,7 @@ import { getTotalSupplyLive } from './components/AppState.js';
 
 export {
   MerkleMapContract,
-  NFT,
+  Nft,
   nftMetadata,
   generateDummyCollectionWithMap,
   generateDummyNftMetadata,
