@@ -6,7 +6,6 @@ import {
   MerkleMap,
   MerkleMapWitness,
   Field,
-  fetchAccount,
   VerificationKey,
   UInt64,
   Signature,
@@ -14,7 +13,7 @@ import {
 import dotenv from 'dotenv';
 
 import { MerkleMapContract } from '../NFTsMapContract.js';
-import { logStates } from './AppState.js';
+import { compareLogStates } from './AppState.js';
 import { logTokenBalances } from './TokenBalances.js';
 import { NFTtoHash, Nft } from './Nft.js';
 
@@ -37,7 +36,7 @@ export function getAppPublic() {
 
   const appPubString: string =
     process.env.NEXT_PUBLIC_APP_KEY ??
-    'B62qkWDJWuPz1aLzwcNNCiEZNFnveQa2DEstF7vtiVJBTbkzi7nhGLm';
+    'B62qpBALfJmiRc9TT46wUNWBdHcFWVxKFYVsMkawqBEdyqBdZwxzJVL';
 
   const appPubKey: PublicKey = PublicKey.fromBase58(appPubString);
 
@@ -82,7 +81,6 @@ export async function setFee(
   );
 
   const txn: Mina.Transaction = await Mina.transaction(deployerAddress, () => {
-    //AccountUpdate.fundNewAccount(deployerAddress);
     contract.setFee(fee, feeSignature);
   });
 
@@ -119,7 +117,7 @@ export async function initNft(
   merkleMap.set(nftId, NFTtoHash(_NFT));
 
   if (!live) {
-    logStates(zkAppInstance, merkleMap);
+    compareLogStates(zkAppInstance, merkleMap);
   }
 }
 
@@ -138,7 +136,7 @@ export async function mintNftFromMap(
 
   if (!live) {
     logTokenBalances(pubKey, zkAppInstance);
-    logStates(zkAppInstance, merkleMap);
+    compareLogStates(zkAppInstance, merkleMap);
   }
 }
 
@@ -218,7 +216,7 @@ export async function transferNft(
     logTokenBalances(pubKey, zkAppInstance);
     logTokenBalances(recipient, zkAppInstance);
 
-    logStates(zkAppInstance, merkleMap);
+    compareLogStates(zkAppInstance, merkleMap);
   }
 }
 
@@ -256,7 +254,7 @@ export async function initAppRoot(
   await sendWaitTx(init_tx, pk, live);
 
   if (!live) {
-    logStates(zkAppInstance, merkleMap);
+    compareLogStates(zkAppInstance, merkleMap);
   }
 }
 
@@ -280,6 +278,7 @@ export async function deployApp(
 
   const zkAppInstance: MerkleMapContract = new MerkleMapContract(zkAppAddress);
   const merkleMap: MerkleMap = new MerkleMap();
+
   const pubKey: PublicKey = pk.toPublicKey();
 
   const deployTxnOptions = createTxOptions(pubKey, live);
@@ -294,11 +293,7 @@ export async function deployApp(
 
   await sendWaitTx(deployTx, pk, live);
 
-  if (live) {
-    await fetchAccount({ publicKey: zkAppAddress });
-  }
-
-  logStates(zkAppInstance, merkleMap);
+  compareLogStates(zkAppInstance, merkleMap);
 
   return {
     merkleMap: merkleMap,

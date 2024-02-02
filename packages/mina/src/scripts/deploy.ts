@@ -6,9 +6,10 @@ import {
 
 startBerkeleyClient();
 
-const { pubKey: pubKey, pk: deployerKey } = getEnvAccount();
+const { pk: deployerKey } = getEnvAccount();
 
-const { merkleMap: map, zkAppInstance: zkAppInstance } = await deployApp(
-  deployerKey,
-  true
-);
+const { zkAppPk: pk } = await deployApp(deployerKey);
+
+console.log(pk.toBase58());
+
+console.log(pk.toPublicKey().toBase58());

@@ -38,8 +38,9 @@
     "initNft": "tsc && node build/src/scripts/initNft.js",
     "serialize": "tsc && node build/src/scripts/serialize.js",
     "compileContract": "tsc && node build/src/scripts/compileContract.js",
-    "compile": "rm -rf build && tsc",
     "mint": "tsc && node build/src/scripts/mint.js",
+    "compile": "rm -rf build && tsc",
+    "pubslish": "yarn compile & npm publish",
     "lint": "npx eslint src/* --fix"
   },
   "devDependencies": {
