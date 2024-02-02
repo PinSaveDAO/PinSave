@@ -10,14 +10,15 @@
     "mina-dapp",
     "zkapp",
     "zk",
+    "zkp",
+    "zkps",
     "pinsave",
-    "pin save",
+    "pin-save",
     "cryptography",
     "blockchain",
     "web3",
-    "zero knowledge",
     "mina",
-    "smart contract"
+    "smart-contract"
   ],
   "type": "module",
   "main": "build/src/index.js",
