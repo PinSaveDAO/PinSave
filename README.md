@@ -37,11 +37,9 @@ Pin Save is a decentralized image, video sharing and content aggregation platfor
 
 - Video and Image posting:
 
-![Upload](https://bafybeiaj46fxgxax6z3nd45n7p42rh7dbyweyssi3dunr3wfewh7ys2d7y.ipfs.nftstorage.link/)
+![Upload](https://github.com/Pfed-prog/Dspyt-NFTs-EVM/blob/master/assets/upload.png)
 
-- Livepeer Video Player:
-
-![Video Player](https://bafybeiacg6yoxvxvk2ayugwlcfnnjpm5kcchvy3t2fl7mu64ft4zt4fs6m.ipfs.nftstorage.link/)
+- Livepeer Video Player
 
 ## Setup
 
