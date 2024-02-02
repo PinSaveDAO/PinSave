@@ -1960,9 +1960,9 @@ delayed-stream@~1.0.0:
   integrity sha512-ZySD7Nf91aLB0RxL4KGrKHBXl7Eds1DAmEdcoVawXnLD7SDhpNgtuII2aAkg7a7QS41jxPSZ17p4VdGnMHk3MQ==
 
 detect-gpu@^5.0.5:
-  version "5.0.37"
-  resolved "https://registry.yarnpkg.com/detect-gpu/-/detect-gpu-5.0.37.tgz#27febe44d478ef4d35cd38007355da795ba075d5"
-  integrity sha512-EraWs84faI4iskB4qvE39bevMIazEvd1RpoyGLOBesRLbiz6eMeJqqRPHjEFClfRByYZzi9IzU35rBXIO76oDw==
+  version "5.0.38"
+  resolved "https://registry.yarnpkg.com/detect-gpu/-/detect-gpu-5.0.38.tgz#1c05ce728ea1229d16db15b865631609bf0d6952"
+  integrity sha512-36QeGHSXYcJ/RfrnPEScR8GDprbXFG4ZhXsfVNVHztZr38+fRxgHnJl3CjYXXjbeRUhu3ZZBJh6Lg0A9v0Qd8A==
   dependencies:
     webgl-constants "^1.1.1"
 
@@ -3283,10 +3283,10 @@ nwsapi@^2.2.0:
   resolved "https://registry.yarnpkg.com/nwsapi/-/nwsapi-2.2.7.tgz#738e0707d3128cb750dddcfe90e4610482df0f30"
   integrity sha512-ub5E4+FBPKwAZx0UwIQOjYWGHTEq5sPqHQNRN8Z9e4A7u3Tj1weLJsL59yH9vmvqEtBHaOmT6cYQKIZOxp35FQ==
 
-o1js@0.15.3:
-  version "0.15.3"
-  resolved "https://registry.yarnpkg.com/o1js/-/o1js-0.15.3.tgz#5c57b10011004273339c506e1f409052a1a2b18e"
-  integrity sha512-M2oLXAI9/xOE9qSpuE5hh1ZvuqVNI1nbxIITDbaHnxtJKb3UDQZFtmtVCT2PF/da4Pz9H49/+TTcTfy39yOmVw==
+o1js@^0.15.4:
+  version "0.15.4"
+  resolved "https://registry.yarnpkg.com/o1js/-/o1js-0.15.4.tgz#bfd6f7a63292cb84b460a20230a9b351416fa10a"
+  integrity sha512-70/9NI+Nq4WCFnhYOj2RUynOOqdH0I4wCGxOlmem7GLL2qgj3r/w6DiMV8ZQVjG/MSEyjXxcmEwQpa5R2ef34A==
   dependencies:
     blakejs "1.2.1"
     cachedir "^2.4.0"
@@ -3477,9 +3477,9 @@ react-is@^17.0.1:
   integrity sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==
 
 reflect-metadata@^0.1.13:
-  version "0.1.13"
-  resolved "https://registry.yarnpkg.com/reflect-metadata/-/reflect-metadata-0.1.13.tgz#67ae3ca57c972a2aa1642b10fe363fe32d49dc08"
-  integrity sha512-Ts1Y/anZELhSsjMcU605fU9RE4Oi3p5ORujwbIKXfWa+0Zxs510Qrmrce5/Jowq3cHSZSJqBjypxmHarc+vEWg==
+  version "0.1.14"
+  resolved "https://registry.yarnpkg.com/reflect-metadata/-/reflect-metadata-0.1.14.tgz#24cf721fe60677146bb77eeb0e1f9dece3d65859"
+  integrity sha512-ZhYeb6nRaXCfhnndflDK8qI6ZQ/YcWZCISRAWICW9XYqMUwjZM9Z0DveWX/ABN01oxSHwVxKQmxeYZSsm0jh5A==
 
 regenerate-unicode-properties@^10.1.0:
   version "10.1.1"
@@ -3988,9 +3988,9 @@ whatwg-encoding@^1.0.5:
     iconv-lite "0.4.24"
 
 whatwg-fetch@^3.4.1:
-  version "3.6.19"
-  resolved "https://registry.yarnpkg.com/whatwg-fetch/-/whatwg-fetch-3.6.19.tgz#caefd92ae630b91c07345537e67f8354db470973"
-  integrity sha512-d67JP4dHSbm2TrpFj8AbO8DnL1JXL5J9u0Kq2xW6d0TFDbCA3Muhdt8orXC22utleTVj7Prqt82baN6RBvnEgw==
+  version "3.6.20"
+  resolved "https://registry.yarnpkg.com/whatwg-fetch/-/whatwg-fetch-3.6.20.tgz#580ce6d791facec91d37c72890995a0b48d31c70"
+  integrity sha512-EqhiFU6daOA8kpjOWTL0olhVOF3i7OrFzSYiGsEMB8GcXS+RrzauAERX65xMeNWVqxA6HXH2m69Z9LaKKdisfg==
 
 whatwg-mimetype@^2.3.0:
   version "2.3.0"

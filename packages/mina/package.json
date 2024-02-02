@@ -33,7 +33,8 @@
     "initRoot": "tsc && node build/src/scripts/initRoot.js",
     "initNft": "tsc && node build/src/scripts/initNft.js",
     "serialize": "tsc && node build/src/scripts/serialize.js",
-    "compile": "tsc && node build/src/scripts/compile.js",
+    "compileContract": "tsc && node build/src/scripts/compileContract.js",
+    "compile": "rm -rf build && tsc",
     "mint": "tsc && node build/src/scripts/mint.js",
     "lint": "npx eslint src/* --fix"
   },
@@ -51,8 +52,8 @@
     "typescript": "^4.7.2"
   },
   "dependencies": {
+    "@vercel/kv": "^1.0.1",
     "dotenv": "^16.3.1",
-    "o1js": "0.15.3",
-    "@vercel/kv": "^1.0.1"
+    "o1js": "^0.15.4"
   }
 }

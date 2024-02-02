@@ -1623,10 +1623,10 @@
   resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-4.29.23.tgz#a38f0efcc4abd5849222a7f382ce3a19a9efb070"
   integrity sha512-4BMHPrkfYmLP+NvqbbkV7Mk1nnphu+bNmxhhuB0+EMjKA7VfyFCfiyiTf55RRDgLaevyb9LrFK16lHW2owF52w==
 
-"@tanstack/query-core@5.17.15":
-  version "5.17.15"
-  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-5.17.15.tgz#e73a3036e72398493ef9eee1678f89938111344c"
-  integrity sha512-QURxpu77/ICA4d61aPvV7EcJ2MwmksxUejKBaq/xLcO2TUJAlXf4PFKHC/WxnVFI/7F1jeLx85AO3Vpk0+uBXw==
+"@tanstack/query-core@5.18.0":
+  version "5.18.0"
+  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-5.18.0.tgz#445a0cbf94b49d57132255c74570cfb63cf444c2"
+  integrity sha512-8c6nxeAnGHxIDZIyDmHdmgFt4D+LprAQaJmjsnM4szcIjsWOyFlzxdqQUuQ/XuQRvUgqYaqlJTtDADlSS7pTPQ==
 
 "@tanstack/query-persist-client-core@4.29.23":
   version "4.29.23"
@@ -1650,12 +1650,12 @@
     "@tanstack/query-core" "4.29.23"
     use-sync-external-store "^1.2.0"
 
-"@tanstack/react-query@5.17.15":
-  version "5.17.15"
-  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-5.17.15.tgz#2214491b97d77613155a3607a3af163ecde613b6"
-  integrity sha512-9qur91mOihaUN7pXm6ioDtS+4qgkBcCiIaZyvi3lZNcQZsrMGCYZ+eP3hiFrV4khoJyJrFUX1W0NcCVlgwNZxQ==
+"@tanstack/react-query@5.18.0":
+  version "5.18.0"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-5.18.0.tgz#da948737c904e7796df2aab2e52a92bdd755ffb1"
+  integrity sha512-7FKxNfxxKEL7n3ADpwp81Fy4FX85hNkYVzQQVQsF0JAPl93c3d1gmNZMIbEtOqgYfom1/ontGh3FiZGYj3xyWA==
   dependencies:
-    "@tanstack/query-core" "5.17.15"
+    "@tanstack/query-core" "5.18.0"
 
 "@testing-library/cypress@^9.0.0":
   version "9.0.0"
@@ -7126,6 +7126,19 @@ o1js@0.15.3:
   version "0.15.3"
   resolved "https://registry.yarnpkg.com/o1js/-/o1js-0.15.3.tgz#5c57b10011004273339c506e1f409052a1a2b18e"
   integrity sha512-M2oLXAI9/xOE9qSpuE5hh1ZvuqVNI1nbxIITDbaHnxtJKb3UDQZFtmtVCT2PF/da4Pz9H49/+TTcTfy39yOmVw==
+  dependencies:
+    blakejs "1.2.1"
+    cachedir "^2.4.0"
+    detect-gpu "^5.0.5"
+    isomorphic-fetch "^3.0.0"
+    js-sha256 "^0.9.0"
+    reflect-metadata "^0.1.13"
+    tslib "^2.3.0"
+
+o1js@0.15.4:
+  version "0.15.4"
+  resolved "https://registry.yarnpkg.com/o1js/-/o1js-0.15.4.tgz#bfd6f7a63292cb84b460a20230a9b351416fa10a"
+  integrity sha512-70/9NI+Nq4WCFnhYOj2RUynOOqdH0I4wCGxOlmem7GLL2qgj3r/w6DiMV8ZQVjG/MSEyjXxcmEwQpa5R2ef34A==
   dependencies:
     blakejs "1.2.1"
     cachedir "^2.4.0"
