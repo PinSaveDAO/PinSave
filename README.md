@@ -21,43 +21,25 @@
 Pin Save is a decentralized image, video sharing and content aggregation platform where users can not only control the content but also the platform itself.
 
 1. The decentralized feed reinforces the discovery of content and feedback.
-2. Decentralized Identity (ERC-725), which provides anonymity and data protection.
+2. Decentralized Identity, which provides anonymity and data protection.
 3. Upgradeable, resilient, and open decentralized storage.
 4. Smart contracts to securely serve web experiences directly to users.
 
 ## Features
 
-- Decentralized feed of NFTs on Optimism and Ethereum Goerli chains with decentralized storage on IPFS with NFTPort, Estuary and Nft.storage:
+- Mina Merkle Trees
 
-![decentralized feed](https://github.com/dspytdao/PinSave-EVM/blob/master/assets/feed.png)
+- Mina App State API
 
-- Decentralized Lit Access Control encrypted comments section on orbis, ceramic and ipfs connected to a decentralized post and identity:
+- Decentralized feed of NFTs with decentralized storage on IPFS with NFTPort, Estuary and Nft.storage:
 
-![decentralized comments](https://bafybeicvm4vqutptj2nxr4iej75tdgnjkc7fv7zez52uyq2laoswnsz6de.ipfs.w3s.link/Screenshot%20from%202023-01-09%2023-18-48.png)
-
-- Decentralized Profile:
-
-![decentralized Profile](https://github.com/dspytdao/PinSave-EVM/blob/master/assets/profile.png)
+![decentralized feed](https://github.com/Pfed-prog/Dspyt-NFTs-EVM/blob/master/assets/feed.png)
 
 - Video and Image posting:
 
-![Upload](https://bafybeiaj46fxgxax6z3nd45n7p42rh7dbyweyssi3dunr3wfewh7ys2d7y.ipfs.nftstorage.link/)
+![Upload](https://github.com/Pfed-prog/Dspyt-NFTs-EVM/blob/master/assets/upload.png)
 
-- Livepeer Video Player:
-
-![Video Player](https://bafybeiacg6yoxvxvk2ayugwlcfnnjpm5kcchvy3t2fl7mu64ft4zt4fs6m.ipfs.nftstorage.link/)
-
-## Experimental Features
-
-- Mina Merkle Trees:
-
-![Mina Merkle Trees](https://github.com/dspytdao/PinSave-EVM/blob/master/assets/Mina.png)
-
-- Mina App State API:
-
-`localhost:3000/api/mina` route displays Mina Contract App state
-
-![Mina Api](https://github.com/dspytdao/PinSave-EVM/blob/master/assets/MinaApi.png)
+- Livepeer Video Player
 
 ## Setup
 
@@ -68,16 +50,6 @@ yarn
 yarn dev
 ```
 
-## Latest Update
-
-- Abstracted orbis and ipfs fetching in the application code.
-- We added more ipfs public servers to improve the loading of CIDs.
-- Removed faulty ipfs servers.
-- Added Optimism mainnet blockchain.
-- Upgraded solidity contract to set the minting fee.
-- Migrated to [https://pinsave.app](https://pinsave.app).
-- Experimenting with Mina merkle trees.
-
 ## Further Resources
 
 [PinSave Figma Resources](https://www.figma.com/community/file/1102944149244783025)
@@ -87,6 +59,3 @@ Some interesting links that we keep returning to include and not limited to:
 - [Practical React Query](https://tkdodo.eu/blog/practical-react-query)
 - [next/image](https://nextjs.org/docs/api-reference/next/image)
 - [Next Js ISG](https://nextjs.org/docs/basic-features/data-fetching/incremental-static-regeneration)
-- [Universal Profiles](https://docs.lukso.tech/standards/universal-profile/introduction)
-- [Working with Lit Access Control](https://litproject.substack.com/p/working-with-access-control)
-- [Lit Supported Blockchains](https://developer.litprotocol.com/support/supportedchains/)
