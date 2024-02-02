@@ -1,12 +1,12 @@
 import {
   deployApp,
-  getEnvAddresses,
+  getEnvAccount,
   startBerkeleyClient,
 } from '../components/transactions.js';
 
-await startBerkeleyClient();
+startBerkeleyClient();
 
-const { pubKey: pubKey, deployerKey: deployerKey } = getEnvAddresses();
+const { pubKey: pubKey, pk: deployerKey } = getEnvAccount();
 
 const { merkleMap: map, zkAppInstance: zkAppInstance } = await deployApp(
   deployerKey,

@@ -1,6 +1,6 @@
 {
   "name": "pin-mina",
-  "version": "0.1.7",
+  "version": "0.1.17",
   "description": "",
   "author": "pavel fedotov pfedprog",
   "license": "Apache-2.0",
@@ -30,8 +30,11 @@
     "test": "tsc && node build/src/NFTsMapContract.test.js",
     "deploy": "tsc && node build/src/scripts/deploy.js",
     "query": "tsc && node build/src/scripts/queryContract.js",
-    "initNFTs": "tsc && node build/src/scripts/initNFTs.js",
+    "initRoot": "tsc && node build/src/scripts/initRoot.js",
+    "initNft": "tsc && node build/src/scripts/initNft.js",
     "serialize": "tsc && node build/src/scripts/serialize.js",
+    "compileContract": "tsc && node build/src/scripts/compileContract.js",
+    "compile": "rm -rf build && tsc",
     "mint": "tsc && node build/src/scripts/mint.js",
     "lint": "npx eslint src/* --fix"
   },
@@ -49,7 +52,8 @@
     "typescript": "^4.7.2"
   },
   "dependencies": {
+    "@vercel/kv": "^1.0.1",
     "dotenv": "^16.3.1",
-    "o1js": "0.15.2"
+    "o1js": "^0.15.4"
   }
 }

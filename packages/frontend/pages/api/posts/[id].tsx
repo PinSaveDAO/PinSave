@@ -1,7 +1,7 @@
-import { generateCollectionWithMap } from "pin-mina";
+import { getVercelMetadata } from "pin-mina";
 import type { NextApiRequest, NextApiResponse } from "next";
-
-import { PublicKey, Field } from "o1js";
+import { kv, createClient } from "@vercel/kv";
+import { fetchImage } from "@/services/fetchCid";
 
 export default async function handler(
   req: NextApiRequest,
@@ -12,15 +12,11 @@ export default async function handler(
 
     const index = Number(id);
 
-    const pubKey: PublicKey = PublicKey.fromBase58(
-      "B62qqpPjKKgp8G2kuB82g9NEgfg85vmEAZ84to3FfyQeL4MuFm5Ybc9"
-    );
+    var data = await getVercelMetadata(index, kv);
 
-    const { map: map, nftArray: nftArray } = generateCollectionWithMap(pubKey);
+    data.cid = await fetchImage(data.cid);
 
-    const output = map.get(Field(index));
-
-    res.status(200).json({ output });
+    res.status(200).json({ ...data });
   } catch (err) {
     res.status(500).send({ error: "failed to fetch data" + err });
   }

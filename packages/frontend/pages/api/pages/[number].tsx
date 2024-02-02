@@ -1,5 +1,13 @@
-import { fetchDecodedPost } from "@/services/fetchCid";
+import { fetchImage } from "@/services/fetchCid";
 import type { NextApiRequest, NextApiResponse } from "next";
+import { kv, createClient } from "@vercel/kv";
+import {
+  MerkleMapContract,
+  startBerkeleyClient,
+  getTotalSupplyLive,
+  getVercelMetadata,
+  getAppPublic,
+} from "pin-mina";
 
 export default async function handler(
   req: NextApiRequest,
@@ -8,35 +16,45 @@ export default async function handler(
   try {
     const { number } = req.query;
     const pageNumber = Number(number);
+    let index = 10;
+    startBerkeleyClient();
 
-    //const totalSupply = Number(await contract.totalSupply());
-    const totalSupply = 0;
+    const { pubKey: pubKey, appPubKey: zkAppAddress } = getAppPublic();
+
+    const zkAppInstance: MerkleMapContract = new MerkleMapContract(
+      zkAppAddress
+    );
+
+    const totalSupply = Number(await getTotalSupplyLive(zkAppInstance));
 
     let items = [];
-    let result;
 
-    var upperLimit = 6 * pageNumber;
-
-    const lowerLimit = upperLimit - 6 + 1;
-
+    const perPage = 6;
+    var upperLimit = perPage * pageNumber;
+    const lowerLimit = upperLimit - perPage + 1;
     if (totalSupply < upperLimit) {
       upperLimit = totalSupply;
     }
 
-    /*     try {
+    try {
       for (let i = lowerLimit; upperLimit >= i; i++) {
-        result = await contract.getPostCid(i);
+        const data = await getVercelMetadata(index, kv);
 
-        const item = await fetchDecodedPost(result);
+        data.cid = await fetchImage(data.cid);
 
-        items.push({ token_id: i, ...item });
+        items.push({ ...data });
+        index++;
       }
-    } catch {
-      res.status(200).json({ items: items, totalSupply: totalSupply });
-    } */
-
-    //res.status(200).json({ items: items, totalSupply: totalSupply });
-    res.status(200).json({ totalSupply: totalSupply });
+    } catch (err) {
+      res.status(200).json({
+        items: items,
+        totalSupply: totalSupply,
+        error: "failed to fetch data" + err,
+      });
+    }
+    res
+      .status(200)
+      .json({ items: items, totalSupply: totalSupply, page: pageNumber });
   } catch (err) {
     res.status(500).json({ error: "failed to fetch data" + err });
   }

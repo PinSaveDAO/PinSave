@@ -16,8 +16,12 @@ export async function fetchImageUrls(resURL: string, resURL2: string) {
     await fetch(resURL);
     image = resURL;
   } catch {
-    await fetch(resURL2);
-    image = resURL2;
+    try {
+      await fetch(resURL2);
+      image = resURL2;
+    } catch (e) {
+      return image;
+    }
   }
   return image;
 }
@@ -65,8 +69,7 @@ export async function fetchDecodedPost(result: string) {
       console.log(e);
       return {
         ...item,
-        image:
-          "https://img.freepik.com/free-vector/failure-grunge-text_460848-9361.jpg",
+        image: "/PinSaveCard.png",
       };
     }
   } catch (e) {
@@ -74,8 +77,7 @@ export async function fetchDecodedPost(result: string) {
     return {
       name: "Failed",
       description: "F for Failure",
-      image:
-        "https://img.freepik.com/free-vector/failure-grunge-text_460848-9361.jpg",
+      image: "/PinSaveCard.png",
     };
   }
 }

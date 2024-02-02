@@ -1,12 +1,13 @@
 import { createClient } from '@vercel/kv';
+import { Field } from 'o1js';
 
+import { initNft } from '../components/transactions.js';
 import {
-  deserializeNft,
-  getMapFromVercelNfts,
-  getVercelNft,
+  generateDummyCollectionWithMap,
+  generateDummyNft,
+  setVercelNft,
 } from '../components/Nft.js';
 import {
-  mintNftFromMap,
   getEnvAccount,
   startBerkeleyClient,
   getAppPublic,
@@ -20,16 +21,15 @@ const client = createClient({
   token: process.env.KV_REST_API_TOKEN as string,
 });
 
-const { pk: deployerKey } = getEnvAccount();
+const { pk: pk } = getEnvAccount();
 const { pubKey: pubKey, appPubKey: zkAppAddress } = getAppPublic();
+
+const { map: merkleMap } = generateDummyCollectionWithMap(pubKey);
+
+const nft = generateDummyNft(13, pubKey);
+
 const zkApp: MerkleMapContract = new MerkleMapContract(zkAppAddress);
 
-const storedMap = await getMapFromVercelNfts([10, 11, 12], client);
+await initNft(pubKey, pk, nft, zkApp, merkleMap);
 
-console.log(storedMap.getRoot().toString());
-
-const nft_ = await getVercelNft(11, client);
-
-const nft = deserializeNft(nft_);
-
-await mintNftFromMap(deployerKey, nft, zkApp, storedMap);
+await setVercelNft(Field(13), client, nft);

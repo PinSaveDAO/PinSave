@@ -1,17 +1,20 @@
-import { Field } from 'o1js';
-
-import { createNFT, generateCollection } from './components/NFT.js';
+import {
+  createNft,
+  generateDummyCollectionMap,
+  generateDummyNftMetadata,
+} from './components/Nft.js';
 import {
   deployApp,
   initAppRoot,
-  initNFT,
-  mintNFTfromMap,
+  initNft,
+  mintNftFromMap,
+  setFee,
   startLocalBlockchainClient,
-  transferNFT,
+  transferNft,
 } from './components/transactions.js';
 
 const proofsEnabled: boolean = false;
-const enforceTransactionLimits: boolean = true;
+const enforceTransactionLimits: boolean = false;
 
 const live: boolean = false;
 
@@ -24,60 +27,80 @@ const { privateKey: pk1, publicKey: pubKey1 } = testAccounts[0];
 const { privateKey: pk2, publicKey: pubKey2 } = testAccounts[1];
 const { privateKey: pk3, publicKey: pubKey3 } = testAccounts[2];
 
-const { merkleMap: map, zkAppInstance: zkAppInstance } = await deployApp(
-  pk1,
-  proofsEnabled
-);
+const {
+  merkleMap: map,
+  zkAppInstance: zkAppInstance,
+  zkAppPk: zkAppPrivateKey,
+} = await deployApp(pk1, proofsEnabled);
 
 console.log('deployed app');
 
+// set fee
+
+await setFee(zkAppPrivateKey, pk1, zkAppInstance);
+
 // add some initial values into the map
 
-const nftArray = generateCollection(pubKey1, map);
+const { nftArray: nftArray, nftMetadata: nftMetadata } =
+  generateDummyCollectionMap(pubKey1, map);
 
-await initAppRoot(pk1, zkAppInstance, map, live);
+await initAppRoot(pk1, zkAppInstance, map, nftArray.length, live);
 
 console.log('initialized root');
 
-await mintNFTfromMap(pk1, nftArray[0], zkAppInstance, map, live);
+await mintNftFromMap(pk1, nftArray[0], zkAppInstance, map, live);
 
 console.log('minted NFT');
 
 // init nft on the contract
-const nftName: string = 'name';
-const nftDescription: string = 'some random words';
-const nftCid: string = '1244324dwfew1';
+const nft = generateDummyNftMetadata(1, pubKey1);
+const nftStruct = createNft(nft);
 
-const newNFT = createNFT(nftName, nftDescription, Field(1), nftCid, pubKey1);
-
-await initNFT(pubKey1, pk1, newNFT, zkAppInstance, map);
+await initNft(pubKey1, pk1, nftStruct, zkAppInstance, map, live);
 
 console.log('inited NFT');
 
 try {
-  await initNFT(pubKey1, pk1, newNFT, zkAppInstance, map);
+  await initNft(pubKey1, pk1, nftStruct, zkAppInstance, map, live);
 } catch {
   console.log('failed sucessfully to initialize NFT which already exists');
 }
 
-const NFT2 = createNFT(nftName, nftDescription, Field(2), nftCid, pubKey2);
+const nftNew = generateDummyNftMetadata(2, pubKey2);
+const nftStructNew = createNft(nftNew);
 
-await initNFT(pubKey2, pk2, NFT2, zkAppInstance, map);
+await initNft(pubKey2, pk2, nftStructNew, zkAppInstance, map, live);
 
 console.log('inited NFT - 2 sucessfully');
 
-await mintNFTfromMap(pk1, newNFT, zkAppInstance, map, live);
+await mintNftFromMap(pk1, nftStruct, zkAppInstance, map, live);
 
 console.log('mints sucessfully');
 
-await mintNFTfromMap(pk2, NFT2, zkAppInstance, map, live);
+await mintNftFromMap(pk2, nftStructNew, zkAppInstance, map, live);
 
 console.log('mints sucessfully');
 
-await transferNFT(pubKey1, pk1, pubKey2, pk2, newNFT, zkAppInstance, map);
+await transferNft(
+  pk1,
+  pubKey2,
+  nftStruct,
+  zkAppInstance,
+  map,
+  zkAppPrivateKey,
+  live
+);
 
 console.log('transfered ownership sucessfully');
 
-await transferNFT(pubKey2, pk2, pubKey3, pk3, NFT2, zkAppInstance, map);
+await transferNft(
+  pk2,
+  pubKey3,
+  nftStructNew,
+  zkAppInstance,
+  map,
+  zkAppPrivateKey,
+  live
+);
 
 console.log('transfered ownership sucessfully');

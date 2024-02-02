@@ -5,15 +5,15 @@ import {
   serializeMerkleMapToJson,
   serializeMerkleToJsonOptimized,
 } from '../components/serialize.js';
-import { generateCollection } from '../components/NFT.js';
+import { generateDummyCollectionMap } from '../components/Nft.js';
 import {
   startBerkeleyClient,
-  getEnvAddresses,
+  getAppPublic,
 } from '../components/transactions.js';
 
 startBerkeleyClient();
 
-const { pubKey: pubKey, deployerKey: deployerKey } = getEnvAddresses();
+const { pubKey: pubKey, appPubKey: zkAppAddress } = getAppPublic();
 
 const merkleMap: MerkleMap = new MerkleMap();
 console.log('MerkleMap()', merkleMap.getRoot().toString());
@@ -27,7 +27,7 @@ console.log('merkle tree leaf count', merkleTree.leafCount);
 
 console.log('merkle tree get node', merkleTree.getNode(0, 0n).toBigInt());
 
-generateCollection(pubKey, merkleMap);
+generateDummyCollectionMap(pubKey, merkleMap);
 
 console.log('merkleMap root', merkleMap.getRoot().toString());
 

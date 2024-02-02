@@ -1,4 +1,5 @@
 import DisplayMedia from "@/components/Post/DisplayMedia";
+import MediaDetails from "@/components/Post/MediaDetails";
 import { usePost } from "@/hooks/api";
 
 import { ActionIcon, SimpleGrid, LoadingOverlay, Center } from "@mantine/core";
@@ -9,6 +10,8 @@ const PostPage = () => {
   const router = useRouter();
 
   const { data: postQueried, isLoading } = usePost(String(router.query.id));
+
+  console.log(postQueried);
 
   return (
     <div>
@@ -34,6 +37,7 @@ const PostPage = () => {
             <Center>
               <DisplayMedia post={postQueried} />
             </Center>
+            <MediaDetails post={postQueried} />
           </SimpleGrid>
         </>
       )}

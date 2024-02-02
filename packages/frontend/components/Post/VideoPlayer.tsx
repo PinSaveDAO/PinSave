@@ -6,14 +6,14 @@ import { useMemo } from "react";
 
 const VideoPlayer = (post: IndividualPost) => {
   const idParsed = useMemo(
-    () => parseCid(post?.image) ?? parseArweaveTxId(post?.image),
-    [post?.image],
+    () => parseCid(post?.cid) ?? parseArweaveTxId(post?.cid),
+    [post?.cid]
   );
 
   return (
     <Player
       title={idParsed}
-      src={post.image}
+      src={post.cid}
       autoPlay
       muted
       autoUrlUpload={{
