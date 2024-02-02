@@ -7,7 +7,7 @@ export function logTokenBalances(address: PublicKey, zkApp: MerkleMapContract) {
   try {
     balance = Mina.getBalance(address, zkApp.token.id).value.toBigInt();
   } catch (e) {
-    //console.log(e);
+    console.log(e);
   }
 
   console.log(address.toBase58() + ' zkApp tokens:', balance);
