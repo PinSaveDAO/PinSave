@@ -99,8 +99,6 @@ const UploadForm = () => {
 
       console.log(cid);
 
-      //setResponse(cid);
-
       setImage(undefined);
       setName("");
       setDescription("");
