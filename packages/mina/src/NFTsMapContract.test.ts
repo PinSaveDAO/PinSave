@@ -13,10 +13,10 @@ import {
   transferNft,
 } from './components/transactions.js';
 
-const proofsEnabled: boolean = false;
-const enforceTransactionLimits: boolean = false;
+const proofsEnabled = false;
+const enforceTransactionLimits = false;
 
-const live: boolean = false;
+const live = false;
 
 const testAccounts = await startLocalBlockchainClient(
   proofsEnabled,
@@ -25,7 +25,7 @@ const testAccounts = await startLocalBlockchainClient(
 
 const { privateKey: pk1, publicKey: pubKey1 } = testAccounts[0];
 const { privateKey: pk2, publicKey: pubKey2 } = testAccounts[1];
-const { privateKey: pk3, publicKey: pubKey3 } = testAccounts[2];
+const { publicKey: pubKey3 } = testAccounts[2];
 
 const {
   merkleMap: map,
@@ -41,8 +41,7 @@ await setFee(zkAppPrivateKey, pk1, zkAppInstance);
 
 // add some initial values into the map
 
-const { nftArray: nftArray, nftMetadata: nftMetadata } =
-  generateDummyCollectionMap(pubKey1, map);
+const { nftArray: nftArray } = generateDummyCollectionMap(pubKey1, map);
 
 await initAppRoot(pk1, zkAppInstance, map, nftArray.length, live);
 

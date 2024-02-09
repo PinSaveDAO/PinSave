@@ -10,7 +10,6 @@
     "prettier:write": "prettier --write \"**/*.{ts,tsx}\""
   },
   "dependencies": {
-    "@livepeer/react": "^3.0.1",
     "@mantine/core": "^4.2.12",
     "@mantine/dropzone": "^4.2.12",
     "@mantine/form": "^7.2.2",
@@ -19,13 +18,14 @@
     "@mantine/notifications": "^4.2.12",
     "@synthetixio/synpress": "^3.1.0",
     "@tanstack/react-query": "5.18.0",
+    "@vercel/blob": "^0.21.0",
     "@vercel/kv": "^1.0.1",
     "filereader-stream": "^2.0.0",
     "isomorphic-fetch": "^3.0.0",
     "next": "^14.0.1",
     "next-sitemap": "^4.2.3",
-    "nft.storage": "^7.0.0",
     "o1js": "0.15.4",
+    "pin-mina": "0.1.20",
     "postcss": "^8.4.22",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
@@ -33,11 +33,9 @@
     "react-player": "^2.11.2",
     "react-query": "^3.39.3",
     "sharp": "^0.33.0",
-    "tabler-icons-react": "^1.56.0",
-    "pin-mina": "0.1.18"
+    "tabler-icons-react": "^1.56.0"
   },
   "devDependencies": {
-    "@tanstack/eslint-plugin-query": "^5.6.0",
     "@types/isomorphic-fetch": "^0.0.39",
     "@types/node": "^20.1.2",
     "@types/react": "^18.2.5",
