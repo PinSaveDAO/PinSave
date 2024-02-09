@@ -1,12 +1,15 @@
-import { fetchAccount, fetchLastBlock } from 'o1js';
-import { startBerkeleyClient } from '../components/transactions.js';
+import { fetchAccount } from 'o1js';
+import {
+  startBerkeleyClient,
+  getAppPublic,
+} from '../components/transactions.js';
 
-startBerkeleyClient('https://berkeley.api.minaexplorer.com/');
+startBerkeleyClient();
+
+const { pubKey: pubKey, appPubKey: zkAppAddress } = getAppPublic();
 
 console.log(
   await fetchAccount({
-    publicKey: 'B62qqpPjKKgp8G2kuB82g9NEgfg85vmEAZ84to3FfyQeL4MuFm5Ybc9',
+    publicKey: pubKey,
   })
 );
-
-console.log(await fetchLastBlock());

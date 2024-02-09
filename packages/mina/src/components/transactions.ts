@@ -36,7 +36,7 @@ export function getAppPublic() {
 
   const appPubString: string =
     process.env.NEXT_PUBLIC_APP_KEY ??
-    'B62qpBALfJmiRc9TT46wUNWBdHcFWVxKFYVsMkawqBEdyqBdZwxzJVL';
+    'B62qmB8pt6jA4kciy1wQG5byBor4xV7dNCDQr7KaES9a3o89jigU5or';
 
   const appPubKey: PublicKey = PublicKey.fromBase58(appPubString);
 
@@ -44,14 +44,13 @@ export function getAppPublic() {
 }
 
 export function startBerkeleyClient(
-  endpoint: string = 'https://api.minascan.io/node/berkeley/v1/graphql'
+  endpoint: string = 'https://mina-berkeley-graphql.aurowallet.com/graphql'
 ) {
   dotenv.config();
 
   const Berkeley = Mina.Network(endpoint);
 
   Mina.setActiveInstance(Berkeley);
-  console.log('network:', Mina.activeInstance.getNetworkId());
 }
 
 export async function startLocalBlockchainClient(
