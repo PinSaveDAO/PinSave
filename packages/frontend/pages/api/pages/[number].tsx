@@ -1,4 +1,3 @@
-import { fetchImage } from "@/services/fetchCid";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { kv, createClient } from "@vercel/kv";
 import {
@@ -52,7 +51,7 @@ export default async function handler(
     var upperLimit = perPage * pageNumber;
     const lowerLimit = upperLimit - perPage;
     if (totalSupply < upperLimit) {
-      upperLimit = totalSupply;
+      upperLimit = totalSupply - 1;
     }
 
     try {
@@ -60,9 +59,6 @@ export default async function handler(
         console.log(await getVercelMetadata(appId, 0, client));
 
         const data = await getVercelMetadata(appId, index, client);
-
-        console.log(data);
-        //data.cid = await fetchImage(data.cid);
 
         items.push({ ...data });
       }
