@@ -19,10 +19,13 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
       </Paper>
       <p style={{ fontSize: "small", color: "#0000008d" }}>
         Owned by:{" "}
-        <a style={{ color: "#198b6eb9" }} href={`/profile/${post.owner}`}>
+        <a
+          style={{ color: "#198b6eb9" }}
+          href={`https://minascan.io/berkeley/account/${post.owner}`}
+        >
           {post.owner.substring(
             post.owner.indexOf(":0x") + 1,
-            post.owner.indexOf(":0x") + 8,
+            post.owner.indexOf(":0x") + 8
           ) +
             "..." +
             post.owner.substring(35)}
