@@ -11,7 +11,7 @@ import {
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
   try {
     let index = 10;
@@ -26,7 +26,7 @@ export default async function handler(
     const { pubKey: pubKey, appPubKey: zkAppAddress } = getAppPublic();
 
     const zkAppInstance: MerkleMapContract = new MerkleMapContract(
-      zkAppAddress
+      zkAppAddress,
     );
 
     let totalSupply = 0;

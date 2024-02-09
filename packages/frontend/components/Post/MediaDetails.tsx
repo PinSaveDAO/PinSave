@@ -22,7 +22,7 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
         <a style={{ color: "#198b6eb9" }} href={`/profile/${post.owner}`}>
           {post.owner.substring(
             post.owner.indexOf(":0x") + 1,
-            post.owner.indexOf(":0x") + 8
+            post.owner.indexOf(":0x") + 8,
           ) +
             "..." +
             post.owner.substring(35)}
