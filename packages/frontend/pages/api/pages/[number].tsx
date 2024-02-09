@@ -14,7 +14,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   try {
-    const isDev = process.env.NEXT_PUBLIC_ISDEV;
+    const isDev = process.env.NEXT_PUBLIC_ISDEV ?? "false";
     let client = kv;
     if (isDev === "true") {
       const url = process.env.NEXT_PUBLIC_REDIS_URL;
