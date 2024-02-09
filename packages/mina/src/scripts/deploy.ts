@@ -12,6 +12,6 @@ console.log('deployer:', pubKey.toBase58());
 
 const { zkAppPk: pk } = await deployApp(deployerKey);
 
-console.log(pk.toBase58());
+console.log('app private key:', pk.toBase58());
 
-console.log(pk.toPublicKey().toBase58());
+console.log('app public key:', pk.toPublicKey().toBase58());

@@ -1,5 +1,4 @@
 import { createClient } from '@vercel/kv';
-import { Field } from 'o1js';
 
 import { initNft } from '../components/transactions.js';
 import {
@@ -26,10 +25,10 @@ const { pubKey: pubKey, appPubKey: zkAppAddress } = getAppPublic();
 
 const { map: merkleMap } = generateDummyCollectionWithMap(pubKey);
 
-const nft = generateDummyNft(13, pubKey);
+const nft = generateDummyNft(0, pubKey);
 
 const zkApp: MerkleMapContract = new MerkleMapContract(zkAppAddress);
 
 await initNft(pubKey, pk, nft, zkApp, merkleMap);
 
-await setVercelNft(Field(13), client, nft);
+await setVercelNft(zkAppAddress, client, nft);

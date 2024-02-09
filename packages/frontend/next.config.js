@@ -12,6 +12,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "pinsave.app",
       },
+      {
+        protocol: "https",
+        hostname: "dspyt.com",
+      },
     ],
     minimumCacheTTL: 31536000,
   },

@@ -14,7 +14,7 @@ import dotenv from 'dotenv';
 
 import { MerkleMapContract } from '../NFTsMapContract.js';
 import { compareLogStates } from './AppState.js';
-import { logTokenBalances } from './TokenBalances.js';
+import { logTokenBalances, getTokenBalances } from './TokenBalances.js';
 import { NFTtoHash, Nft } from './Nft.js';
 
 export function getEnvAccount() {
@@ -36,7 +36,7 @@ export function getAppPublic() {
 
   const appPubString: string =
     process.env.NEXT_PUBLIC_APP_KEY ??
-    'B62qpBALfJmiRc9TT46wUNWBdHcFWVxKFYVsMkawqBEdyqBdZwxzJVL';
+    'B62qmfcFo5LorqmpFVh5Cv4oXGRGjNctnr55JzaVqr5i5bGUYWa7bb2';
 
   const appPubKey: PublicKey = PublicKey.fromBase58(appPubString);
 
@@ -44,14 +44,13 @@ export function getAppPublic() {
 }
 
 export function startBerkeleyClient(
-  endpoint: string = 'https://api.minascan.io/node/berkeley/v1/graphql'
+  endpoint: string = 'https://mina-berkeley-graphql.aurowallet.com/graphql'
 ) {
   dotenv.config();
 
   const Berkeley = Mina.Network(endpoint);
 
   Mina.setActiveInstance(Berkeley);
-  console.log('network:', Mina.activeInstance.getNetworkId());
 }
 
 export async function startLocalBlockchainClient(
@@ -188,26 +187,21 @@ export async function transferNft(
     Nft.toFields(_NFT)
   );
 
-  try {
-    const nft_transfer_tx: Mina.Transaction = await Mina.transaction(
-      pubKey,
-      () => {
-        AccountUpdate.fundNewAccount(pubKey);
-        zkAppInstance.transfer(_NFT, recipient, witnessNFT, transferSignature);
-      }
-    );
-    await sendWaitTx(nft_transfer_tx, pk, live);
-  } catch (e) {
-    console.log('error', e);
-    const nft_transfer_tx: Mina.Transaction = await Mina.transaction(
-      pubKey,
-      () => {
-        zkAppInstance.transfer(_NFT, recipient, witnessNFT, transferSignature);
-      }
-    );
+  const recipientBalance = getTokenBalances(recipient, zkAppInstance);
 
-    await sendWaitTx(nft_transfer_tx, pk, live);
+  let nft_transfer_tx: Mina.Transaction;
+  if (recipientBalance > 0) {
+    nft_transfer_tx = await Mina.transaction(pubKey, () => {
+      zkAppInstance.transfer(_NFT, recipient, witnessNFT, transferSignature);
+    });
+  } else {
+    nft_transfer_tx = await Mina.transaction(pubKey, () => {
+      AccountUpdate.fundNewAccount(pubKey);
+      zkAppInstance.transfer(_NFT, recipient, witnessNFT, transferSignature);
+    });
   }
+
+  await sendWaitTx(nft_transfer_tx, pk, live);
 
   _NFT.changeOwner(recipient);
 
