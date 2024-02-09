@@ -24,11 +24,15 @@ const { pk: deployerKey } = getEnvAccount();
 const { pubKey: pubKey, appPubKey: zkAppAddress } = getAppPublic();
 const zkApp: MerkleMapContract = new MerkleMapContract(zkAppAddress);
 
-const storedMap = await getMapFromVercelNfts([10, 11, 12], client);
+const storedMap = await getMapFromVercelNfts(
+  zkAppAddress,
+  [10, 11, 12],
+  client
+);
 
 console.log(storedMap.getRoot().toString());
 
-const nft_ = await getVercelNft(11, client);
+const nft_ = await getVercelNft(zkAppAddress, 11, client);
 
 const nft = deserializeNft(nft_);
 

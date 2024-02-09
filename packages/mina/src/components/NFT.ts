@@ -50,6 +50,10 @@ export function NFTtoHash(_NFT: NftReduced): Field {
 }
 
 export function createNft(nftMetadata: nftMetadata): Nft {
+  if (nftMetadata.description.length > 128) {
+    throw new Error('circuit string should be equal or below 128');
+  }
+
   const newNFT: Nft = {
     name: Poseidon.hash(CircuitString.fromString(nftMetadata.name).toFields()),
     description: Poseidon.hash(
@@ -62,6 +66,7 @@ export function createNft(nftMetadata: nftMetadata): Nft {
       this.owner = newAddress;
     },
   };
+
   return newNFT;
 }
 
@@ -120,6 +125,7 @@ export function deserializeNft(data: nftDataIn) {
 }
 
 export async function getMapFromVercelNfts(
+  appId: string | PublicKey,
   nftArray: number[],
   client: VercelKV
 ) {
@@ -129,7 +135,7 @@ export async function getMapFromVercelNfts(
   for (let i = 0; i < arrayLength; i++) {
     const nftId = nftArray[i];
 
-    const data: nftDataIn = await getVercelNft(nftId, client);
+    const data: nftDataIn = await getVercelNft(appId, nftId, client);
 
     const dataOut = deserializeNft(data);
 
@@ -139,6 +145,7 @@ export async function getMapFromVercelNfts(
 }
 
 export async function getMapFromVercelMetadata(
+  appId: string | PublicKey,
   nftArray: number[],
   client: VercelKV
 ) {
@@ -147,26 +154,38 @@ export async function getMapFromVercelMetadata(
   for (let i = 0; i < arrayLength; i++) {
     const nftId = nftArray[i];
 
-    const data: nftDataIn = await getVercelMetadata(nftId, client);
+    const data: nftDataIn = await getVercelMetadata(appId, nftId, client);
     setStringObjectToMap(data, map);
   }
   return map;
 }
 
-export async function setVercelNft(nftId: Field, client: VercelKV, nft: Nft) {
-  await client.set(`nft: ${nftId}`, {
+export async function setVercelNft(
+  appId: string | PublicKey,
+  client: VercelKV,
+  nft: Nft
+) {
+  await client.set(`${appId}: ${nft.id}`, {
     ...nft,
   });
 }
 
-export async function setNftsToVercel(nftArray: Nft[], client: VercelKV) {
+export async function setNftsToVercel(
+  appId: string | PublicKey,
+  nftArray: Nft[],
+  client: VercelKV
+) {
   for (let i = 0; i < nftArray.length; i++) {
-    await setVercelNft(nftArray[i].id, client, nftArray[i]);
+    await setVercelNft(appId, client, nftArray[i]);
   }
 }
 
-export async function getVercelNft(nftId: number | string, client: VercelKV) {
-  const nft: nftDataIn | null = await client.get(`nft: ${nftId}`);
+export async function getVercelNft(
+  appId: string | PublicKey,
+  nftId: number | string,
+  client: VercelKV
+) {
+  const nft: nftDataIn | null = await client.get(`${appId}: ${nftId}`);
   if (nft) {
     return nft;
   }
@@ -174,21 +193,22 @@ export async function getVercelNft(nftId: number | string, client: VercelKV) {
 }
 
 export async function setVercelMetadata(
-  nftId: Field,
-  client: VercelKV,
-  nftMetadata: nftMetadata
+  appId: string | PublicKey,
+  nftMetadata: nftMetadata,
+  client: VercelKV
 ) {
-  await client.hset(`nft metadata: ${nftId}`, {
+  await client.hset(`${appId} metadata: ${nftMetadata.id}`, {
     ...nftMetadata,
   });
 }
 
 export async function getVercelMetadata(
+  appId: string | PublicKey,
   nftId: number | string,
   client: VercelKV
 ) {
   const nftMetadata: nftDataIn | null = await client.hgetall(
-    `nft metadata: ${nftId}`
+    `${appId} metadata: ${nftId}`
   );
   if (nftMetadata) {
     return nftMetadata;
@@ -197,11 +217,12 @@ export async function getVercelMetadata(
 }
 
 export async function setMetadatasToVercel(
+  appId: string | PublicKey,
   nftArray: nftMetadata[],
   client: VercelKV
 ) {
   for (let i = 0; i < nftArray.length; i++) {
-    await setVercelMetadata(nftArray[i].id, client, nftArray[i]);
+    await setVercelMetadata(appId, nftArray[i], client);
   }
 }
 
@@ -231,10 +252,11 @@ export function generateDummyNftMetadata(
   pubKey: PublicKey
 ): nftMetadata {
   const nftMetadata = {
-    name: 'name',
-    description: 'some random words',
+    name: 'DSPYT - into CodeVerse',
+    description:
+      'Join our community to explore the latest trends in data science, share insights on blockchain technology, and participate in DAO',
     id: Field(id),
-    cid: 'bafybeigispuqjylk3zric72nmnuzrpbkmeqzaennraw4crpyrjtdd3nguy',
+    cid: 'https://dspyt.com/DSPYT.png',
     owner: pubKey,
   };
   return nftMetadata;

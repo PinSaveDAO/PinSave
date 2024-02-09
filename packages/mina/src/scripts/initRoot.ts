@@ -30,10 +30,14 @@ const client = createClient({
   token: process.env.KV_REST_API_TOKEN as string,
 });
 
-await setNftsToVercel(nftArray.nftArray, client);
-await setMetadatasToVercel(nftArray.nftMetadata, client);
+await setNftsToVercel(zkAppAddress, nftArray.nftArray, client);
+await setMetadatasToVercel(zkAppAddress, nftArray.nftMetadata, client);
 
-const storedTree = await getMapFromVercelNfts([10, 11, 12], client);
+const storedTree = await getMapFromVercelNfts(
+  zkAppAddress,
+  [10, 11, 12],
+  client
+);
 
 const storedTreeRoot = storedTree.getRoot().toString();
 
