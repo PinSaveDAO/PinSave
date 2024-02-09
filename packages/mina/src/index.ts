@@ -10,7 +10,7 @@ export {
   setVercelNft,
   setNftsToVercel,
   setMetadatasToVercel,
-  nftMetadata,
+  NftMetadata,
   Nft,
 } from './components/Nft.js';
 
