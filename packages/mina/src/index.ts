@@ -1,4 +1,8 @@
-export { MerkleMapContract } from './NFTsMapContract.js';
+export {
+  getTotalSupplyLive,
+  getTotalInitedLive,
+  getAppState,
+} from './components/AppState.js';
 
 export {
   generateDummyCollectionWithMap,
@@ -15,6 +19,13 @@ export {
 } from './components/Nft.js';
 
 export {
+  serializeMerkleMapToJson,
+  deserializeJsonToMerkleMap,
+} from './components/serialize.js';
+
+export { getTokenBalances } from './components/TokenBalances.js';
+
+export {
   getEnvAccount,
   getAppPublic,
   startBerkeleyClient,
@@ -22,13 +33,4 @@ export {
   initRootWithApp,
 } from './components/transactions.js';
 
-export {
-  serializeMerkleMapToJson,
-  deserializeJsonToMerkleMap,
-} from './components/serialize.js';
-
-export {
-  getTotalSupplyLive,
-  getTotalInitedLive,
-  getAppState,
-} from './components/AppState.js';
+export { MerkleMapContract } from './NFTsMapContract.js';

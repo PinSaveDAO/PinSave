@@ -4,19 +4,26 @@ import { kv, createClient } from "@vercel/kv";
 import {
   MerkleMapContract,
   startBerkeleyClient,
-  getTotalSupplyLive,
+  getTotalInitedLive,
   getVercelMetadata,
   getAppPublic,
 } from "pin-mina";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse,
+  res: NextApiResponse
 ) {
   try {
-    let index = 10;
-
     const isDev = process.env.NEXT_PUBLIC_ISDEV;
+    let client = kv;
+    if (isDev === "true") {
+      const url = process.env.NEXT_PUBLIC_REDIS_URL;
+      const token = process.env.NEXT_PUBLIC_REDIS_TOKEN;
+      client = createClient({
+        url: url,
+        token: token,
+      });
+    }
 
     const { number } = req.query;
     const pageNumber = Number(number);
@@ -25,14 +32,16 @@ export default async function handler(
 
     const { pubKey: pubKey, appPubKey: zkAppAddress } = getAppPublic();
 
+    const appId = zkAppAddress.toBase58();
+
     const zkAppInstance: MerkleMapContract = new MerkleMapContract(
-      zkAppAddress,
+      zkAppAddress
     );
 
     let totalSupply = 0;
 
     try {
-      totalSupply = Number(await getTotalSupplyLive(zkAppInstance));
+      totalSupply = Number(await getTotalInitedLive(zkAppInstance));
     } catch (e) {
       console.log(e);
     }
@@ -41,19 +50,21 @@ export default async function handler(
 
     const perPage = 6;
     var upperLimit = perPage * pageNumber;
-    const lowerLimit = upperLimit - perPage + 1;
+    const lowerLimit = upperLimit - perPage;
     if (totalSupply < upperLimit) {
       upperLimit = totalSupply;
     }
 
     try {
-      for (let i = lowerLimit; upperLimit >= i; i++) {
-        const data = await getVercelMetadata(index, kv);
+      for (let index = lowerLimit; upperLimit >= index; index++) {
+        console.log(await getVercelMetadata(appId, 0, client));
 
-        data.cid = await fetchImage(data.cid);
+        const data = await getVercelMetadata(appId, index, client);
+
+        console.log(data);
+        //data.cid = await fetchImage(data.cid);
 
         items.push({ ...data });
-        index++;
       }
     } catch (err) {
       res.status(200).json({

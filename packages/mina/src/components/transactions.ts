@@ -36,7 +36,7 @@ export function getAppPublic() {
 
   const appPubString: string =
     process.env.NEXT_PUBLIC_APP_KEY ??
-    'B62qmB8pt6jA4kciy1wQG5byBor4xV7dNCDQr7KaES9a3o89jigU5or';
+    'B62qmfcFo5LorqmpFVh5Cv4oXGRGjNctnr55JzaVqr5i5bGUYWa7bb2';
 
   const appPubKey: PublicKey = PublicKey.fromBase58(appPubString);
 

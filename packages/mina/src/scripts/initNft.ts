@@ -25,7 +25,7 @@ const { pubKey: pubKey, appPubKey: zkAppAddress } = getAppPublic();
 
 const { map: merkleMap } = generateDummyCollectionWithMap(pubKey);
 
-const nft = generateDummyNft(13, pubKey);
+const nft = generateDummyNft(0, pubKey);
 
 const zkApp: MerkleMapContract = new MerkleMapContract(zkAppAddress);
 

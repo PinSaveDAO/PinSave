@@ -5,6 +5,8 @@ declare global {
     interface ProcessEnv {
       NEXT_PUBLIC_ISDEV: string;
       NEXT_PUBLIC_BLOB: string;
+      NEXT_PUBLIC_REDIS_URL: string;
+      NEXT_PUBLIC_REDIS_TOKEN: string;
       NEXT_PUBLIC_ESTUARY: string;
       NEXT_PUBLIC_PRIVATE_KEY: string;
       NEXT_PUBLIC_NFTPORT: string;

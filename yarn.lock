@@ -5727,23 +5727,10 @@ nyc@15.1.0:
     test-exclude "^6.0.0"
     yargs "^15.0.2"
 
-o1js@0.16.0:
+o1js@0.16, o1js@0.16.0:
   version "0.16.0"
   resolved "https://registry.yarnpkg.com/o1js/-/o1js-0.16.0.tgz#b345988d8e68d247db80b5e83ec068aac350651b"
   integrity sha512-H6fKHLgH68v18De0tZydQKqF2bOIvF+EsPHJ+P53dJDOaS7Dlp8Uf4hGVo8S8luCfYsFvCdDGU3YwfegfCk6TQ==
-  dependencies:
-    blakejs "1.2.1"
-    cachedir "^2.4.0"
-    detect-gpu "^5.0.5"
-    isomorphic-fetch "^3.0.0"
-    js-sha256 "^0.9.0"
-    reflect-metadata "^0.1.13"
-    tslib "^2.3.0"
-
-o1js@^0.15.4:
-  version "0.15.4"
-  resolved "https://registry.yarnpkg.com/o1js/-/o1js-0.15.4.tgz#bfd6f7a63292cb84b460a20230a9b351416fa10a"
-  integrity sha512-70/9NI+Nq4WCFnhYOj2RUynOOqdH0I4wCGxOlmem7GLL2qgj3r/w6DiMV8ZQVjG/MSEyjXxcmEwQpa5R2ef34A==
   dependencies:
     blakejs "1.2.1"
     cachedir "^2.4.0"
@@ -6132,14 +6119,14 @@ pify@^4.0.1:
   resolved "https://registry.yarnpkg.com/pify/-/pify-4.0.1.tgz#4b2cd25c50d598735c50292224fd8c6df41e3231"
   integrity sha512-uB80kBFb/tfd68bVleG9T5GGsGPjJrLAUpR5PZIrhBnIaRTQRjqdJSsIKkOP6OAIFbj7GOrcudc5pNjZ+geV2g==
 
-pin-mina@0.1.20:
-  version "0.1.20"
-  resolved "https://registry.yarnpkg.com/pin-mina/-/pin-mina-0.1.20.tgz#bd46090b5a76ef55761db9f61382f9aaa9c0ff51"
-  integrity sha512-4gqJvfmoJSc1BCs+zS2hmBFatmJUrdpW+qwSYb8RPjcgNiqKIrCLz9TqRmXXU0G5lNPCAn5rncQIVTgX6Y93fQ==
+pin-mina@0.1.23:
+  version "0.1.23"
+  resolved "https://registry.yarnpkg.com/pin-mina/-/pin-mina-0.1.23.tgz#47249c53437221f0cf4f7d1f62def14305bb4416"
+  integrity sha512-q5DgaNbAiejpK7Fjjg2587t/5fp+nk9MPmL61Ik6PhvGYc3nm9i1sUS/Eib/v2V3izSOBO5fzR8aXmC9yN+BEg==
   dependencies:
     "@vercel/kv" "^1.0.1"
     dotenv "^16.3.1"
-    o1js "^0.15.4"
+    o1js "0.16"
 
 pinkie-promise@^2.0.0:
   version "2.0.1"
