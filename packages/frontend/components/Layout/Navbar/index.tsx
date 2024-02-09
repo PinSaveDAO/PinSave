@@ -129,10 +129,10 @@ export function Navbar({ links }: NavbarProps) {
 
   return (
     <div>
-      {hasMounted ? (
-        <Header height={80} mb={10} className={classes.root}>
-          <Container className={classes.header}>
-            <Link href="/">
+      <Header height={80} mb={10} className={classes.root}>
+        <Container className={classes.header}>
+          <Link href="/">
+            {hasMounted ? (
               <Image
                 src={iconLeftPath}
                 alt="Pin Save EVM"
@@ -140,39 +140,39 @@ export function Navbar({ links }: NavbarProps) {
                 height={iconHeight}
                 priority
               />
-            </Link>
-            <Group spacing={5} className={classes.links}>
-              {items}
-            </Group>
-            <Group spacing={5}>
-              {/* <ConnectButton
+            ) : null}
+          </Link>
+          <Group spacing={5} className={classes.links}>
+            {items}
+          </Group>
+          <Group spacing={5}>
+            {/* <ConnectButton
               accountStatus={{
                 smallScreen: "avatar",
                 largeScreen: "full",
               }}
             /> */}
-              <Burger
-                opened={opened}
-                onClick={() => toggleOpened()}
-                className={classes.burger}
-                size="sm"
-              />
-            </Group>
+            <Burger
+              opened={opened}
+              onClick={() => toggleOpened()}
+              className={classes.burger}
+              size="sm"
+            />
+          </Group>
 
-            <Transition
-              transition="pop-top-right"
-              duration={200}
-              mounted={opened}
-            >
-              {(styles) => (
-                <Paper className={classes.dropdown} withBorder style={styles}>
-                  {items}
-                </Paper>
-              )}
-            </Transition>
-          </Container>
-        </Header>
-      ) : null}
+          <Transition
+            transition="pop-top-right"
+            duration={200}
+            mounted={opened}
+          >
+            {(styles) => (
+              <Paper className={classes.dropdown} withBorder style={styles}>
+                {items}
+              </Paper>
+            )}
+          </Transition>
+        </Container>
+      </Header>
     </div>
   );
 }

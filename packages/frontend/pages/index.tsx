@@ -42,7 +42,14 @@ const Home: NextPage = () => {
             <Text> Loading decentralized PinSave Posts</Text>
             <Text>
               {" "}
-              Upload your post on <Link href="/upload"> `/Upload`</Link> page
+              Upload your post on <Link href="/upload"> `/Upload`</Link> page.
+              Pin Save is a decentralized social media which consists of
+              decentralized posts enabled by Mina blockchain and o1js. The speed
+              of interacting with media and content should be greatly enhanced
+              by storing metadata off-chain enabled by Mina merkle trees. In
+              addition, it aims to introduce more standards into the Mina
+              ecosystem related to non fungible tokens to improve developer
+              experience.
             </Text>
           </Stack>
         </Center>
