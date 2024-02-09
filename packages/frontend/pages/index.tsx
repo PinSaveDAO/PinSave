@@ -4,6 +4,7 @@ import type { Post } from "@/services/upload";
 
 import { Box, Button, Center, Title, Text, Stack } from "@mantine/core";
 import type { NextPage } from "next";
+import Link from "next/link";
 
 const Home: NextPage = () => {
   const {
@@ -16,7 +17,7 @@ const Home: NextPage = () => {
 
   return (
     <div>
-      {posts?.pages.map((page, i: number) => (
+      {posts?.pages.map((page: any, i: number) => (
         <Box
           mx="auto"
           sx={{
@@ -39,6 +40,10 @@ const Home: NextPage = () => {
           <Stack>
             <Title order={1}> PinSave Home Page</Title>
             <Text> Loading decentralized PinSave Posts</Text>
+            <Text>
+              {" "}
+              Upload your post on <Link href="/upload"> `/Upload`</Link> page
+            </Text>
           </Stack>
         </Center>
       )}
