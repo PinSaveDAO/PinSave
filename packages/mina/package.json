@@ -63,6 +63,6 @@
   "dependencies": {
     "@vercel/kv": "^1.0.1",
     "dotenv": "^16.3.1",
-    "o1js": "^0.15.4"
+    "o1js": "0.16"
   }
 }

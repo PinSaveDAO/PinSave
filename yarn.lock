@@ -1095,17 +1095,17 @@
     viem "^0.3.17"
     wait-on "^7.0.1"
 
-"@tanstack/query-core@5.18.0":
-  version "5.18.0"
-  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-5.18.0.tgz#445a0cbf94b49d57132255c74570cfb63cf444c2"
-  integrity sha512-8c6nxeAnGHxIDZIyDmHdmgFt4D+LprAQaJmjsnM4szcIjsWOyFlzxdqQUuQ/XuQRvUgqYaqlJTtDADlSS7pTPQ==
+"@tanstack/query-core@5.18.1":
+  version "5.18.1"
+  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-5.18.1.tgz#b653ee354b7f4712d53565ccc5c6d8fb83ec866c"
+  integrity sha512-fYhrG7bHgSNbnkIJF2R4VUXb4lF7EBiQjKkDc5wOlB7usdQOIN4LxxHpDxyE3qjqIst1WBGvDtL48T0sHJGKCw==
 
-"@tanstack/react-query@5.18.0":
-  version "5.18.0"
-  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-5.18.0.tgz#da948737c904e7796df2aab2e52a92bdd755ffb1"
-  integrity sha512-7FKxNfxxKEL7n3ADpwp81Fy4FX85hNkYVzQQVQsF0JAPl93c3d1gmNZMIbEtOqgYfom1/ontGh3FiZGYj3xyWA==
+"@tanstack/react-query@5.18.1":
+  version "5.18.1"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-5.18.1.tgz#fd4e7b87260e82c5277355ad64f0e431a9302e02"
+  integrity sha512-PdI07BbsahZ+04PxSuDQsQvBWe008eWFk/YYWzt8fvzt2sALUM0TpAJa/DFpqa7+SSo7j1EQR6Jx6znXNHyaXw==
   dependencies:
-    "@tanstack/query-core" "5.18.0"
+    "@tanstack/query-core" "5.18.1"
 
 "@testing-library/cypress@^9.0.0":
   version "9.0.0"
@@ -5727,7 +5727,20 @@ nyc@15.1.0:
     test-exclude "^6.0.0"
     yargs "^15.0.2"
 
-o1js@0.15.4, o1js@^0.15.4:
+o1js@0.16.0:
+  version "0.16.0"
+  resolved "https://registry.yarnpkg.com/o1js/-/o1js-0.16.0.tgz#b345988d8e68d247db80b5e83ec068aac350651b"
+  integrity sha512-H6fKHLgH68v18De0tZydQKqF2bOIvF+EsPHJ+P53dJDOaS7Dlp8Uf4hGVo8S8luCfYsFvCdDGU3YwfegfCk6TQ==
+  dependencies:
+    blakejs "1.2.1"
+    cachedir "^2.4.0"
+    detect-gpu "^5.0.5"
+    isomorphic-fetch "^3.0.0"
+    js-sha256 "^0.9.0"
+    reflect-metadata "^0.1.13"
+    tslib "^2.3.0"
+
+o1js@^0.15.4:
   version "0.15.4"
   resolved "https://registry.yarnpkg.com/o1js/-/o1js-0.15.4.tgz#bfd6f7a63292cb84b460a20230a9b351416fa10a"
   integrity sha512-70/9NI+Nq4WCFnhYOj2RUynOOqdH0I4wCGxOlmem7GLL2qgj3r/w6DiMV8ZQVjG/MSEyjXxcmEwQpa5R2ef34A==
