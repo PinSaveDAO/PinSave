@@ -14,9 +14,13 @@ export default async function handler(
   res: NextApiResponse
 ) {
   try {
+    let index = 10;
+
+    const isDev = process.env.NEXT_PUBLIC_ISDEV;
+
     const { number } = req.query;
     const pageNumber = Number(number);
-    let index = 10;
+
     startBerkeleyClient();
 
     const { pubKey: pubKey, appPubKey: zkAppAddress } = getAppPublic();
@@ -25,7 +29,13 @@ export default async function handler(
       zkAppAddress
     );
 
-    const totalSupply = Number(await getTotalSupplyLive(zkAppInstance));
+    let totalSupply = 0;
+
+    try {
+      totalSupply = Number(await getTotalSupplyLive(zkAppInstance));
+    } catch (e) {
+      console.log(e);
+    }
 
     let items = [];
 
@@ -55,7 +65,7 @@ export default async function handler(
     res
       .status(200)
       .json({ items: items, totalSupply: totalSupply, page: pageNumber });
-  } catch (err) {
-    res.status(500).json({ error: "failed to fetch data" + err });
+  } catch (e) {
+    res.status(500).json({ error: "failed to fetch data" + e });
   }
 }

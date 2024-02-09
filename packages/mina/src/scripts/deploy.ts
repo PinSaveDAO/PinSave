@@ -6,7 +6,9 @@ import {
 
 startBerkeleyClient();
 
-const { pk: deployerKey } = getEnvAccount();
+const { pk: deployerKey, pubKey: pubKey } = getEnvAccount();
+
+console.log('deployer:', pubKey.toBase58());
 
 const { zkAppPk: pk } = await deployApp(deployerKey);
 

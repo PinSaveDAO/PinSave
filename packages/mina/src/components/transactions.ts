@@ -51,6 +51,7 @@ export function startBerkeleyClient(
   const Berkeley = Mina.Network(endpoint);
 
   Mina.setActiveInstance(Berkeley);
+  console.log('network:', Mina.activeInstance.getNetworkId());
 }
 
 export async function startLocalBlockchainClient(

@@ -3,6 +3,7 @@ export {};
 declare global {
   namespace NodeJS {
     interface ProcessEnv {
+      NEXT_PUBLIC_ISDEF: string;
       NEXT_PUBLIC_ESTUARY: string;
       NEXT_PUBLIC_PRIVATE_KEY: string;
       NEXT_PUBLIC_NFTPORT: string;
@@ -11,7 +12,6 @@ declare global {
       NEXT_PUBLIC_ALCHEMY_ID: string;
       NEXT_APP_CLIENT_ID: string;
       NEXT_APP_REDIRECT_URI: string;
-      ENV: "test" | "dev" | "prod";
     }
   }
 }

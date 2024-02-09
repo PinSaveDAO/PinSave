@@ -1,6 +1,6 @@
 {
   "name": "pin-mina",
-  "version": "0.1.18",
+  "version": "0.1.20",
   "description": "pin save - decentralized pinterest sdk with utils on mina",
   "author": "pavel fedotov pfedprog",
   "license": "Apache-2.0",
@@ -14,11 +14,13 @@
     "zkps",
     "pinsave",
     "pin-save",
+    "nfts",
     "cryptography",
     "blockchain",
     "web3",
     "mina",
-    "smart-contract"
+    "smart-contract",
+    "metadata"
   ],
   "type": "module",
   "main": "build/src/index.js",
@@ -35,13 +37,14 @@
     "test": "tsc && node build/src/NFTsMapContract.test.js",
     "deploy": "tsc && node build/src/scripts/deploy.js",
     "query": "tsc && node build/src/scripts/queryContract.js",
+    "queryAccount": "tsc && node build/src/scripts/queryAccount.js",
     "initRoot": "tsc && node build/src/scripts/initRoot.js",
     "initNft": "tsc && node build/src/scripts/initNft.js",
     "serialize": "tsc && node build/src/scripts/serialize.js",
     "compileContract": "tsc && node build/src/scripts/compileContract.js",
     "mint": "tsc && node build/src/scripts/mint.js",
     "compile": "rm -rf build && tsc",
-    "pubslish": "yarn compile & npm publish",
+    "pub": "yarn compile & yarn publish",
     "lint": "npx eslint src/* --fix"
   },
   "devDependencies": {
