@@ -92,7 +92,9 @@ const UploadForm = () => {
     if (description !== "" && name !== "" && image && address) {
       const cid = await UploadData({
         receiverAddress: address,
-        data: { name: name, description: description, image: image },
+        name: name,
+        description: description,
+        image: image,
       });
 
       console.log(cid);

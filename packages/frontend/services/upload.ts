@@ -1,8 +1,4 @@
-export type PostDataUpload = {
-  name: string;
-  description: string;
-  image: File;
-};
+import { put } from "@vercel/blob";
 
 export type PostData = {
   name: string;
@@ -20,9 +16,25 @@ export type IndividualPost = Post & {
 
 export type UploadingPost = {
   receiverAddress: string;
-  data: PostDataUpload;
+  name: string;
+  description: string;
+  image: File;
 };
 
 export async function UploadData(data: UploadingPost) {
-  console.log(data.data);
+  const isDev = process.env.NEXT_PUBLIC_ISDEV;
+  let blob;
+  if (isDev) {
+    blob = await put(data.image.name, data.image, {
+      access: "public",
+      token: process.env.NEXT_PUBLIC_BLOB,
+    });
+  }
+  if (!isDev) {
+    blob = await put(data.image.name, data.image, {
+      access: "public",
+    });
+  }
+
+  return blob;
 }

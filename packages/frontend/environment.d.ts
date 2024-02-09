@@ -3,7 +3,8 @@ export {};
 declare global {
   namespace NodeJS {
     interface ProcessEnv {
-      NEXT_PUBLIC_ISDEF: string;
+      NEXT_PUBLIC_ISDEV: string;
+      NEXT_PUBLIC_BLOB: string;
       NEXT_PUBLIC_ESTUARY: string;
       NEXT_PUBLIC_PRIVATE_KEY: string;
       NEXT_PUBLIC_NFTPORT: string;
