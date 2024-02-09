@@ -22,7 +22,7 @@ export type UploadingPost = {
 };
 
 export async function UploadData(data: UploadingPost) {
-  const isDev = process.env.NEXT_PUBLIC_ISDEV;
+  const isDev = process.env.NEXT_PUBLIC_ISDEV ?? undefined;
   let blob;
   if (isDev) {
     blob = await put(data.image.name, data.image, {
@@ -30,7 +30,9 @@ export async function UploadData(data: UploadingPost) {
       token: process.env.NEXT_PUBLIC_BLOB,
     });
   }
+
   if (!isDev) {
+    console.log("production");
     blob = await put(data.image.name, data.image, {
       access: "public",
     });
