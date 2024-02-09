@@ -3283,10 +3283,10 @@ nwsapi@^2.2.0:
   resolved "https://registry.yarnpkg.com/nwsapi/-/nwsapi-2.2.7.tgz#738e0707d3128cb750dddcfe90e4610482df0f30"
   integrity sha512-ub5E4+FBPKwAZx0UwIQOjYWGHTEq5sPqHQNRN8Z9e4A7u3Tj1weLJsL59yH9vmvqEtBHaOmT6cYQKIZOxp35FQ==
 
-o1js@^0.15.4:
-  version "0.15.4"
-  resolved "https://registry.yarnpkg.com/o1js/-/o1js-0.15.4.tgz#bfd6f7a63292cb84b460a20230a9b351416fa10a"
-  integrity sha512-70/9NI+Nq4WCFnhYOj2RUynOOqdH0I4wCGxOlmem7GLL2qgj3r/w6DiMV8ZQVjG/MSEyjXxcmEwQpa5R2ef34A==
+o1js@0.16:
+  version "0.16.0"
+  resolved "https://registry.yarnpkg.com/o1js/-/o1js-0.16.0.tgz#b345988d8e68d247db80b5e83ec068aac350651b"
+  integrity sha512-H6fKHLgH68v18De0tZydQKqF2bOIvF+EsPHJ+P53dJDOaS7Dlp8Uf4hGVo8S8luCfYsFvCdDGU3YwfegfCk6TQ==
   dependencies:
     blakejs "1.2.1"
     cachedir "^2.4.0"
