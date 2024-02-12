@@ -28,9 +28,15 @@ export { getTokenBalances } from './components/TokenBalances.js';
 export {
   getEnvAccount,
   getAppPublic,
+  getAppDeployer,
+  getAppString,
+  getAppContract,
   startBerkeleyClient,
+  createMintTx,
   mintNftFromMap,
+  mintNFT,
   initRootWithApp,
+  createTxOptions,
 } from './components/transactions.js';
 
 export { MerkleMapContract } from './NFTsMapContract.js';

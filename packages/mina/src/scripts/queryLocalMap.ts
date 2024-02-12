@@ -2,7 +2,7 @@ import { createClient } from '@vercel/kv';
 import dotenv from 'dotenv';
 
 import { getMapFromVercelNfts, getVercelMetadata } from '../components/Nft.js';
-import { getAppPublic } from '../components/transactions.js';
+import { getAppString } from '../components/transactions.js';
 
 dotenv.config();
 
@@ -11,9 +11,7 @@ const client = createClient({
   token: process.env.KV_REST_API_TOKEN as string,
 });
 
-const { pubKey: pubKey, appPubKey: zkAppAddress } = getAppPublic();
-
-const appId = zkAppAddress.toBase58();
+const appId = getAppString();
 
 const storedMap = await getMapFromVercelNfts(appId, [0, 1, 2], client);
 

@@ -6,10 +6,10 @@ import {
 
 startBerkeleyClient();
 
-const { pubKey: pubKey, appPubKey: zkAppAddress } = getAppPublic();
+const publicKey = getAppPublic();
 
 console.log(
   await fetchAccount({
-    publicKey: pubKey,
+    publicKey: publicKey,
   })
 );

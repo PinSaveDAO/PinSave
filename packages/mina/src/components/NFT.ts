@@ -178,7 +178,7 @@ export async function setNftsToVercel(
 }
 
 export async function getVercelNft(
-  appId: string | PublicKey,
+  appId: string,
   nftId: number | string,
   client: VercelKV
 ) {

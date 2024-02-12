@@ -8,9 +8,7 @@ import { ArrowLeft } from "tabler-icons-react";
 
 const PostPage = () => {
   const router = useRouter();
-
   const { data: postQueried, isLoading } = usePost(String(router.query.id));
-
   return (
     <div>
       <LoadingOverlay visible={isLoading} />

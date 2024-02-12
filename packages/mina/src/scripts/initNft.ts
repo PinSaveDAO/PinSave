@@ -20,8 +20,8 @@ const client = createClient({
   token: process.env.KV_REST_API_TOKEN as string,
 });
 
-const { pk: pk } = getEnvAccount();
-const { pubKey: pubKey, appPubKey: zkAppAddress } = getAppPublic();
+const { pubKey: pubKey, pk: pk } = getEnvAccount();
+const zkAppAddress = getAppPublic();
 
 const { map: merkleMap } = generateDummyCollectionWithMap(pubKey);
 

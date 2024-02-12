@@ -13,7 +13,7 @@ import {
 
 startBerkeleyClient();
 
-const { pubKey: pubKey, appPubKey: zkAppAddress } = getAppPublic();
+const pubKey = getAppPublic();
 
 const merkleMap: MerkleMap = new MerkleMap();
 console.log('MerkleMap()', merkleMap.getRoot().toString());

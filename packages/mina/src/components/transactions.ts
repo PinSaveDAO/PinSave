@@ -18,38 +18,43 @@ import { logTokenBalances, getTokenBalances } from './TokenBalances.js';
 import { NFTtoHash, Nft } from './Nft.js';
 
 export function getEnvAccount() {
+  dotenv.config();
   const pk: PrivateKey = PrivateKey.fromBase58(
     process.env.deployerKey as string
   );
-
   const pubKey: PublicKey = pk.toPublicKey();
-
   return { pubKey: pubKey, pk: pk };
 }
 
-export function getAppPublic() {
+export function getAppDeployer() {
   const pubKeyString: string =
-    process.env.NEXT_PUBLIC_KEY ??
     'B62qqpPjKKgp8G2kuB82g9NEgfg85vmEAZ84to3FfyQeL4MuFm5Ybc9';
-
   const pubKey: PublicKey = PublicKey.fromBase58(pubKeyString);
+  return pubKey;
+}
 
+export function getAppString() {
   const appPubString: string =
-    process.env.NEXT_PUBLIC_APP_KEY ??
     'B62qmfcFo5LorqmpFVh5Cv4oXGRGjNctnr55JzaVqr5i5bGUYWa7bb2';
+  return appPubString;
+}
 
+export function getAppPublic() {
+  const appPubString = getAppString();
   const appPubKey: PublicKey = PublicKey.fromBase58(appPubString);
+  return appPubKey;
+}
 
-  return { pubKey: pubKey, appPubKey: appPubKey };
+export function getAppContract() {
+  const zkAppAddress = getAppPublic();
+  const zkApp: MerkleMapContract = new MerkleMapContract(zkAppAddress);
+  return zkApp;
 }
 
 export function startBerkeleyClient(
   endpoint: string = 'https://mina-berkeley-graphql.aurowallet.com/graphql'
 ) {
-  dotenv.config();
-
   const Berkeley = Mina.Network(endpoint);
-
   Mina.setActiveInstance(Berkeley);
 }
 
@@ -153,20 +158,38 @@ export async function mintNFT(
   const pubKey: PublicKey = pk.toPublicKey();
   const txOptions = createTxOptions(pubKey, live);
 
-  try {
-    const mint_tx: Mina.Transaction = await Mina.transaction(txOptions, () => {
+  const mint_tx = await createMintTx(
+    pubKey,
+    zkAppInstance,
+    _NFT,
+    merkleMapWitness,
+    txOptions
+  );
+
+  await sendWaitTx(mint_tx, pk, live);
+}
+
+export async function createMintTx(
+  pubKey: PublicKey,
+  zkAppInstance: MerkleMapContract,
+  _NFT: Nft,
+  merkleMapWitness: MerkleMapWitness,
+  txOptions: TxOptions
+) {
+  const recipientBalance = getTokenBalances(pubKey, zkAppInstance);
+  let mint_tx: Mina.Transaction;
+
+  if (recipientBalance > 0) {
+    mint_tx = await Mina.transaction(txOptions, () => {
+      zkAppInstance.mintNft(_NFT, merkleMapWitness);
+    });
+  } else {
+    mint_tx = await Mina.transaction(txOptions, () => {
       AccountUpdate.fundNewAccount(pubKey);
       zkAppInstance.mintNft(_NFT, merkleMapWitness);
     });
-
-    await sendWaitTx(mint_tx, pk, live);
-  } catch (e) {
-    const mint_tx: Mina.Transaction = await Mina.transaction(txOptions, () => {
-      zkAppInstance.mintNft(_NFT, merkleMapWitness);
-    });
-
-    await sendWaitTx(mint_tx, pk, live);
   }
+  return mint_tx;
 }
 
 export async function transferNft(
@@ -318,7 +341,7 @@ async function sendWaitTx(
   }
 }
 
-function createTxOptions(
+export function createTxOptions(
   pubKey: PublicKey,
   live: boolean = true,
   fee: number = 100_000_000
@@ -331,3 +354,8 @@ function createTxOptions(
   }
   return txOptions;
 }
+
+export type TxOptions = {
+  sender: PublicKey;
+  fee?: number | undefined;
+};

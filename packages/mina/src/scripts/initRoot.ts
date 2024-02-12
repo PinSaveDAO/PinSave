@@ -15,8 +15,8 @@ import {
 
 startBerkeleyClient();
 
-const { pk: deployerKey } = getEnvAccount();
-const { pubKey: pubKey, appPubKey: zkAppAddress } = getAppPublic();
+const { pubKey: pubKey, pk: deployerKey } = getEnvAccount();
+const zkAppAddress = getAppPublic();
 
 const {
   map: merkleMap,

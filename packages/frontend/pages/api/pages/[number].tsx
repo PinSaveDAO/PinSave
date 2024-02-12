@@ -1,12 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { kv, createClient } from "@vercel/kv";
-import {
-  MerkleMapContract,
-  startBerkeleyClient,
-  getTotalInitedLive,
-  getVercelMetadata,
-  getAppPublic,
-} from "pin-mina";
+import { getVercelMetadata, getAppPublic } from "pin-mina";
 
 export default async function handler(
   req: NextApiRequest,
@@ -14,6 +8,10 @@ export default async function handler(
 ) {
   try {
     const isDev = process.env.NEXT_PUBLIC_ISDEV ?? "false";
+    const host = process.env.NEXT_PUBLIC_ISDEV
+      ? "http://localhost:3000"
+      : "https://pinsave.app";
+
     let client = kv;
     if (isDev === "true") {
       const url = process.env.NEXT_PUBLIC_REDIS_URL;
@@ -27,31 +25,22 @@ export default async function handler(
     const { number } = req.query;
     const pageNumber = Number(number);
 
-    startBerkeleyClient();
-
-    const { pubKey: pubKey, appPubKey: zkAppAddress } = getAppPublic();
+    const { appPubKey: zkAppAddress } = getAppPublic();
 
     const appId = zkAppAddress.toBase58();
 
-    const zkAppInstance: MerkleMapContract = new MerkleMapContract(
-      zkAppAddress
-    );
+    const response = await fetch(`${host}/api/totalInited`);
+    const data = await response.json();
 
-    let totalSupply = 0;
-
-    try {
-      totalSupply = Number(await getTotalInitedLive(zkAppInstance));
-    } catch (e) {
-      console.log(e);
-    }
+    const totalInited = data.totalInited;
 
     let items = [];
 
     const perPage = 6;
     var upperLimit = perPage * pageNumber;
     const lowerLimit = upperLimit - perPage;
-    if (totalSupply < upperLimit) {
-      upperLimit = totalSupply - 1;
+    if (totalInited < upperLimit) {
+      upperLimit = totalInited - 1;
     }
 
     try {
@@ -62,13 +51,13 @@ export default async function handler(
     } catch (err) {
       res.status(200).json({
         items: items,
-        totalSupply: totalSupply,
+        totalInited: totalInited,
         error: "failed to fetch data" + err,
       });
     }
     res
       .status(200)
-      .json({ items: items, totalSupply: totalSupply, page: pageNumber });
+      .json({ items: items, totalSupply: totalInited, page: pageNumber });
   } catch (e) {
     res.status(500).json({ error: "failed to fetch data" + e });
   }

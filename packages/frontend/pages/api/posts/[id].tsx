@@ -21,7 +21,7 @@ export default async function handler(
 
     const index = Number(id);
 
-    const { pubKey: pubKey, appPubKey: zkAppAddress } = getAppPublic();
+    const { appPubKey: zkAppAddress } = getAppPublic();
 
     const appId = zkAppAddress.toBase58();
 
