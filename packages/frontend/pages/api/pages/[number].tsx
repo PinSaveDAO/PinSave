@@ -56,10 +56,7 @@ export default async function handler(
 
     try {
       for (let index = lowerLimit; upperLimit >= index; index++) {
-        console.log(await getVercelMetadata(appId, 0, client));
-
         const data = await getVercelMetadata(appId, index, client);
-
         items.push({ ...data });
       }
     } catch (err) {
