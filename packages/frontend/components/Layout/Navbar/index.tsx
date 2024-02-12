@@ -1,4 +1,4 @@
-import { getMinaAccount } from "@/hooks/minaWallet";
+import { setMinaAccount } from "@/hooks/minaWallet";
 import {
   createStyles,
   Text,
@@ -101,11 +101,21 @@ interface NavbarProps {
 }
 
 export function Navbar({ links }: NavbarProps) {
+  const key = "auroWalletAddress";
+
   const [hasMounted, setHasMounted] = useState(false);
+  const [address, setAddress] = useState("");
 
   useEffect(() => {
     setHasMounted(true);
-  }, []);
+    const key = "auroWalletAddress";
+    const savedAddress = sessionStorage.getItem(key);
+    if (savedAddress) {
+      const shortAddress =
+        savedAddress.substring(0, 3) + "..." + savedAddress.slice(-3);
+      setAddress(shortAddress);
+    }
+  }, [address]);
 
   const [opened, toggleOpened] = useBooleanToggle(false);
   const { classes, cx } = useStyles();
@@ -152,9 +162,9 @@ export function Navbar({ links }: NavbarProps) {
               variant="filled"
               size="md"
               radius="md"
-              onClick={() => getMinaAccount()}
+              onClick={async () => setAddress(await setMinaAccount(key))}
             >
-              Button
+              {address !== "" ? address : "Connect Wallet"}
             </Button>
             <Burger
               opened={opened}

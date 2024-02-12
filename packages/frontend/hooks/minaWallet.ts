@@ -13,7 +13,7 @@ function connectMinaWallet() {
 
 async function getMinaNetwork() {
   const network = await (window as CustomWindow).mina.requestNetwork();
-  console.log(network);
+  return network;
 }
 
 async function requestMinaAccounts() {
@@ -26,9 +26,18 @@ async function requestMinaAccounts() {
 export async function getMinaAccount() {
   connectMinaWallet();
 
-  let account = await (window as CustomWindow).mina.getAccounts();
-  if (account.len === 0) {
-    account = requestMinaAccounts();
+  let account: string[] = await (window as CustomWindow).mina.getAccounts();
+  if (account.length === 0) {
+    account = await requestMinaAccounts();
+    if (account.length === 0) {
+      throw new Error("no account found");
+    }
   }
-  console.log(account);
+  return account[0];
+}
+
+export async function setMinaAccount(key: string) {
+  const account: string = await getMinaAccount();
+  sessionStorage.setItem(key, account);
+  return account;
 }
