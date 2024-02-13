@@ -12,10 +12,13 @@ export {
   getMapFromVercelNfts,
   getVercelMetadata,
   setVercelNft,
+  getVercelNft,
   setNftsToVercel,
   setMetadatasToVercel,
+  deserializeNft,
   NftMetadata,
   Nft,
+  nftDataIn,
 } from './components/Nft.js';
 
 export {
@@ -26,7 +29,6 @@ export {
 export { getTokenBalances } from './components/TokenBalances.js';
 
 export {
-  getEnvAccount,
   getAppPublic,
   getAppDeployer,
   getAppString,

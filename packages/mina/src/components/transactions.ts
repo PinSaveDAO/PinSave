@@ -10,21 +10,11 @@ import {
   UInt64,
   Signature,
 } from 'o1js';
-import dotenv from 'dotenv';
 
 import { MerkleMapContract } from '../NFTsMapContract.js';
 import { compareLogStates } from './AppState.js';
 import { logTokenBalances, getTokenBalances } from './TokenBalances.js';
 import { NFTtoHash, Nft } from './Nft.js';
-
-export function getEnvAccount() {
-  dotenv.config();
-  const pk: PrivateKey = PrivateKey.fromBase58(
-    process.env.deployerKey as string
-  );
-  const pubKey: PublicKey = pk.toPublicKey();
-  return { pubKey: pubKey, pk: pk };
-}
 
 export function getAppDeployer() {
   const pubKeyString: string =

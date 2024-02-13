@@ -3,7 +3,6 @@ import { MerkleMap, MerkleTree } from 'o1js';
 import {
   deserializeJsonToMerkleMap,
   serializeMerkleMapToJson,
-  serializeMerkleToJsonOptimized,
 } from '../components/serialize.js';
 import { generateDummyCollectionMap } from '../components/Nft.js';
 import {
@@ -51,8 +50,6 @@ console.log(
   'after serialize-deserialize',
   exampleMerkleTree.getRoot().toString()
 ); */
-
-await serializeMerkleToJsonOptimized(merkleTree);
 
 //console.log(getZerosMerkleTree(merkleTree.height).toString());
 

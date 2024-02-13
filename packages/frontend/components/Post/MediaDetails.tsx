@@ -6,7 +6,7 @@ import {
   getAppPublic,
   getAppString,
 } from "pin-mina";
-import { getVercelNft } from "pin-mina/build/src/components/Nft";
+
 import React, { useEffect, useState } from "react";
 
 interface IMyProps {
@@ -22,13 +22,24 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
   const [totalSupply, setTotalSupply] = useState(null);
 
   async function mintNFT() {
-    const pub = getAppPublic();
-    const zkApp = getAppContract();
-    const appId = getAppString();
-    // const nft = await getVercelNft(appId, 11, client);
+    /* const isDev = process.env.NEXT_PUBLIC_ISDEV ?? "false";
+    let client = kv;
+    if (isDev === "true") {
+      const url = process.env.NEXT_PUBLIC_REDIS_URL;
+      const token = process.env.NEXT_PUBLIC_REDIS_TOKEN;
+      client = createClient({
+        url: url,
+        token: token,
+      });
+    } */
+    //const pub = getAppPublic();
+    //const zkApp = getAppContract();
+    //const appId = getAppString();
+    //const nft = await getVercelNft(appId, 11, client);
+    //console.log(nft);
     //let transactionJSON = await createMintTx(pub, zkApp, nft);
-    /*     const fee = "";
-    const memo = ""; */
+    const fee = "";
+    const memo = "";
     /* await (window as CustomWindow).mina?.sendTransaction({
       transaction: transactionJSON,
     }); */

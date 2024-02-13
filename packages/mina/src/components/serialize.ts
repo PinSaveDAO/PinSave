@@ -1,5 +1,5 @@
 import { Field, MerkleMap, MerkleTree, Poseidon } from 'o1js';
-import { createWriteStream } from 'fs';
+// import { createWriteStream } from 'fs';
 
 export function serializeMerkleMapToJson(merkleMap: MerkleMap): string {
   const serializedData: { [key: number]: string } = {};
@@ -66,7 +66,7 @@ export function serializeMerkleTreeToJson(merkleTree: MerkleTree): string {
   return JSON.stringify(serializedData);
 }
 
-export function serializeMerkleTreeToJsonWithStream(
+/* export function serializeMerkleTreeToJsonWithStream(
   merkleTree: MerkleTree
 ): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -133,7 +133,7 @@ export async function serializeMerkleToJsonOptimized(merkleTree: MerkleTree) {
   writeStream.end(); // End the JSON object
 
   return 'Serialization complete';
-}
+} */
 
 export function getZerosMerkleTree(height: number): Field[] {
   if (height < 1) {

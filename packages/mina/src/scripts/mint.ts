@@ -7,12 +7,14 @@ import {
 } from '../components/Nft.js';
 import {
   mintNftFromMap,
-  getEnvAccount,
   startBerkeleyClient,
   getAppString,
   getAppContract,
 } from '../components/transactions.js';
 
+import { getEnvAccount } from '../components/env.js';
+
+const { pk: deployerKey } = getEnvAccount();
 startBerkeleyClient();
 
 const client = createClient({
@@ -20,11 +22,10 @@ const client = createClient({
   token: process.env.KV_REST_API_TOKEN as string,
 });
 
-const { pk: deployerKey } = getEnvAccount();
 const appId = getAppString();
 const zkApp = getAppContract();
 
-const storedMap = await getMapFromVercelNfts(appId, [10, 11, 12], client);
+const storedMap = await getMapFromVercelNfts(appId, [0, 1, 2], client);
 
 console.log(storedMap.getRoot().toString());
 
