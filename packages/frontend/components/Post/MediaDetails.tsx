@@ -1,14 +1,38 @@
 import type { IndividualPost } from "@/services/upload";
 import { Paper, Text, Title, Button } from "@mantine/core";
+import {
+  createMintTx,
+  getAppContract,
+  getAppPublic,
+  getAppString,
+} from "pin-mina";
+import { getVercelNft } from "pin-mina/build/src/components/Nft";
 import React, { useEffect, useState } from "react";
 
 interface IMyProps {
   post: IndividualPost;
 }
 
+interface CustomWindow extends Window {
+  mina?: any;
+}
+
 const MediaDetails: React.FC<IMyProps> = ({ post }) => {
   const postNumber = Number(post.id);
   const [totalSupply, setTotalSupply] = useState(null);
+
+  async function mintNFT() {
+    const pub = getAppPublic();
+    const zkApp = getAppContract();
+    const appId = getAppString();
+    // const nft = await getVercelNft(appId, 11, client);
+    //let transactionJSON = await createMintTx(pub, zkApp, nft);
+    /*     const fee = "";
+    const memo = ""; */
+    /* await (window as CustomWindow).mina?.sendTransaction({
+      transaction: transactionJSON,
+    }); */
+  }
 
   useEffect(() => {
     const fetchMediaDetails = async () => {
@@ -50,11 +74,7 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
       {totalSupply && postNumber >= totalSupply ? (
         <Text>Minted</Text>
       ) : (
-        <Button
-          onClick={async () => console.log("") /* await mintNftFromMap() */}
-        >
-          Mint
-        </Button>
+        <Button onClick={async () => await mintNFT()}>Mint</Button>
       )}
     </Paper>
   );

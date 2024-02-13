@@ -1,7 +1,6 @@
 import {
   startBerkeleyClient,
-  getAppPublic,
-  MerkleMapContract,
+  getAppContract,
   getTotalSupplyLive,
 } from "pin-mina";
 import type { NextApiRequest, NextApiResponse } from "next";
@@ -12,13 +11,7 @@ export default async function handler(
 ) {
   try {
     startBerkeleyClient();
-
-    const { appPubKey: zkAppAddress } = getAppPublic();
-
-    const zkAppInstance: MerkleMapContract = new MerkleMapContract(
-      zkAppAddress
-    );
-
+    const zkAppInstance = getAppContract();
     let totalSupply = 0;
 
     try {

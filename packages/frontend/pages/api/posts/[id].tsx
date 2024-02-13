@@ -1,4 +1,4 @@
-import { getVercelMetadata, getAppPublic } from "pin-mina";
+import { getVercelMetadata, getAppString } from "pin-mina";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { kv, createClient } from "@vercel/kv";
 
@@ -18,12 +18,8 @@ export default async function handler(
       });
     }
     const { id } = req.query;
-
     const index = Number(id);
-
-    const { appPubKey: zkAppAddress } = getAppPublic();
-
-    const appId = zkAppAddress.toBase58();
+    const appId = getAppString();
 
     const data = await getVercelMetadata(appId, index, client);
 

@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { kv, createClient } from "@vercel/kv";
-import { getVercelMetadata, getAppPublic } from "pin-mina";
+import { getVercelMetadata, getAppString } from "pin-mina";
 
 export default async function handler(
   req: NextApiRequest,
@@ -25,9 +25,7 @@ export default async function handler(
     const { number } = req.query;
     const pageNumber = Number(number);
 
-    const { appPubKey: zkAppAddress } = getAppPublic();
-
-    const appId = zkAppAddress.toBase58();
+    const appId = getAppString();
 
     const response = await fetch(`${host}/api/totalInited`);
     const data = await response.json();
