@@ -1,3 +1,5 @@
+import { PublicKey } from "o1js";
+
 interface CustomWindow extends Window {
   mina?: any;
 }
@@ -34,6 +36,19 @@ export async function getMinaAccount() {
     }
   }
   return account[0];
+}
+
+export async function getMinaPublicKey() {
+  connectMinaWallet();
+
+  let account: string[] = await (window as CustomWindow).mina.getAccounts();
+  if (account.length === 0) {
+    account = await requestMinaAccounts();
+    if (account.length === 0) {
+      throw new Error("no account found");
+    }
+  }
+  return PublicKey.fromBase58(account[0]);
 }
 
 export async function setMinaAccount(key: string) {

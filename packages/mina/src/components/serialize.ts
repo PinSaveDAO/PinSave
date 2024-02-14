@@ -8,10 +8,8 @@ export function serializeMerkleMapToJson(merkleMap: MerkleMap): string {
   for (let i = 0; i < 256; i++) {
     const key: Field = Field(i);
     const value: string = merkleMap.get(key).toString();
-
     serializedData[i] = value;
   }
-
   return JSON.stringify(serializedData);
 }
 
@@ -26,9 +24,7 @@ export function deserializeJsonToMerkleMap(serializedJson: string): MerkleMap {
     let data = deserializedData[i];
     if (data !== '0') {
       const key: Field = Field(i);
-
       const value: Field = Field(data); // Assuming the JSON contains string representations of the original values
-
       deserializedMerkleMap.set(key, value);
     }
   }

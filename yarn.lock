@@ -5727,7 +5727,7 @@ nyc@15.1.0:
     test-exclude "^6.0.0"
     yargs "^15.0.2"
 
-o1js@0.16, o1js@0.16.0:
+o1js@0.16.0:
   version "0.16.0"
   resolved "https://registry.yarnpkg.com/o1js/-/o1js-0.16.0.tgz#b345988d8e68d247db80b5e83ec068aac350651b"
   integrity sha512-H6fKHLgH68v18De0tZydQKqF2bOIvF+EsPHJ+P53dJDOaS7Dlp8Uf4hGVo8S8luCfYsFvCdDGU3YwfegfCk6TQ==
@@ -6119,14 +6119,14 @@ pify@^4.0.1:
   resolved "https://registry.yarnpkg.com/pify/-/pify-4.0.1.tgz#4b2cd25c50d598735c50292224fd8c6df41e3231"
   integrity sha512-uB80kBFb/tfd68bVleG9T5GGsGPjJrLAUpR5PZIrhBnIaRTQRjqdJSsIKkOP6OAIFbj7GOrcudc5pNjZ+geV2g==
 
-pin-mina@0.1.24:
-  version "0.1.24"
-  resolved "https://registry.yarnpkg.com/pin-mina/-/pin-mina-0.1.24.tgz#e6ac223438ebbb1852b6d6dd8adb5a1d09365ec9"
-  integrity sha512-EcLMfONVXThNOOl8BHoe0x7udv3s/BI92Z/hycI7aWh8DR9G62eUAFGrtxlMzy4DBfZyo7k7mCsysSCW3l3/Bw==
+pin-mina@0.1.25:
+  version "0.1.25"
+  resolved "https://registry.yarnpkg.com/pin-mina/-/pin-mina-0.1.25.tgz#360d20e73c6a694b31484da09ce24fbd8f541a01"
+  integrity sha512-aaVlGFntaViHbmYnZNnoIqYNgBpZZuOyMXlM8c4b8Bj8i9kKDQ4c0Gz5iaD0hJx/WcY7UpQuFrcFdZVNZ0xPBQ==
   dependencies:
     "@vercel/kv" "^1.0.1"
     dotenv "^16.3.1"
-    o1js "0.16"
+    o1js "0.16.0"
 
 pinkie-promise@^2.0.0:
   version "2.0.1"

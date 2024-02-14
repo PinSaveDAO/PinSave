@@ -1,10 +1,13 @@
 import type { IndividualPost } from "@/services/upload";
 import { Paper, Text, Title, Button } from "@mantine/core";
+import { MerkleMap, MerkleMapWitness, Field, PublicKey } from "o1js";
 import {
   createMintTx,
+  deserializeJsonToMerkleMap,
   getAppContract,
-  getAppPublic,
-  getAppString,
+  createTxOptions,
+  deserializeNft,
+  startBerkeleyClient,
 } from "pin-mina";
 
 import React, { useEffect, useState } from "react";
@@ -19,30 +22,39 @@ interface CustomWindow extends Window {
 
 const MediaDetails: React.FC<IMyProps> = ({ post }) => {
   const postNumber = Number(post.id);
-  const [totalSupply, setTotalSupply] = useState(null);
+  const [totalSupply, setTotalSupply] = useState<undefined | number>(undefined);
+  const [treeRoot, setTreeRoot] = useState<undefined | string>(undefined);
+  const [map, setMap] = useState<MerkleMap | undefined>(undefined);
+  const [address, setAddress] = useState<PublicKey | undefined>(undefined);
 
   async function mintNFT() {
-    /* const isDev = process.env.NEXT_PUBLIC_ISDEV ?? "false";
-    let client = kv;
-    if (isDev === "true") {
-      const url = process.env.NEXT_PUBLIC_REDIS_URL;
-      const token = process.env.NEXT_PUBLIC_REDIS_TOKEN;
-      client = createClient({
-        url: url,
-        token: token,
+    console.log(124);
+    if (map && address) {
+      // https://docs.aurowallet.com/general/reference/api-reference/methods/mina_sendtransaction
+      const zkApp = getAppContract();
+
+      startBerkeleyClient();
+      const response = await fetch(`/api/nft/${postNumber}`);
+      const dataNft = await response.json();
+
+      const nft = deserializeNft(dataNft);
+      // create function to serialize nft
+
+      const witnessNFT: MerkleMapWitness = map.getWitness(Field(postNumber));
+
+      const txOptions = createTxOptions(address);
+
+      let transactionJSON = await createMintTx(
+        address,
+        zkApp,
+        nft,
+        witnessNFT,
+        txOptions
+      );
+      await (window as CustomWindow).mina?.sendTransaction({
+        transaction: transactionJSON,
       });
-    } */
-    //const pub = getAppPublic();
-    //const zkApp = getAppContract();
-    //const appId = getAppString();
-    //const nft = await getVercelNft(appId, 11, client);
-    //console.log(nft);
-    //let transactionJSON = await createMintTx(pub, zkApp, nft);
-    const fee = "";
-    const memo = "";
-    /* await (window as CustomWindow).mina?.sendTransaction({
-      transaction: transactionJSON,
-    }); */
+    }
   }
 
   useEffect(() => {
@@ -51,6 +63,18 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
         const response = await fetch("/api/totalSupply");
         const data = await response.json();
         setTotalSupply(data.totalSupply);
+        const responseMap = await fetch("/api/getMap");
+        const dataMap = await responseMap.json();
+
+        const map = deserializeJsonToMerkleMap(dataMap.dataOut);
+        setTreeRoot(map.getRoot().toString());
+        setMap(map);
+
+        const key = "auroWalletAddress";
+        const savedAddress = sessionStorage.getItem(key);
+        if (savedAddress) {
+          setAddress(PublicKey.fromBase58(savedAddress));
+        }
       } catch (error) {
         console.error("Error fetching media details: ", error);
       }

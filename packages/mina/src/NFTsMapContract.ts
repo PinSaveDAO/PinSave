@@ -62,6 +62,9 @@ export class MerkleMapContract extends SmartContract {
 
   // inits nft
   // ensures that sender inits to own account
+  // vulnerability
+
+  // not safe because field is 0
 
   @method initNft(item: Nft, keyWitness: MerkleMapWitness) {
     let initedAmount = this.totalInited.getAndRequireEquals();
