@@ -11,7 +11,6 @@ import {
   deserializeNft,
   startBerkeleyClient,
 } from "pin-mina";
-
 import React, { useEffect, useState } from "react";
 
 interface IMyProps {
@@ -77,7 +76,9 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
           setAddress(PublicKey.fromBase58(savedAddress));
         } else {
           // connect to wallet
-          await setMinaAccount(key)
+          const connectedAddress = await setMinaAccount(key);
+          const pub = PublicKey.fromBase58(connectedAddress)
+          setAddress(pub)
         }
       } catch (error) {
         console.error("Error fetching media details: ", error);
