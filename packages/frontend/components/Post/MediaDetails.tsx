@@ -1,4 +1,6 @@
 import type { IndividualPost } from "@/services/upload";
+import { setMinaAccount } from "@/hooks/minaWallet";
+
 import { Paper, Text, Title, Button } from "@mantine/core";
 import { MerkleMap, MerkleMapWitness, Field, PublicKey } from "o1js";
 import {
@@ -21,6 +23,7 @@ interface CustomWindow extends Window {
 }
 
 const MediaDetails: React.FC<IMyProps> = ({ post }) => {
+  const key = "auroWalletAddress";
   const postNumber = Number(post.id);
   const [totalSupply, setTotalSupply] = useState<undefined | number>(undefined);
   const [treeRoot, setTreeRoot] = useState<undefined | string>(undefined);
@@ -28,7 +31,6 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
   const [address, setAddress] = useState<PublicKey | undefined>(undefined);
 
   async function mintNFT() {
-    console.log(124);
     if (map && address) {
       // https://docs.aurowallet.com/general/reference/api-reference/methods/mina_sendtransaction
       const zkApp = getAppContract();
@@ -69,17 +71,21 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
         const map = deserializeJsonToMerkleMap(dataMap.dataOut);
         setTreeRoot(map.getRoot().toString());
         setMap(map);
-
-        const key = "auroWalletAddress";
+ 
         const savedAddress = sessionStorage.getItem(key);
-        if (savedAddress) {
+        if (savedAddress && savedAddress !== "undefined") {
           setAddress(PublicKey.fromBase58(savedAddress));
+        } else {
+          // connect to wallet
+          await setMinaAccount(key)
         }
       } catch (error) {
         console.error("Error fetching media details: ", error);
       }
     };
     fetchMediaDetails();
+
+    // connect address
   }, [post.id]);
   return (
     <Paper shadow="sm" p="md" withBorder>

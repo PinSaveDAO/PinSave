@@ -108,7 +108,6 @@ export function Navbar({ links }: NavbarProps) {
 
   useEffect(() => {
     setHasMounted(true);
-    const key = "auroWalletAddress";
     const savedAddress = sessionStorage.getItem(key);
     if (savedAddress) {
       const shortAddress =

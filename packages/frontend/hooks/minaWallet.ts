@@ -27,10 +27,12 @@ async function requestMinaAccounts() {
 
 export async function getMinaAccount() {
   connectMinaWallet();
-
   let account: string[] = await (window as CustomWindow).mina.getAccounts();
   if (account.length === 0) {
     account = await requestMinaAccounts();
+    if (account.length === undefined){
+      throw new Error("create an account first");
+    }
     if (account.length === 0) {
       throw new Error("no account found");
     }
@@ -40,7 +42,6 @@ export async function getMinaAccount() {
 
 export async function getMinaPublicKey() {
   connectMinaWallet();
-
   let account: string[] = await (window as CustomWindow).mina.getAccounts();
   if (account.length === 0) {
     account = await requestMinaAccounts();
