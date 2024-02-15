@@ -13,7 +13,7 @@ import {
   Signature,
 } from 'o1js';
 
-import { Nft } from './components/Nft.js';
+import { Nft } from './components/NFT.js';
 
 export class MerkleMapContract extends SmartContract {
   // collection single tree root

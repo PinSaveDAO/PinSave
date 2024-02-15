@@ -1,8 +1,7 @@
 import {
   createNft,
   generateDummyCollectionMap,
-  generateDummyNftMetadata,
-} from './components/Nft.js';
+  generateDummyNftMetadata} from "./components/NFT.js"
 import {
   deployApp,
   initAppRoot,

@@ -4,14 +4,13 @@ import {
   deserializeNft,
   getMapFromVercelNfts,
   getVercelNft,
-} from '../components/Nft.js';
+} from '../components/NFT.js';
 import {
   mintNftFromMap,
   startBerkeleyClient,
   getAppString,
   getAppContract,
 } from '../components/transactions.js';
-
 import { getEnvAccount } from '../components/env.js';
 
 const { pk: deployerKey } = getEnvAccount();

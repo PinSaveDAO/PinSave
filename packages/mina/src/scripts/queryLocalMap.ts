@@ -1,7 +1,7 @@
 import { createClient } from '@vercel/kv';
 import dotenv from 'dotenv';
 
-import { getMapFromVercelNfts, getVercelMetadata } from '../components/Nft.js';
+import { getMapFromVercelNfts, getVercelMetadata } from '../components/NFT.js';
 import { getAppString } from '../components/transactions.js';
 
 dotenv.config();

@@ -1,5 +1,4 @@
 import { Field, MerkleMap, MerkleTree, Poseidon } from 'o1js';
-// import { createWriteStream } from 'fs';
 
 export function serializeMerkleMapToJson(merkleMap: MerkleMap): string {
   const serializedData: { [key: number]: string } = {};
@@ -62,75 +61,6 @@ export function serializeMerkleTreeToJson(merkleTree: MerkleTree): string {
   return JSON.stringify(serializedData);
 }
 
-/* export function serializeMerkleTreeToJsonWithStream(
-  merkleTree: MerkleTree
-): Promise<string> {
-  return new Promise((resolve, reject) => {
-    // Create a write stream to write the serialized data
-    const stream = createWriteStream('serializedMerkleTree.json');
-
-    let index = 0;
-    const leafCount: bigint = merkleTree.leafCount;
-
-    // Define the function to serialize a single data point
-    const serializedData = (currentIndex: bigint): string => {
-      if (index > 0) {
-        stream.write(',');
-      }
-      const value: string = merkleTree.getNode(0, currentIndex).toString();
-      return `"${index}": "${value}"`;
-    };
-
-    // Define serialization function for processing a chunk of data and writing to the stream
-    const processChunk = () => {
-      while (index < leafCount && stream.write(serializedData(BigInt(index)))) {
-        index++;
-      }
-      if (index < leafCount) {
-        stream.once('drain', processChunk); // Wait for the drain event to continue processing
-      } else {
-        stream.write('}'); // End of the JSON object
-        stream.end();
-        resolve('Serialization complete');
-      }
-    };
-
-    stream.on('error', (error) => reject(error));
-    stream.write('{'); // Start of the JSON object
-    processChunk(); // Start processing the chunks
-  });
-}
-
-export async function serializeMerkleToJsonOptimized(merkleTree: MerkleTree) {
-  const batchSize = 10000; // Adjust batch size as needed
-  const leafCount = Number(merkleTree.leafCount);
-  const writeStream = createWriteStream('serializedMerkleTree.json');
-
-  for (let i = 0; i < leafCount; i += batchSize) {
-    const batchEnd = Math.min(i + batchSize, leafCount);
-    const batchData: { [index: string]: string } = {};
-
-    for (let j = i; j < batchEnd; j++) {
-      const value = merkleTree.getNode(0, BigInt(j)).toString();
-      batchData[j.toString()] = value;
-    }
-
-    const isLastBatch = batchEnd >= leafCount;
-
-    if (
-      !writeStream.write(JSON.stringify(batchData) + (isLastBatch ? '' : ','))
-    ) {
-      await new Promise((resolve) => {
-        writeStream.once('drain', resolve);
-      });
-    }
-  }
-
-  writeStream.end(); // End the JSON object
-
-  return 'Serialization complete';
-} */
-
 export function getZerosMerkleTree(height: number): Field[] {
   if (height < 1) {
     throw Error('height starts at 1');
@@ -188,8 +118,6 @@ export function deserializeJsonToMerkleTreeFull(
       currentIndex++;
     }
   }
-
-  console.log(currentIndex);
 
   return merkleTree;
 }

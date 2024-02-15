@@ -1,5 +1,5 @@
 import { getVercelClient } from '../components/env.js';
-import { getMapFromVercelNfts } from '../components/Nft.js';
+import { getMapFromVercelNfts } from '../components/NFT.js';
 import {
   startBerkeleyClient,
   getAppString,

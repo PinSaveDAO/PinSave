@@ -14,7 +14,7 @@ import {
 import { MerkleMapContract } from '../NFTsMapContract.js';
 import { compareLogStates } from './AppState.js';
 import { logTokenBalances, getTokenBalances } from './TokenBalances.js';
-import { NFTtoHash, Nft } from './Nft.js';
+import { NFTtoHash, Nft } from './NFT.js';
 
 export function getAppDeployer() {
   const pubKeyString: string =

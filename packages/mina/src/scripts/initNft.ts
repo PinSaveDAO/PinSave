@@ -6,7 +6,7 @@ import {
   generateDummyCollectionWithMap,
   generateDummyNft,
   setVercelNft,
-} from '../components/Nft.js';
+} from '../components/NFT.js';
 import {
   startBerkeleyClient,
   getAppPublic,

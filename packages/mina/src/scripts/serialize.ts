@@ -4,7 +4,7 @@ import {
   deserializeJsonToMerkleMap,
   serializeMerkleMapToJson,
 } from '../components/serialize.js';
-import { generateDummyCollectionMap } from '../components/Nft.js';
+import { generateDummyCollectionMap } from '../components/NFT.js';
 import {
   startBerkeleyClient,
   getAppPublic,

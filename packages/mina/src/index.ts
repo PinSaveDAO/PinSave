@@ -19,7 +19,7 @@ export {
   NftMetadata,
   Nft,
   nftDataIn,
-} from './components/Nft.js';
+} from './components/NFT.js';
 
 export {
   serializeMerkleMapToJson,
