@@ -34,13 +34,15 @@ const {
 
 console.log('deployed app');
 
-// set fee
+console.log('changing fee amount');
 
 await setFee(zkAppPrivateKey, pk1, zkAppInstance);
 
 // add some initial values into the map
 
 const { nftArray: nftArray } = generateDummyCollectionMap(pubKey1, map);
+
+console.log('initing app root');
 
 await initAppRoot(pk1, zkAppInstance, map, nftArray.length, live);
 

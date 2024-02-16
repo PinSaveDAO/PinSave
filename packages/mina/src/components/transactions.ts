@@ -256,7 +256,7 @@ export async function initAppRoot(
   const txOptions = createTxOptions(pubKey, live);
 
   const init_tx: Mina.Transaction = await Mina.transaction(txOptions, () => {
-    zkAppInstance.initRoot(rootBefore, totalSupplied);
+    zkAppInstance.initRoot(rootBefore, totalSupplied, UInt64.zero, new UInt64(255));
   });
 
   await sendWaitTx(init_tx, pk, live);

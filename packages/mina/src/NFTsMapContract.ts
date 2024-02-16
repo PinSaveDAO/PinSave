@@ -25,7 +25,7 @@ export class MerkleMapContract extends SmartContract {
   // fee for minting
   @state(UInt64) fee = State<UInt64>();
   // max amount
-  @state(UInt64) maxSupply = new UInt64(255);
+  @state(UInt64) maxSupply = State<UInt64>();
 
   deploy(args?: DeployArgs) {
     super.deploy(args);
@@ -45,14 +45,18 @@ export class MerkleMapContract extends SmartContract {
   // if we need to
   // add protection for admin with signature
 
-  @method initRoot(initialRoot: Field, totalInited: UInt64) {
+  @method initRoot(initialRoot: Field, totalInited: UInt64, feeAmount: UInt64, maxSupply: UInt64) {
     // ensures we can only initialize once
     this.treeRoot.requireEquals(Field.from(''));
     this.totalInited.requireEquals(UInt64.zero);
+    this.fee.getAndRequireEquals()
+    this.maxSupply.getAndRequireEquals()
 
     this.treeRoot.set(initialRoot);
     this.totalInited.set(totalInited);
-    //this.maxSupply.set(new UInt64('255'));
+
+    this.fee.set(feeAmount);
+    this.maxSupply.set(maxSupply);
   }
 
   @method setFee(amount: UInt64, adminSignature: Signature) {
@@ -61,22 +65,14 @@ export class MerkleMapContract extends SmartContract {
   }
 
   // inits nft
-  // ensures that sender inits to own account
-  // vulnerability
-
-  // not safe because field is 0
-
   @method initNft(item: Nft, keyWitness: MerkleMapWitness) {
-    let initedAmount = this.totalInited.getAndRequireEquals();
-    initedAmount.assertLessThanOrEqual(this.maxSupply);
-
-    const sender = this.sender;
-    sender.assertEquals(item.owner);
+    const initedAmount = this.totalInited.getAndRequireEquals();
+    const maxSupply = this.maxSupply.getAndRequireEquals()
+    initedAmount.assertLessThanOrEqual(maxSupply);
 
     const initialRoot = this.treeRoot.getAndRequireEquals();
 
-    // check the initial state matches what we expect
-    // should be empty
+    // checks the initial state is empty
 
     const [rootBefore, key] = keyWitness.computeRootAndKey(Field(0));
 
@@ -98,8 +94,6 @@ export class MerkleMapContract extends SmartContract {
   }
 
   // mints nft
-  // Unlike init, expects metadata to be in place
-  // anybody can sponsor mint
 
   @method mintNft(item: Nft, keyWitness: MerkleMapWitness) {
     const initialRoot = this.treeRoot.getAndRequireEquals();
