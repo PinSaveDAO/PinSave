@@ -13,7 +13,7 @@ import {
   Signature,
 } from 'o1js';
 
-import { Nft } from './components/NFT.js';
+import { Nft } from './components/Nft.js';
 
 export class MerkleMapContract extends SmartContract {
   // collection single tree root
@@ -45,12 +45,17 @@ export class MerkleMapContract extends SmartContract {
   // if we need to
   // add protection for admin with signature
 
-  @method initRoot(initialRoot: Field, totalInited: UInt64, feeAmount: UInt64, maxSupply: UInt64) {
+  @method initRoot(
+    initialRoot: Field,
+    totalInited: UInt64,
+    feeAmount: UInt64,
+    maxSupply: UInt64
+  ) {
     // ensures we can only initialize once
     this.treeRoot.requireEquals(Field.from(''));
     this.totalInited.requireEquals(UInt64.zero);
-    this.fee.getAndRequireEquals()
-    this.maxSupply.getAndRequireEquals()
+    this.fee.getAndRequireEquals();
+    this.maxSupply.getAndRequireEquals();
 
     this.treeRoot.set(initialRoot);
     this.totalInited.set(totalInited);
@@ -59,15 +64,17 @@ export class MerkleMapContract extends SmartContract {
     this.maxSupply.set(maxSupply);
   }
 
-  @method setFee(amount: UInt64, adminSignature: Signature) {
-    adminSignature.verify(this.address, amount.toFields()).assertTrue();
-    this.fee.set(amount);
+  @method setFee(amount: UInt64) {
+    //  adminSignature: Signature
+    this.fee.getAndRequireEquals();
+    //adminSignature.verify(this.address, UInt64.toFields(amount)).assertTrue();
+    //this.fee.set(amount);
   }
 
   // inits nft
   @method initNft(item: Nft, keyWitness: MerkleMapWitness) {
     const initedAmount = this.totalInited.getAndRequireEquals();
-    const maxSupply = this.maxSupply.getAndRequireEquals()
+    const maxSupply = this.maxSupply.getAndRequireEquals();
     initedAmount.assertLessThanOrEqual(maxSupply);
 
     const initialRoot = this.treeRoot.getAndRequireEquals();
@@ -111,7 +118,7 @@ export class MerkleMapContract extends SmartContract {
     this.token.mint({ address: item.owner, amount: UInt64.one });
 
     // update liquidity supply
-    let liquidity = this.totalSupply.getAndRequireEquals();
+    const liquidity = this.totalSupply.getAndRequireEquals();
 
     this.totalSupply.set(liquidity.add(1));
   }

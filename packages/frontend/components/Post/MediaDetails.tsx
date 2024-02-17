@@ -45,13 +45,16 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
 
       const txOptions = createTxOptions(address);
 
-      let transactionJSON = await createMintTx(
+      const transactionMint = await createMintTx(
         address,
         zkApp,
         nft,
         witnessNFT,
         txOptions
       );
+
+      const transactionJSON = transactionMint.toJSON();
+
       await (window as CustomWindow).mina?.sendTransaction({
         transaction: transactionJSON,
       });
@@ -70,15 +73,15 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
         const map = deserializeJsonToMerkleMap(dataMap.dataOut);
         setTreeRoot(map.getRoot().toString());
         setMap(map);
- 
+
         const savedAddress = sessionStorage.getItem(key);
         if (savedAddress && savedAddress !== "undefined") {
           setAddress(PublicKey.fromBase58(savedAddress));
         } else {
           // connect to wallet
           const connectedAddress = await setMinaAccount(key);
-          const pub = PublicKey.fromBase58(connectedAddress)
-          setAddress(pub)
+          const pub = PublicKey.fromBase58(connectedAddress);
+          setAddress(pub);
         }
       } catch (error) {
         console.error("Error fetching media details: ", error);

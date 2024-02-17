@@ -4,7 +4,7 @@ import {
   deserializeNft,
   getMapFromVercelNfts,
   getVercelNft,
-} from '../components/NFT.js';
+} from '../components/Nft.js';
 import {
   mintNftFromMap,
   startBerkeleyClient,
@@ -26,10 +26,8 @@ const zkApp = getAppContract();
 
 const storedMap = await getMapFromVercelNfts(appId, [0, 1, 2], client);
 
-console.log(storedMap.getRoot().toString());
-
-const nft_ = await getVercelNft(appId, 11, client);
+const nft_ = await getVercelNft(appId, 0, client);
 
 const nft = deserializeNft(nft_);
 
-await mintNftFromMap(deployerKey, nft, zkApp, storedMap);
+await mintNftFromMap(deployerKey, nft, zkApp, storedMap, true);

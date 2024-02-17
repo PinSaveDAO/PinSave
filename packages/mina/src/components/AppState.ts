@@ -71,3 +71,11 @@ export async function getTotalSupplyLive(
   const totalSupply: UInt64 = zkAppInstance.totalSupply.get();
   return totalSupply;
 }
+
+export async function getTreeRoot(
+  zkAppInstance: MerkleMapContract
+): Promise<Field> {
+  await fetchAccount({ publicKey: zkAppInstance.address });
+  const treeRoot: Field = zkAppInstance.treeRoot.get();
+  return treeRoot;
+}

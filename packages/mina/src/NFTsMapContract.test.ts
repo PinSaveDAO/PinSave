@@ -1,7 +1,8 @@
 import {
   createNft,
   generateDummyCollectionMap,
-  generateDummyNftMetadata} from "./components/NFT.js"
+  generateDummyNftMetadata,
+} from './components/Nft.js';
 import {
   deployApp,
   initAppRoot,
@@ -12,8 +13,8 @@ import {
   transferNft,
 } from './components/transactions.js';
 
-const proofsEnabled = false;
-const enforceTransactionLimits = false;
+const proofsEnabled = true;
+const enforceTransactionLimits = true;
 
 const live = false;
 
@@ -34,10 +35,6 @@ const {
 
 console.log('deployed app');
 
-console.log('changing fee amount');
-
-await setFee(zkAppPrivateKey, pk1, zkAppInstance);
-
 // add some initial values into the map
 
 const { nftArray: nftArray } = generateDummyCollectionMap(pubKey1, map);
@@ -45,6 +42,10 @@ const { nftArray: nftArray } = generateDummyCollectionMap(pubKey1, map);
 console.log('initing app root');
 
 await initAppRoot(pk1, zkAppInstance, map, nftArray.length, live);
+
+console.log('changing fee amount');
+
+await setFee(zkAppPrivateKey, pk1, zkAppInstance);
 
 console.log('initialized root');
 

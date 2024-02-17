@@ -12,9 +12,9 @@ import {
 } from 'o1js';
 
 import { MerkleMapContract } from '../NFTsMapContract.js';
-import { compareLogStates } from './AppState.js';
+import { compareLogStates, getTreeRoot } from './AppState.js';
 import { logTokenBalances, getTokenBalances } from './TokenBalances.js';
-import { NFTtoHash, Nft } from './NFT.js';
+import { NFTtoHash, Nft } from './Nft.js';
 
 export function getAppDeployer() {
   const pubKeyString: string =
@@ -67,16 +67,17 @@ export async function setFee(
   zkAppPrivateKey: PrivateKey,
   deployerPk: PrivateKey,
   contract: MerkleMapContract,
-  fee: UInt64 = UInt64.from(1)
+  fee: UInt64 = UInt64.one
 ) {
   const deployerAddress: PublicKey = deployerPk.toPublicKey();
-  const feeSignature: Signature = Signature.create(
-    zkAppPrivateKey,
-    fee.toFields()
-  );
+
+  const _fee = UInt64.toFields(fee);
+
+  //const feeSignature: Signature = Signature.create(zkAppPrivateKey, _fee);
 
   const txn: Mina.Transaction = await Mina.transaction(deployerAddress, () => {
-    contract.setFee(fee, feeSignature);
+    //contract.setFee(fee, feeSignature);
+    contract.setFee(fee);
   });
 
   await sendWaitTx(txn, deployerPk, false);
@@ -125,6 +126,16 @@ export async function mintNftFromMap(
 ) {
   const pubKey: PublicKey = pk.toPublicKey();
   const nftId: Field = _NFT.id;
+
+  // ensure that local map matches on-chain
+
+  if (live) {
+    const match =
+      merkleMap.getRoot().toString() ===
+      (await getTreeRoot(zkAppInstance)).toString();
+    console.log('it is a tree root state match', match);
+  }
+
   const witnessNFT: MerkleMapWitness = merkleMap.getWitness(nftId);
 
   await mintNFT(pk, _NFT, zkAppInstance, witnessNFT, live);
@@ -256,7 +267,12 @@ export async function initAppRoot(
   const txOptions = createTxOptions(pubKey, live);
 
   const init_tx: Mina.Transaction = await Mina.transaction(txOptions, () => {
-    zkAppInstance.initRoot(rootBefore, totalSupplied, UInt64.zero, new UInt64(255));
+    zkAppInstance.initRoot(
+      rootBefore,
+      totalSupplied,
+      UInt64.zero,
+      new UInt64(255)
+    );
   });
 
   await sendWaitTx(init_tx, pk, live);

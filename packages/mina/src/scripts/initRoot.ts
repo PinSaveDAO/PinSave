@@ -6,7 +6,7 @@ import {
   getMapFromVercelNfts,
   setNftsToVercel,
   setMetadatasToVercel,
-} from '../components/NFT';
+} from '../components/Nft.js';
 import {
   initRootWithApp,
   startBerkeleyClient,
