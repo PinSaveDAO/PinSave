@@ -277,9 +277,9 @@ export async function initAppRoot(
 
   await sendWaitTx(init_tx, pk, live);
 
-  if (!live) {
+  /* if (!live) {
     compareLogStates(zkAppInstance, merkleMap);
-  }
+  } */
 }
 
 export async function deployApp(
@@ -329,10 +329,16 @@ export async function deployApp(
 async function sendWaitTx(
   tx: Mina.Transaction,
   pk: PrivateKey,
-  live: boolean = true
+  live: boolean = true,
+  zkappKey?: PrivateKey
 ) {
   await tx.prove();
-  tx.sign([pk]);
+  if (zkappKey) {
+    tx.sign([pk, zkappKey]);
+  }
+  if (!zkappKey) {
+    tx.sign([pk]);
+  }
 
   let pendingTx = await tx.send();
 

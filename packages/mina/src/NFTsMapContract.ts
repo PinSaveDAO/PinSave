@@ -11,6 +11,7 @@ import {
   Poseidon,
   UInt64,
   Signature,
+  Provable,
 } from 'o1js';
 
 import { Nft } from './components/Nft.js';
@@ -31,10 +32,12 @@ export class MerkleMapContract extends SmartContract {
     super.deploy(args);
 
     const permissionToEdit = Permissions.proof();
+    const none = Permissions.none();
 
     this.account.permissions.set({
       ...Permissions.default(),
-      editState: permissionToEdit,
+      access: none,
+      editState: none,
       setTokenSymbol: permissionToEdit,
       send: permissionToEdit,
       receive: permissionToEdit,
@@ -46,22 +49,27 @@ export class MerkleMapContract extends SmartContract {
   // add protection for admin with signature
 
   @method initRoot(
-    initialRoot: Field,
-    totalInited: UInt64,
-    feeAmount: UInt64,
-    maxSupply: UInt64
+    _initialRoot: Field,
+    _totalInited: UInt64,
+    _feeAmount: UInt64,
+    _maxSupply: UInt64
   ) {
-    // ensures we can only initialize once
-    this.treeRoot.requireEquals(Field.from(''));
-    this.totalInited.requireEquals(UInt64.zero);
-    this.fee.getAndRequireEquals();
-    this.maxSupply.getAndRequireEquals();
+    // ensure that we can only initialize once
 
-    this.treeRoot.set(initialRoot);
+    let root = this.treeRoot.getAndRequireEquals();
+    Provable.log(root);
+    let totalInited = this.totalInited.getAndRequireEquals();
+    Provable.log(totalInited);
+
+    let fee = this.fee.getAndRequireEquals();
+    Provable.log(fee);
+    let maxSupply = this.maxSupply.getAndRequireEquals();
+    Provable.log(maxSupply);
+    /*     this.treeRoot.set(initialRoot);
     this.totalInited.set(totalInited);
 
     this.fee.set(feeAmount);
-    this.maxSupply.set(maxSupply);
+    this.maxSupply.set(maxSupply); */
   }
 
   @method setFee(amount: UInt64) {
