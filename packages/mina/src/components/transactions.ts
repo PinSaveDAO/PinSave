@@ -80,7 +80,7 @@ export async function setFee(
     contract.setFee(fee);
   });
 
-  await sendWaitTx(txn, deployerPk, false);
+  await sendWaitTx(txn, [deployerPk], false);
 }
 
 export async function initNft(
@@ -107,7 +107,7 @@ export async function initNft(
     }
   );
 
-  await sendWaitTx(init_mint_tx, pk, live);
+  await sendWaitTx(init_mint_tx, [pk], live);
 
   // the tx should execute before we set the map value
   merkleMap.set(nftId, NFTtoHash(_NFT));
@@ -167,7 +167,7 @@ export async function mintNFT(
     txOptions
   );
 
-  await sendWaitTx(mint_tx, pk, live);
+  await sendWaitTx(mint_tx, [pk], live);
 }
 
 export async function createMintTx(
@@ -225,7 +225,7 @@ export async function transferNft(
     });
   }
 
-  await sendWaitTx(nft_transfer_tx, pk, live);
+  await sendWaitTx(nft_transfer_tx, [pk], live);
 
   _NFT.changeOwner(recipient);
 
@@ -275,11 +275,11 @@ export async function initAppRoot(
     );
   });
 
-  await sendWaitTx(init_tx, pk, live);
+  await sendWaitTx(init_tx, [pk], live);
 
-  /* if (!live) {
+  if (!live) {
     compareLogStates(zkAppInstance, merkleMap);
-  } */
+  }
 }
 
 export async function deployApp(
@@ -315,7 +315,7 @@ export async function deployApp(
     }
   );
 
-  await sendWaitTx(deployTx, pk, live);
+  await sendWaitTx(deployTx, [pk], live);
 
   compareLogStates(zkAppInstance, merkleMap);
 
@@ -328,17 +328,11 @@ export async function deployApp(
 
 async function sendWaitTx(
   tx: Mina.Transaction,
-  pk: PrivateKey,
-  live: boolean = true,
-  zkappKey?: PrivateKey
+  pks: PrivateKey[],
+  live: boolean = true
 ) {
   await tx.prove();
-  if (zkappKey) {
-    tx.sign([pk, zkappKey]);
-  }
-  if (!zkappKey) {
-    tx.sign([pk]);
-  }
+  tx.sign(pks);
 
   let pendingTx = await tx.send();
 

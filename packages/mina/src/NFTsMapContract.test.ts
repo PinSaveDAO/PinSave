@@ -13,7 +13,7 @@ import {
   transferNft,
 } from './components/transactions.js';
 
-const proofsEnabled = true;
+const proofsEnabled = false;
 const enforceTransactionLimits = true;
 
 const live = false;

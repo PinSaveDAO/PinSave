@@ -65,11 +65,11 @@ export class MerkleMapContract extends SmartContract {
     Provable.log(fee);
     let maxSupply = this.maxSupply.getAndRequireEquals();
     Provable.log(maxSupply);
-    /*     this.treeRoot.set(initialRoot);
-    this.totalInited.set(totalInited);
+    this.treeRoot.set(_initialRoot);
+    this.totalInited.set(_totalInited);
 
-    this.fee.set(feeAmount);
-    this.maxSupply.set(maxSupply); */
+    this.fee.set(_feeAmount);
+    this.maxSupply.set(_maxSupply);
   }
 
   @method setFee(amount: UInt64) {
