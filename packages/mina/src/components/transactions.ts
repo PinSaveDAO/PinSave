@@ -64,7 +64,7 @@ export async function startLocalBlockchainClient(
 
 // improve further
 export async function setFee(
-  zkAppPrivateKey: PrivateKey,
+zkAppPrivateKey: PrivateKey,
   deployerPk: PrivateKey,
   contract: MerkleMapContract,
   fee: UInt64 = UInt64.one
@@ -73,11 +73,10 @@ export async function setFee(
 
   const _fee = UInt64.toFields(fee);
 
-  //const feeSignature: Signature = Signature.create(zkAppPrivateKey, _fee);
+  const feeSignature: Signature = Signature.create(zkAppPrivateKey, _fee);
 
   const txn: Mina.Transaction = await Mina.transaction(deployerAddress, () => {
-    //contract.setFee(fee, feeSignature);
-    contract.setFee(fee);
+    contract.setFee(fee, feeSignature);
   });
 
   await sendWaitTx(txn, [deployerPk], false);
@@ -89,9 +88,11 @@ export async function initNft(
   _NFT: Nft,
   zkAppInstance: MerkleMapContract,
   merkleMap: MerkleMap,
-  live: boolean = true
+  compile: boolean = false,
+  live: boolean = true,
+  displayLogs: boolean = false
 ) {
-  if (live) {
+  if (compile) {
     await MerkleMapContract.compile();
   }
 
@@ -112,7 +113,7 @@ export async function initNft(
   // the tx should execute before we set the map value
   merkleMap.set(nftId, NFTtoHash(_NFT));
 
-  if (!live) {
+  if (displayLogs) {
     compareLogStates(zkAppInstance, merkleMap);
   }
 }
@@ -122,14 +123,16 @@ export async function mintNftFromMap(
   _NFT: Nft,
   zkAppInstance: MerkleMapContract,
   merkleMap: MerkleMap,
-  live = true
+  compile: boolean = false,
+  live: boolean = true,
+  displayLogs: boolean = false
 ) {
   const pubKey: PublicKey = pk.toPublicKey();
   const nftId: Field = _NFT.id;
 
   // ensure that local map matches on-chain
 
-  if (live) {
+  if (displayLogs) {
     const match =
       merkleMap.getRoot().toString() ===
       (await getTreeRoot(zkAppInstance)).toString();
@@ -138,9 +141,9 @@ export async function mintNftFromMap(
 
   const witnessNFT: MerkleMapWitness = merkleMap.getWitness(nftId);
 
-  await mintNFT(pk, _NFT, zkAppInstance, witnessNFT, live);
+  await mintNFT(pk, _NFT, zkAppInstance, witnessNFT, compile, live);
 
-  if (!live) {
+  if (displayLogs) {
     logTokenBalances(pubKey, zkAppInstance);
     compareLogStates(zkAppInstance, merkleMap);
   }
@@ -151,9 +154,10 @@ export async function mintNFT(
   _NFT: Nft,
   zkAppInstance: MerkleMapContract,
   merkleMapWitness: MerkleMapWitness,
+  compile: boolean = false,
   live = true
 ) {
-  if (live) {
+  if (compile) {
     await MerkleMapContract.compile();
   }
   const pubKey: PublicKey = pk.toPublicKey();
@@ -200,7 +204,8 @@ export async function transferNft(
   zkAppInstance: MerkleMapContract,
   merkleMap: MerkleMap,
   zkAppPrivateKey: PrivateKey,
-  live: boolean = true
+  live: boolean = true,
+  displayLogs: boolean = false
 ) {
   const pubKey: PublicKey = pk.toPublicKey();
   const nftId: Field = _NFT.id;
@@ -231,7 +236,7 @@ export async function transferNft(
 
   merkleMap.set(nftId, NFTtoHash(_NFT));
 
-  if (!live) {
+  if (displayLogs) {
     logTokenBalances(pubKey, zkAppInstance);
     logTokenBalances(recipient, zkAppInstance);
 
@@ -244,9 +249,10 @@ export async function initRootWithApp(
   zkAppPub: PublicKey,
   merkleMap: MerkleMap,
   totalInited: number,
+  compile: boolean = false,
   live: boolean = true
 ) {
-  if (live) {
+  if (compile) {
     await MerkleMapContract.compile();
   }
   const zkAppInstance: MerkleMapContract = new MerkleMapContract(zkAppPub);
@@ -258,7 +264,8 @@ export async function initAppRoot(
   zkAppInstance: MerkleMapContract,
   merkleMap: MerkleMap,
   totalInited: number,
-  live: boolean = true
+  live: boolean = true,
+  displayLogs: boolean = false
 ) {
   const pubKey: PublicKey = pk.toPublicKey();
   const rootBefore: Field = merkleMap.getRoot();
@@ -277,14 +284,16 @@ export async function initAppRoot(
 
   await sendWaitTx(init_tx, [pk], live);
 
-  if (!live) {
+  if (displayLogs) {
     compareLogStates(zkAppInstance, merkleMap);
   }
 }
 
 export async function deployApp(
   pk: PrivateKey,
-  live: boolean = true
+  proofsEnabled: boolean = true,
+  live: boolean = true,
+  displayLogs: boolean = false
 ): Promise<{
   merkleMap: MerkleMap;
   zkAppInstance: MerkleMapContract;
@@ -292,7 +301,7 @@ export async function deployApp(
 }> {
   let verificationKey: VerificationKey | undefined;
 
-  if (live) {
+  if (proofsEnabled) {
     ({ verificationKey } = await MerkleMapContract.compile());
     console.log('compiled');
   }
@@ -317,7 +326,10 @@ export async function deployApp(
 
   await sendWaitTx(deployTx, [pk], live);
 
-  compareLogStates(zkAppInstance, merkleMap);
+  if (displayLogs){
+    compareLogStates(zkAppInstance, merkleMap, live);
+  }
+  
 
   return {
     merkleMap: merkleMap,

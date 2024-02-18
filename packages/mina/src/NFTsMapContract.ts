@@ -54,32 +54,29 @@ export class MerkleMapContract extends SmartContract {
     _feeAmount: UInt64,
     _maxSupply: UInt64
   ) {
-    // ensure that we can only initialize once
+    // ensures that we can only initialize once
+    this.account.provedState.requireEquals(this.account.provedState.get());
+    this.account.provedState.get().assertFalse();
 
-    let root = this.treeRoot.getAndRequireEquals();
-    Provable.log(root);
-    let totalInited = this.totalInited.getAndRequireEquals();
-    Provable.log(totalInited);
+    this.treeRoot.getAndRequireEquals();
+    this.totalInited.getAndRequireEquals();
+    this.fee.getAndRequireEquals();
+    this.maxSupply.getAndRequireEquals();
 
-    let fee = this.fee.getAndRequireEquals();
-    Provable.log(fee);
-    let maxSupply = this.maxSupply.getAndRequireEquals();
-    Provable.log(maxSupply);
     this.treeRoot.set(_initialRoot);
     this.totalInited.set(_totalInited);
 
     this.fee.set(_feeAmount);
     this.maxSupply.set(_maxSupply);
+    
   }
 
-  @method setFee(amount: UInt64) {
-    //  adminSignature: Signature
+  @method setFee(amount: UInt64, adminSignature: Signature) {  
     this.fee.getAndRequireEquals();
-    //adminSignature.verify(this.address, UInt64.toFields(amount)).assertTrue();
-    //this.fee.set(amount);
+    adminSignature.verify(this.address, UInt64.toFields(amount)).assertTrue();
+    this.fee.set(amount);
   }
 
-  // inits nft
   @method initNft(item: Nft, keyWitness: MerkleMapWitness) {
     const initedAmount = this.totalInited.getAndRequireEquals();
     const maxSupply = this.maxSupply.getAndRequireEquals();
@@ -107,8 +104,6 @@ export class MerkleMapContract extends SmartContract {
     // update liquidity supply
     this.totalInited.set(initedAmount.add(1));
   }
-
-  // mints nft
 
   @method mintNft(item: Nft, keyWitness: MerkleMapWitness) {
     const initialRoot = this.treeRoot.getAndRequireEquals();
