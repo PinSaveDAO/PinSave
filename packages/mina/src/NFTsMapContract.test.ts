@@ -13,11 +13,11 @@ import {
   transferNft,
 } from './components/transactions.js';
 
-const proofsEnabled = true;
+const proofsEnabled = false;
 const enforceTransactionLimits = true;
 
 const live = false;
-const displayLogs = false
+const displayLogs = true;
 
 const testAccounts = await startLocalBlockchainClient(
   proofsEnabled,
@@ -32,7 +32,7 @@ const {
   merkleMap: map,
   zkAppInstance: zkAppInstance,
   zkAppPk: zkAppPrivateKey,
-} = await deployApp(pk1, proofsEnabled, live);
+} = await deployApp(pk1, proofsEnabled, live, displayLogs);
 
 const compile = false;
 
@@ -45,6 +45,12 @@ const { nftArray: nftArray } = generateDummyCollectionMap(pubKey1, map);
 console.log('initing app root');
 
 await initAppRoot(pk1, zkAppInstance, map, nftArray.length, live, displayLogs);
+
+try {
+  await initAppRoot(pk1, zkAppInstance, map, nftArray.length, live, displayLogs);
+} catch {
+  console.log('failed sucessfully to initialize App root again which already exists');
+}
 
 console.log('changing fee amount');
 

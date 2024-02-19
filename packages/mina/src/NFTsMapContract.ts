@@ -32,12 +32,11 @@ export class MerkleMapContract extends SmartContract {
     super.deploy(args);
 
     const permissionToEdit = Permissions.proof();
-    const none = Permissions.none();
 
     this.account.permissions.set({
       ...Permissions.default(),
-      access: none,
-      editState: none,
+      access: permissionToEdit,
+      editState: permissionToEdit,
       setTokenSymbol: permissionToEdit,
       send: permissionToEdit,
       receive: permissionToEdit,
@@ -57,6 +56,8 @@ export class MerkleMapContract extends SmartContract {
     // ensures that we can only initialize once
     this.account.provedState.requireEquals(this.account.provedState.get());
     this.account.provedState.get().assertFalse();
+    
+    super.init()
 
     this.treeRoot.getAndRequireEquals();
     this.totalInited.getAndRequireEquals();
@@ -71,7 +72,9 @@ export class MerkleMapContract extends SmartContract {
     
   }
 
-  @method setFee(amount: UInt64, adminSignature: Signature) {  
+  @method setFee(amount: UInt64, adminSignature: Signature) {
+    this.account.provedState.requireEquals(this.account.provedState.get());
+    this.account.provedState.get().assertTrue();
     this.fee.getAndRequireEquals();
     adminSignature.verify(this.address, UInt64.toFields(amount)).assertTrue();
     this.fee.set(amount);
