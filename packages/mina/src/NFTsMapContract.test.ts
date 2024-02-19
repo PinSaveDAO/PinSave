@@ -38,8 +38,6 @@ const compile = false;
 
 console.log('deployed app');
 
-// add some initial values into the map
-
 const { nftArray: nftArray } = generateDummyCollectionMap(pubKey1, map);
 
 console.log('initing app root');

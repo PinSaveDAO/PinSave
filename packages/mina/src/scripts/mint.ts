@@ -30,4 +30,7 @@ const nft_ = await getVercelNft(appId, 0, client);
 
 const nft = deserializeNft(nft_);
 
-await mintNftFromMap(deployerKey, nft, zkApp, storedMap, true);
+const compile = true;
+const live = true;
+
+await mintNftFromMap(deployerKey, nft, zkApp, storedMap, compile, live, false);

@@ -1,6 +1,6 @@
 import { createClient } from '@vercel/kv';
 
-import { getEnvAccount } from '../components/env';
+import { getEnvAccount } from '../components/env.js';
 import {
   generateDummyCollectionWithMap,
   getMapFromVercelNfts,
@@ -46,4 +46,7 @@ console.log(storedTreeRoot);
 
 console.log('matches subbed tree', storedTreeRoot === generateTreeRoot);
 
-await initRootWithApp(deployerKey, zkAppAddress, merkleMap, nftArray.length);
+const compile = true;
+const live = true;
+
+await initRootWithApp(deployerKey, zkAppAddress, merkleMap, nftArray.length, compile, live);

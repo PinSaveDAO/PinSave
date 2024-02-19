@@ -43,8 +43,6 @@ export class MerkleMapContract extends SmartContract {
     });
   }
 
-  // test for other addresses
-  // if we need to
   // add protection for admin with signature
 
   @method initRoot(
