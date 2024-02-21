@@ -2,6 +2,7 @@ export {
   getTotalSupplyLive,
   getTotalInitedLive,
   getAppState,
+  getTreeRoot,
 } from './components/AppState.js';
 
 export {
@@ -26,7 +27,10 @@ export {
   deserializeJsonToMerkleMap,
 } from './components/serialize.js';
 
-export { getTokenBalances } from './components/TokenBalances.js';
+export {
+  getTokenBalances,
+  getMinaBalance,
+} from './components/TokenBalances.js';
 
 export {
   getAppPublic,
