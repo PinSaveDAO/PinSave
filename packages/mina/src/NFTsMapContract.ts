@@ -12,6 +12,7 @@ import {
   UInt64,
   Signature,
   Provable,
+  AccountUpdate,
 } from 'o1js';
 
 import { Nft } from './components/Nft.js';
@@ -54,8 +55,8 @@ export class MerkleMapContract extends SmartContract {
     // ensures that we can only initialize once
     this.account.provedState.requireEquals(this.account.provedState.get());
     this.account.provedState.get().assertFalse();
-    
-    super.init()
+
+    super.init();
 
     this.treeRoot.getAndRequireEquals();
     this.totalInited.getAndRequireEquals();
@@ -67,7 +68,6 @@ export class MerkleMapContract extends SmartContract {
 
     this.fee.set(_feeAmount);
     this.maxSupply.set(_maxSupply);
-    
   }
 
   @method setFee(amount: UInt64, adminSignature: Signature) {
@@ -79,6 +79,7 @@ export class MerkleMapContract extends SmartContract {
   }
 
   @method initNft(item: Nft, keyWitness: MerkleMapWitness) {
+    const fee = this.fee.getAndRequireEquals();
     const initedAmount = this.totalInited.getAndRequireEquals();
     const maxSupply = this.maxSupply.getAndRequireEquals();
     initedAmount.assertLessThanOrEqual(maxSupply);
@@ -93,6 +94,9 @@ export class MerkleMapContract extends SmartContract {
     key.assertEquals(item.id);
 
     // ask for fee here
+    let senderUpdate = AccountUpdate.create(this.sender);
+    senderUpdate.requireSignature();
+    senderUpdate.send({ to: this, amount: fee });
 
     // compute the root after incrementing
     const [rootAfter, _] = keyWitness.computeRootAndKey(

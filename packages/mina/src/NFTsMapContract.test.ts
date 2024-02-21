@@ -3,6 +3,7 @@ import {
   generateDummyCollectionMap,
   generateDummyNftMetadata,
 } from './components/Nft.js';
+import { logMinaBalance } from './components/TokenBalances.js';
 import {
   deployApp,
   initAppRoot,
@@ -45,9 +46,18 @@ console.log('initing app root');
 await initAppRoot(pk1, zkAppInstance, map, nftArray.length, live, displayLogs);
 
 try {
-  await initAppRoot(pk1, zkAppInstance, map, nftArray.length, live, displayLogs);
+  await initAppRoot(
+    pk1,
+    zkAppInstance,
+    map,
+    nftArray.length,
+    live,
+    displayLogs
+  );
 } catch {
-  console.log('failed sucessfully to initialize App root again which already exists');
+  console.log(
+    'failed sucessfully to initialize App root again which already exists'
+  );
 }
 
 console.log('changing fee amount');
@@ -56,7 +66,15 @@ await setFee(zkAppPrivateKey, pk1, zkAppInstance);
 
 console.log('set fee');
 
-await mintNftFromMap(pk1, nftArray[0], zkAppInstance, map, compile, live, displayLogs);
+await mintNftFromMap(
+  pk1,
+  nftArray[0],
+  zkAppInstance,
+  map,
+  compile,
+  live,
+  displayLogs
+);
 
 console.log('minted NFT');
 
@@ -64,12 +82,30 @@ console.log('minted NFT');
 const nft = generateDummyNftMetadata(3, pubKey1);
 const nftStruct = createNft(nft);
 
-await initNft(pubKey1, pk1, nftStruct, zkAppInstance, map, compile, live, displayLogs);
+await initNft(
+  pubKey1,
+  pk1,
+  nftStruct,
+  zkAppInstance,
+  map,
+  compile,
+  live,
+  displayLogs
+);
 
 console.log('inited NFT');
 
 try {
-  await initNft(pubKey1, pk1, nftStruct, zkAppInstance, map, compile, live, displayLogs);
+  await initNft(
+    pubKey1,
+    pk1,
+    nftStruct,
+    zkAppInstance,
+    map,
+    compile,
+    live,
+    displayLogs
+  );
 } catch {
   console.log('failed sucessfully to initialize NFT which already exists');
 }
@@ -77,11 +113,28 @@ try {
 const nftNew = generateDummyNftMetadata(4, pubKey2);
 const nftStructNew = createNft(nftNew);
 
-await initNft(pubKey2, pk2, nftStructNew, zkAppInstance, map, compile, live, displayLogs);
+await initNft(
+  pubKey2,
+  pk2,
+  nftStructNew,
+  zkAppInstance,
+  map,
+  compile,
+  live,
+  displayLogs
+);
 
 console.log('inited NFT - 2 sucessfully');
 
-await mintNftFromMap(pk1, nftStruct, zkAppInstance, map, compile, live, displayLogs);
+await mintNftFromMap(
+  pk1,
+  nftStruct,
+  zkAppInstance,
+  map,
+  compile,
+  live,
+  displayLogs
+);
 
 console.log('mints sucessfully');
 
@@ -96,7 +149,7 @@ await transferNft(
   zkAppInstance,
   map,
   zkAppPrivateKey,
-  live, 
+  live,
   displayLogs
 );
 
@@ -114,3 +167,5 @@ await transferNft(
 );
 
 console.log('transfered ownership sucessfully');
+
+logMinaBalance(zkAppInstance.address);
