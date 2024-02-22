@@ -39,6 +39,7 @@ export {
   getAppContract,
   startBerkeleyClient,
   createMintTx,
+  createNotFirstMintTx,
   mintNftFromMap,
   mintNFT,
   initRootWithApp,

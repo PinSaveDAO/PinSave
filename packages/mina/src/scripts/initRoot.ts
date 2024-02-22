@@ -26,8 +26,6 @@ const {
 
 const generateTreeRoot = merkleMap.getRoot().toString();
 
-console.log(generateTreeRoot);
-
 const client = createClient({
   url: process.env.KV_REST_API_URL as string,
   token: process.env.KV_REST_API_TOKEN as string,
@@ -42,11 +40,16 @@ const storedTree = await getMapFromVercelNfts(appId, [0, 1, 2], client);
 
 const storedTreeRoot = storedTree.getRoot().toString();
 
-console.log(storedTreeRoot);
-
 console.log('matches subbed tree', storedTreeRoot === generateTreeRoot);
 
 const compile = true;
 const live = true;
 
-await initRootWithApp(deployerKey, zkAppAddress, merkleMap, nftArray.length, compile, live);
+await initRootWithApp(
+  deployerKey,
+  zkAppAddress,
+  merkleMap,
+  nftArray.length,
+  compile,
+  live
+);

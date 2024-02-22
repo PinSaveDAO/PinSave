@@ -1,3 +1,7 @@
+/* 
+add a single digit token mint rn it is 0.000000001
+fix token interface for minascan https://minascan.io/berkeley/token/wh4DdFswss3vMm2qzjmAAU5JhxD58ZEsbzDyW2VX3Ne6N8DEq2/holders
+*/
 import {
   Field,
   SmartContract,
@@ -11,7 +15,6 @@ import {
   Poseidon,
   UInt64,
   Signature,
-  Provable,
   AccountUpdate,
 } from 'o1js';
 
@@ -73,8 +76,10 @@ export class MerkleMapContract extends SmartContract {
   @method setFee(amount: UInt64, adminSignature: Signature) {
     this.account.provedState.requireEquals(this.account.provedState.get());
     this.account.provedState.get().assertTrue();
+
     this.fee.getAndRequireEquals();
-    adminSignature.verify(this.address, UInt64.toFields(amount)).assertTrue();
+
+    adminSignature.verify(this.address, amount.toFields()).assertTrue();
     this.fee.set(amount);
   }
 
@@ -87,7 +92,6 @@ export class MerkleMapContract extends SmartContract {
     const initialRoot = this.treeRoot.getAndRequireEquals();
 
     // checks the initial state is empty
-
     const [rootBefore, key] = keyWitness.computeRootAndKey(Field(0));
 
     rootBefore.assertEquals(initialRoot);
@@ -113,16 +117,16 @@ export class MerkleMapContract extends SmartContract {
   @method mintNft(item: Nft, keyWitness: MerkleMapWitness) {
     const initialRoot = this.treeRoot.getAndRequireEquals();
 
-    // check the leaf state
-    // should contain correct metadata
+    item.owner.assertEquals(this.sender);
 
     const [rootBefore, key] = keyWitness.computeRootAndKey(
       Poseidon.hash(Nft.toFields(item))
     );
-
     rootBefore.assertEquals(initialRoot);
     key.assertEquals(item.id);
 
+    let senderUpdate = AccountUpdate.create(this.sender);
+    senderUpdate.requireSignature();
     this.token.mint({ address: item.owner, amount: UInt64.one });
 
     // update liquidity supply
@@ -145,6 +149,9 @@ export class MerkleMapContract extends SmartContract {
 
     const sender = this.sender;
     sender.assertEquals(item.owner);
+
+    let senderUpdate = AccountUpdate.create(sender);
+    senderUpdate.requireSignature();
 
     const initialRoot = this.treeRoot.getAndRequireEquals();
 

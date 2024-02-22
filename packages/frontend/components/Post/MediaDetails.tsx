@@ -30,6 +30,11 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
   const [address, setAddress] = useState<PublicKey | undefined>(undefined);
 
   async function mintNFT() {
+    if (!address) {
+      const connectedAddress = await setMinaAccount(key);
+      const pub = PublicKey.fromBase58(connectedAddress);
+      setAddress(pub);
+    }
     if (map && address) {
       // https://docs.aurowallet.com/general/reference/api-reference/methods/mina_sendtransaction
       const zkApp = getAppContract();
@@ -77,11 +82,6 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
         const savedAddress = sessionStorage.getItem(key);
         if (savedAddress && savedAddress !== "undefined") {
           setAddress(PublicKey.fromBase58(savedAddress));
-        } else {
-          // connect to wallet
-          const connectedAddress = await setMinaAccount(key);
-          const pub = PublicKey.fromBase58(connectedAddress);
-          setAddress(pub);
         }
       } catch (error) {
         console.error("Error fetching media details: ", error);
@@ -116,11 +116,10 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
             post.owner.substring(35)}
         </a>
       </p>
-      {totalSupply && postNumber >= totalSupply ? (
-        <Text>Minted</Text>
-      ) : (
+      {totalSupply && postNumber < totalSupply ? <Text>Minted</Text> : null}
+      {address && totalSupply && postNumber >= totalSupply ? (
         <Button onClick={async () => await mintNFT()}>Mint</Button>
-      )}
+      ) : null}
     </Paper>
   );
 };

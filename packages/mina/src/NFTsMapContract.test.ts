@@ -14,11 +14,12 @@ import {
   transferNft,
 } from './components/transactions.js';
 
+const displayLogs = true;
+
 const proofsEnabled = false;
 const enforceTransactionLimits = true;
 
 const live = false;
-const displayLogs = true;
 
 const testAccounts = await startLocalBlockchainClient(
   proofsEnabled,

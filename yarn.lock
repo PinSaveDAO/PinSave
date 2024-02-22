@@ -1095,17 +1095,17 @@
     viem "^0.3.17"
     wait-on "^7.0.1"
 
-"@tanstack/query-core@5.18.1":
-  version "5.18.1"
-  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-5.18.1.tgz#b653ee354b7f4712d53565ccc5c6d8fb83ec866c"
-  integrity sha512-fYhrG7bHgSNbnkIJF2R4VUXb4lF7EBiQjKkDc5wOlB7usdQOIN4LxxHpDxyE3qjqIst1WBGvDtL48T0sHJGKCw==
+"@tanstack/query-core@5.22.2":
+  version "5.22.2"
+  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-5.22.2.tgz#af67d41b0b4a3e846c2325f32540f39ca0d4788d"
+  integrity sha512-z3PwKFUFACMUqe1eyesCIKg3Jv1mysSrYfrEW5ww5DCDUD4zlpTKBvUDaEjsfZzL3ULrFLDM9yVUxI/fega1Qg==
 
-"@tanstack/react-query@5.18.1":
-  version "5.18.1"
-  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-5.18.1.tgz#fd4e7b87260e82c5277355ad64f0e431a9302e02"
-  integrity sha512-PdI07BbsahZ+04PxSuDQsQvBWe008eWFk/YYWzt8fvzt2sALUM0TpAJa/DFpqa7+SSo7j1EQR6Jx6znXNHyaXw==
+"@tanstack/react-query@5.22.2":
+  version "5.22.2"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-5.22.2.tgz#e5fce278fbdd026fc1d561a4505142b9f93549d7"
+  integrity sha512-TaxJDRzJ8/NWRT4lY2jguKCrNI6MRN+67dELzPjNUlvqzTxGANlMp68l7aC7hG8Bd1uHNxHl7ihv7MT50i/43A==
   dependencies:
-    "@tanstack/query-core" "5.18.1"
+    "@tanstack/query-core" "5.22.2"
 
 "@testing-library/cypress@^9.0.0":
   version "9.0.0"
@@ -1534,14 +1534,15 @@
   dependencies:
     crypto-js "^4.2.0"
 
-"@vercel/blob@^0.21.0":
-  version "0.21.0"
-  resolved "https://registry.yarnpkg.com/@vercel/blob/-/blob-0.21.0.tgz#b1d61504324c722b627def8f7e06e636c9aa58e5"
-  integrity sha512-uTVskvD94ZtKsX28M6TSt6GJKe7TOumys4H6GMwa+olBsQt9WGx6+ex1g+OR8bjhnA3EuF8MCehM3ZMtIblUDg==
+"@vercel/blob@^0.22.1":
+  version "0.22.1"
+  resolved "https://registry.yarnpkg.com/@vercel/blob/-/blob-0.22.1.tgz#0ccbbb6d99748310de1ce8c8cdb0507ee4af286e"
+  integrity sha512-LtHmiYAdJhiSAfBP+5hHXtVyqZUND2G+ild/XVY0SOiB46ab7VUrQctwUMGcVx+yZyXZ2lXPT1HvRJtXFnKvHA==
   dependencies:
     async-retry "1.3.3"
     bytes "3.1.2"
-    undici "5.28.2"
+    is-buffer "2.0.5"
+    undici "5.28.3"
 
 "@vercel/kv@^1.0.1":
   version "1.0.1"
@@ -4690,6 +4691,11 @@ is-boolean-object@^1.1.0:
     call-bind "^1.0.2"
     has-tostringtag "^1.0.0"
 
+is-buffer@2.0.5:
+  version "2.0.5"
+  resolved "https://registry.yarnpkg.com/is-buffer/-/is-buffer-2.0.5.tgz#ebc252e400d22ff8d77fa09888821a24a658c191"
+  integrity sha512-i2R6zNFDwgEHJyQUtJEk0XFi1i0dPFn/oqjK3/vPCcDeJvW5NQ83V8QbicfF1SupOaB0h8ntgBC2YiE7dfyctQ==
+
 is-callable@^1.1.3, is-callable@^1.1.4, is-callable@^1.2.7:
   version "1.2.7"
   resolved "https://registry.yarnpkg.com/is-callable/-/is-callable-1.2.7.tgz#3bc2a85ea742d9e36205dcacdd72ca1fdc51b055"
@@ -5727,10 +5733,10 @@ nyc@15.1.0:
     test-exclude "^6.0.0"
     yargs "^15.0.2"
 
-o1js@0.16.0:
-  version "0.16.0"
-  resolved "https://registry.yarnpkg.com/o1js/-/o1js-0.16.0.tgz#b345988d8e68d247db80b5e83ec068aac350651b"
-  integrity sha512-H6fKHLgH68v18De0tZydQKqF2bOIvF+EsPHJ+P53dJDOaS7Dlp8Uf4hGVo8S8luCfYsFvCdDGU3YwfegfCk6TQ==
+o1js@0.16.2:
+  version "0.16.2"
+  resolved "https://registry.yarnpkg.com/o1js/-/o1js-0.16.2.tgz#46e7bcdcce41a4a01f2b9b884d2dec4a23df1775"
+  integrity sha512-CyQFURc2UzzNpPJcYUdvFqa6I7SjXksDCubgJixWjEoS3R+FOl/yttMwOwopxb3oLLK92MyD2ZM/OEdKqVUyyg==
   dependencies:
     blakejs "1.2.1"
     cachedir "^2.4.0"
@@ -6119,14 +6125,14 @@ pify@^4.0.1:
   resolved "https://registry.yarnpkg.com/pify/-/pify-4.0.1.tgz#4b2cd25c50d598735c50292224fd8c6df41e3231"
   integrity sha512-uB80kBFb/tfd68bVleG9T5GGsGPjJrLAUpR5PZIrhBnIaRTQRjqdJSsIKkOP6OAIFbj7GOrcudc5pNjZ+geV2g==
 
-pin-mina@0.1.25:
-  version "0.1.25"
-  resolved "https://registry.yarnpkg.com/pin-mina/-/pin-mina-0.1.25.tgz#360d20e73c6a694b31484da09ce24fbd8f541a01"
-  integrity sha512-aaVlGFntaViHbmYnZNnoIqYNgBpZZuOyMXlM8c4b8Bj8i9kKDQ4c0Gz5iaD0hJx/WcY7UpQuFrcFdZVNZ0xPBQ==
+pin-mina@0.1.27:
+  version "0.1.27"
+  resolved "https://registry.yarnpkg.com/pin-mina/-/pin-mina-0.1.27.tgz#9ee3425b53cc9e9c163258a16a12e332011004a1"
+  integrity sha512-Xk6+etsFa1Yu8wKwqBB6TJtXY6wueBHDcX6d8HHtaL+C644qkM+VAI+8c8w3Gmzv1R84SNLNhhDmIt2d/SAjsg==
   dependencies:
     "@vercel/kv" "^1.0.1"
     dotenv "^16.3.1"
-    o1js "0.16.0"
+    o1js "0.16.2"
 
 pinkie-promise@^2.0.0:
   version "2.0.1"
@@ -7524,10 +7530,10 @@ undici-types@~5.26.4:
   resolved "https://registry.yarnpkg.com/undici-types/-/undici-types-5.26.5.tgz#bcd539893d00b56e964fd2657a4866b221a65617"
   integrity sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==
 
-undici@5.28.2:
-  version "5.28.2"
-  resolved "https://registry.yarnpkg.com/undici/-/undici-5.28.2.tgz#fea200eac65fc7ecaff80a023d1a0543423b4c91"
-  integrity sha512-wh1pHJHnUeQV5Xa8/kyQhO7WFa8M34l026L5P/+2TYiakvGy5Rdc8jWZVyG7ieht/0WgJLEd3kcU5gKx+6GC8w==
+undici@5.28.3:
+  version "5.28.3"
+  resolved "https://registry.yarnpkg.com/undici/-/undici-5.28.3.tgz#a731e0eff2c3fcfd41c1169a869062be222d1e5b"
+  integrity sha512-3ItfzbrhDlINjaP0duwnNsKpDQk3acHI3gVJ1z4fmwMK31k5G9OVIAMLSIaP6w4FaGkaAkN6zaQO9LUvZ1t7VA==
   dependencies:
     "@fastify/busboy" "^2.0.0"
 
