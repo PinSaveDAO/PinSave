@@ -1,8 +1,5 @@
-import {
-  deployApp,
-  getEnvAccount,
-  startBerkeleyClient,
-} from '../components/transactions.js';
+import { deployApp, startBerkeleyClient } from '../components/transactions.js';
+import { getEnvAccount } from '../components/env.js';
 
 startBerkeleyClient();
 

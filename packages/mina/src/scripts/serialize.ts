@@ -3,7 +3,6 @@ import { MerkleMap, MerkleTree } from 'o1js';
 import {
   deserializeJsonToMerkleMap,
   serializeMerkleMapToJson,
-  serializeMerkleToJsonOptimized,
 } from '../components/serialize.js';
 import { generateDummyCollectionMap } from '../components/Nft.js';
 import {
@@ -13,7 +12,7 @@ import {
 
 startBerkeleyClient();
 
-const { pubKey: pubKey, appPubKey: zkAppAddress } = getAppPublic();
+const pubKey = getAppPublic();
 
 const merkleMap: MerkleMap = new MerkleMap();
 console.log('MerkleMap()', merkleMap.getRoot().toString());
@@ -38,22 +37,3 @@ const map: MerkleMap = deserializeJsonToMerkleMap(serializedJson);
 console.log('after serialize-deserialize', map.getRoot().toString());
 
 console.log('merkleMap root', merkleTree.getRoot().toString());
-
-/* console.time('123');
-
-const exampleMerkleTreeJson = serializeMerkleTreeToJson(merkleTree);
-
-console.timeEnd('123');
-
-const exampleMerkleTree = deserializeJsonToMerkleTree(exampleMerkleTreeJson);
-
-console.log(
-  'after serialize-deserialize',
-  exampleMerkleTree.getRoot().toString()
-); */
-
-await serializeMerkleToJsonOptimized(merkleTree);
-
-//console.log(getZerosMerkleTree(merkleTree.height).toString());
-
-//console.log(serializeMerkleTreeToJsonFull(exampleMerkleTree));

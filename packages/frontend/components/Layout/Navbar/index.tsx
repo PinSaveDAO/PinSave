@@ -1,3 +1,4 @@
+import { setMinaAccount } from "@/hooks/minaWallet";
 import {
   createStyles,
   Text,
@@ -7,6 +8,7 @@ import {
   Burger,
   Paper,
   Transition,
+  Button,
 } from "@mantine/core";
 import { useBooleanToggle } from "@mantine/hooks";
 import { useMediaQuery } from "@mantine/hooks";
@@ -99,11 +101,20 @@ interface NavbarProps {
 }
 
 export function Navbar({ links }: NavbarProps) {
+  const key = "auroWalletAddress";
+
   const [hasMounted, setHasMounted] = useState(false);
+  const [address, setAddress] = useState("");
 
   useEffect(() => {
     setHasMounted(true);
-  }, []);
+    const savedAddress = sessionStorage.getItem(key);
+    if (savedAddress) {
+      const shortAddress =
+        savedAddress.substring(0, 3) + "..." + savedAddress.slice(-3);
+      setAddress(shortAddress);
+    }
+  }, [address]);
 
   const [opened, toggleOpened] = useBooleanToggle(false);
   const { classes, cx } = useStyles();
@@ -146,12 +157,14 @@ export function Navbar({ links }: NavbarProps) {
             {items}
           </Group>
           <Group spacing={5}>
-            {/* <ConnectButton
-              accountStatus={{
-                smallScreen: "avatar",
-                largeScreen: "full",
-              }}
-            /> */}
+            <Button
+              variant="filled"
+              size="md"
+              radius="md"
+              onClick={async () => setAddress(await setMinaAccount(key))}
+            >
+              {address !== "" ? address : "Connect Wallet"}
+            </Button>
             <Burger
               opened={opened}
               onClick={() => toggleOpened()}

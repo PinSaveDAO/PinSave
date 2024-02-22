@@ -2,6 +2,7 @@ export {
   getTotalSupplyLive,
   getTotalInitedLive,
   getAppState,
+  getTreeRoot,
 } from './components/AppState.js';
 
 export {
@@ -12,10 +13,13 @@ export {
   getMapFromVercelNfts,
   getVercelMetadata,
   setVercelNft,
+  getVercelNft,
   setNftsToVercel,
   setMetadatasToVercel,
+  deserializeNft,
   NftMetadata,
   Nft,
+  nftDataIn,
 } from './components/Nft.js';
 
 export {
@@ -23,14 +27,22 @@ export {
   deserializeJsonToMerkleMap,
 } from './components/serialize.js';
 
-export { getTokenBalances } from './components/TokenBalances.js';
+export {
+  getTokenBalances,
+  getMinaBalance,
+} from './components/TokenBalances.js';
 
 export {
-  getEnvAccount,
   getAppPublic,
+  getAppDeployer,
+  getAppString,
+  getAppContract,
   startBerkeleyClient,
+  createMintTx,
   mintNftFromMap,
+  mintNFT,
   initRootWithApp,
+  createTxOptions,
 } from './components/transactions.js';
 
 export { MerkleMapContract } from './NFTsMapContract.js';

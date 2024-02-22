@@ -4,7 +4,6 @@ import type { Post } from "@/services/upload";
 
 import { Box, Button, Center, Title, Text, Stack } from "@mantine/core";
 import type { NextPage } from "next";
-import Link from "next/link";
 
 const Home: NextPage = () => {
   const {
@@ -37,12 +36,13 @@ const Home: NextPage = () => {
 
       {!posts && isLoading && (
         <Center>
-          <Stack>
-            <Title order={1}> PinSave Home Page</Title>
-            <Text> Loading decentralized PinSave Posts</Text>
+          <Stack
+            sx={{
+              maxWidth: 700,
+            }}
+          >
+            <Title order={1}>PinSave Home Page</Title>
             <Text>
-              {" "}
-              Upload your post on <Link href="/upload"> `/Upload`</Link> page.
               Pin Save is a decentralized social media which consists of
               decentralized posts enabled by Mina blockchain and o1js. The speed
               of interacting with media and content should be greatly enhanced

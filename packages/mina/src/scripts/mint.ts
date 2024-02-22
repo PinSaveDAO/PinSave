@@ -7,12 +7,13 @@ import {
 } from '../components/Nft.js';
 import {
   mintNftFromMap,
-  getEnvAccount,
   startBerkeleyClient,
-  getAppPublic,
+  getAppString,
+  getAppContract,
 } from '../components/transactions.js';
-import { MerkleMapContract } from '../NFTsMapContract.js';
+import { getEnvAccount } from '../components/env.js';
 
+const { pk: deployerKey } = getEnvAccount();
 startBerkeleyClient();
 
 const client = createClient({
@@ -20,19 +21,16 @@ const client = createClient({
   token: process.env.KV_REST_API_TOKEN as string,
 });
 
-const { pk: deployerKey } = getEnvAccount();
-const { pubKey: pubKey, appPubKey: zkAppAddress } = getAppPublic();
+const appId = getAppString();
+const zkApp = getAppContract();
 
-const appId = zkAppAddress.toBase58();
+const storedMap = await getMapFromVercelNfts(appId, [0, 1, 2], client);
 
-const zkApp: MerkleMapContract = new MerkleMapContract(zkAppAddress);
-
-const storedMap = await getMapFromVercelNfts(appId, [10, 11, 12], client);
-
-console.log(storedMap.getRoot().toString());
-
-const nft_ = await getVercelNft(zkAppAddress, 11, client);
+const nft_ = await getVercelNft(appId, 0, client);
 
 const nft = deserializeNft(nft_);
 
-await mintNftFromMap(deployerKey, nft, zkApp, storedMap);
+const compile = true;
+const live = true;
+
+await mintNftFromMap(deployerKey, nft, zkApp, storedMap, compile, live, false);

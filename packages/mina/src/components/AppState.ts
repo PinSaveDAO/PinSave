@@ -13,7 +13,7 @@ async function logAppStates(
     maxSupply: maxSupply,
   } = await getAppState(zkAppInstance, live);
 
-  console.log('max supply', maxSupply);
+  console.log('max supply', maxSupply.toBigInt());
   console.log('totalSupply state:', totalSupply.toBigInt());
   console.log('totalInited state:', totalInited.toBigInt());
   console.log('treeRoot state:', treeRoot.toString());
@@ -47,7 +47,7 @@ export async function getAppState(
   const treeRoot: Field = zkAppInstance.treeRoot.get();
   const totalSupply: UInt64 = zkAppInstance.totalSupply.get();
   const totalInited: UInt64 = zkAppInstance.totalInited.get();
-  const maxSupply: bigint = zkAppInstance.maxSupply.toBigInt();
+  const maxSupply: UInt64 = zkAppInstance.maxSupply.get();
   return {
     treeRoot: treeRoot,
     totalSupply: totalSupply,
@@ -70,4 +70,12 @@ export async function getTotalSupplyLive(
   await fetchAccount({ publicKey: zkAppInstance.address });
   const totalSupply: UInt64 = zkAppInstance.totalSupply.get();
   return totalSupply;
+}
+
+export async function getTreeRoot(
+  zkAppInstance: MerkleMapContract
+): Promise<Field> {
+  await fetchAccount({ publicKey: zkAppInstance.address });
+  const treeRoot: Field = zkAppInstance.treeRoot.get();
+  return treeRoot;
 }
