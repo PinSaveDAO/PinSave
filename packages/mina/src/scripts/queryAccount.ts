@@ -1,10 +1,9 @@
 import { fetchAccount } from 'o1js';
 
 import {
-  getAppContract,
   startBerkeleyClient,
 } from '../components/transactions.js';
-import { getEnvAccount } from '../components/env.js';
+import { getEnvAccount, getAppEnv } from '../components/env.js';
 import {
   logMinaBalance,
   logTokenBalances,
@@ -12,12 +11,10 @@ import {
 
 startBerkeleyClient();
 
-const contract = getAppContract();
-
+const { zkApp: zkApp } = getAppEnv();
 const { pubKey: pub } = getEnvAccount();
 
 await fetchAccount({ publicKey: pub });
 
 logMinaBalance(pub);
-
-logTokenBalances(pub, contract);
+logTokenBalances(pub, zkApp);

@@ -21,14 +21,6 @@ export class Nft extends Struct({
   }
 }
 
-export type NftReduced = {
-  name: Field;
-  description: Field;
-  id: Field;
-  cid: Field;
-  owner: PublicKey;
-};
-
 export type NftMetadata = {
   name: string;
   description: string;
@@ -45,7 +37,7 @@ export type nftDataIn = {
   owner: string;
 };
 
-export function NFTtoHash(_NFT: NftReduced): Field {
+export function NFTtoHash(_NFT: Nft): Field {
   return Poseidon.hash(Nft.toFields(_NFT));
 }
 
@@ -103,12 +95,12 @@ export function setStringObjectToMap(data: nftDataIn, map: MerkleMap) {
   map.set(nftObject.id, NFTtoHash(nftObject));
 }
 
-export function setHashedObjectToMap(data: NftReduced, map: MerkleMap) {
+export function setHashedObjectToMap(data: Nft, map: MerkleMap) {
   map.set(data.id, NFTtoHash(data));
 }
 
 export function deserializeNft(data: nftDataIn) {
-  const dataOut = {
+  const dataOut: Nft = {
     name: Field(data.name),
     description: Field(data.description),
     cid: Field(data.cid),
@@ -134,7 +126,7 @@ export async function getMapFromVercelNfts(
 
     const data: nftDataIn = await getVercelNft(appId, nftId, client);
 
-    const dataOut = deserializeNft(data);
+    const dataOut: Nft = deserializeNft(data);
 
     setHashedObjectToMap(dataOut, map);
   }

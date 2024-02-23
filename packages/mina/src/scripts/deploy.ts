@@ -19,5 +19,4 @@ const { zkAppPk: pk } = await deployApp(
 );
 
 console.log('app private key:', pk.toBase58());
-
 console.log('app public key:', pk.toPublicKey().toBase58());

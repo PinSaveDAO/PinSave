@@ -1,6 +1,4 @@
-import { createClient } from '@vercel/kv';
-
-import { getEnvAccount } from '../components/env.js';
+import { getEnvAccount,  getAppEnv, getVercelClient } from '../components/env.js';
 import {
   generateDummyCollectionWithMap,
   getMapFromVercelNfts,
@@ -10,13 +8,12 @@ import {
 import {
   initRootWithApp,
   startBerkeleyClient,
-  getAppPublic,
 } from '../components/transactions.js';
 
 startBerkeleyClient();
-
+const client = getVercelClient()
 const { pubKey: pubKey, pk: deployerKey } = getEnvAccount();
-const zkAppAddress = getAppPublic();
+const { appId: appId, pk: zkAppPK } = getAppEnv();
 
 const {
   map: merkleMap,
@@ -25,13 +22,6 @@ const {
 } = generateDummyCollectionWithMap(pubKey);
 
 const generateTreeRoot = merkleMap.getRoot().toString();
-
-const client = createClient({
-  url: process.env.KV_REST_API_URL as string,
-  token: process.env.KV_REST_API_TOKEN as string,
-});
-
-const appId = zkAppAddress.toBase58();
 
 await setNftsToVercel(appId, nftArray, client);
 await setMetadatasToVercel(appId, nftMetadata, client);
@@ -46,8 +36,8 @@ const compile = true;
 const live = true;
 
 await initRootWithApp(
+  zkAppPK,
   deployerKey,
-  zkAppAddress,
   merkleMap,
   nftArray.length,
   compile,

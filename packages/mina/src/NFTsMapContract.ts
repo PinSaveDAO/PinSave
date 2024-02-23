@@ -1,7 +1,3 @@
-/* 
-add a single digit token mint rn it is 0.000000001
-fix token interface for minascan https://minascan.io/berkeley/token/wh4DdFswss3vMm2qzjmAAU5JhxD58ZEsbzDyW2VX3Ne6N8DEq2/holders
-*/
 import {
   Field,
   SmartContract,
@@ -42,24 +38,29 @@ export class MerkleMapContract extends SmartContract {
       access: permissionToEdit,
       editState: permissionToEdit,
       setTokenSymbol: permissionToEdit,
+      setZkappUri: permissionToEdit,
       send: permissionToEdit,
       receive: permissionToEdit,
     });
   }
 
-  // add protection for admin with signature
-
   @method initRoot(
     _initialRoot: Field,
     _totalInited: UInt64,
     _feeAmount: UInt64,
-    _maxSupply: UInt64
+    _maxSupply: UInt64,
+    adminSignature: Signature
   ) {
     // ensures that we can only initialize once
     this.account.provedState.requireEquals(this.account.provedState.get());
     this.account.provedState.get().assertFalse();
 
+    adminSignature.verify(this.address, this.address.toFields()).assertTrue();
+
     super.init();
+
+    this.account.tokenSymbol.set("PINSAV")
+    this.account.zkappUri.set('https://pinsave.app/uri.json')
 
     this.treeRoot.getAndRequireEquals();
     this.totalInited.getAndRequireEquals();
@@ -77,9 +78,9 @@ export class MerkleMapContract extends SmartContract {
     this.account.provedState.requireEquals(this.account.provedState.get());
     this.account.provedState.get().assertTrue();
 
-    this.fee.getAndRequireEquals();
-
     adminSignature.verify(this.address, amount.toFields()).assertTrue();
+
+    this.fee.getAndRequireEquals();
     this.fee.set(amount);
   }
 
@@ -103,9 +104,10 @@ export class MerkleMapContract extends SmartContract {
     senderUpdate.send({ to: this, amount: fee });
 
     // compute the root after incrementing
-    const [rootAfter, _] = keyWitness.computeRootAndKey(
+    const [rootAfter, keyAfter] = keyWitness.computeRootAndKey(
       Poseidon.hash(Nft.toFields(item))
     );
+    key.assertEquals(keyAfter);
 
     // set the new root
     this.treeRoot.set(rootAfter);
@@ -127,7 +129,7 @@ export class MerkleMapContract extends SmartContract {
 
     let senderUpdate = AccountUpdate.create(this.sender);
     senderUpdate.requireSignature();
-    this.token.mint({ address: item.owner, amount: UInt64.one });
+    this.token.mint({ address: item.owner, amount: UInt64.from(1_000_000_000) });
 
     // update liquidity supply
     const liquidity = this.totalSupply.getAndRequireEquals();
@@ -159,19 +161,18 @@ export class MerkleMapContract extends SmartContract {
     const [rootBefore, key] = keyWitness.computeRootAndKey(
       Poseidon.hash(itemFeldsArray)
     );
-
     rootBefore.assertEquals(initialRoot);
     key.assertEquals(item.id);
 
     item.changeOwner(newOwner);
 
     // compute the root after incrementing
-    const [rootAfter, _] = keyWitness.computeRootAndKey(
+    const [rootAfter, keyAfter] = keyWitness.computeRootAndKey(
       Poseidon.hash(Nft.toFields(item))
     );
+    key.assertEquals(keyAfter);
 
     this.treeRoot.set(rootAfter);
-
-    this.token.send({ from: sender, to: newOwner, amount: UInt64.one });
+    this.token.send({ from: sender, to: newOwner, amount: UInt64.from(1_000_000_000) });
   }
 }

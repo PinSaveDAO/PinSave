@@ -36,7 +36,6 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
       setAddress(pub);
     }
     if (map && address) {
-      // https://docs.aurowallet.com/general/reference/api-reference/methods/mina_sendtransaction
       const zkApp = getAppContract();
 
       startBerkeleyClient();
@@ -116,8 +115,7 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
             post.owner.substring(35)}
         </a>
       </p>
-      {totalSupply && postNumber < totalSupply ? <Text>Minted</Text> : null}
-      {address && totalSupply && postNumber >= totalSupply ? (
+      {address?.toBase58() === post.owner ? (
         <Button onClick={async () => await mintNFT()}>Mint</Button>
       ) : null}
     </Paper>

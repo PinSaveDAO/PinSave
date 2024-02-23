@@ -14,6 +14,7 @@ import {
   transferNft,
 } from './components/transactions.js';
 
+// displayLogs true and proofsEnabled true, do not work
 const displayLogs = true;
 
 const proofsEnabled = false;
@@ -44,10 +45,11 @@ const { nftArray: nftArray } = generateDummyCollectionMap(pubKey1, map);
 
 console.log('initing app root');
 
-await initAppRoot(pk1, zkAppInstance, map, nftArray.length, live, displayLogs);
+await initAppRoot(zkAppPrivateKey, pk1, zkAppInstance, map, nftArray.length, live, displayLogs);
 
 try {
   await initAppRoot(
+    zkAppPrivateKey,
     pk1,
     zkAppInstance,
     map,

@@ -69,9 +69,7 @@ export async function setFee(
   fee: UInt64 = UInt64.one
 ) {
   const deployerAddress: PublicKey = deployerPk.toPublicKey();
-
-  const feeFields = fee.toFields();
-
+  const feeFields: Field[] = fee.toFields();
   const feeSignature: Signature = Signature.create(zkAppPrivateKey, feeFields);
 
   const txn: Mina.Transaction = await Mina.transaction(deployerAddress, () => {
@@ -257,21 +255,23 @@ export async function transferNft(
 }
 
 export async function initRootWithApp(
+  zkAppPrivateKey: PrivateKey,
   pk: PrivateKey,
-  zkAppPub: PublicKey,
   merkleMap: MerkleMap,
   totalInited: number,
   compile: boolean = false,
   live: boolean = true
 ) {
+  const zkAppPub: PublicKey = zkAppPrivateKey.toPublicKey();
   if (compile) {
     await MerkleMapContract.compile();
   }
   const zkAppInstance: MerkleMapContract = new MerkleMapContract(zkAppPub);
-  await initAppRoot(pk, zkAppInstance, merkleMap, totalInited, live);
+  await initAppRoot(zkAppPrivateKey, pk, zkAppInstance, merkleMap, totalInited, live);
 }
 
 export async function initAppRoot(
+  zkAppPrivateKey: PrivateKey,
   pk: PrivateKey,
   zkAppInstance: MerkleMapContract,
   merkleMap: MerkleMap,
@@ -283,14 +283,17 @@ export async function initAppRoot(
   const rootBefore: Field = merkleMap.getRoot();
   const totalSupplied: UInt64 = UInt64.from(totalInited);
 
-  const txOptions = createTxOptions(pubKey, live);
+  const rootSignature: Signature = Signature.create(zkAppPrivateKey, zkAppInstance.address.toFields());
 
+  const txOptions = createTxOptions(pubKey, live);
+  
   const init_tx: Mina.Transaction = await Mina.transaction(txOptions, () => {
     zkAppInstance.initRoot(
       rootBefore,
       totalSupplied,
       UInt64.zero,
-      new UInt64(255)
+      new UInt64(255),
+      rootSignature
     );
   });
 
