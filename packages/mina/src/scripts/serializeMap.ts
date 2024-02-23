@@ -1,11 +1,7 @@
-import {
-  startBerkeleyClient,
-} from '../components/client.js';
+import { getAppString } from '../components/AppEnv.js';
+import { startBerkeleyClient } from '../components/client.js';
 import { getVercelClient } from '../components/env.js';
 import { getMapFromVercelNfts } from '../components/Nft.js';
-import {
-  getAppString,
-} from '../components/transactions.js';
 import {
   serializeMerkleMapToJson,
   deserializeJsonToMerkleMap,

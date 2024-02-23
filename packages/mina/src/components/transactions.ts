@@ -16,52 +16,6 @@ import { compareLogStates, getTreeRoot } from './AppState.js';
 import { logTokenBalances, getTokenBalances } from './TokenBalances.js';
 import { NFTtoHash, Nft } from './Nft.js';
 
-export function getAppDeployer() {
-  const pubKeyString: string =
-    'B62qqpPjKKgp8G2kuB82g9NEgfg85vmEAZ84to3FfyQeL4MuFm5Ybc9';
-  const pubKey: PublicKey = PublicKey.fromBase58(pubKeyString);
-  return pubKey;
-}
-
-export function getAppString() {
-  const appPubString: string =
-    'B62qqdFj5RJNk9ieNV9PDymu19Lqpe6jXUfpatAFoE4iHLo3137yMCE';
-  return appPubString;
-}
-
-export function getAppPublic() {
-  const appPubString = getAppString();
-  const appPubKey: PublicKey = PublicKey.fromBase58(appPubString);
-  return appPubKey;
-}
-
-export function getAppContract() {
-  const zkAppAddress = getAppPublic();
-  const zkApp: MerkleMapContract = new MerkleMapContract(zkAppAddress);
-  return zkApp;
-}
-
-export function startBerkeleyClient(
-  endpoint: string = 'https://mina-berkeley-graphql.aurowallet.com/graphql'
-) {
-  const Berkeley = Mina.Network(endpoint);
-  Mina.setActiveInstance(Berkeley);
-}
-
-export async function startLocalBlockchainClient(
-  proofsEnabled: boolean = false,
-  enforceTransactionLimits: boolean = false
-) {
-  const Local = Mina.LocalBlockchain({
-    proofsEnabled: proofsEnabled,
-    enforceTransactionLimits: enforceTransactionLimits,
-  });
-
-  Mina.setActiveInstance(Local);
-  const accounts = Local.testAccounts;
-  return accounts;
-}
-
 export async function setFee(
   zkAppPrivateKey: PrivateKey,
   deployerPk: PrivateKey,
@@ -267,7 +221,14 @@ export async function initRootWithApp(
     await MerkleMapContract.compile();
   }
   const zkAppInstance: MerkleMapContract = new MerkleMapContract(zkAppPub);
-  await initAppRoot(zkAppPrivateKey, pk, zkAppInstance, merkleMap, totalInited, live);
+  await initAppRoot(
+    zkAppPrivateKey,
+    pk,
+    zkAppInstance,
+    merkleMap,
+    totalInited,
+    live
+  );
 }
 
 export async function initAppRoot(
@@ -283,10 +244,13 @@ export async function initAppRoot(
   const rootBefore: Field = merkleMap.getRoot();
   const totalSupplied: UInt64 = UInt64.from(totalInited);
 
-  const rootSignature: Signature = Signature.create(zkAppPrivateKey, zkAppInstance.address.toFields());
+  const rootSignature: Signature = Signature.create(
+    zkAppPrivateKey,
+    zkAppInstance.address.toFields()
+  );
 
   const txOptions = createTxOptions(pubKey, live);
-  
+
   const init_tx: Mina.Transaction = await Mina.transaction(txOptions, () => {
     zkAppInstance.initRoot(
       rootBefore,

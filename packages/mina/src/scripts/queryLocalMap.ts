@@ -1,8 +1,8 @@
-import { getMapFromVercelNfts, getVercelMetadata } from '../components/Nft.js';
-import { getAppString } from '../components/transactions.js';
+import { getAppString } from '../components/AppEnv.js';
 import { getVercelClient } from '../components/env.js';
+import { getMapFromVercelNfts, getVercelMetadata } from '../components/Nft.js';
 
-const client = getVercelClient()
+const client = getVercelClient();
 const appId = getAppString();
 
 const storedMap = await getMapFromVercelNfts(appId, [0, 1, 2], client);

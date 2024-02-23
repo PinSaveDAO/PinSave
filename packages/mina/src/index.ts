@@ -1,13 +1,18 @@
 export {
+  getAppPublic,
+  getAppDeployer,
+  getAppString,
+  getAppContract,
+} from './components/AppEnv.js';
+
+export {
   getTotalSupplyLive,
   getTotalInitedLive,
   getAppState,
   getTreeRoot,
 } from './components/AppState.js';
 
-export {
-  startBerkeleyClient,
-} from './components/client.js';
+export { startBerkeleyClient } from './components/client.js';
 
 export {
   generateDummyCollectionWithMap,
@@ -37,10 +42,6 @@ export {
 } from './components/TokenBalances.js';
 
 export {
-  getAppPublic,
-  getAppDeployer,
-  getAppString,
-  getAppContract,
   createMintTx,
   createNotFirstMintTx,
   mintNftFromMap,
