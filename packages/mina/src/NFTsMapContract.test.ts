@@ -1,4 +1,7 @@
 import {
+  startLocalBlockchainClient,
+} from './components/client.js';
+import {
   createNft,
   generateDummyCollectionMap,
   generateDummyNftMetadata,
@@ -10,7 +13,6 @@ import {
   initNft,
   mintNftFromMap,
   setFee,
-  startLocalBlockchainClient,
   transferNft,
 } from './components/transactions.js';
 

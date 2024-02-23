@@ -7,8 +7,10 @@ import {
 } from '../components/Nft.js';
 import {
   initRootWithApp,
-  startBerkeleyClient,
 } from '../components/transactions.js';
+import {
+  startBerkeleyClient,
+} from '../components/client.js';
 
 startBerkeleyClient();
 const client = getVercelClient()

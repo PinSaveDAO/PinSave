@@ -1,12 +1,14 @@
 import { MerkleMap, MerkleTree } from 'o1js';
 
 import {
+  startBerkeleyClient,
+} from '../components/client.js';
+import {
   deserializeJsonToMerkleMap,
   serializeMerkleMapToJson,
 } from '../components/serialize.js';
 import { generateDummyCollectionMap } from '../components/Nft.js';
 import {
-  startBerkeleyClient,
   getAppPublic,
 } from '../components/transactions.js';
 

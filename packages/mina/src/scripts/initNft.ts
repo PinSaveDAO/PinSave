@@ -7,7 +7,7 @@ import {
 } from '../components/Nft.js';
 import {
   startBerkeleyClient,
-} from '../components/transactions.js';
+} from '../components/client.js';
 
 startBerkeleyClient();
 

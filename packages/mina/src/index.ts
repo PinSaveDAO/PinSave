@@ -6,6 +6,10 @@ export {
 } from './components/AppState.js';
 
 export {
+  startBerkeleyClient,
+} from './components/client.js';
+
+export {
   generateDummyCollectionWithMap,
   generateDummyNftMetadata,
   storeNftMap,
@@ -37,7 +41,6 @@ export {
   getAppDeployer,
   getAppString,
   getAppContract,
-  startBerkeleyClient,
   createMintTx,
   createNotFirstMintTx,
   mintNftFromMap,

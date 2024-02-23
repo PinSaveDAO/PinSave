@@ -1,6 +1,6 @@
 import {
   startBerkeleyClient,
-} from '../components/transactions.js';
+} from '../components/client.js';
 import { getEnvAccount, getAppEnv } from '../components/env.js';
 import { getTokenIdBalance } from '../components/TokenBalances.js';
 

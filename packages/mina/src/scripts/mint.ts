@@ -5,10 +5,11 @@ import {
 } from '../components/Nft.js';
 import {
   mintNftFromMap,
-  startBerkeleyClient,
 } from '../components/transactions.js';
 import { getEnvAccount, getAppEnv, getVercelClient } from '../components/env.js';
-
+import {
+  startBerkeleyClient,
+} from '../components/client.js';
 
 const { pk: deployerKey } = getEnvAccount();
 const { appId: appId, zkApp: zkApp } = getAppEnv();
