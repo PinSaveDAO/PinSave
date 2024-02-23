@@ -1,16 +1,15 @@
 import { logAppStatesContract } from '../components/AppState.js';
 import {
   startBerkeleyClient,
-  getAppPublic,
 } from '../components/transactions.js';
 import { logMinaBalance } from '../components/TokenBalances.js';
+import { getAppEnv } from '../components/env.js';
 
 startBerkeleyClient();
 
-const zkAppAddress = getAppPublic();
+const { zkAppAddress: zkAppAddress } = getAppEnv();
 
 console.log('app public key', zkAppAddress.toBase58());
 
 logAppStatesContract(zkAppAddress);
-
 logMinaBalance(zkAppAddress);

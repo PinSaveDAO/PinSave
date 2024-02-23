@@ -21,7 +21,7 @@ export function getAppEnv() {
   const zkAppAddress: PublicKey = pk.toPublicKey();
   const appId: string = zkAppAddress.toBase58()
   const zkApp: MerkleMapContract = new MerkleMapContract(zkAppAddress);
-  return { pk: pk, appId: appId, zkApp: zkApp };
+  return { pk: pk, zkAppAddress: zkAppAddress, appId: appId, zkApp: zkApp };
 }
 
 export function getVercelClient() {
