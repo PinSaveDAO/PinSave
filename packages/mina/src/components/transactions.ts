@@ -37,15 +37,14 @@ export async function setFee(
   await sendWaitTx(txn, [deployerPk], false);
 }
 
-export async function initNft(
+export async function initNFTLive(
   pubKey: PublicKey,
   pk: PrivateKey,
   _NFT: Nft,
   zkAppInstance: MerkleMapContract,
   merkleMap: MerkleMap,
   compile: boolean = false,
-  live: boolean = false,
-  displayLogs: boolean = false
+  live: boolean = true
 ) {
   if (compile) {
     await MerkleMapContract.compile();
@@ -56,21 +55,31 @@ export async function initNft(
 
   const txOptions = createTxOptions(pubKey, live);
 
-  const init_mint_tx: Mina.Transaction = await Mina.transaction(
-    txOptions,
-    () => {
-      zkAppInstance.initNft(_NFT, witnessNFT);
-    }
-  );
-
-  await sendWaitTx(init_mint_tx, [pk], live);
-
-  // the tx should execute before we set the map value
+  const initMintTx: Mina.Transaction = await Mina.transaction(txOptions, () => {
+    zkAppInstance.initNft(_NFT, witnessNFT);
+  });
+  await sendWaitTx(initMintTx, [pk], live);
   merkleMap.set(nftId, NFTtoHash(_NFT));
+}
 
-  if (displayLogs) {
-    compareLogStates(zkAppInstance, merkleMap);
+export async function createInitNFTTxFromMap(
+  _NFT: Nft,
+  zkAppInstance: MerkleMapContract,
+  merkleMap: MerkleMap,
+  compile: boolean = true,
+  txOptions: TxOptions
+) {
+  if (compile) {
+    await MerkleMapContract.compile();
   }
+  const nftId: Field = _NFT.id;
+  const witnessNFT: MerkleMapWitness = merkleMap.getWitness(nftId);
+
+  const initMintTx: Mina.Transaction = await Mina.transaction(txOptions, () => {
+    zkAppInstance.initNft(_NFT, witnessNFT);
+  });
+  await initMintTx.prove();
+  return initMintTx;
 }
 
 export async function createMintTxFromMap(

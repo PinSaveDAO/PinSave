@@ -1,4 +1,7 @@
-import { mintNftFromMap } from './components/localBlockchain/transactions.js';
+import {
+  mintNftFromMap,
+  initNFT,
+} from './components/localBlockchain/transactions.js';
 import { startLocalBlockchainClient } from './components/client.js';
 import {
   createNft,
@@ -9,7 +12,6 @@ import { logMinaBalance } from './components/TokenBalances.js';
 import {
   deployApp,
   initAppRoot,
-  initNft,
   setFee,
   transferNft,
 } from './components/transactions.js';
@@ -93,7 +95,7 @@ console.log('minted NFT');
 const nft = generateDummyNftMetadata(3, pubKey1);
 const nftStruct = createNft(nft);
 
-await initNft(
+await initNFT(
   pubKey1,
   pk1,
   nftStruct,
@@ -107,7 +109,7 @@ await initNft(
 console.log('inited NFT');
 
 try {
-  await initNft(
+  await initNFT(
     pubKey1,
     pk1,
     nftStruct,
@@ -124,7 +126,7 @@ try {
 const nftNew = generateDummyNftMetadata(4, pubKey2);
 const nftStructNew = createNft(nftNew);
 
-await initNft(
+await initNFT(
   pubKey2,
   pk2,
   nftStructNew,

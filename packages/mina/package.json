@@ -1,6 +1,6 @@
 {
   "name": "pin-mina",
-  "version": "0.1.31",
+  "version": "0.1.32",
   "description": "pin save - decentralized pinterest sdk with utils on mina",
   "author": "pavel fedotov pfedprog",
   "license": "Apache-2.0",
@@ -40,7 +40,7 @@
     "queryAccount": "tsc && node build/src/scripts/queryAccount.js",
     "queryLocalMap": "tsc && node build/src/scripts/queryLocalMap.js",
     "initRoot": "tsc && node build/src/scripts/initRoot.js",
-    "initNft": "tsc && node build/src/scripts/initNft.js",
+    "initNFT": "tsc && node build/src/scripts/initNFT.js",
     "serialize": "tsc && node build/src/scripts/serialize.js",
     "serializeMap": "tsc && node build/src/scripts/serializeMap.js",
     "compileContract": "tsc && node build/src/scripts/compileContract.js",

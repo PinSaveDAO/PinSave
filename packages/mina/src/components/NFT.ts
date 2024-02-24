@@ -123,11 +123,8 @@ export async function getMapFromVercelNfts(
 
   for (let i = 0; i < arrayLength; i++) {
     const nftId = nftArray[i];
-
     const data: nftDataIn = await getVercelNft(appId, nftId, client);
-
     const dataOut: Nft = deserializeNft(data);
-
     setHashedObjectToMap(dataOut, map);
   }
   return map;
@@ -151,8 +148,8 @@ export async function getMapFromVercelMetadata(
 
 export async function setVercelNft(
   appId: string | PublicKey,
-  client: VercelKV,
-  nft: Nft
+  nft: Nft,
+  client: VercelKV
 ) {
   await client.set(`${appId}: ${nft.id}`, {
     ...nft,
@@ -165,7 +162,7 @@ export async function setNftsToVercel(
   client: VercelKV
 ) {
   for (let i = 0; i < nftArray.length; i++) {
-    await setVercelNft(appId, client, nftArray[i]);
+    await setVercelNft(appId, nftArray[i], client);
   }
 }
 
@@ -197,9 +194,8 @@ export async function getVercelMetadata(
   nftId: number | string,
   client: VercelKV
 ) {
-  const nftMetadata: nftDataIn | null = await client.hgetall(
-    `${appId} metadata: ${nftId}`
-  );
+  const query = `${appId} metadata: ${nftId}`;
+  const nftMetadata: nftDataIn | null = await client.hgetall(query);
   if (nftMetadata) {
     return nftMetadata;
   }
@@ -258,8 +254,8 @@ export function generateDummyNftMetadata(
   return nftMetadata;
 }
 
-export function generateDummyNft(id: number, pubKey: PublicKey): Nft {
+export function generateDummyNft(id: number, pubKey: PublicKey) {
   const nftMetadata = generateDummyNftMetadata(id, pubKey);
-  const nft = createNft(nftMetadata);
-  return nft;
+  const nftHashed = createNft(nftMetadata);
+  return { nftHashed: nftHashed, nftMetadata: nftMetadata };
 }

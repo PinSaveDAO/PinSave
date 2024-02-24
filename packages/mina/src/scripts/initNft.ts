@@ -1,23 +1,32 @@
-import { getEnvAccount, getVercelClient, getAppEnv } from '../components/env.js';
-import { initNft } from '../components/transactions.js';
+import {
+  getEnvAccount,
+  getVercelClient,
+  getAppEnv,
+} from '../components/env.js';
+import { initNFTLive } from '../components/transactions.js';
 import {
   generateDummyCollectionWithMap,
   generateDummyNft,
   setVercelNft,
+  setVercelMetadata,
 } from '../components/Nft.js';
-import {
-  startBerkeleyClient,
-} from '../components/client.js';
+import { startBerkeleyClient } from '../components/client.js';
 
 startBerkeleyClient();
 
-const client = getVercelClient()
+const client = getVercelClient();
 const { appId: appId, zkApp: zkApp } = getAppEnv();
 const { pubKey: pubKey, pk: pk } = getEnvAccount();
 
 const { map: merkleMap } = generateDummyCollectionWithMap(pubKey);
 
-const nft = generateDummyNft(0, pubKey);
+const { nftHashed: nftHashed, nftMetadata: nftMetadata } = generateDummyNft(
+  3,
+  pubKey
+);
 
-await initNft(pubKey, pk, nft, zkApp, merkleMap);
-await setVercelNft(appId, client, nft);
+const compile = true;
+
+await initNFTLive(pubKey, pk, nftHashed, zkApp, merkleMap, compile);
+await setVercelNft(appId, nftHashed, client);
+await setVercelMetadata(appId, nftMetadata, client);

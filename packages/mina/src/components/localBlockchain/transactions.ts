@@ -10,7 +10,7 @@ import {
 
 import { MerkleMapContract } from '../../NFTsMapContract.js';
 import { compareLogStates, getTreeRoot } from '../AppState.js';
-import { Nft } from '../Nft.js';
+import { Nft, NFTtoHash } from '../Nft.js';
 import { logTokenBalances, getTokenBalances } from '../TokenBalances.js';
 import { createTxOptions, sendWaitTx, TxOptions } from '../transactions.js';
 
@@ -90,4 +90,40 @@ export async function createMintTx(
     });
   }
   return mint_tx;
+}
+
+export async function initNFT(
+  pubKey: PublicKey,
+  pk: PrivateKey,
+  _NFT: Nft,
+  zkAppInstance: MerkleMapContract,
+  merkleMap: MerkleMap,
+  compile: boolean = false,
+  live: boolean = false,
+  displayLogs: boolean = false
+) {
+  if (compile) {
+    await MerkleMapContract.compile();
+  }
+
+  const nftId: Field = _NFT.id;
+  const witnessNFT: MerkleMapWitness = merkleMap.getWitness(nftId);
+
+  const txOptions = createTxOptions(pubKey, live);
+
+  const init_mint_tx: Mina.Transaction = await Mina.transaction(
+    txOptions,
+    () => {
+      zkAppInstance.initNft(_NFT, witnessNFT);
+    }
+  );
+
+  await sendWaitTx(init_mint_tx, [pk], live);
+
+  // the tx should execute before we set the map value
+  merkleMap.set(nftId, NFTtoHash(_NFT));
+
+  if (displayLogs) {
+    compareLogStates(zkAppInstance, merkleMap);
+  }
 }

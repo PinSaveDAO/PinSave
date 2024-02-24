@@ -1299,7 +1299,7 @@
   dependencies:
     "@types/node" "*"
 
-"@types/node@*", "@types/node@^20.1.2":
+"@types/node@*":
   version "20.9.0"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-20.9.0.tgz#bfcdc230583aeb891cf51e73cfdaacdd8deae298"
   integrity sha512-nekiGu2NDb1BcVofVcEKMIwzlx4NjHlcjhoxxKBNLtz15Y1z7MYf549DFvkHSId02Ax6kGwWntIBPC3l/JZcmw==
@@ -1320,6 +1320,13 @@
   version "18.18.9"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-18.18.9.tgz#5527ea1832db3bba8eb8023ce8497b7d3f299592"
   integrity sha512-0f5klcuImLnG4Qreu9hPj/rEfFq6YRc5n2mAjSsH+ec/mJL+3voBH0+8T7o8RpFjH7ovc+TRsL/c7OYIQsPTfQ==
+  dependencies:
+    undici-types "~5.26.4"
+
+"@types/node@^20.11.20":
+  version "20.11.20"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.11.20.tgz#f0a2aee575215149a62784210ad88b3a34843659"
+  integrity sha512-7/rR21OS+fq8IyHTgtLkDK949uzsa6n8BkziAKtPVpugIkO6D+/ooXMvzXxDnZrmtXVfjb1bKQafYpb8s89LOg==
   dependencies:
     undici-types "~5.26.4"
 
@@ -6125,10 +6132,10 @@ pify@^4.0.1:
   resolved "https://registry.yarnpkg.com/pify/-/pify-4.0.1.tgz#4b2cd25c50d598735c50292224fd8c6df41e3231"
   integrity sha512-uB80kBFb/tfd68bVleG9T5GGsGPjJrLAUpR5PZIrhBnIaRTQRjqdJSsIKkOP6OAIFbj7GOrcudc5pNjZ+geV2g==
 
-pin-mina@0.1.31:
-  version "0.1.31"
-  resolved "https://registry.yarnpkg.com/pin-mina/-/pin-mina-0.1.31.tgz#e7acead119979a15504f6bd60f732671e0ce7ce0"
-  integrity sha512-/EekCkC6QvUYIVgglG27uBk/zGUNL7hfLZ+OlykDiS+lORiii23wMXosGOZwZ6bUOfalhi8wOJgd6I9bQMO+KA==
+pin-mina@0.1.32:
+  version "0.1.32"
+  resolved "https://registry.yarnpkg.com/pin-mina/-/pin-mina-0.1.32.tgz#26a8684d4954c7bbe9f9c9a9d6353902597e0ef3"
+  integrity sha512-O1tiJt7veR5URwS5S29PhwwP878AYOpH2xAILxFZHiBRQeGxMARR8mgZUQxaSY3rMsUGKdysUnBue8H866Nk6A==
   dependencies:
     "@vercel/kv" "^1.0.1"
     dotenv "^16.3.1"
