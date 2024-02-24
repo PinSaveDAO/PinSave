@@ -1,24 +1,28 @@
 import {
-  createNft,
+  mintNftFromMap,
+  initNFT,
+} from './components/localBlockchain/transactions.js';
+import { startLocalBlockchainClient } from './components/client.js';
+import {
+  createNFT,
   generateDummyCollectionMap,
-  generateDummyNftMetadata,
-} from './components/Nft.js';
+  generateDummyNFTMetadata,
+} from './components/NFT.js';
 import { logMinaBalance } from './components/TokenBalances.js';
 import {
   deployApp,
   initAppRoot,
-  initNft,
-  mintNftFromMap,
   setFee,
-  startLocalBlockchainClient,
   transferNft,
 } from './components/transactions.js';
+
+// displayLogs true and proofsEnabled true, do not work
+const displayLogs = true;
 
 const proofsEnabled = false;
 const enforceTransactionLimits = true;
 
 const live = false;
-const displayLogs = true;
 
 const testAccounts = await startLocalBlockchainClient(
   proofsEnabled,
@@ -43,10 +47,19 @@ const { nftArray: nftArray } = generateDummyCollectionMap(pubKey1, map);
 
 console.log('initing app root');
 
-await initAppRoot(pk1, zkAppInstance, map, nftArray.length, live, displayLogs);
+await initAppRoot(
+  zkAppPrivateKey,
+  pk1,
+  zkAppInstance,
+  map,
+  nftArray.length,
+  live,
+  displayLogs
+);
 
 try {
   await initAppRoot(
+    zkAppPrivateKey,
     pk1,
     zkAppInstance,
     map,
@@ -79,10 +92,10 @@ await mintNftFromMap(
 console.log('minted NFT');
 
 // init nft on the contract
-const nft = generateDummyNftMetadata(3, pubKey1);
-const nftStruct = createNft(nft);
+const nft = generateDummyNFTMetadata(3, pubKey1);
+const nftStruct = createNFT(nft);
 
-await initNft(
+await initNFT(
   pubKey1,
   pk1,
   nftStruct,
@@ -96,7 +109,7 @@ await initNft(
 console.log('inited NFT');
 
 try {
-  await initNft(
+  await initNFT(
     pubKey1,
     pk1,
     nftStruct,
@@ -110,10 +123,10 @@ try {
   console.log('failed sucessfully to initialize NFT which already exists');
 }
 
-const nftNew = generateDummyNftMetadata(4, pubKey2);
-const nftStructNew = createNft(nftNew);
+const nftNew = generateDummyNFTMetadata(4, pubKey2);
+const nftStructNew = createNFT(nftNew);
 
-await initNft(
+await initNFT(
   pubKey2,
   pk2,
   nftStructNew,
@@ -138,7 +151,15 @@ await mintNftFromMap(
 
 console.log('mints sucessfully');
 
-await mintNftFromMap(pk2, nftStructNew, zkAppInstance, map, live, displayLogs);
+await mintNftFromMap(
+  pk2,
+  nftStructNew,
+  zkAppInstance,
+  map,
+  compile,
+  live,
+  displayLogs
+);
 
 console.log('mints sucessfully');
 

@@ -35,11 +35,9 @@ Pin Save is a decentralized image, video sharing and content aggregation platfor
 
 ![decentralized feed](https://github.com/Pfed-prog/Dspyt-NFTs-EVM/blob/master/assets/feed.png)
 
-- Video and Image posting:
+- Image posting:
 
 ![Upload](https://github.com/Pfed-prog/Dspyt-NFTs-EVM/blob/master/assets/upload.png)
-
-- Livepeer Video Player
 
 ## Setup
 
@@ -52,7 +50,9 @@ yarn dev
 
 ## Further Resources
 
-[PinSave Figma Resources](https://www.figma.com/community/file/1102944149244783025)
+- [PinSave Figma Resources](https://www.figma.com/community/file/1102944149244783025)
+- [Pin Save on zkok](https://zkok.io/mina/pin-save/)
+- [Pin Save on Dspyt](https://dspyt.com/PinSave)
 
 Some interesting links that we keep returning to include and not limited to:
 

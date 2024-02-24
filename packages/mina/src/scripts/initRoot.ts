@@ -1,22 +1,21 @@
-import { createClient } from '@vercel/kv';
-
-import { getEnvAccount } from '../components/env.js';
+import {
+  getEnvAccount,
+  getAppEnv,
+  getVercelClient,
+} from '../components/env.js';
 import {
   generateDummyCollectionWithMap,
-  getMapFromVercelNfts,
-  setNftsToVercel,
+  getMapFromVercelNFTs,
+  setNFTsToVercel,
   setMetadatasToVercel,
-} from '../components/Nft.js';
-import {
-  initRootWithApp,
-  startBerkeleyClient,
-  getAppPublic,
-} from '../components/transactions.js';
+} from '../components/NFT.js';
+import { initRootWithApp } from '../components/transactions.js';
+import { startBerkeleyClient } from '../components/client.js';
 
 startBerkeleyClient();
-
+const client = getVercelClient();
 const { pubKey: pubKey, pk: deployerKey } = getEnvAccount();
-const zkAppAddress = getAppPublic();
+const { appId: appId, pk: zkAppPK } = getAppEnv();
 
 const {
   map: merkleMap,
@@ -26,27 +25,23 @@ const {
 
 const generateTreeRoot = merkleMap.getRoot().toString();
 
-console.log(generateTreeRoot);
-
-const client = createClient({
-  url: process.env.KV_REST_API_URL as string,
-  token: process.env.KV_REST_API_TOKEN as string,
-});
-
-const appId = zkAppAddress.toBase58();
-
-await setNftsToVercel(appId, nftArray, client);
+await setNFTsToVercel(appId, nftArray, client);
 await setMetadatasToVercel(appId, nftMetadata, client);
 
-const storedTree = await getMapFromVercelNfts(appId, [0, 1, 2], client);
+const storedTree = await getMapFromVercelNFTs(appId, [0, 1, 2], client);
 
 const storedTreeRoot = storedTree.getRoot().toString();
-
-console.log(storedTreeRoot);
 
 console.log('matches subbed tree', storedTreeRoot === generateTreeRoot);
 
 const compile = true;
 const live = true;
 
-await initRootWithApp(deployerKey, zkAppAddress, merkleMap, nftArray.length, compile, live);
+await initRootWithApp(
+  zkAppPK,
+  deployerKey,
+  merkleMap,
+  nftArray.length,
+  compile,
+  live
+);

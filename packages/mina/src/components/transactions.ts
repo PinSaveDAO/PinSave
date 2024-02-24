@@ -12,68 +12,23 @@ import {
 } from 'o1js';
 
 import { MerkleMapContract } from '../NFTsMapContract.js';
-import { compareLogStates, getTreeRoot } from './AppState.js';
-import { logTokenBalances, getTokenBalances } from './TokenBalances.js';
-import { NFTtoHash, Nft } from './Nft.js';
+import { compareLogStates } from './AppState.js';
+import { NFTtoHash, NFT } from './NFT.js';
+import {
+  logTokenBalances,
+  getTokenBalances,
+  getTokenIdBalance,
+} from './TokenBalances.js';
 
-export function getAppDeployer() {
-  const pubKeyString: string =
-    'B62qqpPjKKgp8G2kuB82g9NEgfg85vmEAZ84to3FfyQeL4MuFm5Ybc9';
-  const pubKey: PublicKey = PublicKey.fromBase58(pubKeyString);
-  return pubKey;
-}
-
-export function getAppString() {
-  const appPubString: string =
-    'B62qrGPGeDX9iGsc242x465zPixv8k7Swx8Ee53oov3FbyT3EXfZcB7';
-  return appPubString;
-}
-
-export function getAppPublic() {
-  const appPubString = getAppString();
-  const appPubKey: PublicKey = PublicKey.fromBase58(appPubString);
-  return appPubKey;
-}
-
-export function getAppContract() {
-  const zkAppAddress = getAppPublic();
-  const zkApp: MerkleMapContract = new MerkleMapContract(zkAppAddress);
-  return zkApp;
-}
-
-export function startBerkeleyClient(
-  endpoint: string = 'https://mina-berkeley-graphql.aurowallet.com/graphql'
-) {
-  const Berkeley = Mina.Network(endpoint);
-  Mina.setActiveInstance(Berkeley);
-}
-
-export async function startLocalBlockchainClient(
-  proofsEnabled: boolean = false,
-  enforceTransactionLimits: boolean = false
-) {
-  const Local = Mina.LocalBlockchain({
-    proofsEnabled: proofsEnabled,
-    enforceTransactionLimits: enforceTransactionLimits,
-  });
-
-  Mina.setActiveInstance(Local);
-  const accounts = Local.testAccounts;
-  return accounts;
-}
-
-// improve further
 export async function setFee(
-zkAppPrivateKey: PrivateKey,
+  zkAppPrivateKey: PrivateKey,
   deployerPk: PrivateKey,
   contract: MerkleMapContract,
   fee: UInt64 = UInt64.one
 ) {
   const deployerAddress: PublicKey = deployerPk.toPublicKey();
-
-  const _fee = UInt64.toFields(fee);
-
-  const feeSignature: Signature = Signature.create(zkAppPrivateKey, _fee);
+  const feeFields: Field[] = fee.toFields();
+  const feeSignature: Signature = Signature.create(zkAppPrivateKey, feeFields);
 
   const txn: Mina.Transaction = await Mina.transaction(deployerAddress, () => {
     contract.setFee(fee, feeSignature);
@@ -82,15 +37,14 @@ zkAppPrivateKey: PrivateKey,
   await sendWaitTx(txn, [deployerPk], false);
 }
 
-export async function initNft(
+export async function initNFTLive(
   pubKey: PublicKey,
   pk: PrivateKey,
-  _NFT: Nft,
+  _NFT: NFT,
   zkAppInstance: MerkleMapContract,
   merkleMap: MerkleMap,
   compile: boolean = false,
-  live: boolean = true,
-  displayLogs: boolean = false
+  live: boolean = true
 ) {
   if (compile) {
     await MerkleMapContract.compile();
@@ -101,57 +55,73 @@ export async function initNft(
 
   const txOptions = createTxOptions(pubKey, live);
 
-  const init_mint_tx: Mina.Transaction = await Mina.transaction(
-    txOptions,
-    () => {
-      zkAppInstance.initNft(_NFT, witnessNFT);
-    }
-  );
-
-  await sendWaitTx(init_mint_tx, [pk], live);
-
-  // the tx should execute before we set the map value
+  const initMintTx: Mina.Transaction = await Mina.transaction(txOptions, () => {
+    zkAppInstance.initNft(_NFT, witnessNFT);
+  });
+  await sendWaitTx(initMintTx, [pk], live);
   merkleMap.set(nftId, NFTtoHash(_NFT));
-
-  if (displayLogs) {
-    compareLogStates(zkAppInstance, merkleMap);
-  }
 }
 
-export async function mintNftFromMap(
+export async function createInitNFTTxFromMap(
+  _NFT: NFT,
+  zkAppInstance: MerkleMapContract,
+  merkleMap: MerkleMap,
+  compile: boolean = true,
+  txOptions: TxOptions
+) {
+  if (compile) {
+    await MerkleMapContract.compile();
+  }
+  const nftId: Field = _NFT.id;
+  const witnessNFT: MerkleMapWitness = merkleMap.getWitness(nftId);
+
+  const initMintTx: Mina.Transaction = await Mina.transaction(txOptions, () => {
+    zkAppInstance.initNft(_NFT, witnessNFT);
+  });
+  await initMintTx.prove();
+  return initMintTx;
+}
+
+export async function createMintTxFromMap(
+  pubKey: PublicKey,
+  zkAppInstance: MerkleMapContract,
+  _NFT: NFT,
+  merkleMap: MerkleMap,
+  compile: boolean = true,
+  txOptions: TxOptions
+) {
+  if (compile) {
+    await MerkleMapContract.compile();
+  }
+  const nftId: Field = _NFT.id;
+  const witnessNFT: MerkleMapWitness = merkleMap.getWitness(nftId);
+  const mintTx = await createMintTxLive(
+    pubKey,
+    zkAppInstance,
+    _NFT,
+    witnessNFT,
+    txOptions
+  );
+  await mintTx.prove();
+  return mintTx;
+}
+
+export async function mintNFTwithMapLive(
   pk: PrivateKey,
-  _NFT: Nft,
+  _NFT: NFT,
   zkAppInstance: MerkleMapContract,
   merkleMap: MerkleMap,
   compile: boolean = false,
-  live: boolean = true,
-  displayLogs: boolean = false
+  live: boolean = true
 ) {
-  const pubKey: PublicKey = pk.toPublicKey();
   const nftId: Field = _NFT.id;
-
-  // ensure that local map matches on-chain
-
-  if (displayLogs) {
-    const match =
-      merkleMap.getRoot().toString() ===
-      (await getTreeRoot(zkAppInstance)).toString();
-    console.log('it is a tree root state match', match);
-  }
-
   const witnessNFT: MerkleMapWitness = merkleMap.getWitness(nftId);
-
-  await mintNFT(pk, _NFT, zkAppInstance, witnessNFT, compile, live);
-
-  if (displayLogs) {
-    logTokenBalances(pubKey, zkAppInstance);
-    compareLogStates(zkAppInstance, merkleMap);
-  }
+  await mintNFTLive(pk, _NFT, zkAppInstance, witnessNFT, compile, live);
 }
 
-export async function mintNFT(
+export async function mintNFTLive(
   pk: PrivateKey,
-  _NFT: Nft,
+  _NFT: NFT,
   zkAppInstance: MerkleMapContract,
   merkleMapWitness: MerkleMapWitness,
   compile: boolean = false,
@@ -163,7 +133,7 @@ export async function mintNFT(
   const pubKey: PublicKey = pk.toPublicKey();
   const txOptions = createTxOptions(pubKey, live);
 
-  const mint_tx = await createMintTx(
+  const mint_tx = await createMintTxLive(
     pubKey,
     zkAppInstance,
     _NFT,
@@ -174,14 +144,17 @@ export async function mintNFT(
   await sendWaitTx(mint_tx, [pk], live);
 }
 
-export async function createMintTx(
+export async function createMintTxLive(
   pubKey: PublicKey,
   zkAppInstance: MerkleMapContract,
-  _NFT: Nft,
+  _NFT: NFT,
   merkleMapWitness: MerkleMapWitness,
   txOptions: TxOptions
 ) {
-  const recipientBalance = getTokenBalances(pubKey, zkAppInstance);
+  const recipientBalance = await getTokenIdBalance(
+    pubKey,
+    zkAppInstance.token.id
+  );
   let mint_tx: Mina.Transaction;
 
   if (recipientBalance > 0) {
@@ -200,7 +173,7 @@ export async function createMintTx(
 export async function transferNft(
   pk: PrivateKey,
   recipient: PublicKey,
-  _NFT: Nft,
+  _NFT: NFT,
   zkAppInstance: MerkleMapContract,
   merkleMap: MerkleMap,
   zkAppPrivateKey: PrivateKey,
@@ -213,7 +186,7 @@ export async function transferNft(
 
   const transferSignature: Signature = Signature.create(
     zkAppPrivateKey,
-    Nft.toFields(_NFT)
+    NFT.toFields(_NFT)
   );
 
   const recipientBalance = getTokenBalances(recipient, zkAppInstance);
@@ -245,21 +218,30 @@ export async function transferNft(
 }
 
 export async function initRootWithApp(
+  zkAppPrivateKey: PrivateKey,
   pk: PrivateKey,
-  zkAppPub: PublicKey,
   merkleMap: MerkleMap,
   totalInited: number,
   compile: boolean = false,
   live: boolean = true
 ) {
+  const zkAppPub: PublicKey = zkAppPrivateKey.toPublicKey();
   if (compile) {
     await MerkleMapContract.compile();
   }
   const zkAppInstance: MerkleMapContract = new MerkleMapContract(zkAppPub);
-  await initAppRoot(pk, zkAppInstance, merkleMap, totalInited, live);
+  await initAppRoot(
+    zkAppPrivateKey,
+    pk,
+    zkAppInstance,
+    merkleMap,
+    totalInited,
+    live
+  );
 }
 
 export async function initAppRoot(
+  zkAppPrivateKey: PrivateKey,
   pk: PrivateKey,
   zkAppInstance: MerkleMapContract,
   merkleMap: MerkleMap,
@@ -271,6 +253,11 @@ export async function initAppRoot(
   const rootBefore: Field = merkleMap.getRoot();
   const totalSupplied: UInt64 = UInt64.from(totalInited);
 
+  const rootSignature: Signature = Signature.create(
+    zkAppPrivateKey,
+    zkAppInstance.address.toFields()
+  );
+
   const txOptions = createTxOptions(pubKey, live);
 
   const init_tx: Mina.Transaction = await Mina.transaction(txOptions, () => {
@@ -278,7 +265,8 @@ export async function initAppRoot(
       rootBefore,
       totalSupplied,
       UInt64.zero,
-      new UInt64(255)
+      new UInt64(255),
+      rootSignature
     );
   });
 
@@ -326,10 +314,9 @@ export async function deployApp(
 
   await sendWaitTx(deployTx, [pk], live);
 
-  if (displayLogs){
+  if (displayLogs) {
     compareLogStates(zkAppInstance, merkleMap, live);
   }
-  
 
   return {
     merkleMap: merkleMap,
@@ -338,16 +325,15 @@ export async function deployApp(
   };
 }
 
-async function sendWaitTx(
+export async function sendWaitTx(
   tx: Mina.Transaction,
   pks: PrivateKey[],
   live: boolean = true
 ) {
-  await tx.prove();
   tx.sign(pks);
+  await tx.prove();
 
   let pendingTx = await tx.send();
-
   if (live) {
     console.log(`Got pending transaction with hash ${pendingTx.hash()}`);
 

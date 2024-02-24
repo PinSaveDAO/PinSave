@@ -8,7 +8,7 @@ export function parseCid(link: string): string {
 
 export function insertIpfsDomainProvider(
   link: string,
-  providerDomain: string,
+  providerDomain: string
 ): string {
   const cid = parseCid(link);
 

@@ -1,9 +1,7 @@
+import { getAppString } from '../components/AppEnv.js';
+import { startBerkeleyClient } from '../components/client.js';
 import { getVercelClient } from '../components/env.js';
-import { getMapFromVercelNfts } from '../components/Nft.js';
-import {
-  startBerkeleyClient,
-  getAppString,
-} from '../components/transactions.js';
+import { getMapFromVercelNFTs } from '../components/NFT.js';
 import {
   serializeMerkleMapToJson,
   deserializeJsonToMerkleMap,
@@ -15,7 +13,7 @@ const client = getVercelClient();
 
 const appId = getAppString();
 
-const storedMap = await getMapFromVercelNfts(appId, [0, 1, 2], client);
+const storedMap = await getMapFromVercelNFTs(appId, [0, 1, 2], client);
 
 console.log(storedMap.getRoot().toString());
 

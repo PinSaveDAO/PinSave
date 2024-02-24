@@ -30,7 +30,7 @@ export async function getMinaAccount() {
   let account: string[] = await (window as CustomWindow).mina.getAccounts();
   if (account.length === 0) {
     account = await requestMinaAccounts();
-    if (account.length === undefined){
+    if (account.length === undefined) {
       throw new Error("create an account first");
     }
     if (account.length === 0) {

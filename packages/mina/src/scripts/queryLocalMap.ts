@@ -1,20 +1,11 @@
-import { createClient } from '@vercel/kv';
-import dotenv from 'dotenv';
+import { getAppString } from '../components/AppEnv.js';
+import { getVercelClient } from '../components/env.js';
+import { getMapFromVercelNFTs, getVercelMetadata } from '../components/NFT.js';
 
-import { getMapFromVercelNfts, getVercelMetadata } from '../components/Nft.js';
-import { getAppString } from '../components/transactions.js';
-
-dotenv.config();
-
-const client = createClient({
-  url: process.env.KV_REST_API_URL as string,
-  token: process.env.KV_REST_API_TOKEN as string,
-});
-
+const client = getVercelClient();
 const appId = getAppString();
 
-const storedMap = await getMapFromVercelNfts(appId, [0, 1, 2], client);
+const storedMap = await getMapFromVercelNFTs(appId, [0, 1, 2, 3], client);
 
 console.log(storedMap.getRoot().toString());
-
-console.log(await getVercelMetadata(appId, 0, client));
+console.log(await getVercelMetadata(appId, 3, client));

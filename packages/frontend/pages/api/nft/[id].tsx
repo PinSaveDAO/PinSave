@@ -1,4 +1,4 @@
-import { startBerkeleyClient, getAppString, getVercelNft } from "pin-mina";
+import { startBerkeleyClient, getAppString, getVercelNFT } from "pin-mina";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { kv, createClient } from "@vercel/kv";
 
@@ -22,7 +22,7 @@ export default async function handler(
       });
     }
 
-    const nft = await getVercelNft(appId, idNumber, client);
+    const nft = await getVercelNFT(appId, idNumber, client);
 
     res.status(200).json({ ...nft });
   } catch (err) {
