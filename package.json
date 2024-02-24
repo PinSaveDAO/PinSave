@@ -10,11 +10,8 @@
   "private": true,
   "scripts": {
     "frontend:build": "yarn workspace @pinsav3/frontend build",
-    "frontend:eject": "yarn workspace @pinsav3/frontend eject",
     "frontend:dev": "yarn workspace @pinsav3/frontend dev",
-    "frontend:test": "yarn workspace @pinsav3/frontend test",
-    "frontend:prettier": "yarn workspace @pinsav3/frontend prettier:write",
-    "prettier": "yarn workspace @pinsav3/frontend prettier:write",
+    "prettier": "yarn workspace @pinsav3/frontend prettier",
     "dev": "yarn workspace @pinsav3/frontend dev",
     "build": "yarn workspace @pinsav3/frontend build",
     "install": "yarn workspace @pinsav3/frontend install",

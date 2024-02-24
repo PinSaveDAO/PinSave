@@ -6,8 +6,7 @@
     "build": "next build",
     "postbuild": "next-sitemap",
     "start": "next start",
-    "lint": "next lint",
-    "prettier:write": "prettier --write \"**/*.{ts,tsx}\""
+    "prettier": "prettier --write \"**/*.{ts,tsx}\""
   },
   "dependencies": {
     "@mantine/core": "^4.2.12",
@@ -39,9 +38,6 @@
     "@types/isomorphic-fetch": "^0.0.39",
     "@types/node": "^20.11.20",
     "@types/react": "^18.2.5",
-    "eslint": "^8.37.0",
-    "eslint-config-next": "^14.0.0",
-    "eslint-plugin-react-hooks": "^4.6.0",
     "prettier": "^3.0.3",
     "typescript": "^5.0.4"
   }
