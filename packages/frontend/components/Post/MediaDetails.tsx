@@ -2,14 +2,14 @@ import type { IndividualPost } from "@/services/upload";
 import { setMinaAccount } from "@/hooks/minaWallet";
 
 import { Paper, Text, Title, Button } from "@mantine/core";
-import { MerkleMap, MerkleMapWitness, Field, PublicKey } from "o1js";
+import { MerkleMap, PublicKey } from "o1js";
 import {
-  createMintTx,
   deserializeJsonToMerkleMap,
   getAppContract,
   createTxOptions,
   deserializeNft,
   startBerkeleyClient,
+  createMintTxFromMap,
 } from "pin-mina";
 import React, { useEffect, useState } from "react";
 
@@ -43,21 +43,19 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
       const dataNft = await response.json();
 
       const nft = deserializeNft(dataNft);
-      // create function to serialize nft
-
-      const witnessNFT: MerkleMapWitness = map.getWitness(Field(postNumber));
 
       const txOptions = createTxOptions(address);
 
-      const transactionMint = await createMintTx(
+      const txMint = await createMintTxFromMap(
         address,
         zkApp,
         nft,
-        witnessNFT,
+        map,
+        true,
         txOptions
       );
 
-      const transactionJSON = transactionMint.toJSON();
+      const transactionJSON = txMint.toJSON();
 
       await (window as CustomWindow).mina?.sendTransaction({
         transaction: transactionJSON,

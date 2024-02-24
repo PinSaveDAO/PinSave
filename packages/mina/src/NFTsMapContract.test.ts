@@ -1,3 +1,4 @@
+import { mintNftFromMap } from './components/localBlockchain/transactions.js';
 import { startLocalBlockchainClient } from './components/client.js';
 import {
   createNft,
@@ -9,7 +10,6 @@ import {
   deployApp,
   initAppRoot,
   initNft,
-  mintNftFromMap,
   setFee,
   transferNft,
 } from './components/transactions.js';
