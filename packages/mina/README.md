@@ -6,7 +6,7 @@ Pin Save is a decentralized social media which consists of decentralized posts e
 
 [Website](https://pinsave.app/)
 
-[Github](https://github.com/PinSaveDAO/PinSave-EVM)
+[Github](https://github.com/PinSaveDAO/PinSave)
 
 Discord ID: fedotov_am
 
@@ -27,3 +27,5 @@ yarn test
 ## Further Links
 
 [Pin Save on zkok](https://zkok.io/mina/pin-save/)
+
+[Pin Save on Dspyt](https://dspyt.com/PinSave)

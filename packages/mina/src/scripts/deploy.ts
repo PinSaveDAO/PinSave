@@ -1,6 +1,4 @@
-import {
-  startBerkeleyClient,
-} from '../components/client.js';
+import { startBerkeleyClient } from '../components/client.js';
 import { deployApp } from '../components/transactions.js';
 import { getEnvAccount } from '../components/env.js';
 

@@ -19,7 +19,7 @@ export function getAppEnv() {
     process.env.zkAppPrivateKey as string
   );
   const zkAppAddress: PublicKey = pk.toPublicKey();
-  const appId: string = zkAppAddress.toBase58()
+  const appId: string = zkAppAddress.toBase58();
   const zkApp: MerkleMapContract = new MerkleMapContract(zkAppAddress);
   return { pk: pk, zkAppAddress: zkAppAddress, appId: appId, zkApp: zkApp };
 }
