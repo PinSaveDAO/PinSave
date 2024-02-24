@@ -24,8 +24,6 @@ interface CustomWindow extends Window {
 const MediaDetails: React.FC<IMyProps> = ({ post }) => {
   const key = "auroWalletAddress";
   const postNumber = Number(post.id);
-  const [totalSupply, setTotalSupply] = useState<undefined | number>(undefined);
-  const [treeRoot, setTreeRoot] = useState<undefined | string>(undefined);
   const [map, setMap] = useState<MerkleMap | undefined>(undefined);
   const [address, setAddress] = useState<PublicKey | undefined>(undefined);
 
@@ -66,14 +64,10 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
   useEffect(() => {
     const fetchMediaDetails = async () => {
       try {
-        const response = await fetch("/api/totalSupply");
-        const data = await response.json();
-        setTotalSupply(data.totalSupply);
         const responseMap = await fetch("/api/getMap");
         const dataMap = await responseMap.json();
 
         const map = deserializeJsonToMerkleMap(dataMap.dataOut);
-        setTreeRoot(map.getRoot().toString());
         setMap(map);
 
         const savedAddress = sessionStorage.getItem(key);
@@ -85,8 +79,6 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
       }
     };
     fetchMediaDetails();
-
-    // connect address
   }, [post.id]);
   return (
     <Paper shadow="sm" p="md" withBorder>
@@ -110,7 +102,7 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
             post.owner.indexOf(":0x") + 8
           ) +
             "..." +
-            post.owner.substring(35)}
+            post.owner.substring(45)}
         </a>
       </p>
       {address?.toBase58() === post.owner ? (
