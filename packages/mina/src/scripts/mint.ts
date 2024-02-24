@@ -1,8 +1,8 @@
 import {
-  deserializeNft,
-  getMapFromVercelNfts,
-  getVercelNft,
-} from '../components/Nft.js';
+  deserializeNFT,
+  getMapFromVercelNFTs,
+  getVercelNFT,
+} from '../components/NFT.js';
 import { mintNFTwithMapLive } from '../components/transactions.js';
 import {
   getEnvAccount,
@@ -18,11 +18,11 @@ startBerkeleyClient();
 
 const client = getVercelClient();
 
-const storedMap = await getMapFromVercelNfts(appId, [0, 1, 2], client);
+const storedMap = await getMapFromVercelNFTs(appId, [0, 1, 2], client);
 
-const nft_ = await getVercelNft(appId, 1, client);
+const nft_ = await getVercelNFT(appId, 1, client);
 
-const nft = deserializeNft(nft_);
+const nft = deserializeNFT(nft_);
 
 const compile = true;
 const live = true;

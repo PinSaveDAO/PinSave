@@ -6,10 +6,10 @@ import {
 import { initNFTLive } from '../components/transactions.js';
 import {
   generateDummyCollectionWithMap,
-  generateDummyNft,
-  setVercelNft,
+  generateDummyNFT,
+  setVercelNFT,
   setVercelMetadata,
-} from '../components/Nft.js';
+} from '../components/NFT.js';
 import { startBerkeleyClient } from '../components/client.js';
 
 startBerkeleyClient();
@@ -20,7 +20,7 @@ const { pubKey: pubKey, pk: pk } = getEnvAccount();
 
 const { map: merkleMap } = generateDummyCollectionWithMap(pubKey);
 
-const { nftHashed: nftHashed, nftMetadata: nftMetadata } = generateDummyNft(
+const { nftHashed: nftHashed, nftMetadata: nftMetadata } = generateDummyNFT(
   3,
   pubKey
 );
@@ -28,5 +28,5 @@ const { nftHashed: nftHashed, nftMetadata: nftMetadata } = generateDummyNft(
 const compile = true;
 
 await initNFTLive(pubKey, pk, nftHashed, zkApp, merkleMap, compile);
-await setVercelNft(appId, nftHashed, client);
+await setVercelNFT(appId, nftHashed, client);
 await setVercelMetadata(appId, nftMetadata, client);

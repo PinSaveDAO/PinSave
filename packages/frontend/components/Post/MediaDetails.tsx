@@ -7,7 +7,7 @@ import {
   deserializeJsonToMerkleMap,
   getAppContract,
   createTxOptions,
-  deserializeNft,
+  deserializeNFT,
   startBerkeleyClient,
   createMintTxFromMap,
 } from "pin-mina";
@@ -40,7 +40,7 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
       const response = await fetch(`/api/nft/${postNumber}`);
       const dataNft = await response.json();
 
-      const nft = deserializeNft(dataNft);
+      const nft = deserializeNFT(dataNft);
 
       const txOptions = createTxOptions(address);
 
@@ -67,7 +67,7 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
         const responseMap = await fetch("/api/getMap");
         const dataMap = await responseMap.json();
 
-        const map = deserializeJsonToMerkleMap(dataMap.dataOut);
+        const map = deserializeJsonToMerkleMap(dataMap.map);
         setMap(map);
 
         const savedAddress = sessionStorage.getItem(key);

@@ -21,11 +21,11 @@ export type UploadingPost = {
   image: File;
 };
 
-export async function UploadData(data: UploadingPost) {
-  const blob = await put(data.image.name, data.image, {
+export async function UploadData(image: File) {
+  const blobImage = await put(image.name, image, {
     access: "public",
     token: process.env.NEXT_PUBLIC_BLOB,
   });
-
-  return blob;
+  const imageUrl = blobImage.url;
+  return imageUrl;
 }

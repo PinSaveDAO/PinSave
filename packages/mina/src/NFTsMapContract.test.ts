@@ -4,10 +4,10 @@ import {
 } from './components/localBlockchain/transactions.js';
 import { startLocalBlockchainClient } from './components/client.js';
 import {
-  createNft,
+  createNFT,
   generateDummyCollectionMap,
-  generateDummyNftMetadata,
-} from './components/Nft.js';
+  generateDummyNFTMetadata,
+} from './components/NFT.js';
 import { logMinaBalance } from './components/TokenBalances.js';
 import {
   deployApp,
@@ -92,8 +92,8 @@ await mintNftFromMap(
 console.log('minted NFT');
 
 // init nft on the contract
-const nft = generateDummyNftMetadata(3, pubKey1);
-const nftStruct = createNft(nft);
+const nft = generateDummyNFTMetadata(3, pubKey1);
+const nftStruct = createNFT(nft);
 
 await initNFT(
   pubKey1,
@@ -123,8 +123,8 @@ try {
   console.log('failed sucessfully to initialize NFT which already exists');
 }
 
-const nftNew = generateDummyNftMetadata(4, pubKey2);
-const nftStructNew = createNft(nftNew);
+const nftNew = generateDummyNFTMetadata(4, pubKey2);
+const nftStructNew = createNFT(nftNew);
 
 await initNFT(
   pubKey2,

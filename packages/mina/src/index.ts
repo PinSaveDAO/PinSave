@@ -16,20 +16,20 @@ export { startBerkeleyClient } from './components/client.js';
 
 export {
   generateDummyCollectionWithMap,
-  generateDummyNftMetadata,
-  storeNftMap,
   setStringObjectToMap,
-  getMapFromVercelNfts,
+  getMapFromVercelNFTs,
   getVercelMetadata,
-  setVercelNft,
-  getVercelNft,
-  setNftsToVercel,
+  setVercelMetadata,
+  setVercelNFT,
+  getVercelNFT,
+  setNFTsToVercel,
   setMetadatasToVercel,
-  deserializeNft,
-  NftMetadata,
-  Nft,
+  deserializeNFT,
+  createNFT,
+  NFTMetadata,
+  NFT,
   nftDataIn,
-} from './components/Nft.js';
+} from './components/NFT.js';
 
 export {
   serializeMerkleMapToJson,

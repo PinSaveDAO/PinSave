@@ -13,7 +13,7 @@ import {
 
 import { MerkleMapContract } from '../NFTsMapContract.js';
 import { compareLogStates } from './AppState.js';
-import { NFTtoHash, Nft } from './Nft.js';
+import { NFTtoHash, NFT } from './NFT.js';
 import {
   logTokenBalances,
   getTokenBalances,
@@ -40,7 +40,7 @@ export async function setFee(
 export async function initNFTLive(
   pubKey: PublicKey,
   pk: PrivateKey,
-  _NFT: Nft,
+  _NFT: NFT,
   zkAppInstance: MerkleMapContract,
   merkleMap: MerkleMap,
   compile: boolean = false,
@@ -63,7 +63,7 @@ export async function initNFTLive(
 }
 
 export async function createInitNFTTxFromMap(
-  _NFT: Nft,
+  _NFT: NFT,
   zkAppInstance: MerkleMapContract,
   merkleMap: MerkleMap,
   compile: boolean = true,
@@ -85,7 +85,7 @@ export async function createInitNFTTxFromMap(
 export async function createMintTxFromMap(
   pubKey: PublicKey,
   zkAppInstance: MerkleMapContract,
-  _NFT: Nft,
+  _NFT: NFT,
   merkleMap: MerkleMap,
   compile: boolean = true,
   txOptions: TxOptions
@@ -108,7 +108,7 @@ export async function createMintTxFromMap(
 
 export async function mintNFTwithMapLive(
   pk: PrivateKey,
-  _NFT: Nft,
+  _NFT: NFT,
   zkAppInstance: MerkleMapContract,
   merkleMap: MerkleMap,
   compile: boolean = false,
@@ -121,7 +121,7 @@ export async function mintNFTwithMapLive(
 
 export async function mintNFTLive(
   pk: PrivateKey,
-  _NFT: Nft,
+  _NFT: NFT,
   zkAppInstance: MerkleMapContract,
   merkleMapWitness: MerkleMapWitness,
   compile: boolean = false,
@@ -147,7 +147,7 @@ export async function mintNFTLive(
 export async function createMintTxLive(
   pubKey: PublicKey,
   zkAppInstance: MerkleMapContract,
-  _NFT: Nft,
+  _NFT: NFT,
   merkleMapWitness: MerkleMapWitness,
   txOptions: TxOptions
 ) {
@@ -173,7 +173,7 @@ export async function createMintTxLive(
 export async function transferNft(
   pk: PrivateKey,
   recipient: PublicKey,
-  _NFT: Nft,
+  _NFT: NFT,
   zkAppInstance: MerkleMapContract,
   merkleMap: MerkleMap,
   zkAppPrivateKey: PrivateKey,
@@ -186,7 +186,7 @@ export async function transferNft(
 
   const transferSignature: Signature = Signature.create(
     zkAppPrivateKey,
-    Nft.toFields(_NFT)
+    NFT.toFields(_NFT)
   );
 
   const recipientBalance = getTokenBalances(recipient, zkAppInstance);

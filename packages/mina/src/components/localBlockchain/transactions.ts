@@ -10,13 +10,13 @@ import {
 
 import { MerkleMapContract } from '../../NFTsMapContract.js';
 import { compareLogStates, getTreeRoot } from '../AppState.js';
-import { Nft, NFTtoHash } from '../Nft.js';
+import { NFT, NFTtoHash } from '../NFT.js';
 import { logTokenBalances, getTokenBalances } from '../TokenBalances.js';
 import { createTxOptions, sendWaitTx, TxOptions } from '../transactions.js';
 
 export async function mintNftFromMap(
   pk: PrivateKey,
-  _NFT: Nft,
+  _NFT: NFT,
   zkAppInstance: MerkleMapContract,
   merkleMap: MerkleMap,
   compile: boolean = false,
@@ -46,7 +46,7 @@ export async function mintNftFromMap(
 
 export async function mintNFT(
   pk: PrivateKey,
-  _NFT: Nft,
+  _NFT: NFT,
   zkAppInstance: MerkleMapContract,
   merkleMapWitness: MerkleMapWitness,
   compile: boolean = false,
@@ -72,7 +72,7 @@ export async function mintNFT(
 export async function createMintTx(
   pubKey: PublicKey,
   zkAppInstance: MerkleMapContract,
-  _NFT: Nft,
+  _NFT: NFT,
   merkleMapWitness: MerkleMapWitness,
   txOptions: TxOptions
 ) {
@@ -95,7 +95,7 @@ export async function createMintTx(
 export async function initNFT(
   pubKey: PublicKey,
   pk: PrivateKey,
-  _NFT: Nft,
+  _NFT: NFT,
   zkAppInstance: MerkleMapContract,
   merkleMap: MerkleMap,
   compile: boolean = false,

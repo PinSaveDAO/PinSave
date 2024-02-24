@@ -1,19 +1,19 @@
-import { getEnvAccount,  getAppEnv, getVercelClient } from '../components/env.js';
+import {
+  getEnvAccount,
+  getAppEnv,
+  getVercelClient,
+} from '../components/env.js';
 import {
   generateDummyCollectionWithMap,
-  getMapFromVercelNfts,
-  setNftsToVercel,
+  getMapFromVercelNFTs,
+  setNFTsToVercel,
   setMetadatasToVercel,
-} from '../components/Nft.js';
-import {
-  initRootWithApp,
-} from '../components/transactions.js';
-import {
-  startBerkeleyClient,
-} from '../components/client.js';
+} from '../components/NFT.js';
+import { initRootWithApp } from '../components/transactions.js';
+import { startBerkeleyClient } from '../components/client.js';
 
 startBerkeleyClient();
-const client = getVercelClient()
+const client = getVercelClient();
 const { pubKey: pubKey, pk: deployerKey } = getEnvAccount();
 const { appId: appId, pk: zkAppPK } = getAppEnv();
 
@@ -25,10 +25,10 @@ const {
 
 const generateTreeRoot = merkleMap.getRoot().toString();
 
-await setNftsToVercel(appId, nftArray, client);
+await setNFTsToVercel(appId, nftArray, client);
 await setMetadatasToVercel(appId, nftMetadata, client);
 
-const storedTree = await getMapFromVercelNfts(appId, [0, 1, 2], client);
+const storedTree = await getMapFromVercelNFTs(appId, [0, 1, 2], client);
 
 const storedTreeRoot = storedTree.getRoot().toString();
 

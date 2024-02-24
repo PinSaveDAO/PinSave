@@ -1,4 +1,5 @@
 import { UploadData } from "@/services/upload";
+import { setMinaAccount } from "@/hooks/minaWallet";
 
 import {
   Text,
@@ -12,9 +13,27 @@ import {
   MediaQuery,
 } from "@mantine/core";
 import { Dropzone, MIME_TYPES } from "@mantine/dropzone";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ReactPlayer from "react-player";
 import { Upload, Replace } from "tabler-icons-react";
+import { PublicKey, Field } from "o1js";
+import {
+  startBerkeleyClient,
+  NFTMetadata,
+  createInitNFTTxFromMap,
+  createNFT,
+  deserializeJsonToMerkleMap,
+  getAppContract,
+  getAppString,
+  createTxOptions,
+  setVercelNFT,
+  setVercelMetadata,
+} from "pin-mina";
+import { kv, createClient } from "@vercel/kv";
+
+interface CustomWindow extends Window {
+  mina?: any;
+}
 
 export const dropzoneChildren = (image: File | undefined) => {
   if (image) {
@@ -66,7 +85,7 @@ export const dropzoneChildren = (image: File | undefined) => {
           Drag image here or click to select an image
         </Text>
         <Text size="sm" color="dimmed" inline mt={7}>
-          Image should not exceed 100 000 kb
+          Image should not exceed 1 000 000 bytes
         </Text>
       </div>
     </Group>
@@ -74,30 +93,76 @@ export const dropzoneChildren = (image: File | undefined) => {
 };
 
 const UploadForm = () => {
-  const [address, setAddress] = useState<string>("qwr");
+  const key = "auroWalletAddress";
+  const [address, setAddress] = useState<string | undefined>();
 
-  const [name, setName] = useState<string | undefined>();
-  const [description, setDescription] = useState<string | undefined>();
+  const [name, setName] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
   const [image, setImage] = useState<File | undefined>();
-  const [postReceiver, setPostReceiver] = useState<string | undefined>();
+  //const [postReceiver, setPostReceiver] = useState<string | undefined>();
 
   const isDataCorrect =
-    name !== undefined && description !== undefined && image !== undefined;
+    name !== "" && description !== "" && image !== undefined;
 
   async function savePostBeforeUpload(
     name: string,
     description: string,
-    image: File,
+    image: File
   ) {
-    if (description !== "" && name !== "" && image && address) {
-      const cid = await UploadData({
-        receiverAddress: address,
+    if (description !== "" && name !== "" && address) {
+      startBerkeleyClient();
+      const pub = PublicKey.fromBase58(address);
+
+      const response = await fetch("/api/totalInited");
+      const data = await response.json();
+      const totalInited = data.totalInited;
+
+      const isDev = process.env.NEXT_PUBLIC_ISDEV ?? "false";
+      let client = kv;
+      if (isDev === "true") {
+        const url = process.env.NEXT_PUBLIC_REDIS_URL;
+        const token = process.env.NEXT_PUBLIC_REDIS_TOKEN;
+        client = createClient({
+          url: url,
+          token: token,
+        });
+      }
+
+      const cid = await UploadData(image);
+      const nftMetadata: NFTMetadata = {
         name: name,
         description: description,
-        image: image,
+        id: Field(totalInited),
+        cid: cid,
+        owner: pub,
+      };
+      const nftHashed = createNFT(nftMetadata);
+
+      const responseMap = await fetch("/api/getMap");
+      const dataMap = await responseMap.json();
+
+      const map = deserializeJsonToMerkleMap(dataMap.map);
+      const zkApp = getAppContract();
+      const appId = getAppString();
+
+      const compile = true;
+      const txOptions = createTxOptions(pub);
+      const tx = await createInitNFTTxFromMap(
+        nftHashed,
+        zkApp,
+        map,
+        compile,
+        txOptions
+      );
+
+      const transactionJSON = tx.toJSON();
+
+      await (window as CustomWindow).mina?.sendTransaction({
+        transaction: transactionJSON,
       });
 
-      console.log(cid);
+      await setVercelNFT(appId, nftHashed, client);
+      await setVercelMetadata(appId, nftMetadata, client);
 
       setImage(undefined);
       setName("");
@@ -107,6 +172,20 @@ const UploadForm = () => {
     }
     return false;
   }
+
+  useEffect(() => {
+    const fetchAddress = async () => {
+      try {
+        const savedAddress = sessionStorage.getItem(key);
+        if (savedAddress && savedAddress !== "undefined") {
+          setAddress(savedAddress);
+        }
+      } catch (error) {
+        console.error("Error fetching media details: ", error);
+      }
+    };
+    fetchAddress();
+  }, []);
 
   return (
     <Paper
@@ -146,18 +225,18 @@ const UploadForm = () => {
         label="Description"
         placeholder="Describe your post here"
       />
-      <Textarea
+      {/* <Textarea
         my="lg"
         onChange={(e) => setPostReceiver(e.target.value)}
         value={postReceiver}
         label="Post Receiver"
         placeholder="Enter Address You Want To Receive The NFT"
-      />
+      /> */}
       <Dropzone
         mt="md"
         onReject={(files) => console.log("rejected files", files)}
         onDrop={(files) => setImage(files[0])}
-        maxSize={100000}
+        maxSize={1000000}
         multiple={false}
         accept={[
           MIME_TYPES.png,
@@ -171,7 +250,17 @@ const UploadForm = () => {
         {() => dropzoneChildren(image)}
       </Dropzone>
       <Group position="center" sx={{ padding: 15 }}>
-        {isDataCorrect ? (
+        {!address ? (
+          <Button
+            component="a"
+            radius="lg"
+            mt="md"
+            onClick={async () => setAddress(await setMinaAccount(key))}
+          >
+            Connect Wallet
+          </Button>
+        ) : null}
+        {isDataCorrect && address ? (
           <Button
             component="a"
             radius="lg"
@@ -180,8 +269,13 @@ const UploadForm = () => {
               await savePostBeforeUpload(name, description, image)
             }
           >
-            Save Post
+            Mint Post
           </Button>
+        ) : null}
+        {!isDataCorrect ? (
+          <Text component="a" mt="md">
+            Upload Data
+          </Text>
         ) : null}
       </Group>
     </Paper>
