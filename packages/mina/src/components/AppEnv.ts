@@ -11,7 +11,7 @@ export function getAppDeployer() {
 
 export function getAppString() {
   const appPubString: string =
-    'B62qqdFj5RJNk9ieNV9PDymu19Lqpe6jXUfpatAFoE4iHLo3137yMCE';
+    'B62qoPsMXpcVjm1TSqQM76rrYarULgn3iwzFktGWUfVkxhZQnfebvxS';
   return appPubString;
 }
 

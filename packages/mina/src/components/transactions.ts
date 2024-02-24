@@ -13,8 +13,12 @@ import {
 
 import { MerkleMapContract } from '../NFTsMapContract.js';
 import { compareLogStates, getTreeRoot } from './AppState.js';
-import { logTokenBalances, getTokenBalances } from './TokenBalances.js';
 import { NFTtoHash, Nft } from './Nft.js';
+import {
+  logTokenBalances,
+  getTokenBalances,
+  getTokenIdBalance,
+} from './TokenBalances.js';
 
 export async function setFee(
   zkAppPrivateKey: PrivateKey,
@@ -40,7 +44,7 @@ export async function initNft(
   zkAppInstance: MerkleMapContract,
   merkleMap: MerkleMap,
   compile: boolean = false,
-  live: boolean = true,
+  live: boolean = false,
   displayLogs: boolean = false
 ) {
   if (compile) {
@@ -69,20 +73,20 @@ export async function initNft(
   }
 }
 
+// only for testing
 export async function mintNftFromMap(
   pk: PrivateKey,
   _NFT: Nft,
   zkAppInstance: MerkleMapContract,
   merkleMap: MerkleMap,
   compile: boolean = false,
-  live: boolean = true,
+  live: boolean = false,
   displayLogs: boolean = false
 ) {
   const pubKey: PublicKey = pk.toPublicKey();
   const nftId: Field = _NFT.id;
 
   // ensure that local map matches on-chain
-
   if (displayLogs) {
     const match =
       merkleMap.getRoot().toString() ===
@@ -100,13 +104,26 @@ export async function mintNftFromMap(
   }
 }
 
+export async function mintNFTwithMapLive(
+  pk: PrivateKey,
+  _NFT: Nft,
+  zkAppInstance: MerkleMapContract,
+  merkleMap: MerkleMap,
+  compile: boolean = false,
+  live: boolean = true
+) {
+  const nftId: Field = _NFT.id;
+  const witnessNFT: MerkleMapWitness = merkleMap.getWitness(nftId);
+  await mintNFTLive(pk, _NFT, zkAppInstance, witnessNFT, compile, live);
+}
+
 export async function mintNFT(
   pk: PrivateKey,
   _NFT: Nft,
   zkAppInstance: MerkleMapContract,
   merkleMapWitness: MerkleMapWitness,
   compile: boolean = false,
-  live = true
+  live = false
 ) {
   if (compile) {
     await MerkleMapContract.compile();
@@ -123,6 +140,57 @@ export async function mintNFT(
   );
 
   await sendWaitTx(mint_tx, [pk], live);
+}
+
+export async function mintNFTLive(
+  pk: PrivateKey,
+  _NFT: Nft,
+  zkAppInstance: MerkleMapContract,
+  merkleMapWitness: MerkleMapWitness,
+  compile: boolean = false,
+  live = true
+) {
+  if (compile) {
+    await MerkleMapContract.compile();
+  }
+  const pubKey: PublicKey = pk.toPublicKey();
+  const txOptions = createTxOptions(pubKey, live);
+
+  const mint_tx = await createMintTxLive(
+    pubKey,
+    zkAppInstance,
+    _NFT,
+    merkleMapWitness,
+    txOptions
+  );
+
+  await sendWaitTx(mint_tx, [pk], live);
+}
+
+export async function createMintTxLive(
+  pubKey: PublicKey,
+  zkAppInstance: MerkleMapContract,
+  _NFT: Nft,
+  merkleMapWitness: MerkleMapWitness,
+  txOptions: TxOptions
+) {
+  const recipientBalance = await getTokenIdBalance(
+    pubKey,
+    zkAppInstance.token.id
+  );
+  let mint_tx: Mina.Transaction;
+
+  if (recipientBalance > 0) {
+    mint_tx = await Mina.transaction(txOptions, () => {
+      zkAppInstance.mintNft(_NFT, merkleMapWitness);
+    });
+  } else {
+    mint_tx = await Mina.transaction(txOptions, () => {
+      AccountUpdate.fundNewAccount(pubKey);
+      zkAppInstance.mintNft(_NFT, merkleMapWitness);
+    });
+  }
+  return mint_tx;
 }
 
 export async function createMintTx(
@@ -145,19 +213,6 @@ export async function createMintTx(
       zkAppInstance.mintNft(_NFT, merkleMapWitness);
     });
   }
-  return mint_tx;
-}
-
-export async function createNotFirstMintTx(
-  zkAppInstance: MerkleMapContract,
-  _NFT: Nft,
-  merkleMapWitness: MerkleMapWitness,
-  txOptions: TxOptions
-) {
-  const mint_tx: Mina.Transaction = await Mina.transaction(txOptions, () => {
-    zkAppInstance.mintNft(_NFT, merkleMapWitness);
-  });
-
   return mint_tx;
 }
 

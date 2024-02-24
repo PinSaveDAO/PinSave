@@ -42,11 +42,9 @@ export {
 } from './components/TokenBalances.js';
 
 export {
-  createMintTx,
-  createNotFirstMintTx,
-  mintNftFromMap,
-  mintNFT,
-  initRootWithApp,
+  mintNFTwithMapLive,
+  mintNFTLive,
+  createMintTxLive,
   createTxOptions,
 } from './components/transactions.js';
 

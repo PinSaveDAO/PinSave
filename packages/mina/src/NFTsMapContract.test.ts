@@ -1,6 +1,4 @@
-import {
-  startLocalBlockchainClient,
-} from './components/client.js';
+import { startLocalBlockchainClient } from './components/client.js';
 import {
   createNft,
   generateDummyCollectionMap,
@@ -47,7 +45,15 @@ const { nftArray: nftArray } = generateDummyCollectionMap(pubKey1, map);
 
 console.log('initing app root');
 
-await initAppRoot(zkAppPrivateKey, pk1, zkAppInstance, map, nftArray.length, live, displayLogs);
+await initAppRoot(
+  zkAppPrivateKey,
+  pk1,
+  zkAppInstance,
+  map,
+  nftArray.length,
+  live,
+  displayLogs
+);
 
 try {
   await initAppRoot(
@@ -143,7 +149,15 @@ await mintNftFromMap(
 
 console.log('mints sucessfully');
 
-await mintNftFromMap(pk2, nftStructNew, zkAppInstance, map, live, displayLogs);
+await mintNftFromMap(
+  pk2,
+  nftStructNew,
+  zkAppInstance,
+  map,
+  compile,
+  live,
+  displayLogs
+);
 
 console.log('mints sucessfully');
 
