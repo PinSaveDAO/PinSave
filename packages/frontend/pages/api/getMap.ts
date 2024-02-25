@@ -5,7 +5,7 @@ import {
   serializeMerkleMapToJson,
 } from "pin-mina";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { kv, createClient } from "@vercel/kv";
+import { getVercelClient } from "@/services/vercelClient";
 
 function generateIntegersArray(n: number) {
   let integersArray = [];
@@ -24,16 +24,7 @@ export default async function handler(
       ? "http://localhost:3000"
       : "https://pinsave.app";
     startBerkeleyClient();
-    const isDev = process.env.NEXT_PUBLIC_ISDEV ?? "false";
-    let client = kv;
-    if (isDev === "true") {
-      const url = process.env.NEXT_PUBLIC_REDIS_URL;
-      const token = process.env.NEXT_PUBLIC_REDIS_TOKEN;
-      client = createClient({
-        url: url,
-        token: token,
-      });
-    }
+    const client = await getVercelClient();
     const appId = getAppString();
 
     const response = await fetch(`${host}/api/totalInited`);
