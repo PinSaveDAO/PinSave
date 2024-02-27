@@ -1,4 +1,4 @@
-import fetcher from "@/utils/fetcher";
+import { fetcher } from "@/utils/fetcher";
 
 export const fetchMessages = async (address: string) => {
   try {

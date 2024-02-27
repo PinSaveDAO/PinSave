@@ -29,7 +29,7 @@ import {
   setVercelNFT,
   setVercelMetadata,
 } from "pin-mina";
-import { kv, createClient } from "@vercel/kv";
+import { getVercelClient } from "@/services/vercelClient";
 
 interface CustomWindow extends Window {
   mina?: any;
@@ -117,16 +117,7 @@ const UploadForm = () => {
       const data = await response.json();
       const totalInited = data.totalInited;
 
-      const isDev = process.env.NEXT_PUBLIC_ISDEV ?? "false";
-      let client = kv;
-      if (isDev === "true") {
-        const url = process.env.NEXT_PUBLIC_REDIS_URL;
-        const token = process.env.NEXT_PUBLIC_REDIS_TOKEN;
-        client = createClient({
-          url: url,
-          token: token,
-        });
-      }
+      const client = await getVercelClient();
 
       const cid = await UploadData(image);
       const nftMetadata: NFTMetadata = {

@@ -1,4 +1,4 @@
-const fetcher = async (input: RequestInfo, params = {}) => {
+export const fetcher = async (input: RequestInfo, params = {}) => {
   const response = await fetch(input, {
     mode: "cors",
     credentials: "same-origin",
@@ -17,5 +17,3 @@ const fetcher = async (input: RequestInfo, params = {}) => {
 
   return data;
 };
-
-export default fetcher;

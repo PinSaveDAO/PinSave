@@ -21,7 +21,7 @@ class MyDocument extends Document {
             name="description"
             content="Pin Save is a platform for decentralized content aggregation and image sharing where users have content ownership."
           />
-          <link rel="icon" href="/favicon.svg" />
+          <link rel="icon" href="/pin.svg" />
           <meta
             property="og:image"
             content="https://pinsave.app/TwitterIconWords.png"

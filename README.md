@@ -1,7 +1,7 @@
 # Pin Save - decentralized Pinterest
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/Pfed-prog/Dspyt-NFTs-EVM/master/packages/frontend/public/PinSaveL.png" alt="Size Limit CLI" width="738" >
+  <img src="https://raw.githubusercontent.com/Pfed-prog/Dspyt-NFTs-EVM/master/assets/PinSaveL.png" alt="Size Limit CLI" width="738" >
 </p>
 
 <p align="center">
