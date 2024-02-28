@@ -263,7 +263,7 @@ const UploadForm = () => {
             Mint Post
           </Button>
         ) : null}
-        {!isDataCorrect ? (
+        {!isDataCorrect && address ? (
           <Text component="a" mt="md">
             Upload Data
           </Text>
