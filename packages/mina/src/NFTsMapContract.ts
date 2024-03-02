@@ -22,11 +22,11 @@ export class MerkleMapContract extends SmartContract {
   // amount minted
   @state(UInt64) totalSupply = State<UInt64>();
   // amount initialized
-  @state(UInt64) totalInited = State<UInt64>();
+  @state(Field) totalInited = State<Field>();
   // fee for minting
   @state(UInt64) fee = State<UInt64>();
   // max amount
-  @state(UInt64) maxSupply = State<UInt64>();
+  @state(Field) maxSupply = State<Field>();
 
   deploy(args?: DeployArgs) {
     super.deploy(args);
@@ -46,9 +46,9 @@ export class MerkleMapContract extends SmartContract {
 
   @method initRoot(
     _initialRoot: Field,
-    _totalInited: UInt64,
+    _totalInited: Field,
     _feeAmount: UInt64,
-    _maxSupply: UInt64,
+    _maxSupply: Field,
     adminSignature: Signature
   ) {
     // ensures that we can only initialize once
@@ -86,20 +86,22 @@ export class MerkleMapContract extends SmartContract {
 
   @method initNft(item: NFT, keyWitness: MerkleMapWitness) {
     const fee = this.fee.getAndRequireEquals();
+
     const initedAmount = this.totalInited.getAndRequireEquals();
     const maxSupply = this.maxSupply.getAndRequireEquals();
     initedAmount.assertLessThanOrEqual(maxSupply);
 
     const initialRoot = this.treeRoot.getAndRequireEquals();
 
-    // checks the initial state is empty
+    // checks the initial leaf state is empty
     const [rootBefore, key] = keyWitness.computeRootAndKey(Field(0));
 
     rootBefore.assertEquals(initialRoot);
     key.assertEquals(item.id);
+    key.assertEquals(initedAmount);
 
     // ask for fee here
-    let senderUpdate = AccountUpdate.create(this.sender);
+    const senderUpdate = AccountUpdate.create(this.sender);
     senderUpdate.requireSignature();
     senderUpdate.send({ to: this, amount: fee });
 

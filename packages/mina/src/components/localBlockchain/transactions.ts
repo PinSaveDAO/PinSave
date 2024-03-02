@@ -14,7 +14,7 @@ import { NFT, NFTtoHash } from '../NFT.js';
 import { logTokenBalances, getTokenBalances } from '../TokenBalances.js';
 import { createTxOptions, sendWaitTx, TxOptions } from '../transactions.js';
 
-export async function mintNftFromMap(
+export async function mintNFTFromMap(
   pk: PrivateKey,
   _NFT: NFT,
   zkAppInstance: MerkleMapContract,

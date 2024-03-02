@@ -1,5 +1,5 @@
 import {
-  mintNftFromMap,
+  mintNFTFromMap,
   initNFT,
 } from './components/localBlockchain/transactions.js';
 import { startLocalBlockchainClient } from './components/client.js';
@@ -13,7 +13,7 @@ import {
   deployApp,
   initAppRoot,
   setFee,
-  transferNft,
+  transferNFT,
 } from './components/transactions.js';
 
 // displayLogs true and proofsEnabled true, do not work
@@ -79,7 +79,7 @@ await setFee(zkAppPrivateKey, pk1, zkAppInstance);
 
 console.log('set fee');
 
-await mintNftFromMap(
+await mintNFTFromMap(
   pk1,
   nftArray[0],
   zkAppInstance,
@@ -139,7 +139,25 @@ await initNFT(
 
 console.log('inited NFT - 2 sucessfully');
 
-await mintNftFromMap(
+try {
+  const nftNew = generateDummyNFTMetadata(10, pubKey2);
+  const nftStructNew = createNFT(nftNew);
+
+  await initNFT(
+    pubKey2,
+    pk2,
+    nftStructNew,
+    zkAppInstance,
+    map,
+    compile,
+    live,
+    displayLogs
+  );
+} catch {
+  console.log('fails successfully. Not correct nft id');
+}
+
+await mintNFTFromMap(
   pk1,
   nftStruct,
   zkAppInstance,
@@ -151,7 +169,7 @@ await mintNftFromMap(
 
 console.log('mints sucessfully');
 
-await mintNftFromMap(
+await mintNFTFromMap(
   pk2,
   nftStructNew,
   zkAppInstance,
@@ -163,7 +181,7 @@ await mintNftFromMap(
 
 console.log('mints sucessfully');
 
-await transferNft(
+await transferNFT(
   pk1,
   pubKey2,
   nftStruct,
@@ -176,7 +194,7 @@ await transferNft(
 
 console.log('transfered ownership sucessfully');
 
-await transferNft(
+await transferNFT(
   pk2,
   pubKey3,
   nftStructNew,

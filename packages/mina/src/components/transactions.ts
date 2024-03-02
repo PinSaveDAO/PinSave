@@ -170,7 +170,7 @@ export async function createMintTxLive(
   return mint_tx;
 }
 
-export async function transferNft(
+export async function transferNFT(
   pk: PrivateKey,
   recipient: PublicKey,
   _NFT: NFT,
@@ -251,7 +251,9 @@ export async function initAppRoot(
 ) {
   const pubKey: PublicKey = pk.toPublicKey();
   const rootBefore: Field = merkleMap.getRoot();
-  const totalSupplied: UInt64 = UInt64.from(totalInited);
+  const totalSupplied: Field = Field(totalInited);
+
+  const maxSupply = Field(255);
 
   const rootSignature: Signature = Signature.create(
     zkAppPrivateKey,
@@ -265,7 +267,7 @@ export async function initAppRoot(
       rootBefore,
       totalSupplied,
       UInt64.zero,
-      new UInt64(255),
+      maxSupply,
       rootSignature
     );
   });
