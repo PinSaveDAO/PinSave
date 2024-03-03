@@ -1,5 +1,5 @@
-import { getAppString } from '../components/AppEnv.js';
-import { getVercelClient } from '../components/env.js';
+import { getAppString } from '../components/utilities/AppEnv.js';
+import { getVercelClient } from '../components/utilities/env.js';
 import { getMapFromVercelNFTs, getVercelMetadata } from '../components/NFT.js';
 
 const client = getVercelClient();

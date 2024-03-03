@@ -3,7 +3,11 @@ export {
   getAppDeployer,
   getAppString,
   getAppContract,
-} from './components/AppEnv.js';
+} from './components/utilities/AppEnv.js';
+
+export { startBerkeleyClient } from './components/utilities/client.js';
+
+export { generateIntegersArray } from './components/utilities/helpers.js';
 
 export {
   getTotalSupplyLive,
@@ -11,8 +15,6 @@ export {
   getAppState,
   getTreeRoot,
 } from './components/AppState.js';
-
-export { startBerkeleyClient } from './components/client.js';
 
 export {
   generateDummyCollectionWithMap,

@@ -56,7 +56,7 @@ export async function initNFTLive(
   const txOptions = createTxOptions(pubKey, live);
 
   const initMintTx: Mina.Transaction = await Mina.transaction(txOptions, () => {
-    zkAppInstance.initNft(_NFT, witnessNFT);
+    zkAppInstance.initNFT(_NFT, witnessNFT);
   });
   await sendWaitTx(initMintTx, [pk], live);
   merkleMap.set(nftId, NFTtoHash(_NFT));
@@ -76,7 +76,7 @@ export async function createInitNFTTxFromMap(
   const witnessNFT: MerkleMapWitness = merkleMap.getWitness(nftId);
 
   const initMintTx: Mina.Transaction = await Mina.transaction(txOptions, () => {
-    zkAppInstance.initNft(_NFT, witnessNFT);
+    zkAppInstance.initNFT(_NFT, witnessNFT);
   });
   await initMintTx.prove();
   return initMintTx;
@@ -159,12 +159,12 @@ export async function createMintTxLive(
 
   if (recipientBalance > 0) {
     mint_tx = await Mina.transaction(txOptions, () => {
-      zkAppInstance.mintNft(_NFT, merkleMapWitness);
+      zkAppInstance.mintNFT(_NFT, merkleMapWitness);
     });
   } else {
     mint_tx = await Mina.transaction(txOptions, () => {
       AccountUpdate.fundNewAccount(pubKey);
-      zkAppInstance.mintNft(_NFT, merkleMapWitness);
+      zkAppInstance.mintNFT(_NFT, merkleMapWitness);
     });
   }
   return mint_tx;

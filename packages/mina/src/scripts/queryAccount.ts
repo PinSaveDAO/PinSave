@@ -1,5 +1,5 @@
-import { startBerkeleyClient } from '../components/client.js';
-import { getEnvAccount, getAppEnv } from '../components/env.js';
+import { startBerkeleyClient } from '../components/utilities/client.js';
+import { getEnvAccount, getAppEnv } from '../components/utilities/env.js';
 import { getTokenIdBalance } from '../components/TokenBalances.js';
 
 startBerkeleyClient();

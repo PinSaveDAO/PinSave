@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 import { PublicKey, PrivateKey } from 'o1js';
 import { createClient } from '@vercel/kv';
 
-import { MerkleMapContract } from '../NFTsMapContract.js';
+import { MerkleMapContract } from '../../NFTsMapContract.js';
 
 dotenv.config();
 

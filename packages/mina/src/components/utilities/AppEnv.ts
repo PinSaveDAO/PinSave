@@ -1,6 +1,6 @@
 import { PublicKey } from 'o1js';
 
-import { MerkleMapContract } from '../NFTsMapContract.js';
+import { MerkleMapContract } from '../../NFTsMapContract.js';
 
 export function getAppDeployer() {
   const pubKeyString: string =

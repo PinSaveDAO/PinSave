@@ -58,17 +58,19 @@ export async function getAppState(
 
 export async function getTotalInitedLive(
   zkAppInstance: MerkleMapContract
-): Promise<Field> {
+): Promise<number> {
   await fetchAccount({ publicKey: zkAppInstance.address });
-  const totalSupply: Field = zkAppInstance.totalInited.get();
+  const totalSupplyField: Field = zkAppInstance.totalInited.get();
+  const totalSupply: number = Number(totalSupplyField);
   return totalSupply;
 }
 
 export async function getTotalSupplyLive(
   zkAppInstance: MerkleMapContract
-): Promise<UInt64> {
+): Promise<number> {
   await fetchAccount({ publicKey: zkAppInstance.address });
-  const totalSupply: UInt64 = zkAppInstance.totalSupply.get();
+  const totalSupply64: UInt64 = zkAppInstance.totalSupply.get();
+  const totalSupply = Number(totalSupply64);
   return totalSupply;
 }
 

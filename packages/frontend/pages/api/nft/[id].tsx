@@ -11,9 +11,7 @@ export default async function handler(
     const idNumber = Number(id);
 
     startBerkeleyClient();
-
     const appId = getAppString();
-
     const client = await getVercelClient();
     const nft = await getVercelNFT(appId, idNumber, client);
 

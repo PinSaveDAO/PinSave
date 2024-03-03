@@ -2,7 +2,7 @@ import {
   mintNFTFromMap,
   initNFT,
 } from './components/localBlockchain/transactions.js';
-import { startLocalBlockchainClient } from './components/client.js';
+import { startLocalBlockchainClient } from './components/utilities/client.js';
 import {
   createNFT,
   generateDummyCollectionMap,

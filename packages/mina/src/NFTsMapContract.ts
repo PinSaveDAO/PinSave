@@ -84,7 +84,7 @@ export class MerkleMapContract extends SmartContract {
     this.fee.set(amount);
   }
 
-  @method initNft(item: NFT, keyWitness: MerkleMapWitness) {
+  @method initNFT(item: NFT, keyWitness: MerkleMapWitness) {
     const fee = this.fee.getAndRequireEquals();
 
     const initedAmount = this.totalInited.getAndRequireEquals();
@@ -118,7 +118,7 @@ export class MerkleMapContract extends SmartContract {
     this.totalInited.set(initedAmount.add(1));
   }
 
-  @method mintNft(item: NFT, keyWitness: MerkleMapWitness) {
+  @method mintNFT(item: NFT, keyWitness: MerkleMapWitness) {
     const initialRoot = this.treeRoot.getAndRequireEquals();
 
     item.owner.assertEquals(this.sender);

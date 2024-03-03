@@ -8,8 +8,8 @@ import {
   getEnvAccount,
   getAppEnv,
   getVercelClient,
-} from '../components/env.js';
-import { startBerkeleyClient } from '../components/client.js';
+} from '../components/utilities/env.js';
+import { startBerkeleyClient } from '../components/utilities/client.js';
 
 const { pk: deployerKey } = getEnvAccount();
 const { appId: appId, zkApp: zkApp } = getAppEnv();

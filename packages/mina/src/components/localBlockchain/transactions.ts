@@ -81,12 +81,12 @@ export async function createMintTx(
 
   if (recipientBalance > 0) {
     mint_tx = await Mina.transaction(txOptions, () => {
-      zkAppInstance.mintNft(_NFT, merkleMapWitness);
+      zkAppInstance.mintNFT(_NFT, merkleMapWitness);
     });
   } else {
     mint_tx = await Mina.transaction(txOptions, () => {
       AccountUpdate.fundNewAccount(pubKey);
-      zkAppInstance.mintNft(_NFT, merkleMapWitness);
+      zkAppInstance.mintNFT(_NFT, merkleMapWitness);
     });
   }
   return mint_tx;
@@ -114,7 +114,7 @@ export async function initNFT(
   const init_mint_tx: Mina.Transaction = await Mina.transaction(
     txOptions,
     () => {
-      zkAppInstance.initNft(_NFT, witnessNFT);
+      zkAppInstance.initNFT(_NFT, witnessNFT);
     }
   );
 

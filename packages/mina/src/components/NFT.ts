@@ -78,7 +78,7 @@ export function storeNFTMap(nftMetadata: NFTMetadata, map: MerkleMap) {
   return _NFT;
 }
 
-export function stringObjectToNftMetadata(data: nftDataIn) {
+export function stringObjectToNFTMetadata(data: nftDataIn) {
   const nftMetadata: NFTMetadata = {
     name: data.name,
     description: data.description,
@@ -91,7 +91,7 @@ export function stringObjectToNftMetadata(data: nftDataIn) {
 }
 
 export function setStringObjectToMap(data: nftDataIn, map: MerkleMap) {
-  const nftObject = stringObjectToNftMetadata(data);
+  const nftObject = stringObjectToNFTMetadata(data);
   map.set(nftObject.id, NFTtoHash(nftObject));
 }
 

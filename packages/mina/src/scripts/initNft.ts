@@ -2,7 +2,7 @@ import {
   getEnvAccount,
   getVercelClient,
   getAppEnv,
-} from '../components/env.js';
+} from '../components/utilities/env.js';
 import { initNFTLive } from '../components/transactions.js';
 import {
   generateDummyCollectionWithMap,
@@ -10,7 +10,7 @@ import {
   setVercelNFT,
   setVercelMetadata,
 } from '../components/NFT.js';
-import { startBerkeleyClient } from '../components/client.js';
+import { startBerkeleyClient } from '../components/utilities/client.js';
 
 startBerkeleyClient();
 
