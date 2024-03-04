@@ -27,14 +27,12 @@ export async function setFee(
   fee: UInt64 = UInt64.one
 ) {
   const deployerAddress: PublicKey = deployerPk.toPublicKey();
-  const feeFields: Field[] = fee.toFields();
-  const feeSignature: Signature = Signature.create(zkAppPrivateKey, feeFields);
 
   const txn: Mina.Transaction = await Mina.transaction(deployerAddress, () => {
-    contract.setFee(fee, feeSignature);
+    contract.setFee(fee);
   });
 
-  await sendWaitTx(txn, [deployerPk], false);
+  await sendWaitTx(txn, [deployerPk, zkAppPrivateKey], false);
 }
 
 export async function initNFTLive(
@@ -254,25 +252,15 @@ export async function initAppRoot(
   const totalSupplied: Field = Field(totalInited);
 
   const maxSupply = Field(255);
-
-  const rootSignature: Signature = Signature.create(
-    zkAppPrivateKey,
-    zkAppInstance.address.toFields()
-  );
+  const feeAmount = UInt64.zero;
 
   const txOptions = createTxOptions(pubKey, live);
 
   const init_tx: Mina.Transaction = await Mina.transaction(txOptions, () => {
-    zkAppInstance.initRoot(
-      rootBefore,
-      totalSupplied,
-      UInt64.zero,
-      maxSupply,
-      rootSignature
-    );
+    zkAppInstance.initRoot(rootBefore, totalSupplied, feeAmount, maxSupply);
   });
 
-  await sendWaitTx(init_tx, [pk], live);
+  await sendWaitTx(init_tx, [pk, zkAppPrivateKey], live);
 
   if (displayLogs) {
     compareLogStates(zkAppInstance, merkleMap);

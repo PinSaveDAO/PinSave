@@ -16,7 +16,6 @@ import {
   transferNFT,
 } from './components/transactions.js';
 
-// displayLogs true and proofsEnabled true, do not work
 const displayLogs = true;
 
 const proofsEnabled = false;
@@ -91,7 +90,6 @@ await mintNFTFromMap(
 
 console.log('minted NFT');
 
-// init nft on the contract
 const nft = generateDummyNFTMetadata(3, pubKey1);
 const nftStruct = createNFT(nft);
 

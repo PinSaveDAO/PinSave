@@ -35,7 +35,6 @@ export class MerkleMapContract extends SmartContract {
 
     this.account.permissions.set({
       ...Permissions.default(),
-      access: permissionToEdit,
       editState: permissionToEdit,
       setTokenSymbol: permissionToEdit,
       setZkappUri: permissionToEdit,
@@ -48,14 +47,13 @@ export class MerkleMapContract extends SmartContract {
     _initialRoot: Field,
     _totalInited: Field,
     _feeAmount: UInt64,
-    _maxSupply: Field,
-    adminSignature: Signature
+    _maxSupply: Field
   ) {
     // ensures that we can only initialize once
     this.account.provedState.requireEquals(this.account.provedState.get());
     this.account.provedState.get().assertFalse();
 
-    adminSignature.verify(this.address, this.address.toFields()).assertTrue();
+    this.checkThisSignature();
 
     super.init();
 
@@ -74,11 +72,11 @@ export class MerkleMapContract extends SmartContract {
     this.maxSupply.set(_maxSupply);
   }
 
-  @method setFee(amount: UInt64, adminSignature: Signature) {
+  @method setFee(amount: UInt64) {
     this.account.provedState.requireEquals(this.account.provedState.get());
     this.account.provedState.get().assertTrue();
 
-    adminSignature.verify(this.address, amount.toFields()).assertTrue();
+    this.checkThisSignature();
 
     this.fee.getAndRequireEquals();
     this.fee.set(amount);
@@ -183,5 +181,11 @@ export class MerkleMapContract extends SmartContract {
       to: newOwner,
       amount: UInt64.from(1_000_000_000),
     });
+  }
+
+  checkThisSignature() {
+    const address = this.address;
+    const senderUpdate = AccountUpdate.create(address);
+    senderUpdate.requireSignature();
   }
 }

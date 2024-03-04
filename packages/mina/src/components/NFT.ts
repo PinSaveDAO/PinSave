@@ -146,14 +146,12 @@ export async function getMapFromVercelMetadata(
   return map;
 }
 
-export async function setVercelNFT(
-  appId: string | PublicKey,
-  nft: NFT,
-  client: VercelKV
-) {
-  await client.set(`${appId}: ${nft.id}`, {
+export async function setVercelNFT(appId: string, nft: NFT, client: VercelKV) {
+  const key = `${appId}: ${nft.id}`;
+  const value = {
     ...nft,
-  });
+  };
+  await client.set(key, value);
 }
 
 export async function setNFTsToVercel(
@@ -171,7 +169,8 @@ export async function getVercelNFT(
   nftId: number | string,
   client: VercelKV
 ) {
-  const nft: nftDataIn | null = await client.get(`${appId}: ${nftId}`);
+  const key = `${appId}: ${nftId}`;
+  const nft: nftDataIn | null = await client.get(key);
   if (nft) {
     return nft;
   }
