@@ -15,6 +15,7 @@ import { logTokenBalances, getTokenBalances } from '../TokenBalances.js';
 import { createTxOptions, sendWaitTx, TxOptions } from '../transactions.js';
 
 export async function mintNFTFromMap(
+  zkAppPK: PrivateKey,
   pk: PrivateKey,
   _NFT: NFT,
   zkAppInstance: MerkleMapContract,
@@ -36,7 +37,7 @@ export async function mintNFTFromMap(
 
   const witnessNFT: MerkleMapWitness = merkleMap.getWitness(nftId);
 
-  await mintNFT(pk, _NFT, zkAppInstance, witnessNFT, compile, live);
+  await mintNFT(zkAppPK, pk, _NFT, zkAppInstance, witnessNFT, compile, live);
 
   if (displayLogs) {
     logTokenBalances(pubKey, zkAppInstance);
@@ -45,6 +46,7 @@ export async function mintNFTFromMap(
 }
 
 export async function mintNFT(
+  zkAppPK: PrivateKey,
   pk: PrivateKey,
   _NFT: NFT,
   zkAppInstance: MerkleMapContract,
@@ -66,7 +68,7 @@ export async function mintNFT(
     txOptions
   );
 
-  await sendWaitTx(mint_tx, [pk], live);
+  await sendWaitTx(mint_tx, [pk, zkAppPK], live);
 }
 
 export async function createMintTx(
@@ -93,7 +95,7 @@ export async function createMintTx(
 }
 
 export async function initNFT(
-  pubKey: PublicKey,
+  zkAppPK: PrivateKey,
   pk: PrivateKey,
   _NFT: NFT,
   zkAppInstance: MerkleMapContract,
@@ -105,6 +107,7 @@ export async function initNFT(
   if (compile) {
     await MerkleMapContract.compile();
   }
+  const pubKey: PublicKey = pk.toPublicKey();
 
   const nftId: Field = _NFT.id;
   const witnessNFT: MerkleMapWitness = merkleMap.getWitness(nftId);
@@ -118,7 +121,7 @@ export async function initNFT(
     }
   );
 
-  await sendWaitTx(init_mint_tx, [pk], live);
+  await sendWaitTx(init_mint_tx, [pk, zkAppPK], live);
 
   // the tx should execute before we set the map value
   merkleMap.set(nftId, NFTtoHash(_NFT));

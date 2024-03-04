@@ -10,7 +10,6 @@ import {
   PublicKey,
   Poseidon,
   UInt64,
-  Signature,
   AccountUpdate,
 } from 'o1js';
 
@@ -27,6 +26,8 @@ export class MerkleMapContract extends SmartContract {
   @state(UInt64) fee = State<UInt64>();
   // max amount
   @state(Field) maxSupply = State<Field>();
+
+  @state(PublicKey) admin = State<PublicKey>();
 
   deploy(args?: DeployArgs) {
     super.deploy(args);
@@ -49,11 +50,15 @@ export class MerkleMapContract extends SmartContract {
     _feeAmount: UInt64,
     _maxSupply: Field
   ) {
-    // ensures that we can only initialize once
-    this.account.provedState.requireEquals(this.account.provedState.get());
-    this.account.provedState.get().assertFalse();
-
+    this.checkNotInitialized();
     this.checkThisSignature();
+
+    const sender = this.sender;
+    const senderUpdate = AccountUpdate.create(sender);
+    senderUpdate.requireSignature();
+
+    this.admin.getAndRequireEquals();
+    this.admin.set(sender);
 
     super.init();
 
@@ -73,16 +78,18 @@ export class MerkleMapContract extends SmartContract {
   }
 
   @method setFee(amount: UInt64) {
-    this.account.provedState.requireEquals(this.account.provedState.get());
-    this.account.provedState.get().assertTrue();
-
-    this.checkThisSignature();
+    this.checkInitialized();
+    this.checkAdminSignature();
 
     this.fee.getAndRequireEquals();
     this.fee.set(amount);
   }
 
   @method initNFT(item: NFT, keyWitness: MerkleMapWitness) {
+    this.checkInitialized();
+    this.checkThisSignature();
+    const { senderUpdate: senderUpdate } = this.checkSenderSignature();
+
     const fee = this.fee.getAndRequireEquals();
 
     const initedAmount = this.totalInited.getAndRequireEquals();
@@ -98,9 +105,6 @@ export class MerkleMapContract extends SmartContract {
     key.assertEquals(item.id);
     key.assertEquals(initedAmount);
 
-    // ask for fee here
-    const senderUpdate = AccountUpdate.create(this.sender);
-    senderUpdate.requireSignature();
     senderUpdate.send({ to: this, amount: fee });
 
     // compute the root after incrementing
@@ -117,9 +121,13 @@ export class MerkleMapContract extends SmartContract {
   }
 
   @method mintNFT(item: NFT, keyWitness: MerkleMapWitness) {
+    this.checkInitialized();
+    this.checkThisSignature();
+    const { sender: sender } = this.checkSenderSignature();
+
     const initialRoot = this.treeRoot.getAndRequireEquals();
 
-    item.owner.assertEquals(this.sender);
+    item.owner.assertEquals(sender);
 
     const [rootBefore, key] = keyWitness.computeRootAndKey(
       Poseidon.hash(NFT.toFields(item))
@@ -127,8 +135,6 @@ export class MerkleMapContract extends SmartContract {
     rootBefore.assertEquals(initialRoot);
     key.assertEquals(item.id);
 
-    let senderUpdate = AccountUpdate.create(this.sender);
-    senderUpdate.requireSignature();
     this.token.mint({
       address: item.owner,
       amount: UInt64.from(1_000_000_000),
@@ -146,23 +152,21 @@ export class MerkleMapContract extends SmartContract {
   @method transfer(
     item: NFT,
     newOwner: PublicKey,
-    keyWitness: MerkleMapWitness,
-    adminSignature: Signature
+    keyWitness: MerkleMapWitness
   ) {
-    const itemFeldsArray = NFT.toFields(item);
-    adminSignature.verify(this.address, NFT.toFields(item)).assertTrue();
+    this.checkInitialized();
+    this.checkThisSignature();
+    const { sender: sender } = this.checkSenderSignature();
 
-    const sender = this.sender;
+    const itemFieldsArray = NFT.toFields(item);
+
     sender.assertEquals(item.owner);
-
-    let senderUpdate = AccountUpdate.create(sender);
-    senderUpdate.requireSignature();
 
     const initialRoot = this.treeRoot.getAndRequireEquals();
 
     // check the initial state matches what we expect
     const [rootBefore, key] = keyWitness.computeRootAndKey(
-      Poseidon.hash(itemFeldsArray)
+      Poseidon.hash(itemFieldsArray)
     );
     rootBefore.assertEquals(initialRoot);
     key.assertEquals(item.id);
@@ -183,9 +187,32 @@ export class MerkleMapContract extends SmartContract {
     });
   }
 
+  checkAdminSignature() {
+    const admin = this.admin.getAndRequireEquals();
+    const senderUpdate = AccountUpdate.create(admin);
+    senderUpdate.requireSignature();
+  }
+
   checkThisSignature() {
     const address = this.address;
     const senderUpdate = AccountUpdate.create(address);
     senderUpdate.requireSignature();
+  }
+
+  checkInitialized() {
+    this.account.provedState.requireEquals(this.account.provedState.get());
+    this.account.provedState.get().assertTrue();
+  }
+
+  checkNotInitialized() {
+    this.account.provedState.requireEquals(this.account.provedState.get());
+    this.account.provedState.get().assertFalse();
+  }
+
+  checkSenderSignature() {
+    const sender = this.sender;
+    const senderUpdate = AccountUpdate.create(sender);
+    senderUpdate.requireSignature();
+    return { senderUpdate: senderUpdate, sender: sender };
   }
 }

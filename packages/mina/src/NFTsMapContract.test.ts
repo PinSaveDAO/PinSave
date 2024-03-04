@@ -74,11 +74,12 @@ try {
 
 console.log('changing fee amount');
 
-await setFee(zkAppPrivateKey, pk1, zkAppInstance);
+await setFee(pk1, zkAppInstance);
 
 console.log('set fee');
 
 await mintNFTFromMap(
+  zkAppPrivateKey,
   pk1,
   nftArray[0],
   zkAppInstance,
@@ -94,7 +95,7 @@ const nft = generateDummyNFTMetadata(3, pubKey1);
 const nftStruct = createNFT(nft);
 
 await initNFT(
-  pubKey1,
+  zkAppPrivateKey,
   pk1,
   nftStruct,
   zkAppInstance,
@@ -108,7 +109,7 @@ console.log('inited NFT');
 
 try {
   await initNFT(
-    pubKey1,
+    zkAppPrivateKey,
     pk1,
     nftStruct,
     zkAppInstance,
@@ -125,7 +126,7 @@ const nftNew = generateDummyNFTMetadata(4, pubKey2);
 const nftStructNew = createNFT(nftNew);
 
 await initNFT(
-  pubKey2,
+  zkAppPrivateKey,
   pk2,
   nftStructNew,
   zkAppInstance,
@@ -142,7 +143,7 @@ try {
   const nftStructNew = createNFT(nftNew);
 
   await initNFT(
-    pubKey2,
+    zkAppPrivateKey,
     pk2,
     nftStructNew,
     zkAppInstance,
@@ -156,6 +157,7 @@ try {
 }
 
 await mintNFTFromMap(
+  zkAppPrivateKey,
   pk1,
   nftStruct,
   zkAppInstance,
@@ -168,6 +170,7 @@ await mintNFTFromMap(
 console.log('mints sucessfully');
 
 await mintNFTFromMap(
+  zkAppPrivateKey,
   pk2,
   nftStructNew,
   zkAppInstance,
