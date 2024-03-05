@@ -1,14 +1,12 @@
-import { PublicKey, Mina, Field, fetchAccount } from 'o1js';
-
-import { MerkleMapContract } from '../NFTsMapContract.js';
+import { PublicKey, Mina, Field, fetchAccount, SmartContract } from 'o1js';
 
 export function logMinaBalance(address: PublicKey) {
   const balance = getMinaBalance(address);
   console.log(address.toBase58() + ' Mina balance:', balance);
 }
 
-export function logTokenBalances(address: PublicKey, zkApp: MerkleMapContract) {
-  const balance = getTokenBalances(address, zkApp);
+export function logTokenBalances(address: PublicKey, zkApp: SmartContract) {
+  const balance = getTokenAddressBalance(address, zkApp.token.id);
   console.log(address.toBase58() + ' zkApp tokens:', balance);
 }
 
@@ -22,15 +20,14 @@ export function getMinaBalance(address: PublicKey) {
   return balance;
 }
 
-export function getTokenBalances(address: PublicKey, zkApp: MerkleMapContract) {
+export function getTokenAddressBalance(address: PublicKey, tokenId: Field) {
   let balance: bigint = 0n;
   try {
-    balance = Mina.getBalance(address, zkApp.token.id).value.toBigInt();
+    const fetchedBalance = Mina.getBalance(address, tokenId).value.toBigInt();
+    balance = fetchedBalance / BigInt(1e9);
   } catch (e) {
     console.log(
-      `balance of ${
-        zkApp.token.id
-      } token for address ${address.toBase58()} is 0`
+      `balance of ${tokenId} token for address ${address.toBase58()} is 0`
     );
   }
   return balance;
@@ -43,7 +40,8 @@ export async function getTokenIdBalance(
   const data = await fetchAccount({ publicKey: pub, tokenId: tokenId });
   let tokenBalance = 0n;
   if (data.account?.balance) {
-    tokenBalance = data.account.balance.toBigInt();
+    const fetchedBalance = data.account.balance.toBigInt();
+    tokenBalance = fetchedBalance / BigInt(1e9);
   }
   return tokenBalance;
 }

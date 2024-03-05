@@ -8,17 +8,16 @@ import {
   Field,
   VerificationKey,
   UInt64,
-  Signature,
 } from 'o1js';
 
-import { MerkleMapContract } from '../NFTsMapContract.js';
 import { compareLogStates } from './AppState.js';
 import { NFTtoHash, NFT } from './NFT.js';
 import {
   logTokenBalances,
-  getTokenBalances,
+  getTokenAddressBalance,
   getTokenIdBalance,
 } from './TokenBalances.js';
+import { MerkleMapContract } from '../NFTsMapContract.js';
 
 export async function setFee(
   deployerPk: PrivateKey,
@@ -35,7 +34,8 @@ export async function setFee(
   await sendWaitTx(txn, [deployerPk], live);
 }
 
-export async function initNFTLive(
+export async function initNFT(
+  zkAppPK: PrivateKey,
   pubKey: PublicKey,
   pk: PrivateKey,
   _NFT: NFT,
@@ -56,7 +56,7 @@ export async function initNFTLive(
   const initMintTx: Mina.Transaction = await Mina.transaction(txOptions, () => {
     zkAppInstance.initNFT(_NFT, witnessNFT);
   });
-  await sendWaitTx(initMintTx, [pk], live);
+  await sendWaitTx(initMintTx, [pk, zkAppPK], live);
   merkleMap.set(nftId, NFTtoHash(_NFT));
 }
 
@@ -104,7 +104,8 @@ export async function createMintTxFromMap(
   return mintTx;
 }
 
-export async function mintNFTwithMapLive(
+export async function mintNFTwithMap(
+  zkAppPK: PrivateKey,
   pk: PrivateKey,
   _NFT: NFT,
   zkAppInstance: MerkleMapContract,
@@ -114,10 +115,11 @@ export async function mintNFTwithMapLive(
 ) {
   const nftId: Field = _NFT.id;
   const witnessNFT: MerkleMapWitness = merkleMap.getWitness(nftId);
-  await mintNFTLive(pk, _NFT, zkAppInstance, witnessNFT, compile, live);
+  await mintNFT(zkAppPK, pk, _NFT, zkAppInstance, witnessNFT, compile, live);
 }
 
-export async function mintNFTLive(
+export async function mintNFT(
+  zkAppPK: PrivateKey,
   pk: PrivateKey,
   _NFT: NFT,
   zkAppInstance: MerkleMapContract,
@@ -139,7 +141,7 @@ export async function mintNFTLive(
     txOptions
   );
 
-  await sendWaitTx(mint_tx, [pk], live);
+  await sendWaitTx(mint_tx, [pk, zkAppPK], live);
 }
 
 export async function createMintTxLive(
@@ -149,13 +151,16 @@ export async function createMintTxLive(
   merkleMapWitness: MerkleMapWitness,
   txOptions: TxOptions
 ) {
-  const recipientBalance = await getTokenIdBalance(
-    pubKey,
-    zkAppInstance.token.id
-  );
+  let recipientBalance;
+  if (txOptions.fee) {
+    recipientBalance = await getTokenIdBalance(pubKey, zkAppInstance.token.id);
+  }
+  if (!txOptions.fee) {
+    recipientBalance = getTokenAddressBalance(pubKey, zkAppInstance.token.id);
+  }
   let mint_tx: Mina.Transaction;
 
-  if (recipientBalance > 0) {
+  if (recipientBalance) {
     mint_tx = await Mina.transaction(txOptions, () => {
       zkAppInstance.mintNFT(_NFT, merkleMapWitness);
     });
@@ -182,7 +187,10 @@ export async function transferNFT(
   const nftId: Field = _NFT.id;
   const witnessNFT: MerkleMapWitness = merkleMap.getWitness(nftId);
 
-  const recipientBalance = getTokenBalances(recipient, zkAppInstance);
+  const recipientBalance = getTokenAddressBalance(
+    recipient,
+    zkAppInstance.token.id
+  );
 
   let nft_transfer_tx: Mina.Transaction;
   if (recipientBalance > 0) {
@@ -333,7 +341,7 @@ export async function sendWaitTx(
 export function createTxOptions(
   pubKey: PublicKey,
   live: boolean = true,
-  fee: number = 100_000_000
+  fee: number = 8e7
 ) {
   const txOptions: { sender: PublicKey; fee?: number } = {
     sender: pubKey,

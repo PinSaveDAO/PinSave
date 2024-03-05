@@ -1,11 +1,18 @@
-import { getAppString } from '../components/utilities/AppEnv.js';
-import { getVercelClient } from '../components/utilities/env.js';
+import { startBerkeleyClient } from '../components/utilities/client.js';
+import { getVercelClient, getAppEnv } from '../components/utilities/env.js';
+import { generateIntegersArray } from '../components/utilities/helpers.js';
+import { getTotalInitedLive } from '../components/AppState.js';
 import { getMapFromVercelNFTs, getVercelMetadata } from '../components/NFT.js';
 
+startBerkeleyClient();
 const client = getVercelClient();
-const appId = getAppString();
 
-const storedMap = await getMapFromVercelNFTs(appId, [0, 1, 2, 3], client);
+const { appId: appId, zkApp: zkApp } = getAppEnv();
+
+const totalInited = await getTotalInitedLive(zkApp);
+const array = generateIntegersArray(totalInited);
+
+const storedMap = await getMapFromVercelNFTs(appId, array, client);
 
 console.log(storedMap.getRoot().toString());
-console.log(await getVercelMetadata(appId, 3, client));
+console.log(await getVercelMetadata(appId, 0, client));

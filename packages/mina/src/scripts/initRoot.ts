@@ -14,8 +14,9 @@ import { initRootWithApp } from '../components/transactions.js';
 
 startBerkeleyClient();
 const client = getVercelClient();
+
 const { pubKey: pubKey, pk: deployerKey } = getEnvAccount();
-const { appId: appId, pk: zkAppPK } = getAppEnv();
+const { appId: appId, zkAppPK: zkAppPK } = getAppEnv();
 
 const {
   map: merkleMap,

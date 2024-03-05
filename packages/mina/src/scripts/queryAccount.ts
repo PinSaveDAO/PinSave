@@ -9,8 +9,8 @@ const { pubKey: pub } = getEnvAccount();
 
 const tokenBalance = await getTokenIdBalance(pub, zkApp.token.id);
 
-console.log('PinSave token balance:', tokenBalance / 1_000_000_000n);
+console.log('PinSave token balance:', tokenBalance);
 
 const minaTokenBalance = await getTokenIdBalance(pub);
 
-console.log('Mina token balance:', Number(minaTokenBalance) / 1_000_000_000);
+console.log('Mina token balance:', minaTokenBalance);

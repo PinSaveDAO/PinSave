@@ -39,7 +39,7 @@ export {
 } from './components/serialize.js';
 
 export {
-  getTokenBalances,
+  getTokenAddressBalance,
   getMinaBalance,
 } from './components/TokenBalances.js';
 

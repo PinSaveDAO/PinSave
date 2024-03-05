@@ -1,6 +1,6 @@
 import { startBerkeleyClient } from '../components/utilities/client.js';
-import { deployApp } from '../components/transactions.js';
 import { getEnvAccount } from '../components/utilities/env.js';
+import { deployApp } from '../components/transactions.js';
 
 startBerkeleyClient();
 

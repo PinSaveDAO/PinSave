@@ -136,9 +136,9 @@ export async function getMapFromVercelMetadata(
   client: VercelKV
 ) {
   const map: MerkleMap = new MerkleMap();
-  const arrayLength = nftArray.length;
+  const arrayLength: number = nftArray.length;
   for (let i = 0; i < arrayLength; i++) {
-    const nftId = nftArray[i];
+    const nftId: number = nftArray[i];
 
     const data: nftDataIn = await getVercelMetadata(appId, nftId, client);
     setStringObjectToMap(data, map);
@@ -147,7 +147,7 @@ export async function getMapFromVercelMetadata(
 }
 
 export async function setVercelNFT(appId: string, nft: NFT, client: VercelKV) {
-  const key = `${appId}: ${nft.id}`;
+  const key: string = `${appId}: ${nft.id}`;
   const value = {
     ...nft,
   };
@@ -169,7 +169,7 @@ export async function getVercelNFT(
   nftId: number | string,
   client: VercelKV
 ) {
-  const key = `${appId}: ${nftId}`;
+  const key: string = `${appId}: ${nftId}`;
   const nft: nftDataIn | null = await client.get(key);
   if (nft) {
     return nft;
@@ -182,7 +182,7 @@ export async function setVercelMetadata(
   nftMetadata: NFTMetadata,
   client: VercelKV
 ) {
-  const query = `${appId} metadata: ${nftMetadata.id}`;
+  const query: string = `${appId} metadata: ${nftMetadata.id}`;
   await client.hset(query, {
     ...nftMetadata,
   });
@@ -193,7 +193,7 @@ export async function getVercelMetadata(
   nftId: number | string,
   client: VercelKV
 ) {
-  const query = `${appId} metadata: ${nftId}`;
+  const query: string = `${appId} metadata: ${nftId}`;
   const nftMetadata: nftDataIn | null = await client.hgetall(query);
   if (nftMetadata) {
     return nftMetadata;

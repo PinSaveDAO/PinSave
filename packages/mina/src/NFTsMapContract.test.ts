@@ -1,6 +1,6 @@
 import {
-  mintNFTFromMap,
-  initNFT,
+  mintNFTWithMapAndLogs,
+  initNFTWithLogs,
 } from './components/localBlockchain/transactions.js';
 import { startLocalBlockchainClient } from './components/utilities/client.js';
 import {
@@ -78,7 +78,7 @@ await setFee(pk1, zkAppInstance);
 
 console.log('set fee');
 
-await mintNFTFromMap(
+await mintNFTWithMapAndLogs(
   zkAppPrivateKey,
   pk1,
   nftArray[0],
@@ -94,7 +94,7 @@ console.log('minted NFT');
 const nft = generateDummyNFTMetadata(3, pubKey1);
 const nftStruct = createNFT(nft);
 
-await initNFT(
+await initNFTWithLogs(
   zkAppPrivateKey,
   pk1,
   nftStruct,
@@ -108,7 +108,7 @@ await initNFT(
 console.log('inited NFT');
 
 try {
-  await initNFT(
+  await initNFTWithLogs(
     zkAppPrivateKey,
     pk1,
     nftStruct,
@@ -125,7 +125,7 @@ try {
 const nftNew = generateDummyNFTMetadata(4, pubKey2);
 const nftStructNew = createNFT(nftNew);
 
-await initNFT(
+await initNFTWithLogs(
   zkAppPrivateKey,
   pk2,
   nftStructNew,
@@ -142,7 +142,7 @@ try {
   const nftNew = generateDummyNFTMetadata(10, pubKey2);
   const nftStructNew = createNFT(nftNew);
 
-  await initNFT(
+  await initNFTWithLogs(
     zkAppPrivateKey,
     pk2,
     nftStructNew,
@@ -156,7 +156,7 @@ try {
   console.log('fails successfully. Not correct nft id');
 }
 
-await mintNFTFromMap(
+await mintNFTWithMapAndLogs(
   zkAppPrivateKey,
   pk1,
   nftStruct,
@@ -169,7 +169,7 @@ await mintNFTFromMap(
 
 console.log('mints sucessfully');
 
-await mintNFTFromMap(
+await mintNFTWithMapAndLogs(
   zkAppPrivateKey,
   pk2,
   nftStructNew,

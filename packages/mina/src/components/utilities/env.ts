@@ -15,13 +15,18 @@ export function getEnvAccount() {
 }
 
 export function getAppEnv() {
-  const pk: PrivateKey = PrivateKey.fromBase58(
+  const zkAppPK: PrivateKey = PrivateKey.fromBase58(
     process.env.zkAppPrivateKey as string
   );
-  const zkAppAddress: PublicKey = pk.toPublicKey();
+  const zkAppAddress: PublicKey = zkAppPK.toPublicKey();
   const appId: string = zkAppAddress.toBase58();
   const zkApp: MerkleMapContract = new MerkleMapContract(zkAppAddress);
-  return { pk: pk, zkAppAddress: zkAppAddress, appId: appId, zkApp: zkApp };
+  return {
+    zkAppPK: zkAppPK,
+    zkAppAddress: zkAppAddress,
+    appId: appId,
+    zkApp: zkApp,
+  };
 }
 
 export function getVercelClient() {
