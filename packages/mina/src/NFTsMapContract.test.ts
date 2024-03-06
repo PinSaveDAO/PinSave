@@ -28,7 +28,7 @@ const testAccounts = await startLocalBlockchainClient(
   enforceTransactionLimits
 );
 
-const { privateKey: pk1, publicKey: pubKey1 } = testAccounts[0];
+const { privateKey: pkAdmin, publicKey: pubKeyAdmin } = testAccounts[0];
 const { privateKey: pk2, publicKey: pubKey2 } = testAccounts[1];
 const { publicKey: pubKey3 } = testAccounts[2];
 
@@ -36,19 +36,19 @@ const {
   merkleMap: map,
   zkAppInstance: zkAppInstance,
   zkAppPk: zkAppPrivateKey,
-} = await deployApp(pk1, proofsEnabled, live, displayLogs);
+} = await deployApp(pkAdmin, proofsEnabled, live, displayLogs);
 
 const compile = false;
 
 console.log('deployed app');
 
-const { nftArray: nftArray } = generateDummyCollectionMap(pubKey1, map);
+const { nftArray: nftArray } = generateDummyCollectionMap(pubKeyAdmin, map);
 
 console.log('initing app root');
 
 await initAppRoot(
   zkAppPrivateKey,
-  pk1,
+  pkAdmin,
   zkAppInstance,
   map,
   nftArray.length,
@@ -59,7 +59,7 @@ await initAppRoot(
 try {
   await initAppRoot(
     zkAppPrivateKey,
-    pk1,
+    pkAdmin,
     zkAppInstance,
     map,
     nftArray.length,
@@ -74,13 +74,13 @@ try {
 
 console.log('changing fee amount');
 
-await setFee(pk1, zkAppInstance);
+await setFee(pkAdmin, zkAppInstance);
 
 console.log('set fee');
 
 await mintNFTWithMapAndLogs(
-  zkAppPrivateKey,
-  pk1,
+  pkAdmin,
+  pkAdmin,
   nftArray[0],
   zkAppInstance,
   map,
@@ -91,12 +91,12 @@ await mintNFTWithMapAndLogs(
 
 console.log('minted NFT');
 
-const nft = generateDummyNFTMetadata(3, pubKey1);
+const nft = generateDummyNFTMetadata(3, pubKeyAdmin);
 const nftStruct = createNFT(nft);
 
 await initNFTWithLogs(
-  zkAppPrivateKey,
-  pk1,
+  pkAdmin,
+  pkAdmin,
   nftStruct,
   zkAppInstance,
   map,
@@ -109,8 +109,8 @@ console.log('inited NFT');
 
 try {
   await initNFTWithLogs(
-    zkAppPrivateKey,
-    pk1,
+    pkAdmin,
+    pkAdmin,
     nftStruct,
     zkAppInstance,
     map,
@@ -126,7 +126,7 @@ const nftNew = generateDummyNFTMetadata(4, pubKey2);
 const nftStructNew = createNFT(nftNew);
 
 await initNFTWithLogs(
-  zkAppPrivateKey,
+  pkAdmin,
   pk2,
   nftStructNew,
   zkAppInstance,
@@ -157,8 +157,8 @@ try {
 }
 
 await mintNFTWithMapAndLogs(
-  zkAppPrivateKey,
-  pk1,
+  pkAdmin,
+  pkAdmin,
   nftStruct,
   zkAppInstance,
   map,
@@ -183,12 +183,12 @@ await mintNFTWithMapAndLogs(
 console.log('mints sucessfully');
 
 await transferNFT(
-  pk1,
+  pkAdmin,
+  pkAdmin,
   pubKey2,
   nftStruct,
   zkAppInstance,
   map,
-  zkAppPrivateKey,
   live,
   displayLogs
 );
@@ -196,12 +196,12 @@ await transferNFT(
 console.log('transfered ownership sucessfully');
 
 await transferNFT(
+  pkAdmin,
   pk2,
   pubKey3,
   nftStructNew,
   zkAppInstance,
   map,
-  zkAppPrivateKey,
   live,
   displayLogs
 );

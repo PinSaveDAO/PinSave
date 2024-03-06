@@ -85,10 +85,9 @@ export class MerkleMapContract extends SmartContract {
     this.fee.set(amount);
   }
 
-  // change to admin
   @method initNFT(item: NFT, keyWitness: MerkleMapWitness) {
     this.checkInitialized();
-    this.checkThisSignature();
+    this.checkAdminSignature();
     const { senderUpdate: senderUpdate } = this.checkSenderSignature();
 
     const fee = this.fee.getAndRequireEquals();
@@ -121,10 +120,9 @@ export class MerkleMapContract extends SmartContract {
     this.totalInited.set(initedAmount.add(1));
   }
 
-  // change to admin
   @method mintNFT(item: NFT, keyWitness: MerkleMapWitness) {
     this.checkInitialized();
-    this.checkThisSignature();
+    this.checkAdminSignature();
     const { sender: sender } = this.checkSenderSignature();
 
     const initialRoot = this.treeRoot.getAndRequireEquals();
@@ -148,14 +146,13 @@ export class MerkleMapContract extends SmartContract {
     this.totalSupply.set(liquidity.add(1));
   }
 
-  // change to admin
   @method transfer(
     item: NFT,
     newOwner: PublicKey,
     keyWitness: MerkleMapWitness
   ) {
     this.checkInitialized();
-    this.checkThisSignature();
+    this.checkAdminSignature();
     const { sender: sender } = this.checkSenderSignature();
 
     const itemFieldsArray = NFT.toFields(item);

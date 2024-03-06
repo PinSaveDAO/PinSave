@@ -36,7 +36,7 @@ export async function setFee(
 }
 
 export async function initNFT(
-  zkAppPK: PrivateKey,
+  adminPK: PrivateKey,
   pubKey: PublicKey,
   pk: PrivateKey,
   _NFT: NFT,
@@ -57,7 +57,7 @@ export async function initNFT(
   const initMintTx: Mina.Transaction = await Mina.transaction(txOptions, () => {
     zkAppInstance.initNFT(_NFT, witnessNFT);
   });
-  await sendWaitTx(initMintTx, [pk, zkAppPK], live);
+  await sendWaitTx(initMintTx, [pk, adminPK], live);
   merkleMap.set(nftId, NFTtoHash(_NFT));
 }
 
@@ -106,7 +106,7 @@ export async function createMintTxFromMap(
 }
 
 export async function mintNFTwithMap(
-  zkAppPK: PrivateKey,
+  adminPK: PrivateKey,
   pk: PrivateKey,
   _NFT: NFT,
   zkAppInstance: MerkleMapContract,
@@ -116,11 +116,11 @@ export async function mintNFTwithMap(
 ) {
   const nftId: Field = _NFT.id;
   const witnessNFT: MerkleMapWitness = merkleMap.getWitness(nftId);
-  await mintNFT(zkAppPK, pk, _NFT, zkAppInstance, witnessNFT, compile, live);
+  await mintNFT(adminPK, pk, _NFT, zkAppInstance, witnessNFT, compile, live);
 }
 
 export async function mintNFT(
-  zkAppPK: PrivateKey,
+  adminPK: PrivateKey,
   pk: PrivateKey,
   _NFT: NFT,
   zkAppInstance: MerkleMapContract,
@@ -142,7 +142,7 @@ export async function mintNFT(
     txOptions
   );
 
-  await sendWaitTx(mint_tx, [pk, zkAppPK], live);
+  await sendWaitTx(mint_tx, [pk, adminPK], live);
 }
 
 export async function createMintTxLive(
@@ -175,12 +175,12 @@ export async function createMintTxLive(
 }
 
 export async function transferNFT(
+  adminPK: PrivateKey,
   pk: PrivateKey,
   recipient: PublicKey,
   _NFT: NFT,
   zkAppInstance: MerkleMapContract,
   merkleMap: MerkleMap,
-  zkAppPrivateKey: PrivateKey,
   live: boolean = true,
   displayLogs: boolean = false
 ) {
@@ -205,7 +205,7 @@ export async function transferNFT(
     });
   }
 
-  await sendWaitTx(nft_transfer_tx, [pk, zkAppPrivateKey], live);
+  await sendWaitTx(nft_transfer_tx, [pk, adminPK], live);
 
   _NFT.changeOwner(recipient);
 

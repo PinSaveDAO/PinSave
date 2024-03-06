@@ -7,7 +7,7 @@ import { mintNFTwithMap, initNFT } from '../transactions.js';
 import { MerkleMapContract } from '../../NFTsMapContract.js';
 
 export async function mintNFTWithMapAndLogs(
-  zkAppPK: PrivateKey,
+  adminPK: PrivateKey,
   pk: PrivateKey,
   _NFT: NFT,
   zkAppInstance: MerkleMapContract,
@@ -27,7 +27,7 @@ export async function mintNFTWithMapAndLogs(
   }
 
   await mintNFTwithMap(
-    zkAppPK,
+    adminPK,
     pk,
     _NFT,
     zkAppInstance,
@@ -43,7 +43,7 @@ export async function mintNFTWithMapAndLogs(
 }
 
 export async function initNFTWithLogs(
-  zkAppPK: PrivateKey,
+  adminPK: PrivateKey,
   pk: PrivateKey,
   _NFT: NFT,
   zkAppInstance: MerkleMapContract,
@@ -55,7 +55,7 @@ export async function initNFTWithLogs(
   const pubKey: PublicKey = pk.toPublicKey();
 
   await initNFT(
-    zkAppPK,
+    adminPK,
     pubKey,
     pk,
     _NFT,

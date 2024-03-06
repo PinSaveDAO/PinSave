@@ -27,6 +27,13 @@ export {
 } from './components/NFT/merkleMap.js';
 
 export {
+  createNFT,
+  NFTMetadata,
+  NFT,
+  createNFTWithMapWitness,
+} from './components/NFT/NFT.js';
+
+export {
   getVercelMetadata,
   setVercelMetadata,
   setMetadatasToVercel,
@@ -36,13 +43,6 @@ export {
   getMapFromVercelNFTs,
   getMapFromVercelMetadata,
 } from './components/NFT/vercel.js';
-
-export {
-  createNFT,
-  NFTMetadata,
-  NFT,
-  createNFTWithMapWitness,
-} from './components/NFT/NFT.js';
 
 export {
   serializeMerkleMapToJson,
