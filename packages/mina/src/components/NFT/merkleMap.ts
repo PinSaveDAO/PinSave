@@ -34,3 +34,25 @@ export function storeNFTMap(nftMetadata: NFTMetadata, map: MerkleMap) {
   map.set(nftMetadata.id, NFTtoHash(_NFT));
   return _NFT;
 }
+
+export function initNFTtoMap(_NFT: NFT, map: MerkleMap) {
+  const nftId: Field = _NFT.id;
+  const currentValue = map.get(nftId).toString();
+  if (currentValue !== '0') {
+    throw new Error('value already initialized');
+  }
+  map.set(nftId, NFTtoHash(_NFT));
+}
+
+export function mintNFTtoMap(_NFT: NFT, map: MerkleMap) {
+  const nftId: Field = _NFT.id;
+  const currentValue = map.get(nftId);
+
+  const beforeMint = NFTtoHash(_NFT);
+  if (!currentValue.equals(beforeMint)) {
+    throw new Error('value not initialized');
+  }
+  _NFT.mint();
+  const afterMint = NFTtoHash(_NFT);
+  map.set(nftId, afterMint);
+}

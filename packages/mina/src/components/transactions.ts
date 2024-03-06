@@ -11,7 +11,7 @@ import {
 } from 'o1js';
 
 import { compareLogStates } from './AppState.js';
-import { NFTtoHash } from './NFT/merkleMap.js';
+import { NFTtoHash, initNFTtoMap, mintNFTtoMap } from './NFT/merkleMap.js';
 import { NFT } from './NFT/NFT.js';
 import {
   logTokenBalances,
@@ -58,7 +58,7 @@ export async function initNFT(
     zkAppInstance.initNFT(_NFT, witnessNFT);
   });
   await sendWaitTx(initMintTx, [pk, adminPK], live);
-  merkleMap.set(nftId, NFTtoHash(_NFT));
+  initNFTtoMap(_NFT, merkleMap);
 }
 
 export async function createInitNFTTxFromMap(
@@ -117,6 +117,7 @@ export async function mintNFTwithMap(
   const nftId: Field = _NFT.id;
   const witnessNFT: MerkleMapWitness = merkleMap.getWitness(nftId);
   await mintNFT(adminPK, pk, _NFT, zkAppInstance, witnessNFT, compile, live);
+  mintNFTtoMap(_NFT, merkleMap);
 }
 
 export async function mintNFT(

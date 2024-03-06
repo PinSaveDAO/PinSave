@@ -121,20 +121,14 @@ export class MerkleMapContract extends SmartContract {
   }
 
   @method mintNFT(item: NFT, keyWitness: MerkleMapWitness) {
-    this.checkInitialized();
-    this.checkAdminSignature();
-    const { sender: sender } = this.checkSenderSignature();
-
-    const initialRoot = this.treeRoot.getAndRequireEquals();
-
-    item.owner.assertEquals(sender);
-
-    const [rootBefore, key] = keyWitness.computeRootAndKey(
+    const { key: key } = this.verifyTreeLeaf(item, keyWitness);
+    item.mint();
+    // compute the root after incrementing
+    const [rootAfter, keyAfter] = keyWitness.computeRootAndKey(
       Poseidon.hash(NFT.toFields(item))
     );
-    rootBefore.assertEquals(initialRoot);
-    key.assertEquals(item.id);
-
+    key.assertEquals(keyAfter);
+    this.treeRoot.set(rootAfter);
     this.token.mint({
       address: item.owner,
       amount: UInt64.from(1_000_000_000),
@@ -151,25 +145,8 @@ export class MerkleMapContract extends SmartContract {
     newOwner: PublicKey,
     keyWitness: MerkleMapWitness
   ) {
-    this.checkInitialized();
-    this.checkAdminSignature();
-    const { sender: sender } = this.checkSenderSignature();
-
-    const itemFieldsArray = NFT.toFields(item);
-
-    sender.assertEquals(item.owner);
-
-    const initialRoot = this.treeRoot.getAndRequireEquals();
-
-    // check the initial state matches what we expect
-    const [rootBefore, key] = keyWitness.computeRootAndKey(
-      Poseidon.hash(itemFieldsArray)
-    );
-    rootBefore.assertEquals(initialRoot);
-    key.assertEquals(item.id);
-
+    const { key: key, sender: sender } = this.verifyTreeLeaf(item, keyWitness);
     item.changeOwner(newOwner);
-
     // compute the root after incrementing
     const [rootAfter, keyAfter] = keyWitness.computeRootAndKey(
       Poseidon.hash(NFT.toFields(item))
@@ -182,6 +159,25 @@ export class MerkleMapContract extends SmartContract {
       to: newOwner,
       amount: UInt64.from(1_000_000_000),
     });
+  }
+
+  verifyTreeLeaf(item: NFT, keyWitness: MerkleMapWitness) {
+    this.checkInitialized();
+    this.checkAdminSignature();
+    const { sender: sender } = this.checkSenderSignature();
+    sender.assertEquals(item.owner);
+
+    const initialRoot = this.treeRoot.getAndRequireEquals();
+    const itemFieldsArray = NFT.toFields(item);
+
+    // check the initial state matches what we expect
+    const [rootBefore, key] = keyWitness.computeRootAndKey(
+      Poseidon.hash(itemFieldsArray)
+    );
+    rootBefore.assertEquals(initialRoot);
+    key.assertEquals(item.id);
+
+    return { key: key, sender: sender };
   }
 
   checkAdminSignature() {
