@@ -6,7 +6,7 @@ import { startBerkeleyClient } from '../components/utilities/client.js';
 import { getVercelClient } from '../components/utilities/env.js';
 import { generateIntegersArray } from '../components/utilities/helpers.js';
 import { getTotalInitedLive } from '../components/AppState.js';
-import { getMapFromVercelNFTs } from '../components/NFT.js';
+import { getMapFromVercelNFTs } from '../components/NFT/vercel.js';
 import {
   serializeMerkleMapToJson,
   deserializeJsonToMerkleMap,

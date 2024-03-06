@@ -16,22 +16,33 @@ export {
   getTreeRoot,
 } from './components/AppState.js';
 
+export { nftDataIn, deserializeNFT } from './components/NFT/deserialization.js';
+
 export {
-  generateDummyCollectionWithMap,
+  NFTtoHash,
+  stringObjectToNFTMetadata,
   setStringObjectToMap,
-  getMapFromVercelNFTs,
+  setHashedObjectToMap,
+  storeNFTMap,
+} from './components/NFT/merkleMap.js';
+
+export {
   getVercelMetadata,
   setVercelMetadata,
-  setVercelNFT,
-  getVercelNFT,
-  setNFTsToVercel,
   setMetadatasToVercel,
-  deserializeNFT,
+  setVercelNFT,
+  setNFTsToVercel,
+  getVercelNFT,
+  getMapFromVercelNFTs,
+  getMapFromVercelMetadata,
+} from './components/NFT/vercel.js';
+
+export {
   createNFT,
   NFTMetadata,
   NFT,
-  nftDataIn,
-} from './components/NFT.js';
+  createNFTWithMapWitness,
+} from './components/NFT/NFT.js';
 
 export {
   serializeMerkleMapToJson,

@@ -11,7 +11,8 @@ import {
 } from 'o1js';
 
 import { compareLogStates } from './AppState.js';
-import { NFTtoHash, NFT } from './NFT.js';
+import { NFTtoHash } from './NFT/merkleMap.js';
+import { NFT } from './NFT/NFT.js';
 import {
   logTokenBalances,
   getTokenAddressBalance,

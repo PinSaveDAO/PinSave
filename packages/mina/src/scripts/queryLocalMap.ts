@@ -2,7 +2,10 @@ import { startBerkeleyClient } from '../components/utilities/client.js';
 import { getVercelClient, getAppEnv } from '../components/utilities/env.js';
 import { generateIntegersArray } from '../components/utilities/helpers.js';
 import { getTotalInitedLive } from '../components/AppState.js';
-import { getMapFromVercelNFTs, getVercelMetadata } from '../components/NFT.js';
+import {
+  getMapFromVercelNFTs,
+  getVercelMetadata,
+} from '../components/NFT/vercel.js';
 
 startBerkeleyClient();
 const client = getVercelClient();

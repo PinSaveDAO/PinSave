@@ -1,7 +1,7 @@
 import { PublicKey, PrivateKey, MerkleMap } from 'o1js';
 
 import { compareLogStates, getTreeRoot } from '../AppState.js';
-import { NFT } from '../NFT.js';
+import { NFT } from '../NFT/NFT.js';
 import { logTokenBalances } from '../TokenBalances.js';
 import { mintNFTwithMap, initNFT } from '../transactions.js';
 import { MerkleMapContract } from '../../NFTsMapContract.js';

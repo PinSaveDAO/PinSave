@@ -13,7 +13,7 @@ import {
   AccountUpdate,
 } from 'o1js';
 
-import { NFT } from './components/NFT.js';
+import { NFT } from './components/NFT/NFT.js';
 
 export class MerkleMapContract extends SmartContract {
   // collection single tree root
@@ -85,6 +85,7 @@ export class MerkleMapContract extends SmartContract {
     this.fee.set(amount);
   }
 
+  // change to admin
   @method initNFT(item: NFT, keyWitness: MerkleMapWitness) {
     this.checkInitialized();
     this.checkThisSignature();
@@ -120,6 +121,7 @@ export class MerkleMapContract extends SmartContract {
     this.totalInited.set(initedAmount.add(1));
   }
 
+  // change to admin
   @method mintNFT(item: NFT, keyWitness: MerkleMapWitness) {
     this.checkInitialized();
     this.checkThisSignature();
@@ -146,9 +148,7 @@ export class MerkleMapContract extends SmartContract {
     this.totalSupply.set(liquidity.add(1));
   }
 
-  // we use nft struct to change an owner
-  // we should ensure that the ownership is saved on the local db
-
+  // change to admin
   @method transfer(
     item: NFT,
     newOwner: PublicKey,

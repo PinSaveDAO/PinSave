@@ -6,12 +6,12 @@ import {
 } from '../components/utilities/env.js';
 import { generateIntegersArray } from '../components/utilities/helpers.js';
 import { getTotalInitedLive } from '../components/AppState.js';
+import { generateDummyNFT } from '../components/NFT/dummy.js';
 import {
-  generateDummyNFT,
   setVercelNFT,
   setVercelMetadata,
   getMapFromVercelNFTs,
-} from '../components/NFT.js';
+} from '../components/NFT/vercel.js';
 import { initNFT } from '../components/transactions.js';
 
 startBerkeleyClient();

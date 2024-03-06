@@ -2,7 +2,7 @@ import { MerkleMap, MerkleTree } from 'o1js';
 
 import { getAppPublic } from '../components/utilities/AppEnv.js';
 import { startBerkeleyClient } from '../components/utilities/client.js';
-import { generateDummyCollectionMap } from '../components/NFT.js';
+import { generateDummyCollectionMap } from '../components/NFT/dummy.js';
 import {
   deserializeJsonToMerkleMap,
   serializeMerkleMapToJson,

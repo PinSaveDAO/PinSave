@@ -4,12 +4,12 @@ import {
   getAppEnv,
   getVercelClient,
 } from '../components/utilities/env.js';
+import { generateDummyCollectionWithMap } from '../components/NFT/dummy.js';
 import {
-  generateDummyCollectionWithMap,
   getMapFromVercelNFTs,
   setNFTsToVercel,
   setMetadatasToVercel,
-} from '../components/NFT.js';
+} from '../components/NFT/vercel.js';
 import { initRootWithApp } from '../components/transactions.js';
 
 startBerkeleyClient();

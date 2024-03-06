@@ -4,10 +4,10 @@ import {
 } from './components/localBlockchain/transactions.js';
 import { startLocalBlockchainClient } from './components/utilities/client.js';
 import {
-  createNFT,
   generateDummyCollectionMap,
   generateDummyNFTMetadata,
-} from './components/NFT.js';
+} from './components/NFT/dummy.js';
+import { createNFT } from './components/NFT/NFT.js';
 import { logMinaBalance } from './components/TokenBalances.js';
 import {
   deployApp,
