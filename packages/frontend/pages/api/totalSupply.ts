@@ -12,13 +12,8 @@ export default async function handler(
   try {
     startBerkeleyClient();
     const zkAppInstance = getAppContract();
-    let totalSupply = 0;
 
-    try {
-      totalSupply = Number(await getTotalSupplyLive(zkAppInstance));
-    } catch (e) {
-      console.log(e);
-    }
+    const totalSupply = Number(await getTotalSupplyLive(zkAppInstance));
 
     res.status(200).json({ totalSupply: totalSupply });
   } catch (err) {

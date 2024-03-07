@@ -7,7 +7,10 @@ export {
 
 export { startBerkeleyClient } from './components/utilities/client.js';
 
-export { generateIntegersArray } from './components/utilities/helpers.js';
+export {
+  generateIntegersArray,
+  generateIntegersArrayIncluding,
+} from './components/utilities/helpers.js';
 
 export {
   getTotalSupplyLive,

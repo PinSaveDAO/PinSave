@@ -5,3 +5,7 @@ export function generateIntegersArray(n: number) {
   }
   return integersArray;
 }
+
+export function generateIntegersArrayIncluding(n: number) {
+  return generateIntegersArray(n + 1);
+}

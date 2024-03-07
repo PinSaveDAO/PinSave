@@ -1,11 +1,12 @@
 import "@/styles/globals.css";
-import LayoutApp from "@/components/Layout";
+import type { NextComponentType } from "next";
+import type AppProps from "next/app";
+import NextHead from "next/head";
 import { MantineProvider } from "@mantine/core";
 import { NotificationsProvider } from "@mantine/notifications";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import NextHead from "next/head";
-import type { NextComponentType } from "next";
-import type AppProps from "next/app";
+
+import LayoutApp from "@/components/Layout";
 
 type NextAppProps<P = any> = AppProps & {
   pageProps: P;

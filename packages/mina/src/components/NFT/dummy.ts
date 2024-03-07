@@ -3,11 +3,15 @@ import { Field, PublicKey, MerkleMap } from 'o1js';
 import { storeNFTMap } from './merkleMap.js';
 import { NFT, NFTMetadata, createNFT } from './NFT.js';
 
-export function generateDummyCollectionMap(pubKey: PublicKey, map: MerkleMap) {
+export function generateDummyCollectionMap(
+  pubKey: PublicKey,
+  map: MerkleMap,
+  totalNumber: number = 2
+) {
   const nftArray: NFT[] = [];
   const nftMetadataArray: NFTMetadata[] = [];
 
-  for (let i = 0; i <= 2; i++) {
+  for (let i = 0; i <= totalNumber; i++) {
     // Generate NFT metadata
     const nftMetadata = generateDummyNFTMetadata(i, pubKey);
 
