@@ -8,7 +8,6 @@ import {
   DeployArgs,
   MerkleMapWitness,
   PublicKey,
-  Poseidon,
   UInt64,
   AccountUpdate,
 } from 'o1js';
@@ -108,9 +107,7 @@ export class MerkleMapContract extends SmartContract {
     senderUpdate.send({ to: this, amount: fee });
 
     // compute the root after incrementing
-    const [rootAfter, keyAfter] = keyWitness.computeRootAndKey(
-      Poseidon.hash(NFT.toFields(item))
-    );
+    const [rootAfter, keyAfter] = keyWitness.computeRootAndKey(item.hash());
     key.assertEquals(keyAfter);
 
     // set the new root
@@ -124,9 +121,7 @@ export class MerkleMapContract extends SmartContract {
     const { key: key } = this.verifyTreeLeaf(item, keyWitness);
     item.mint();
     // compute the root after incrementing
-    const [rootAfter, keyAfter] = keyWitness.computeRootAndKey(
-      Poseidon.hash(NFT.toFields(item))
-    );
+    const [rootAfter, keyAfter] = keyWitness.computeRootAndKey(item.hash());
     key.assertEquals(keyAfter);
     this.treeRoot.set(rootAfter);
     this.token.mint({
@@ -148,9 +143,7 @@ export class MerkleMapContract extends SmartContract {
     const { key: key, sender: sender } = this.verifyTreeLeaf(item, keyWitness);
     item.changeOwner(newOwner);
     // compute the root after incrementing
-    const [rootAfter, keyAfter] = keyWitness.computeRootAndKey(
-      Poseidon.hash(NFT.toFields(item))
-    );
+    const [rootAfter, keyAfter] = keyWitness.computeRootAndKey(item.hash());
     key.assertEquals(keyAfter);
 
     this.treeRoot.set(rootAfter);
@@ -168,12 +161,9 @@ export class MerkleMapContract extends SmartContract {
     sender.assertEquals(item.owner);
 
     const initialRoot = this.treeRoot.getAndRequireEquals();
-    const itemFieldsArray = NFT.toFields(item);
 
     // check the initial state matches what we expect
-    const [rootBefore, key] = keyWitness.computeRootAndKey(
-      Poseidon.hash(itemFieldsArray)
-    );
+    const [rootBefore, key] = keyWitness.computeRootAndKey(item.hash());
     rootBefore.assertEquals(initialRoot);
     key.assertEquals(item.id);
 

@@ -1,4 +1,4 @@
-import { Field, PublicKey } from 'o1js';
+import { Field, PublicKey, Poseidon } from 'o1js';
 
 import { NFT } from './NFT.js';
 
@@ -24,6 +24,9 @@ export function deserializeNFT(data: nftDataIn) {
     },
     mint: function (): void {
       this.isMinted = Field(1);
+    },
+    hash: function (): Field {
+      return Poseidon.hash(NFT.toFields(this));
     },
   };
   return dataOut;

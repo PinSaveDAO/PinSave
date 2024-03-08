@@ -1,11 +1,7 @@
-import { Field, PublicKey, MerkleMap, Poseidon } from 'o1js';
+import { Field, PublicKey, MerkleMap } from 'o1js';
 
 import { NFT, NFTMetadata, createNFT } from './NFT.js';
 import { nftDataIn } from './deserialization.js';
-
-export function NFTtoHash(_NFT: NFT): Field {
-  return Poseidon.hash(NFT.toFields(_NFT));
-}
 
 export function stringObjectToNFTMetadata(data: nftDataIn) {
   const nftMetadata: NFTMetadata = {
@@ -22,16 +18,16 @@ export function stringObjectToNFTMetadata(data: nftDataIn) {
 
 export function setStringObjectToMap(data: nftDataIn, map: MerkleMap) {
   const nftObject = stringObjectToNFTMetadata(data);
-  map.set(nftObject.id, NFTtoHash(nftObject));
+  map.set(nftObject.id, nftObject.hash());
 }
 
 export function setHashedObjectToMap(data: NFT, map: MerkleMap) {
-  map.set(data.id, NFTtoHash(data));
+  map.set(data.id, data.hash());
 }
 
 export function storeNFTMap(nftMetadata: NFTMetadata, map: MerkleMap) {
   const _NFT: NFT = createNFT(nftMetadata);
-  map.set(nftMetadata.id, NFTtoHash(_NFT));
+  map.set(nftMetadata.id, _NFT.hash());
   return _NFT;
 }
 
@@ -41,18 +37,18 @@ export function initNFTtoMap(_NFT: NFT, map: MerkleMap) {
   if (currentValue !== '0') {
     throw new Error('value already initialized');
   }
-  map.set(nftId, NFTtoHash(_NFT));
+  map.set(nftId, _NFT.hash());
 }
 
 export function mintNFTtoMap(_NFT: NFT, map: MerkleMap) {
   const nftId: Field = _NFT.id;
   const currentValue = map.get(nftId);
 
-  const beforeMint = NFTtoHash(_NFT);
+  const beforeMint = _NFT.hash();
   if (!currentValue.equals(beforeMint)) {
     throw new Error('value not initialized');
   }
   _NFT.mint();
-  const afterMint = NFTtoHash(_NFT);
+  const afterMint = _NFT.hash();
   map.set(nftId, afterMint);
 }

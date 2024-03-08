@@ -22,7 +22,6 @@ export {
 export { nftDataIn, deserializeNFT } from './components/NFT/deserialization.js';
 
 export {
-  NFTtoHash,
   stringObjectToNFTMetadata,
   setStringObjectToMap,
   setHashedObjectToMap,

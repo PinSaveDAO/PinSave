@@ -11,7 +11,7 @@ import {
 } from 'o1js';
 
 import { compareLogStates } from './AppState.js';
-import { NFTtoHash, initNFTtoMap, mintNFTtoMap } from './NFT/merkleMap.js';
+import { initNFTtoMap, mintNFTtoMap } from './NFT/merkleMap.js';
 import { NFT } from './NFT/NFT.js';
 import {
   logTokenBalances,
@@ -210,7 +210,7 @@ export async function transferNFT(
 
   _NFT.changeOwner(recipient);
 
-  merkleMap.set(nftId, NFTtoHash(_NFT));
+  merkleMap.set(nftId, _NFT.hash());
 
   if (displayLogs) {
     logTokenBalances(pubKey, zkAppInstance);
