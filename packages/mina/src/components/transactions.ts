@@ -233,18 +233,10 @@ export async function initRootWithApp(
     await MerkleMapContract.compile();
   }
   const zkAppInstance: MerkleMapContract = new MerkleMapContract(zkAppPub);
-  await initAppRoot(
-    zkAppPrivateKey,
-    pk,
-    zkAppInstance,
-    merkleMap,
-    totalInited,
-    live
-  );
+  await initAppRoot(pk, zkAppInstance, merkleMap, totalInited, live);
 }
 
 export async function initAppRoot(
-  zkAppPrivateKey: PrivateKey,
   pk: PrivateKey,
   zkAppInstance: MerkleMapContract,
   merkleMap: MerkleMap,
@@ -265,7 +257,7 @@ export async function initAppRoot(
     zkAppInstance.initRoot(rootBefore, totalSupplied, feeAmount, maxSupply);
   });
 
-  await sendWaitTx(init_tx, [pk, zkAppPrivateKey], live);
+  await sendWaitTx(init_tx, [pk], live);
 
   if (displayLogs) {
     compareLogStates(zkAppInstance, merkleMap);

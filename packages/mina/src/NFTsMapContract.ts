@@ -9,23 +9,25 @@ import {
   MerkleMapWitness,
   PublicKey,
   UInt64,
+  Bool,
   AccountUpdate,
 } from 'o1js';
 
 import { NFT } from './components/NFT/NFT.js';
 
 export class MerkleMapContract extends SmartContract {
-  // collection single tree root
-  @state(Field) treeRoot = State<Field>();
-  // amount minted
+  events = {
+    'update-merkle-root': Field,
+    'update-fee': UInt64,
+    'update-total-supply': UInt64,
+    'update-inited-amount': Field,
+    'init-max-supply': Field,
+  };
+  @state(Field) root = State<Field>();
   @state(UInt64) totalSupply = State<UInt64>();
-  // amount initialized
   @state(Field) totalInited = State<Field>();
-  // fee for minting
-  @state(UInt64) fee = State<UInt64>();
-  // max amount
   @state(Field) maxSupply = State<Field>();
-
+  @state(UInt64) fee = State<UInt64>();
   @state(PublicKey) admin = State<PublicKey>();
 
   deploy(args?: DeployArgs) {
@@ -41,63 +43,52 @@ export class MerkleMapContract extends SmartContract {
       send: permissionToEdit,
       receive: permissionToEdit,
     });
+
+    const { sender: sender } = this.checkSenderSignature();
+    this.admin.set(sender);
   }
 
-  @method initRoot(
+  @method public initRoot(
     _initialRoot: Field,
     _totalInited: Field,
     _feeAmount: UInt64,
     _maxSupply: Field
-  ) {
+  ): void {
     this.checkNotInitialized();
-    this.checkThisSignature();
-
-    const sender = this.sender;
-    const senderUpdate = AccountUpdate.create(sender);
-    senderUpdate.requireSignature();
-
-    this.admin.getAndRequireEquals();
-    this.admin.set(sender);
+    this.checkAdminSignature();
 
     super.init();
 
     this.account.tokenSymbol.set('PINSAV');
     this.account.zkappUri.set('https://pinsave.app/uri.json');
 
-    this.treeRoot.getAndRequireEquals();
-    this.totalInited.getAndRequireEquals();
-    this.fee.getAndRequireEquals();
-    this.maxSupply.getAndRequireEquals();
+    this.root.getAndRequireEquals();
 
-    this.treeRoot.set(_initialRoot);
-    this.totalInited.set(_totalInited);
-
-    this.fee.set(_feeAmount);
-    this.maxSupply.set(_maxSupply);
+    this.initMaxSupply(_maxSupply);
+    this.updateInitedAmount(_totalInited);
+    this.updateFee(_feeAmount);
+    this.updateRoot(_initialRoot);
   }
 
-  @method setFee(amount: UInt64) {
+  @method public setFee(newFeeAmount: UInt64): Bool {
     this.checkInitialized();
     this.checkAdminSignature();
-
-    this.fee.getAndRequireEquals();
-    this.fee.set(amount);
+    this.updateFee(newFeeAmount);
+    return Bool(true);
   }
 
-  @method initNFT(item: NFT, keyWitness: MerkleMapWitness) {
+  @method public initNFT(item: NFT, keyWitness: MerkleMapWitness): Bool {
     this.checkInitialized();
     this.checkAdminSignature();
     const { senderUpdate: senderUpdate } = this.checkSenderSignature();
-
-    const fee = this.fee.getAndRequireEquals();
 
     const initedAmount = this.totalInited.getAndRequireEquals();
     const maxSupply = this.maxSupply.getAndRequireEquals();
     initedAmount.assertLessThanOrEqual(maxSupply);
 
-    const initialRoot = this.treeRoot.getAndRequireEquals();
+    const fee = this.fee.getAndRequireEquals();
+    const initialRoot = this.root.getAndRequireEquals();
 
-    // checks the initial leaf state is empty
     const [rootBefore, key] = keyWitness.computeRootAndKey(Field(0));
 
     rootBefore.assertEquals(initialRoot);
@@ -106,63 +97,90 @@ export class MerkleMapContract extends SmartContract {
 
     senderUpdate.send({ to: this, amount: fee });
 
-    // compute the root after incrementing
     const [rootAfter, keyAfter] = keyWitness.computeRootAndKey(item.hash());
     key.assertEquals(keyAfter);
 
-    // set the new root
-    this.treeRoot.set(rootAfter);
-
-    // update liquidity supply
-    this.totalInited.set(initedAmount.add(1));
+    this.updateInitedAmount(Field(1));
+    this.updateRoot(rootAfter);
+    return Bool(true);
   }
 
-  @method mintNFT(item: NFT, keyWitness: MerkleMapWitness) {
+  @method public mintNFT(item: NFT, keyWitness: MerkleMapWitness): Bool {
     const { key: key } = this.verifyTreeLeaf(item, keyWitness);
     item.mint();
-    // compute the root after incrementing
+
     const [rootAfter, keyAfter] = keyWitness.computeRootAndKey(item.hash());
     key.assertEquals(keyAfter);
-    this.treeRoot.set(rootAfter);
+
     this.token.mint({
       address: item.owner,
       amount: UInt64.from(1_000_000_000),
     });
 
-    // update liquidity supply
-    const liquidity = this.totalSupply.getAndRequireEquals();
-
-    this.totalSupply.set(liquidity.add(1));
+    this.updateTotalSupply();
+    this.updateRoot(rootAfter);
+    return Bool(true);
   }
 
-  @method transfer(
+  @method public transfer(
     item: NFT,
     newOwner: PublicKey,
     keyWitness: MerkleMapWitness
-  ) {
+  ): Bool {
     const { key: key, sender: sender } = this.verifyTreeLeaf(item, keyWitness);
     item.changeOwner(newOwner);
-    // compute the root after incrementing
+
     const [rootAfter, keyAfter] = keyWitness.computeRootAndKey(item.hash());
     key.assertEquals(keyAfter);
 
-    this.treeRoot.set(rootAfter);
     this.token.send({
       from: sender,
       to: newOwner,
       amount: UInt64.from(1_000_000_000),
     });
+    this.updateRoot(rootAfter);
+    return Bool(true);
   }
 
-  verifyTreeLeaf(item: NFT, keyWitness: MerkleMapWitness) {
+  private initMaxSupply(_maxSupply: Field) {
+    this.maxSupply.getAndRequireEquals();
+    this.maxSupply.set(_maxSupply);
+    this.emitEvent('init-max-supply', _maxSupply);
+  }
+
+  private updateInitedAmount(amount: Field) {
+    const initedAmount = this.totalInited.getAndRequireEquals();
+    const newTotalInited = initedAmount.add(amount);
+    this.totalInited.set(newTotalInited);
+    this.emitEvent('update-inited-amount', newTotalInited);
+  }
+
+  private updateTotalSupply() {
+    const liquidity = this.totalSupply.getAndRequireEquals();
+    const newTotalSypply = liquidity.add(1);
+    this.totalSupply.set(newTotalSypply);
+    this.emitEvent('update-total-supply', newTotalSypply);
+  }
+
+  private updateFee(newFeeAmount: UInt64) {
+    this.fee.getAndRequireEquals();
+    this.fee.set(newFeeAmount);
+    this.emitEvent('update-fee', newFeeAmount);
+  }
+
+  private updateRoot(root: Field) {
+    this.root.set(root);
+    this.emitEvent('update-merkle-root', root);
+  }
+
+  private verifyTreeLeaf(item: NFT, keyWitness: MerkleMapWitness) {
     this.checkInitialized();
     this.checkAdminSignature();
     const { sender: sender } = this.checkSenderSignature();
     sender.assertEquals(item.owner);
 
-    const initialRoot = this.treeRoot.getAndRequireEquals();
+    const initialRoot = this.root.getAndRequireEquals();
 
-    // check the initial state matches what we expect
     const [rootBefore, key] = keyWitness.computeRootAndKey(item.hash());
     rootBefore.assertEquals(initialRoot);
     key.assertEquals(item.id);
@@ -170,29 +188,23 @@ export class MerkleMapContract extends SmartContract {
     return { key: key, sender: sender };
   }
 
-  checkAdminSignature() {
+  private checkAdminSignature() {
     const admin = this.admin.getAndRequireEquals();
     const senderUpdate = AccountUpdate.create(admin);
     senderUpdate.requireSignature();
   }
 
-  checkThisSignature() {
-    const address = this.address;
-    const senderUpdate = AccountUpdate.create(address);
-    senderUpdate.requireSignature();
-  }
-
-  checkInitialized() {
+  private checkInitialized() {
     this.account.provedState.requireEquals(this.account.provedState.get());
     this.account.provedState.get().assertTrue();
   }
 
-  checkNotInitialized() {
+  private checkNotInitialized() {
     this.account.provedState.requireEquals(this.account.provedState.get());
     this.account.provedState.get().assertFalse();
   }
 
-  checkSenderSignature() {
+  private checkSenderSignature() {
     const sender = this.sender;
     const senderUpdate = AccountUpdate.create(sender);
     senderUpdate.requireSignature();

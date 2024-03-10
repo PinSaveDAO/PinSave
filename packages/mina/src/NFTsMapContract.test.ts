@@ -47,7 +47,6 @@ const { nftArray: nftArray } = generateDummyCollectionMap(pubKeyAdmin, map);
 console.log('initing app root');
 
 await initAppRoot(
-  zkAppPrivateKey,
   pkAdmin,
   zkAppInstance,
   map,
@@ -58,7 +57,6 @@ await initAppRoot(
 
 try {
   await initAppRoot(
-    zkAppPrivateKey,
     pkAdmin,
     zkAppInstance,
     map,

@@ -44,7 +44,7 @@ export async function getAppState(
   if (live) {
     await fetchAccount({ publicKey: zkAppInstance.address });
   }
-  const treeRoot: Field = zkAppInstance.treeRoot.get();
+  const treeRoot: Field = zkAppInstance.root.get();
   const totalSupply: UInt64 = zkAppInstance.totalSupply.get();
   const totalInited: Field = zkAppInstance.totalInited.get();
   const maxSupply: Field = zkAppInstance.maxSupply.get();
@@ -78,6 +78,6 @@ export async function getTreeRoot(
   zkAppInstance: MerkleMapContract
 ): Promise<Field> {
   await fetchAccount({ publicKey: zkAppInstance.address });
-  const treeRoot: Field = zkAppInstance.treeRoot.get();
+  const treeRoot: Field = zkAppInstance.root.get();
   return treeRoot;
 }
