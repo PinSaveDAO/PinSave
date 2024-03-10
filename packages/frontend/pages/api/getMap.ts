@@ -5,7 +5,10 @@ import {
   serializeMerkleMapToJson,
 } from "pin-mina";
 import type { NextApiRequest, NextApiResponse } from "next";
+
 import { getVercelClient } from "@/services/vercelClient";
+import { fetcher } from "@/utils/fetcher";
+import { host } from "@/utils/host";
 
 function generateIntegersArray(n: number) {
   let integersArray = [];
@@ -20,16 +23,13 @@ export default async function handler(
   res: NextApiResponse
 ) {
   try {
-    const host = process.env.NEXT_PUBLIC_ISDEV
-      ? "http://localhost:3000"
-      : "https://pinsave.app";
+    const hostname = host;
 
     startBerkeleyClient();
     const client = await getVercelClient();
     const appId = getAppString();
 
-    const response = await fetch(`${host}/api/totalInited`);
-    const data = await response.json();
+    const data = await fetcher(`${hostname}/api/totalInited`);
     const totalInited = data.totalInited;
 
     const array = generateIntegersArray(totalInited);

@@ -1,30 +1,29 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getVercelMetadata, getAppString } from "pin-mina";
+
 import { getVercelClient } from "@/services/vercelClient";
+import { fetcher } from "@/utils/fetcher";
+import { host } from "@/utils/host";
+
+const perPage = 6;
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   try {
-    const host = process.env.NEXT_PUBLIC_ISDEV
-      ? "http://localhost:3000"
-      : "https://pinsave.app";
+    const hostname = host;
     const { number } = req.query;
     const pageNumber = Number(number);
 
     const client = await getVercelClient();
     const appId = getAppString();
-
-    const response = await fetch(`${host}/api/totalInited`);
-    const data = await response.json();
-
+    const data = await fetcher(`${hostname}/api/totalInited`);
     const totalInited = data.totalInited;
 
     let items = [];
 
-    const perPage = 6;
-    var upperLimit = perPage * pageNumber;
+    let upperLimit = perPage * pageNumber;
     const lowerLimit = upperLimit - perPage;
     if (totalInited < upperLimit) {
       upperLimit = totalInited - 1;
