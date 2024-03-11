@@ -100,7 +100,7 @@ export class MerkleMapContract extends SmartContract {
     const [rootAfter, keyAfter] = keyWitness.computeRootAndKey(item.hash());
     key.assertEquals(keyAfter);
 
-    this.updateInitedAmount(Field(1));
+    this.updateInitedAmount(1);
     this.updateRoot(rootAfter);
     return Bool(true);
   }
@@ -148,7 +148,7 @@ export class MerkleMapContract extends SmartContract {
     this.emitEvent('init-max-supply', _maxSupply);
   }
 
-  private updateInitedAmount(amount: Field) {
+  private updateInitedAmount(amount: number | Field) {
     const initedAmount = this.totalInited.getAndRequireEquals();
     const newTotalInited = initedAmount.add(amount);
     this.totalInited.set(newTotalInited);
@@ -157,9 +157,9 @@ export class MerkleMapContract extends SmartContract {
 
   private updateTotalSupply() {
     const liquidity = this.totalSupply.getAndRequireEquals();
-    const newTotalSypply = liquidity.add(1);
-    this.totalSupply.set(newTotalSypply);
-    this.emitEvent('update-total-supply', newTotalSypply);
+    const newTotalSupply = liquidity.add(1);
+    this.totalSupply.set(newTotalSupply);
+    this.emitEvent('update-total-supply', newTotalSupply);
   }
 
   private updateFee(newFeeAmount: UInt64) {
@@ -184,7 +184,6 @@ export class MerkleMapContract extends SmartContract {
     const [rootBefore, key] = keyWitness.computeRootAndKey(item.hash());
     rootBefore.assertEquals(initialRoot);
     key.assertEquals(item.id);
-
     return { key: key, sender: sender };
   }
 

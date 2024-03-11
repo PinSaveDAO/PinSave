@@ -1,6 +1,3 @@
-import type { IndividualPost } from "@/services/upload";
-import { setMinaAccount } from "@/hooks/minaWallet";
-
 import { Paper, Text, Title, Button } from "@mantine/core";
 import { MerkleMap, PublicKey } from "o1js";
 import {
@@ -10,8 +7,16 @@ import {
   deserializeNFT,
   startBerkeleyClient,
   createMintTxFromMap,
+  mintVercelNFT,
+  getAppString,
+  mintVercelMetadata,
 } from "pin-mina";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+
+import { getVercelClient } from "@/services/vercelClient";
+import type { IndividualPost } from "@/services/upload";
+import { setMinaAccount } from "@/hooks/minaWallet";
+import { fetcher } from "@/utils/fetcher";
 
 interface IMyProps {
   post: IndividualPost;
@@ -26,6 +31,7 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
   const postNumber = Number(post.id);
   const [map, setMap] = useState<MerkleMap | undefined>(undefined);
   const [address, setAddress] = useState<PublicKey | undefined>(undefined);
+  const [hash, setHash] = useState<string | undefined>(undefined);
 
   async function mintNFT() {
     if (!address) {
@@ -35,10 +41,10 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
     }
     if (map && address) {
       const zkApp = getAppContract();
+      const appId = getAppString();
 
       startBerkeleyClient();
-      const response = await fetch(`/api/nft/${postNumber}`);
-      const dataNft = await response.json();
+      const dataNft = await fetcher(`/api/nft/${postNumber}`);
 
       const nft = deserializeNFT(dataNft);
 
@@ -55,17 +61,24 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
 
       const transactionJSON = txMint.toJSON();
 
-      await (window as CustomWindow).mina?.sendTransaction({
+      const sendTransactionResult = await (
+        window as CustomWindow
+      ).mina?.sendTransaction({
         transaction: transactionJSON,
       });
+
+      setHash(sendTransactionResult.hash);
+
+      const client = await getVercelClient();
+      await mintVercelNFT(appId, postNumber, client);
+      await mintVercelMetadata(appId, postNumber, client);
     }
   }
 
   useEffect(() => {
     const fetchMediaDetails = async () => {
       try {
-        const responseMap = await fetch("/api/getMap");
-        const dataMap = await responseMap.json();
+        const dataMap = await fetcher("/api/getMap");
 
         const map = deserializeJsonToMerkleMap(dataMap.map);
         setMap(map);
@@ -81,7 +94,15 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
     fetchMediaDetails();
   }, [post.id]);
   return (
-    <Paper shadow="sm" p="md" withBorder>
+    <Paper
+      shadow="sm"
+      p="md"
+      withBorder
+      style={{
+        width: "99%",
+        borderRadius: "10px",
+      }}
+    >
       <Title mb="1.4rem">{post.name}</Title>
       <Paper
         shadow="xs"
@@ -105,7 +126,20 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
             post.owner.substring(45)}
         </a>
       </p>
-      {address?.toBase58() === post.owner ? (
+      {address?.toBase58() === post.owner && post.isMinted === "1" ? (
+        <p style={{ fontSize: "small", color: "#0000008d" }}>Minted</p>
+      ) : null}
+      {hash ? (
+        <p style={{ fontSize: "small", color: "#0000008d" }}>
+          <a
+            style={{ color: "#198b6eb9" }}
+            href={`https://minascan.io/berkeley/tx/${hash}`}
+          >
+            hash
+          </a>
+        </p>
+      ) : null}
+      {address?.toBase58() === post.owner && post.isMinted === "0" ? (
         <Button onClick={async () => await mintNFT()}>Mint</Button>
       ) : null}
     </Paper>

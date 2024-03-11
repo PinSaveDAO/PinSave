@@ -10,8 +10,8 @@ export async function getVercelMetadata(
   nftId: number | string,
   client: VercelKV
 ) {
-  const query: string = `${appId} metadata: ${nftId}`;
-  const nftMetadata: nftDataIn | null = await client.hgetall(query);
+  const key: string = `${appId} metadata: ${nftId}`;
+  const nftMetadata: nftDataIn | null = await client.hgetall(key);
   if (nftMetadata) {
     return nftMetadata;
   }
@@ -23,10 +23,19 @@ export async function setVercelMetadata(
   nftMetadata: NFTMetadata,
   client: VercelKV
 ) {
-  const query: string = `${appId} metadata: ${nftMetadata.id}`;
-  await client.hset(query, {
+  const key: string = `${appId} metadata: ${nftMetadata.id}`;
+  await client.hset(key, {
     ...nftMetadata,
   });
+}
+
+export async function mintVercelMetadata(
+  appId: string,
+  nftId: string | number,
+  client: VercelKV
+) {
+  const key: string = `${appId} metadata: ${nftId}`;
+  await client.hset(key, { isMinted: '1' });
 }
 
 export async function setMetadatasToVercel(
@@ -42,9 +51,14 @@ export async function setMetadatasToVercel(
 export async function setVercelNFT(appId: string, nft: NFT, client: VercelKV) {
   const key: string = `${appId}: ${nft.id}`;
   const value = {
-    ...nft,
+    name: nft.name,
+    description: nft.description,
+    id: nft.id,
+    cid: nft.cid,
+    owner: nft.owner,
+    isMinted: nft.isMinted,
   };
-  await client.set(key, value);
+  await client.hset(key, value);
 }
 
 export async function setNFTsToVercel(
@@ -57,13 +71,22 @@ export async function setNFTsToVercel(
   }
 }
 
+export async function mintVercelNFT(
+  appId: string,
+  nftId: string | number,
+  client: VercelKV
+) {
+  const key: string = `${appId}: ${nftId}`;
+  await client.hset(key, { isMinted: '1' });
+}
+
 export async function getVercelNFT(
   appId: string,
   nftId: number | string,
   client: VercelKV
 ) {
   const key: string = `${appId}: ${nftId}`;
-  const nft: nftDataIn | null = await client.get(key);
+  const nft: nftDataIn | null = await client.hgetall(key);
   if (nft) {
     return nft;
   }

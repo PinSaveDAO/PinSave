@@ -30,9 +30,7 @@ const PostPage = () => {
               { maxWidth: "md", cols: 1, spacing: "md" },
             ]}
           >
-            <Center>
-              <DisplayMedia post={postQueried} />
-            </Center>
+            <DisplayMedia post={postQueried} />
             <MediaDetails post={postQueried} />
           </SimpleGrid>
         </>

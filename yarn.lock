@@ -5681,10 +5681,10 @@ pify@^4.0.1:
   resolved "https://registry.yarnpkg.com/pify/-/pify-4.0.1.tgz#4b2cd25c50d598735c50292224fd8c6df41e3231"
   integrity sha512-uB80kBFb/tfd68bVleG9T5GGsGPjJrLAUpR5PZIrhBnIaRTQRjqdJSsIKkOP6OAIFbj7GOrcudc5pNjZ+geV2g==
 
-pin-mina@0.1.34:
-  version "0.1.34"
-  resolved "https://registry.yarnpkg.com/pin-mina/-/pin-mina-0.1.34.tgz#76ca1aa6872a567e03b120603b89756a4956f563"
-  integrity sha512-aM3VJHM+qcjVenA2SUPEsC8Xc7EdGKLzmUwtIsL2kpWYWuH5PLFjVQzSf7kfgTuXefRS94Os+t4vJYjrcWS6dw==
+pin-mina@0.1.37:
+  version "0.1.37"
+  resolved "https://registry.yarnpkg.com/pin-mina/-/pin-mina-0.1.37.tgz#a0e143a1120140af57fb1ff5ee565896b4edf635"
+  integrity sha512-YnZw8OLhqMkuOmfrJDMV+yPOJ3hzw0+lKnU21I+qKSeoYBoWGvvFStnlhMKF2LSLAmZbq6QFasHMfaZkn4hANQ==
   dependencies:
     "@vercel/kv" "^1.0.1"
     dotenv "^16.3.1"

@@ -12,9 +12,7 @@ export default async function handler(
   try {
     startBerkeleyClient();
     const zkAppInstance = getAppContract();
-
-    const totalInited = Number(await getTotalInitedLive(zkAppInstance));
-
+    const totalInited = await getTotalInitedLive(zkAppInstance);
     res.status(200).json({ totalInited: totalInited });
   } catch (err) {
     res.status(500).send({ error: "failed to fetch data" + err });

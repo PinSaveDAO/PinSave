@@ -27,17 +27,14 @@ export async function setFee(
   live: boolean = false
 ) {
   const deployerAddress: PublicKey = deployerPk.toPublicKey();
-
   const txn: Mina.Transaction = await Mina.transaction(deployerAddress, () => {
     contract.setFee(fee);
   });
-
   await sendWaitTx(txn, [deployerPk], live);
 }
 
 export async function initNFT(
   adminPK: PrivateKey,
-  pubKey: PublicKey,
   pk: PrivateKey,
   _NFT: NFT,
   zkAppInstance: MerkleMapContract,
@@ -48,7 +45,7 @@ export async function initNFT(
   if (compile) {
     await MerkleMapContract.compile();
   }
-
+  const pubKey: PublicKey = pk.toPublicKey();
   const nftId: Field = _NFT.id;
   const witnessNFT: MerkleMapWitness = merkleMap.getWitness(nftId);
 
@@ -221,14 +218,13 @@ export async function transferNFT(
 }
 
 export async function initRootWithApp(
-  zkAppPrivateKey: PrivateKey,
+  zkAppPub: PublicKey,
   pk: PrivateKey,
   merkleMap: MerkleMap,
   totalInited: number,
   compile: boolean = false,
   live: boolean = true
 ) {
-  const zkAppPub: PublicKey = zkAppPrivateKey.toPublicKey();
   if (compile) {
     await MerkleMapContract.compile();
   }

@@ -8,12 +8,12 @@ const displayLogs = false;
 const proofsEnabled = true;
 const live = true;
 
-const { pk: deployerKey, pubKey: pubKey } = getEnvAccount();
+const { adminPK: adminPK, pubKey: pubKey } = getEnvAccount();
 
 console.log('deployer:', pubKey.toBase58());
 
 const { zkAppPk: pk } = await deployApp(
-  deployerKey,
+  adminPK,
   proofsEnabled,
   live,
   displayLogs

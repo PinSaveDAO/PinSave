@@ -19,7 +19,6 @@ export async function mintNFTWithMapAndLogs(
   const pubKey: PublicKey = pk.toPublicKey();
 
   if (displayLogs) {
-    // ensures that local map matches on-chain
     const match =
       merkleMap.getRoot().toString() ===
       (await getTreeRoot(zkAppInstance)).toString();
@@ -52,19 +51,7 @@ export async function initNFTWithLogs(
   live: boolean = false,
   displayLogs: boolean = false
 ) {
-  const pubKey: PublicKey = pk.toPublicKey();
-
-  await initNFT(
-    adminPK,
-    pubKey,
-    pk,
-    _NFT,
-    zkAppInstance,
-    merkleMap,
-    compile,
-    live
-  );
-
+  await initNFT(adminPK, pk, _NFT, zkAppInstance, merkleMap, compile, live);
   if (displayLogs) {
     compareLogStates(zkAppInstance, merkleMap);
   }

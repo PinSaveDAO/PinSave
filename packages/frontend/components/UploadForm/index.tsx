@@ -1,6 +1,3 @@
-import { UploadData } from "@/services/upload";
-import { setMinaAccount } from "@/hooks/minaWallet";
-
 import {
   Text,
   Paper,
@@ -11,9 +8,10 @@ import {
   Button,
   Image,
   MediaQuery,
+  Center,
 } from "@mantine/core";
 import { Dropzone, MIME_TYPES } from "@mantine/dropzone";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ReactPlayer from "react-player";
 import { Upload, Replace } from "tabler-icons-react";
 import { PublicKey, Field } from "o1js";
@@ -29,7 +27,11 @@ import {
   setVercelNFT,
   setVercelMetadata,
 } from "pin-mina";
+
+import { setMinaAccount } from "@/hooks/minaWallet";
 import { getVercelClient } from "@/services/vercelClient";
+import { UploadData } from "@/services/upload";
+import { fetcher } from "@/utils/fetcher";
 
 interface CustomWindow extends Window {
   mina?: any;
@@ -100,6 +102,7 @@ const UploadForm = () => {
   const [description, setDescription] = useState<string>("");
   const [image, setImage] = useState<File | undefined>();
   //const [postReceiver, setPostReceiver] = useState<string | undefined>();
+  const [hash, setHash] = useState<string | undefined>(undefined);
 
   const isDataCorrect =
     name !== "" && description !== "" && image !== undefined;
@@ -113,8 +116,7 @@ const UploadForm = () => {
       startBerkeleyClient();
       const pub = PublicKey.fromBase58(address);
 
-      const response = await fetch("/api/totalInited");
-      const data = await response.json();
+      const data = await fetcher("/api/totalInited");
       const totalInited = data.totalInited;
 
       const client = await getVercelClient();
@@ -126,11 +128,11 @@ const UploadForm = () => {
         id: Field(totalInited),
         cid: cid,
         owner: pub,
+        isMinted: "0",
       };
       const nftHashed = createNFT(nftMetadata);
 
-      const responseMap = await fetch("/api/getMap");
-      const dataMap = await responseMap.json();
+      const dataMap = await fetcher("/api/getMap");
 
       const map = deserializeJsonToMerkleMap(dataMap.map);
       const zkApp = getAppContract();
@@ -148,9 +150,12 @@ const UploadForm = () => {
 
       const transactionJSON = tx.toJSON();
 
-      await (window as CustomWindow).mina?.sendTransaction({
+      const sendTransactionResult = await (
+        window as CustomWindow
+      ).mina?.sendTransaction({
         transaction: transactionJSON,
       });
+      setHash(sendTransactionResult.hash);
 
       await setVercelNFT(appId, nftHashed, client);
       await setVercelMetadata(appId, nftMetadata, client);
@@ -176,7 +181,7 @@ const UploadForm = () => {
       }
     };
     fetchAddress();
-  }, []);
+  });
 
   return (
     <Paper
@@ -263,12 +268,23 @@ const UploadForm = () => {
             Mint Post
           </Button>
         ) : null}
+
         {!isDataCorrect && address ? (
           <Text component="a" mt="md">
             Upload Data
           </Text>
         ) : null}
       </Group>
+      {hash ? (
+        <Center>
+          <a
+            style={{ color: "#198b6eb9" }}
+            href={`https://minascan.io/berkeley/tx/${hash}`}
+          >
+            hash
+          </a>
+        </Center>
+      ) : null}
     </Paper>
   );
 };

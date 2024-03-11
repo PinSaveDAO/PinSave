@@ -1,6 +1,5 @@
 export {
   getAppPublic,
-  getAppDeployer,
   getAppString,
   getAppContract,
 } from './components/utilities/AppEnv.js';
@@ -29,21 +28,23 @@ export {
 } from './components/NFT/merkleMap.js';
 
 export {
-  createNFT,
-  NFTMetadata,
   NFT,
+  NFTMetadata,
+  createNFT,
   createNFTWithMapWitness,
 } from './components/NFT/NFT.js';
 
 export {
   getVercelMetadata,
+  getVercelNFT,
+  getMapFromVercelNFTs,
+  getMapFromVercelMetadata,
   setVercelMetadata,
   setMetadatasToVercel,
   setVercelNFT,
   setNFTsToVercel,
-  getVercelNFT,
-  getMapFromVercelNFTs,
-  getMapFromVercelMetadata,
+  mintVercelNFT,
+  mintVercelMetadata,
 } from './components/NFT/vercel.js';
 
 export {

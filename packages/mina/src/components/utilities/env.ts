@@ -1,17 +1,16 @@
-import dotenv from 'dotenv';
 import { PublicKey, PrivateKey } from 'o1js';
 import { createClient } from '@vercel/kv';
+import dotenv from 'dotenv';
+dotenv.config();
 
 import { MerkleMapContract } from '../../NFTsMapContract.js';
 
-dotenv.config();
-
 export function getEnvAccount() {
-  const pk: PrivateKey = PrivateKey.fromBase58(
+  const adminPK: PrivateKey = PrivateKey.fromBase58(
     process.env.deployerKey as string
   );
-  const pubKey: PublicKey = pk.toPublicKey();
-  return { pubKey: pubKey, pk: pk };
+  const pubKey: PublicKey = adminPK.toPublicKey();
+  return { pubKey: pubKey, adminPK: adminPK };
 }
 
 export function getAppEnv() {
