@@ -9,6 +9,7 @@ import {
   VerificationKey,
   UInt64,
 } from 'o1js';
+import { PendingTransaction } from 'o1js/dist/node/lib/mina.js';
 
 import { compareLogStates } from './AppState.js';
 import { initNFTtoMap, mintNFTtoMap } from './NFT/merkleMap.js';
@@ -316,14 +317,18 @@ export async function sendWaitTx(
   tx.sign(pks);
   await tx.prove();
 
-  let pendingTx = await tx.send();
+  let pendingTx: PendingTransaction = await tx.send();
   if (live) {
-    console.log(`Got pending transaction with hash ${pendingTx.hash()}`);
+    console.log(`Got pending transaction with hash ${pendingTx.hash}`);
 
-    // Wait until transaction is included in a block
-    await pendingTx.wait();
-    if (!pendingTx.isSuccess) {
-      throw new Error('tx not successful');
+    if (pendingTx.status === 'pending') {
+      try {
+        await pendingTx.safeWait();
+      } catch (error) {
+        throw new Error('tx not successful');
+      }
+    } else {
+      throw new Error('tx not accepted by Mina Daemon');
     }
   }
 }

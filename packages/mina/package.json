@@ -33,6 +33,7 @@
     "build": "tsc",
     "buildw": "tsc --watch",
     "format": "prettier --write --ignore-unknown **/*",
+    "coverage": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage",
     "test": "tsc && node build/src/NFTsMapContract.test.js",
     "deploy": "tsc && node build/src/scripts/deploy.js",
     "query": "tsc && node build/src/scripts/queryContract.js",
@@ -51,6 +52,7 @@
   "devDependencies": {
     "@babel/preset-env": "^7.16.4",
     "@babel/preset-typescript": "^7.16.0",
+    "@jest/globals": "^29.7.0",
     "@types/jest": "^27.0.3",
     "@typescript-eslint/eslint-plugin": "^5.5.0",
     "@typescript-eslint/parser": "^5.5.0",
@@ -64,6 +66,6 @@
   "dependencies": {
     "@vercel/kv": "^1.0.1",
     "dotenv": "^16.3.1",
-    "o1js": "0.16.2"
+    "o1js": "0.17.0"
   }
 }
