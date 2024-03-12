@@ -147,7 +147,6 @@ const UploadForm = () => {
         compile,
         txOptions
       );
-
       const transactionJSON = tx.toJSON();
 
       const sendTransactionResult = await (
@@ -155,6 +154,7 @@ const UploadForm = () => {
       ).mina?.sendTransaction({
         transaction: transactionJSON,
       });
+
       setHash(sendTransactionResult.hash);
 
       await setVercelNFT(appId, nftHashed, client);
@@ -163,7 +163,6 @@ const UploadForm = () => {
       setImage(undefined);
       setName("");
       setDescription("");
-
       return true;
     }
     return false;
@@ -181,7 +180,7 @@ const UploadForm = () => {
       }
     };
     fetchAddress();
-  });
+  }, []);
 
   return (
     <Paper

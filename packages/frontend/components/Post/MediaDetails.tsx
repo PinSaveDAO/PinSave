@@ -48,6 +48,7 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
 
       const nft = deserializeNFT(dataNft);
 
+      const compile = true;
       const txOptions = createTxOptions(address);
 
       const txMint = await createMintTxFromMap(
@@ -55,7 +56,7 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
         zkApp,
         nft,
         map,
-        true,
+        compile,
         txOptions
       );
 

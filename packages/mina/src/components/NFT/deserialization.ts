@@ -25,6 +25,9 @@ export function deserializeNFT(data: nftDataIn) {
     mint: function (): void {
       this.isMinted = Field(1);
     },
+    toFields: function (): Field[] {
+      return NFT.toFields(this);
+    },
     hash: function (): Field {
       return Poseidon.hash(NFT.toFields(this));
     },

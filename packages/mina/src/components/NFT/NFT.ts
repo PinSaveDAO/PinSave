@@ -31,6 +31,9 @@ export class NFT extends Struct({
   mint() {
     this.isMinted = Field(1);
   }
+  toFields(): Field[] {
+    return NFT.toFields(this);
+  }
   hash(): Field {
     return Poseidon.hash(NFT.toFields(this));
   }
@@ -59,6 +62,9 @@ export function createNFT(nftMetadata: NFTMetadata): NFT {
     },
     mint: function (): void {
       this.isMinted = Field(1);
+    },
+    toFields: function (): Field[] {
+      return NFT.toFields(this);
     },
     hash: function (): Field {
       return Poseidon.hash(NFT.toFields(this));

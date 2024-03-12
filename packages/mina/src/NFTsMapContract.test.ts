@@ -35,7 +35,7 @@ const { publicKey: pubKey3 } = testAccounts[2];
 const {
   merkleMap: map,
   zkAppInstance: zkAppInstance,
-  zkAppPk: zkAppPrivateKey,
+  zkAppPk: zkAppPK,
 } = await deployApp(pkAdmin, proofsEnabled, live, displayLogs);
 
 const compile = false;
@@ -47,6 +47,7 @@ const { nftArray: nftArray } = generateDummyCollectionMap(pubKeyAdmin, map);
 console.log('initing app root');
 
 await initAppRoot(
+  zkAppPK,
   pkAdmin,
   zkAppInstance,
   map,
@@ -57,6 +58,7 @@ await initAppRoot(
 
 try {
   await initAppRoot(
+    zkAppPK,
     pkAdmin,
     zkAppInstance,
     map,
@@ -64,6 +66,7 @@ try {
     live,
     displayLogs
   );
+  throw Error('should throw error');
 } catch {
   console.log(
     'failed sucessfully to initialize App root again which already exists'
@@ -71,6 +74,13 @@ try {
 }
 
 console.log('changing fee amount');
+
+try {
+  await setFee(pk2, zkAppInstance);
+  throw Error('should not throw error');
+} catch {
+  console.log('failed sucessfully to initialize fee; not admin');
+}
 
 await setFee(pkAdmin, zkAppInstance);
 
@@ -116,6 +126,7 @@ try {
     live,
     displayLogs
   );
+  throw Error('should not throw error');
 } catch {
   console.log('failed sucessfully to initialize NFT which already exists');
 }
@@ -141,7 +152,7 @@ try {
   const nftStructNew = createNFT(nftNew);
 
   await initNFTWithLogs(
-    zkAppPrivateKey,
+    zkAppPK,
     pk2,
     nftStructNew,
     zkAppInstance,
@@ -150,12 +161,13 @@ try {
     live,
     displayLogs
   );
+  throw Error('should not throw error');
 } catch {
   console.log('fails successfully. Not correct nft id');
 }
 
 await mintNFTWithMapAndLogs(
-  pkAdmin,
+  pk2,
   pkAdmin,
   nftStruct,
   zkAppInstance,
@@ -168,7 +180,7 @@ await mintNFTWithMapAndLogs(
 console.log('mints sucessfully');
 
 await mintNFTWithMapAndLogs(
-  zkAppPrivateKey,
+  zkAppPK,
   pk2,
   nftStructNew,
   zkAppInstance,

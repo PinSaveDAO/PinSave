@@ -17,7 +17,7 @@ startBerkeleyClient();
 const client = getVercelClient();
 
 const { pubKey: pubKey, adminPK: adminPK } = getEnvAccount();
-const { appId: appId, zkAppAddress: zkAppAddress } = getAppEnv();
+const { appId: appId, zkAppPK: zkAppPK } = getAppEnv();
 
 const {
   map: merkleMap,
@@ -39,7 +39,7 @@ const compile = true;
 const live = true;
 
 await initRootWithApp(
-  zkAppAddress,
+  zkAppPK,
   adminPK,
   merkleMap,
   nftArray.length,
