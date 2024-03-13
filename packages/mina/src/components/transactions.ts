@@ -94,7 +94,7 @@ export async function createMintTxFromMap(
   const nftId: Field = _NFT.id;
   const witnessNFT: MerkleMapWitness = merkleMap.getWitness(nftId);
 
-  const mintTx = await createMintTxLive(
+  const mintTx = await createMintTx(
     pubKey,
     zkAppInstance,
     _NFT,
@@ -137,7 +137,7 @@ export async function mintNFT(
   const txOptions = createTxOptions(pubKey, live);
   const adminSignature = Signature.create(adminPK, _NFT.toFields());
 
-  const mint_tx = await createMintTxLive(
+  const mint_tx = await createMintTx(
     pubKey,
     zkAppInstance,
     _NFT,
@@ -149,7 +149,7 @@ export async function mintNFT(
   await sendWaitTx(mint_tx, [pk], live);
 }
 
-export async function createMintTxLive(
+export async function createMintTx(
   pubKey: PublicKey,
   zkAppInstance: MerkleMapContract,
   _NFT: NFT,

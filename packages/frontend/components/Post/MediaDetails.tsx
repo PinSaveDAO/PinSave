@@ -10,6 +10,7 @@ import {
   mintVercelNFT,
   getAppString,
   mintVercelMetadata,
+  getTokenAddressBalance,
 } from "pin-mina";
 import { useEffect, useState } from "react";
 
@@ -18,6 +19,7 @@ import type { IndividualPost } from "@/services/upload";
 import { setMinaAccount } from "@/hooks/minaWallet";
 import { fetcher } from "@/utils/fetcher";
 import { useAddressContext } from "context";
+import { host } from "@/utils/host";
 
 interface IMyProps {
   post: IndividualPost;
@@ -45,14 +47,14 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
       const appId = getAppString();
 
       startBerkeleyClient();
-      const dataNft = await fetcher(`/api/nft/${postNumber}`);
+      const dataNft = await fetcher(`${host}/api/nft/${postNumber}`);
       const nft = deserializeNFT(dataNft);
       const compile = true;
       const pub = PublicKey.fromBase58(address);
 
       const txOptions = createTxOptions(pub);
 
-      const adminSignatureData = await fetch("/api/mint/", {
+      const adminSignatureData = await fetch(`${host}/api/mint/`, {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
@@ -60,9 +62,14 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
         method: "POST",
         body: JSON.stringify({ postNumber: postNumber }),
       });
+      console.log(postNumber);
       const adminSignatureJSON = await adminSignatureData.json();
       const adminSignatureBase58 = adminSignatureJSON.adminSignatureBase58;
       const adminSignature = Signature.fromBase58(adminSignatureBase58);
+
+      console.log(appId);
+      console.log(nft.hash().toString());
+      console.log(adminSignatureBase58);
 
       const txMint = await createMintTxFromMap(
         pub,
@@ -75,6 +82,8 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
       );
 
       const transactionJSON = txMint.toJSON();
+      /* 
+
 
       const sendTransactionResult = await (
         window as CustomWindow
@@ -86,7 +95,7 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
 
       const client = await getVercelClient();
       await mintVercelNFT(appId, postNumber, client);
-      await mintVercelMetadata(appId, postNumber, client);
+      await mintVercelMetadata(appId, postNumber, client); */
     }
   }
 

@@ -59,6 +59,7 @@ export {
 
 export {
   createMintTxFromMap,
+  createMintTx,
   createTxOptions,
   createInitNFTTxFromMap,
 } from './components/transactions.js';
