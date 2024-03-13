@@ -36,7 +36,7 @@ export async function mintNFTWithMapAndLogs(
   );
 
   if (displayLogs) {
-    logTokenBalances(pubKey, zkAppInstance);
+    await logTokenBalances(pubKey, zkAppInstance);
     compareLogStates(zkAppInstance, merkleMap);
   }
 }

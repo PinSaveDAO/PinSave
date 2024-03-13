@@ -119,7 +119,6 @@ export async function getMapFromVercelMetadata(
   const arrayLength: number = nftArray.length;
   for (let i = 0; i < arrayLength; i++) {
     const nftId: number = nftArray[i];
-
     const data: nftDataIn = await getVercelMetadata(appId, nftId, client);
     setStringObjectToMap(data, map);
   }

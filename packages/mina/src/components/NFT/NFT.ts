@@ -70,7 +70,6 @@ export function createNFT(nftMetadata: NFTMetadata): NFT {
       return Poseidon.hash(NFT.toFields(this));
     },
   };
-
   return newNFT;
 }
 

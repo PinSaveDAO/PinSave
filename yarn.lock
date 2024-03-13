@@ -2815,13 +2815,6 @@ destroy@1.2.0:
   resolved "https://registry.yarnpkg.com/destroy/-/destroy-1.2.0.tgz#4803735509ad8be552934c67df614f94e66fa015"
   integrity sha512-2sJGJTaXIIaR1w4iJSNoN0hnMY7Gpc/n8D4qSCJw8QqFWXf7cuAgnEHxBpweaVcPevC2l3KpjYCx3NypQQgaJg==
 
-detect-gpu@^5.0.5:
-  version "5.0.37"
-  resolved "https://registry.yarnpkg.com/detect-gpu/-/detect-gpu-5.0.37.tgz#27febe44d478ef4d35cd38007355da795ba075d5"
-  integrity sha512-EraWs84faI4iskB4qvE39bevMIazEvd1RpoyGLOBesRLbiz6eMeJqqRPHjEFClfRByYZzi9IzU35rBXIO76oDw==
-  dependencies:
-    webgl-constants "^1.1.1"
-
 detect-libc@^2.0.2:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/detect-libc/-/detect-libc-2.0.2.tgz#8ccf2ba9315350e1241b88d0ac3b0e1fbd99605d"
@@ -5339,14 +5332,13 @@ nyc@15.1.0:
     test-exclude "^6.0.0"
     yargs "^15.0.2"
 
-o1js@0.16.2:
-  version "0.16.2"
-  resolved "https://registry.yarnpkg.com/o1js/-/o1js-0.16.2.tgz#46e7bcdcce41a4a01f2b9b884d2dec4a23df1775"
-  integrity sha512-CyQFURc2UzzNpPJcYUdvFqa6I7SjXksDCubgJixWjEoS3R+FOl/yttMwOwopxb3oLLK92MyD2ZM/OEdKqVUyyg==
+o1js@0.17.0:
+  version "0.17.0"
+  resolved "https://registry.yarnpkg.com/o1js/-/o1js-0.17.0.tgz#4c7173f160e60cdb3224a96f4f734d7ad95003e7"
+  integrity sha512-OPQc3jBG2X5z7yI2mcovzRVbd91Q2D/npep14+g0wBdGXpyyAFdaz59YjVlEsPcY1Gmh2L+LCFhVA2fQ+1ogIg==
   dependencies:
     blakejs "1.2.1"
     cachedir "^2.4.0"
-    detect-gpu "^5.0.5"
     isomorphic-fetch "^3.0.0"
     js-sha256 "^0.9.0"
     reflect-metadata "^0.1.13"
@@ -5681,14 +5673,14 @@ pify@^4.0.1:
   resolved "https://registry.yarnpkg.com/pify/-/pify-4.0.1.tgz#4b2cd25c50d598735c50292224fd8c6df41e3231"
   integrity sha512-uB80kBFb/tfd68bVleG9T5GGsGPjJrLAUpR5PZIrhBnIaRTQRjqdJSsIKkOP6OAIFbj7GOrcudc5pNjZ+geV2g==
 
-pin-mina@0.1.37:
-  version "0.1.37"
-  resolved "https://registry.yarnpkg.com/pin-mina/-/pin-mina-0.1.37.tgz#a0e143a1120140af57fb1ff5ee565896b4edf635"
-  integrity sha512-YnZw8OLhqMkuOmfrJDMV+yPOJ3hzw0+lKnU21I+qKSeoYBoWGvvFStnlhMKF2LSLAmZbq6QFasHMfaZkn4hANQ==
+pin-mina@0.1.39:
+  version "0.1.39"
+  resolved "https://registry.yarnpkg.com/pin-mina/-/pin-mina-0.1.39.tgz#10c74cd3abe9c350a365842544e3159ac3ca5222"
+  integrity sha512-+ix13Az3A1g3RW8Blb3UUUvX5NkifkKLkK2x9WLNsjXTGNEXywf4QUK8muoFLgd/IYO4YcNlhtGfXiAWRt/ZNg==
   dependencies:
     "@vercel/kv" "^1.0.1"
     dotenv "^16.3.1"
-    o1js "0.16.2"
+    o1js "0.17.0"
 
 pinkie-promise@^2.0.0:
   version "2.0.1"
@@ -7199,11 +7191,6 @@ wbuf@^1.1.0, wbuf@^1.7.3:
   integrity sha512-O84QOnr0icsbFGLS0O3bI5FswxzRr8/gHwWkDlQFskhSPryQXvrTMxjxGP4+iWYoauLoBvfDpkrOauZ+0iZpDA==
   dependencies:
     minimalistic-assert "^1.0.0"
-
-webgl-constants@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/webgl-constants/-/webgl-constants-1.1.1.tgz#f9633ee87fea56647a60b9ce735cbdfb891c6855"
-  integrity sha512-LkBXKjU5r9vAW7Gcu3T5u+5cvSvh5WwINdr0C+9jpzVB41cjQAP5ePArDtk/WHYdVj0GefCgM73BA7FlIiNtdg==
 
 webidl-conversions@^3.0.0:
   version "3.0.1"

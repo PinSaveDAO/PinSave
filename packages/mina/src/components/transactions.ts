@@ -9,17 +9,13 @@ import {
   VerificationKey,
   UInt64,
   Signature,
+  PendingTransaction,
 } from 'o1js';
-import { PendingTransaction } from 'o1js/dist/node/lib/mina.js';
 
 import { compareLogStates } from './AppState.js';
 import { initNFTtoMap, mintNFTtoMap } from './NFT/merkleMap.js';
 import { NFT } from './NFT/NFT.js';
-import {
-  logTokenBalances,
-  getTokenAddressBalance,
-  getTokenIdBalance,
-} from './TokenBalances.js';
+import { logTokenBalances, getTokenAddressBalance } from './TokenBalances.js';
 import { MerkleMapContract } from '../NFTsMapContract.js';
 import { createInitState } from './NFT/InitState.js';
 
@@ -161,16 +157,14 @@ export async function createMintTxLive(
   adminSignature: Signature,
   txOptions: TxOptions
 ) {
-  let recipientBalance;
-  if (txOptions.fee) {
-    recipientBalance = await getTokenIdBalance(pubKey, zkAppInstance.token.id);
-  }
-  if (!txOptions.fee) {
-    recipientBalance = getTokenAddressBalance(pubKey, zkAppInstance.token.id);
-  }
+  const recipientBalance = await getTokenAddressBalance(
+    pubKey,
+    zkAppInstance.token.id
+  );
+
   let mint_tx: Mina.Transaction;
 
-  if (recipientBalance) {
+  if (recipientBalance > 0n) {
     mint_tx = await Mina.transaction(txOptions, () => {
       zkAppInstance.mintNFT(_NFT, merkleMapWitness, adminSignature);
     });
@@ -197,7 +191,7 @@ export async function transferNFT(
   const nftId: Field = _NFT.id;
   const witnessNFT: MerkleMapWitness = merkleMap.getWitness(nftId);
 
-  const recipientBalance = getTokenAddressBalance(
+  const recipientBalance = await getTokenAddressBalance(
     recipient,
     zkAppInstance.token.id
   );
@@ -205,7 +199,7 @@ export async function transferNFT(
   const adminSignature = Signature.create(adminPK, _NFT.toFields());
 
   let nft_transfer_tx: Mina.Transaction;
-  if (recipientBalance > 0) {
+  if (recipientBalance > 0n) {
     nft_transfer_tx = await Mina.transaction(pubKey, () => {
       zkAppInstance.transfer(_NFT, recipient, witnessNFT, adminSignature);
     });
@@ -336,7 +330,8 @@ export async function sendWaitTx(
 
     if (pendingTx.status === 'pending') {
       try {
-        await pendingTx.safeWait();
+        const transaction = await pendingTx.safeWait();
+        console.log(transaction.status);
       } catch (error) {
         throw new Error('tx not successful');
       }

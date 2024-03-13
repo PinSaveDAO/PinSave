@@ -1,5 +1,5 @@
 import { Paper, Text, Title, Button } from "@mantine/core";
-import { MerkleMap, PublicKey } from "o1js";
+import { MerkleMap, PublicKey, Signature } from "o1js";
 import {
   deserializeJsonToMerkleMap,
   getAppContract,
@@ -17,6 +17,7 @@ import { getVercelClient } from "@/services/vercelClient";
 import type { IndividualPost } from "@/services/upload";
 import { setMinaAccount } from "@/hooks/minaWallet";
 import { fetcher } from "@/utils/fetcher";
+import { useAddressContext } from "context";
 
 interface IMyProps {
   post: IndividualPost;
@@ -30,14 +31,14 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
   const key = "auroWalletAddress";
   const postNumber = Number(post.id);
   const [map, setMap] = useState<MerkleMap | undefined>(undefined);
-  const [address, setAddress] = useState<PublicKey | undefined>(undefined);
   const [hash, setHash] = useState<string | undefined>(undefined);
+
+  const { address, setAddress } = useAddressContext();
 
   async function mintNFT() {
     if (!address) {
       const connectedAddress = await setMinaAccount(key);
-      const pub = PublicKey.fromBase58(connectedAddress);
-      setAddress(pub);
+      setAddress(connectedAddress);
     }
     if (map && address) {
       const zkApp = getAppContract();
@@ -45,17 +46,30 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
 
       startBerkeleyClient();
       const dataNft = await fetcher(`/api/nft/${postNumber}`);
-
       const nft = deserializeNFT(dataNft);
-
       const compile = true;
-      const txOptions = createTxOptions(address);
+      const pub = PublicKey.fromBase58(address);
+
+      const txOptions = createTxOptions(pub);
+
+      const adminSignatureData = await fetch("/api/mint/", {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        body: JSON.stringify({ postNumber: postNumber }),
+      });
+      const adminSignatureJSON = await adminSignatureData.json();
+      const adminSignatureBase58 = adminSignatureJSON.adminSignatureBase58;
+      const adminSignature = Signature.fromBase58(adminSignatureBase58);
 
       const txMint = await createMintTxFromMap(
-        address,
+        pub,
         zkApp,
         nft,
         map,
+        adminSignature,
         compile,
         txOptions
       );
@@ -86,14 +100,14 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
 
         const savedAddress = sessionStorage.getItem(key);
         if (savedAddress && savedAddress !== "undefined") {
-          setAddress(PublicKey.fromBase58(savedAddress));
+          setAddress(savedAddress);
         }
       } catch (error) {
         console.error("Error fetching media details: ", error);
       }
     };
     fetchMediaDetails();
-  }, [post.id]);
+  }, [post.id, address]);
   return (
     <Paper
       shadow="sm"
@@ -127,7 +141,7 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
             post.owner.substring(45)}
         </a>
       </p>
-      {address?.toBase58() === post.owner && post.isMinted === "1" ? (
+      {address === post.owner && post.isMinted === "1" ? (
         <p style={{ fontSize: "small", color: "#0000008d" }}>Minted</p>
       ) : null}
       {hash ? (
@@ -140,7 +154,7 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
           </a>
         </p>
       ) : null}
-      {address?.toBase58() === post.owner && post.isMinted === "0" ? (
+      {address === post.owner && post.isMinted === "0" && map ? (
         <Button onClick={async () => await mintNFT()}>Mint</Button>
       ) : null}
     </Paper>

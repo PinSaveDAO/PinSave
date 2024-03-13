@@ -5,8 +5,11 @@ export function logMinaBalance(address: PublicKey) {
   console.log(address.toBase58() + ' Mina balance:', balance);
 }
 
-export function logTokenBalances(address: PublicKey, zkApp: SmartContract) {
-  const balance = getTokenAddressBalance(address, zkApp.token.id);
+export async function logTokenBalances(
+  address: PublicKey,
+  zkApp: SmartContract
+) {
+  const balance = await getTokenAddressBalance(address, zkApp.token.id);
   console.log(address.toBase58() + ' zkApp tokens:', balance);
 }
 
@@ -20,9 +23,13 @@ export function getMinaBalance(address: PublicKey) {
   return balance;
 }
 
-export function getTokenAddressBalance(address: PublicKey, tokenId: Field) {
+export async function getTokenAddressBalance(
+  address: PublicKey,
+  tokenId: Field = Field(1)
+) {
   let balance: bigint = 0n;
   try {
+    await fetchAccount({ publicKey: address, tokenId: tokenId });
     const fetchedBalance = Mina.getBalance(address, tokenId).value.toBigInt();
     balance = fetchedBalance / BigInt(1e9);
   } catch (e) {
@@ -31,17 +38,4 @@ export function getTokenAddressBalance(address: PublicKey, tokenId: Field) {
     );
   }
   return balance;
-}
-
-export async function getTokenIdBalance(
-  pub: PublicKey,
-  tokenId: Field = Field(1)
-) {
-  const data = await fetchAccount({ publicKey: pub, tokenId: tokenId });
-  let tokenBalance = 0n;
-  if (data.account?.balance) {
-    const fetchedBalance = data.account.balance.toBigInt();
-    tokenBalance = fetchedBalance / BigInt(1e9);
-  }
-  return tokenBalance;
 }

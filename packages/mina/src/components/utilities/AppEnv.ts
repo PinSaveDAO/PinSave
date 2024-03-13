@@ -4,7 +4,7 @@ import { MerkleMapContract } from '../../NFTsMapContract.js';
 
 export function getAppString() {
   const appPubString: string =
-    'B62qr3YP4gRiCEoWu8w65rProdsBaV7NeEU2sFgbgo8R4iHiVym5D6Q';
+    'B62qjHeCXnQMZtWz27UbKu6KHFmn6AKga51TqKR8ERAcfF9vnHB7KQC';
   return appPubString;
 }
 

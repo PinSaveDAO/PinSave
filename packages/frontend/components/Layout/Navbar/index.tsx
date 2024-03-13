@@ -17,6 +17,7 @@ import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 
 import { setMinaAccount } from "@/hooks/minaWallet";
+import { useAddressContext } from "context";
 
 const useStyles = createStyles((theme) => ({
   root: {
@@ -102,18 +103,20 @@ interface NavbarProps {
 }
 
 export function Navbar({ links }: NavbarProps) {
-  const key = "auroWalletAddress";
+  const { address, setAddress } = useAddressContext();
 
+  const key = "auroWalletAddress";
   const [hasMounted, setHasMounted] = useState(false);
-  const [address, setAddress] = useState("");
+  const [shortAddress, setShortAddress] = useState<string | undefined>();
 
   useEffect(() => {
     setHasMounted(true);
     const savedAddress = sessionStorage.getItem(key);
     if (savedAddress) {
-      const shortAddress =
-        savedAddress.substring(0, 3) + "..." + savedAddress.slice(-3);
-      setAddress(shortAddress);
+      setAddress(savedAddress);
+      setShortAddress(
+        savedAddress.substring(0, 3) + "..." + savedAddress.slice(-3)
+      );
     }
   }, [address]);
 
@@ -164,7 +167,7 @@ export function Navbar({ links }: NavbarProps) {
               radius="md"
               onClick={async () => setAddress(await setMinaAccount(key))}
             >
-              {address !== "" ? address : "Connect Wallet"}
+              {shortAddress ? shortAddress : "Connect Wallet"}
             </Button>
             <Burger
               opened={opened}

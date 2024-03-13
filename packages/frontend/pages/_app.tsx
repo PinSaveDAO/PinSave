@@ -7,6 +7,7 @@ import { NotificationsProvider } from "@mantine/notifications";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import LayoutApp from "@/components/Layout";
+import { AddressProvider } from "context";
 
 type NextAppProps<P = any> = AppProps & {
   pageProps: P;
@@ -30,9 +31,11 @@ function MyApp({ Component, pageProps }: NextAppProps) {
           <title>Pin Save - decentralized Pinterest</title>
         </NextHead>
         <NotificationsProvider>
-          <LayoutApp>
-            <Component {...pageProps} />
-          </LayoutApp>
+          <AddressProvider>
+            <LayoutApp>
+              <Component {...pageProps} />
+            </LayoutApp>
+          </AddressProvider>
         </NotificationsProvider>
       </QueryClientProvider>
     </MantineProvider>

@@ -18,7 +18,7 @@ import { mintNFTwithMap } from '../components/transactions.js';
 startBerkeleyClient();
 const client = getVercelClient();
 
-const nftId = 0;
+const nftId = 1;
 
 const { adminPK: adminPK } = getEnvAccount();
 const { appId: appId, zkApp: zkApp } = getAppEnv();
