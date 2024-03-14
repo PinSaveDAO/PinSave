@@ -14,7 +14,7 @@ import { Dropzone, MIME_TYPES } from "@mantine/dropzone";
 import { useEffect, useState } from "react";
 import ReactPlayer from "react-player";
 import { Upload, Replace } from "tabler-icons-react";
-import { PublicKey, Field } from "o1js";
+import { PublicKey, Field, Signature } from "o1js";
 import {
   startBerkeleyClient,
   NFTMetadata,
@@ -26,6 +26,7 @@ import {
   createTxOptions,
   setVercelNFT,
   setVercelMetadata,
+  getTotalInitedLive,
 } from "pin-mina";
 
 import { setMinaAccount } from "@/hooks/minaWallet";
@@ -114,12 +115,12 @@ const UploadForm = () => {
   ) {
     if (description !== "" && name !== "" && address) {
       startBerkeleyClient();
+      const zkApp = getAppContract();
+      const appId = getAppString();
+      const totalInited = await getTotalInitedLive(zkApp);
       const pub = PublicKey.fromBase58(address);
 
-      const data = await fetcher("/api/totalInited");
-      const totalInited = data.totalInited;
-
-      const client = await getVercelClient();
+      const client = getVercelClient();
 
       const cid = await UploadData(image);
       const nftMetadata: NFTMetadata = {
@@ -133,10 +134,25 @@ const UploadForm = () => {
       const nftHashed = createNFT(nftMetadata);
 
       const dataMap = await fetcher("/api/getMap");
-
       const map = deserializeJsonToMerkleMap(dataMap.map);
-      const zkApp = getAppContract();
-      const appId = getAppString();
+
+      const adminSignatureData = await fetch(`/api/init/`, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        body: JSON.stringify({
+          name: name,
+          description: description,
+          id: totalInited,
+          cid: cid,
+          owner: address,
+        }),
+      });
+      const adminSignatureJSON = await adminSignatureData.json();
+      const adminSignatureBase58 = adminSignatureJSON.adminSignatureBase58;
+      const adminSignature = Signature.fromBase58(adminSignatureBase58);
 
       const compile = true;
       const txOptions = createTxOptions(pub);
@@ -144,6 +160,7 @@ const UploadForm = () => {
         nftHashed,
         zkApp,
         map,
+        adminSignature,
         compile,
         txOptions
       );

@@ -18,4 +18,4 @@ const array = generateIntegersArray(totalInited);
 const storedMap = await getMapFromVercelNFTs(appId, array, client);
 
 console.log(storedMap.getRoot().toString());
-console.log(await getVercelMetadata(appId, 0, client));
+console.log(await getVercelMetadata(appId, 4, client));

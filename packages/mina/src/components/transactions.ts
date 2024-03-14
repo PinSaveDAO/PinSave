@@ -12,10 +12,9 @@ import {
   PendingTransaction,
 } from 'o1js';
 
-import { compareLogStates } from './AppState.js';
 import { initNFTtoMap, mintNFTtoMap } from './NFT/merkleMap.js';
 import { NFT } from './NFT/NFT.js';
-import { logTokenBalances, getTokenAddressBalance } from './TokenBalances.js';
+import { getTokenAddressBalance } from './TokenBalances.js';
 import { MerkleMapContract } from '../NFTsMapContract.js';
 import { createInitState } from './NFT/InitState.js';
 
@@ -34,7 +33,7 @@ export async function setFee(
 
 export async function initNFT(
   adminPK: PrivateKey,
-  pk: PrivateKey,
+  senderPK: PrivateKey,
   _NFT: NFT,
   zkAppInstance: MerkleMapContract,
   merkleMap: MerkleMap,
@@ -44,8 +43,9 @@ export async function initNFT(
   if (compile) {
     await MerkleMapContract.compile();
   }
-  const pubKey: PublicKey = pk.toPublicKey();
+  const pubKey: PublicKey = senderPK.toPublicKey();
   const nftId: Field = _NFT.id;
+
   const witnessNFT: MerkleMapWitness = merkleMap.getWitness(nftId);
 
   const txOptions = createTxOptions(pubKey, live);
@@ -54,7 +54,7 @@ export async function initNFT(
   const initMintTx: Mina.Transaction = await Mina.transaction(txOptions, () => {
     zkAppInstance.initNFT(_NFT, witnessNFT, adminSignature);
   });
-  await sendWaitTx(initMintTx, [pk], live);
+  await sendWaitTx(initMintTx, [senderPK], live);
   initNFTtoMap(_NFT, merkleMap);
 }
 

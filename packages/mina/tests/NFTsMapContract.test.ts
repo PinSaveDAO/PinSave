@@ -15,13 +15,14 @@ import {
   initNFT,
 } from '../src/components/transactions.js';
 import { MerkleMapContract } from '../src/NFTsMapContract.js';
+import { getMinaBalance } from '../src/index.js';
 
 const proofsEnabled = false;
 const enforceTransactionLimits = true;
 
 const live = false;
 
-describe('SoulboundToken', () => {
+describe('PinSave NFTs on Local Blockchain', () => {
   const testAccounts = startLocalBlockchainClient(
     proofsEnabled,
     enforceTransactionLimits
@@ -133,7 +134,9 @@ describe('SoulboundToken', () => {
     }
   });
 
-  it('inited NFT: not admin user', async () => {
+  it('init NFT: not admin user', async () => {
+    const balance = getMinaBalance(pubKey2);
+    expect(balance).toEqual(1000000000000n);
     const nftNew = generateDummyNFTMetadata(4, pubKey2);
     const nftStructNew = createNFT(nftNew);
 

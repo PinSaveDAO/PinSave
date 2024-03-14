@@ -1,5 +1,5 @@
 import { Paper, Text, Title, Button } from "@mantine/core";
-import { MerkleMap, PrivateKey, PublicKey, Signature } from "o1js";
+import { MerkleMap, PublicKey, Signature } from "o1js";
 import {
   deserializeJsonToMerkleMap,
   getAppContract,
@@ -10,9 +10,7 @@ import {
   mintVercelNFT,
   getAppString,
   mintVercelMetadata,
-  getTokenAddressBalance,
-  mintNFT,
-  mintNFTwithMap,
+  getTotalInitedLive,
 } from "pin-mina";
 import { useEffect, useState } from "react";
 
@@ -21,7 +19,6 @@ import type { IndividualPost } from "@/services/upload";
 import { setMinaAccount } from "@/hooks/minaWallet";
 import { fetcher } from "@/utils/fetcher";
 import { useAddressContext } from "context";
-import { host } from "@/utils/host";
 
 interface IMyProps {
   post: IndividualPost;
@@ -34,6 +31,7 @@ interface CustomWindow extends Window {
 const MediaDetails: React.FC<IMyProps> = ({ post }) => {
   const key = "auroWalletAddress";
   const postNumber = Number(post.id);
+
   const [map, setMap] = useState<MerkleMap | undefined>(undefined);
   const [hash, setHash] = useState<string | undefined>(undefined);
 
@@ -48,15 +46,17 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
       const zkApp = getAppContract();
       const appId = getAppString();
 
+      const client = getVercelClient();
       startBerkeleyClient();
-      const dataNft = await fetcher(`${host}/api/nft/${postNumber}`);
+
+      const dataNft = await fetcher(`/api/nft/${postNumber}`);
       const nft = deserializeNFT(dataNft);
+
       const compile = true;
-      const pub = PublicKey.fromBase58(address);
 
-      const txOptions = createTxOptions(pub);
+      const totalInited = await getTotalInitedLive(zkApp);
 
-      const adminSignatureData = await fetch(`${host}/api/mint/`, {
+      const adminSignatureData = await fetch(`/api/mint/`, {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
@@ -64,22 +64,14 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
         method: "POST",
         body: JSON.stringify({ postNumber: postNumber }),
       });
-      console.log(postNumber);
       const adminSignatureJSON = await adminSignatureData.json();
       const adminSignatureBase58 = adminSignatureJSON.adminSignatureBase58;
       const adminSignature = Signature.fromBase58(adminSignatureBase58);
 
-      console.log(appId);
-      console.log(nft.hash().toString());
-      console.log(adminSignatureBase58);
+      const pub = PublicKey.fromBase58(address);
+      const txOptions = createTxOptions(pub);
 
-      /* const adminPK = PrivateKey.fromBase58(
-        ""
-      );
-
-      await mintNFTwithMap(adminPK, adminPK, nft, zkApp, map, true, true); */
-      /* 
-const txMint = await createMintTxFromMap(
+      const txMint = await createMintTxFromMap(
         pub,
         zkApp,
         nft,
@@ -99,9 +91,8 @@ const txMint = await createMintTxFromMap(
 
       setHash(sendTransactionResult.hash);
 
-      const client = await getVercelClient();
       await mintVercelNFT(appId, postNumber, client);
-      await mintVercelMetadata(appId, postNumber, client); */
+      await mintVercelMetadata(appId, postNumber, client);
     }
   }
 
