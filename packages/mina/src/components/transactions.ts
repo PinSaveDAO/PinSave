@@ -184,8 +184,7 @@ export async function transferNFT(
   _NFT: NFT,
   zkAppInstance: MerkleMapContract,
   merkleMap: MerkleMap,
-  live: boolean = true,
-  displayLogs: boolean = false
+  live: boolean = true
 ) {
   const pubKey: PublicKey = pk.toPublicKey();
   const nftId: Field = _NFT.id;
@@ -215,13 +214,6 @@ export async function transferNFT(
   _NFT.changeOwner(recipient);
 
   merkleMap.set(nftId, _NFT.hash());
-
-  if (displayLogs) {
-    logTokenBalances(pubKey, zkAppInstance);
-    logTokenBalances(recipient, zkAppInstance);
-
-    compareLogStates(zkAppInstance, merkleMap);
-  }
 }
 
 export async function initRootWithApp(
@@ -246,8 +238,7 @@ export async function initAppRoot(
   zkAppInstance: MerkleMapContract,
   merkleMap: MerkleMap,
   totalInited: number,
-  live: boolean = false,
-  displayLogs: boolean = false
+  live: boolean = false
 ) {
   const pubKey: PublicKey = adminPK.toPublicKey();
 
@@ -262,36 +253,24 @@ export async function initAppRoot(
   });
 
   await sendWaitTx(init_tx, [adminPK], live);
-
-  if (displayLogs) {
-    compareLogStates(zkAppInstance, merkleMap);
-  }
 }
 
 export async function deployApp(
-  pk: PrivateKey,
+  senderPK: PrivateKey,
+  zkAppPrivateKey: PrivateKey,
   proofsEnabled: boolean = true,
-  live: boolean = true,
-  displayLogs: boolean = false
-): Promise<{
-  merkleMap: MerkleMap;
-  zkAppInstance: MerkleMapContract;
-  zkAppPk: PrivateKey;
-}> {
+  live: boolean = true
+) {
   let verificationKey: VerificationKey | undefined;
 
   if (proofsEnabled) {
     ({ verificationKey } = await MerkleMapContract.compile());
     console.log('compiled');
   }
-
-  const zkAppPrivateKey: PrivateKey = PrivateKey.random();
   const zkAppAddress: PublicKey = zkAppPrivateKey.toPublicKey();
-
   const zkAppInstance: MerkleMapContract = new MerkleMapContract(zkAppAddress);
-  const merkleMap: MerkleMap = new MerkleMap();
 
-  const pubKey: PublicKey = pk.toPublicKey();
+  const pubKey: PublicKey = senderPK.toPublicKey();
 
   const deployTxnOptions = createTxOptions(pubKey, live);
 
@@ -302,18 +281,8 @@ export async function deployApp(
       zkAppInstance.deploy({ verificationKey, zkappKey: zkAppPrivateKey });
     }
   );
-
-  await sendWaitTx(deployTx, [pk], live);
-
-  if (displayLogs) {
-    compareLogStates(zkAppInstance, merkleMap, live);
-  }
-
-  return {
-    merkleMap: merkleMap,
-    zkAppInstance: zkAppInstance,
-    zkAppPk: zkAppPrivateKey,
-  };
+  const txStatus = await sendWaitTx(deployTx, [senderPK], live);
+  return txStatus;
 }
 
 export async function sendWaitTx(
@@ -332,6 +301,7 @@ export async function sendWaitTx(
       try {
         const transaction = await pendingTx.safeWait();
         console.log(transaction.status);
+        return transaction.status;
       } catch (error) {
         throw new Error('tx not successful');
       }

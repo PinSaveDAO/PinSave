@@ -2,7 +2,7 @@ import { PublicKey, Mina, Field, fetchAccount, SmartContract } from 'o1js';
 
 export function logMinaBalance(address: PublicKey) {
   const balance = getMinaBalance(address);
-  console.log(address.toBase58() + ' Mina balance:', balance);
+  console.log(address.toBase58(), ' Mina balance:', balance);
 }
 
 export async function logTokenBalances(
@@ -10,7 +10,7 @@ export async function logTokenBalances(
   zkApp: SmartContract
 ) {
   const balance = await getTokenAddressBalance(address, zkApp.token.id);
-  console.log(address.toBase58() + ' zkApp tokens:', balance);
+  console.log(address.toBase58(), ' zkApp tokens:', balance);
 }
 
 export function getMinaBalance(address: PublicKey) {

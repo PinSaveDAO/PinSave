@@ -1,5 +1,5 @@
 import { Paper, Text, Title, Button } from "@mantine/core";
-import { MerkleMap, PublicKey, Signature } from "o1js";
+import { MerkleMap, PrivateKey, PublicKey, Signature } from "o1js";
 import {
   deserializeJsonToMerkleMap,
   getAppContract,
@@ -11,6 +11,8 @@ import {
   getAppString,
   mintVercelMetadata,
   getTokenAddressBalance,
+  mintNFT,
+  mintNFTwithMap,
 } from "pin-mina";
 import { useEffect, useState } from "react";
 
@@ -37,7 +39,7 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
 
   const { address, setAddress } = useAddressContext();
 
-  async function mintNFT() {
+  async function mintNFTClient() {
     if (!address) {
       const connectedAddress = await setMinaAccount(key);
       setAddress(connectedAddress);
@@ -71,7 +73,13 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
       console.log(nft.hash().toString());
       console.log(adminSignatureBase58);
 
-      const txMint = await createMintTxFromMap(
+      /* const adminPK = PrivateKey.fromBase58(
+        ""
+      );
+
+      await mintNFTwithMap(adminPK, adminPK, nft, zkApp, map, true, true); */
+      /* 
+const txMint = await createMintTxFromMap(
         pub,
         zkApp,
         nft,
@@ -82,8 +90,6 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
       );
 
       const transactionJSON = txMint.toJSON();
-      /* 
-
 
       const sendTransactionResult = await (
         window as CustomWindow
@@ -164,7 +170,7 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
         </p>
       ) : null}
       {address === post.owner && post.isMinted === "0" && map ? (
-        <Button onClick={async () => await mintNFT()}>Mint</Button>
+        <Button onClick={async () => await mintNFTClient()}>Mint</Button>
       ) : null}
     </Paper>
   );

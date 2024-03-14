@@ -7,7 +7,7 @@ export function startBerkeleyClient(
   Mina.setActiveInstance(Berkeley);
 }
 
-export async function startLocalBlockchainClient(
+export function startLocalBlockchainClient(
   proofsEnabled: boolean = false,
   enforceTransactionLimits: boolean = false
 ) {

@@ -34,7 +34,7 @@
     "buildw": "tsc --watch",
     "format": "prettier --write --ignore-unknown **/*",
     "coverage": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage",
-    "test": "tsc && node build/src/NFTsMapContract.test.js",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "deploy": "tsc && node build/src/scripts/deploy.js",
     "query": "tsc && node build/src/scripts/queryContract.js",
     "queryAccount": "tsc && node build/src/scripts/queryAccount.js",
