@@ -62,6 +62,8 @@ export {
   createMintTx,
   createTxOptions,
   createInitNFTTxFromMap,
+  mintNFTwithMap,
+  mintNFT,
 } from './components/transactions.js';
 
 export { MerkleMapContract } from './NFTsMapContract.js';
