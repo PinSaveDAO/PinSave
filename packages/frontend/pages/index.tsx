@@ -1,4 +1,12 @@
-import { Box, Button, Center, Title, Text, Stack } from "@mantine/core";
+import {
+  Box,
+  Button,
+  Center,
+  Title,
+  Text,
+  Stack,
+  LoadingOverlay,
+} from "@mantine/core";
 import type { NextPage } from "next";
 
 import PostCard from "@/components/Posts/PostCard";
@@ -51,6 +59,7 @@ const Home: NextPage = () => {
               ecosystem related to non fungible tokens to improve developer
               experience.
             </Text>
+            <LoadingOverlay visible={isLoading} />
           </Stack>
         </Center>
       )}
