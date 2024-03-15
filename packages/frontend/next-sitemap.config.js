@@ -1,5 +1,7 @@
 /** @type {import('next-sitemap').IConfig} */
-module.exports = {
+const sitemap = {
   siteUrl: "https://pinsave.app",
   generateRobotsTxt: true,
 };
+
+export default sitemap;

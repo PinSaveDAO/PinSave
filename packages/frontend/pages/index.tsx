@@ -1,9 +1,9 @@
+import { Box, Button, Center, Title, Text, Stack } from "@mantine/core";
+import type { NextPage } from "next";
+
 import PostCard from "@/components/Posts/PostCard";
 import { usePosts } from "@/hooks/api";
 import type { Post } from "@/services/upload";
-
-import { Box, Button, Center, Title, Text, Stack } from "@mantine/core";
-import type { NextPage } from "next";
 
 const Home: NextPage = () => {
   const {

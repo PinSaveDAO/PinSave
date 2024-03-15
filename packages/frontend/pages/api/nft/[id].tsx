@@ -1,5 +1,6 @@
-import { startBerkeleyClient, getAppString, getVercelNFT } from "pin-mina";
+import { getAppString, getVercelNFT } from "pin-mina";
 import type { NextApiRequest, NextApiResponse } from "next";
+
 import { getVercelClient } from "@/services/vercelClient";
 
 export default async function handler(
@@ -10,11 +11,8 @@ export default async function handler(
     const { id } = req.query;
     const idNumber = Number(id);
 
-    startBerkeleyClient();
-
     const appId = getAppString();
-
-    const client = await getVercelClient();
+    const client = getVercelClient();
     const nft = await getVercelNFT(appId, idNumber, client);
 
     res.status(200).json({ ...nft });

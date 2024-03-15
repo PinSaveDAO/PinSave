@@ -1,27 +1,31 @@
-import dotenv from 'dotenv';
 import { PublicKey, PrivateKey } from 'o1js';
 import { createClient } from '@vercel/kv';
-
-import { MerkleMapContract } from '../NFTsMapContract.js';
-
+import dotenv from 'dotenv';
 dotenv.config();
 
+import { MerkleMapContract } from '../../NFTsMapContract.js';
+
 export function getEnvAccount() {
-  const pk: PrivateKey = PrivateKey.fromBase58(
+  const adminPK: PrivateKey = PrivateKey.fromBase58(
     process.env.deployerKey as string
   );
-  const pubKey: PublicKey = pk.toPublicKey();
-  return { pubKey: pubKey, pk: pk };
+  const pubKey: PublicKey = adminPK.toPublicKey();
+  return { pubKey: pubKey, adminPK: adminPK };
 }
 
 export function getAppEnv() {
-  const pk: PrivateKey = PrivateKey.fromBase58(
+  const zkAppPK: PrivateKey = PrivateKey.fromBase58(
     process.env.zkAppPrivateKey as string
   );
-  const zkAppAddress: PublicKey = pk.toPublicKey();
+  const zkAppAddress: PublicKey = zkAppPK.toPublicKey();
   const appId: string = zkAppAddress.toBase58();
   const zkApp: MerkleMapContract = new MerkleMapContract(zkAppAddress);
-  return { pk: pk, zkAppAddress: zkAppAddress, appId: appId, zkApp: zkApp };
+  return {
+    zkAppPK: zkAppPK,
+    zkAppAddress: zkAppAddress,
+    appId: appId,
+    zkApp: zkApp,
+  };
 }
 
 export function getVercelClient() {

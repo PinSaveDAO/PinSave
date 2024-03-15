@@ -1,4 +1,3 @@
-import { setMinaAccount } from "@/hooks/minaWallet";
 import {
   createStyles,
   Text,
@@ -16,6 +15,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
+
+import { setMinaAccount } from "@/hooks/minaWallet";
+import { useAddressContext } from "context";
 
 const useStyles = createStyles((theme) => ({
   root: {
@@ -67,7 +69,7 @@ const useStyles = createStyles((theme) => ({
     color:
       theme.colorScheme === "dark"
         ? theme.colors.dark[0]
-        : theme.colors.gray[7],
+        : theme.colors[theme.primaryColor][9],
     fontSize: theme.fontSizes.lg,
     fontWeight: 500,
 
@@ -75,7 +77,7 @@ const useStyles = createStyles((theme) => ({
       backgroundColor:
         theme.colorScheme === "dark"
           ? theme.colors.dark[6]
-          : theme.colors.gray[0],
+          : theme.colors.lime[2],
     },
 
     [theme.fn.smallerThan("sm")]: {
@@ -85,13 +87,19 @@ const useStyles = createStyles((theme) => ({
   },
 
   linkActive: {
-    "&, &:hover": {
+    "&": {
       backgroundColor:
         theme.colorScheme === "dark"
           ? theme.fn.rgba(theme.colors[theme.primaryColor][9], 0.25)
-          : theme.colors[theme.primaryColor][0],
+          : theme.colors.lime[1],
       color:
-        theme.colors[theme.primaryColor][theme.colorScheme === "dark" ? 3 : 7],
+        theme.colors[theme.primaryColor][theme.colorScheme === "dark" ? 3 : 9],
+    },
+    "&:hover": {
+      backgroundColor:
+        theme.colorScheme === "dark"
+          ? theme.colors.dark[6]
+          : theme.colors[theme.primaryColor][2],
     },
   },
 }));
@@ -101,18 +109,20 @@ interface NavbarProps {
 }
 
 export function Navbar({ links }: NavbarProps) {
-  const key = "auroWalletAddress";
+  const { address, setAddress } = useAddressContext();
 
+  const key = "auroWalletAddress";
   const [hasMounted, setHasMounted] = useState(false);
-  const [address, setAddress] = useState("");
+  const [shortAddress, setShortAddress] = useState<string | undefined>();
 
   useEffect(() => {
     setHasMounted(true);
     const savedAddress = sessionStorage.getItem(key);
     if (savedAddress) {
-      const shortAddress =
-        savedAddress.substring(0, 3) + "..." + savedAddress.slice(-3);
-      setAddress(shortAddress);
+      setAddress(savedAddress);
+      setShortAddress(
+        savedAddress.substring(0, 3) + "..." + savedAddress.slice(-3)
+      );
     }
   }, [address]);
 
@@ -163,7 +173,7 @@ export function Navbar({ links }: NavbarProps) {
               radius="md"
               onClick={async () => setAddress(await setMinaAccount(key))}
             >
-              {address !== "" ? address : "Connect Wallet"}
+              {shortAddress ? shortAddress : "Connect Wallet"}
             </Button>
             <Burger
               opened={opened}

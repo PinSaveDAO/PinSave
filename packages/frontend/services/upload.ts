@@ -4,6 +4,7 @@ export type PostData = {
   name: string;
   description: string;
   cid: string;
+  isMinted: string;
 };
 
 export type Post = PostData & {

@@ -50,7 +50,6 @@ const useStyles = createStyles((theme) => ({
 
 export default function NotFoundPage() {
   const { classes } = useStyles();
-
   return (
     <Container className={classes.root}>
       <div className={classes.label}>404</div>

@@ -1,10 +1,10 @@
+import { ActionIcon, SimpleGrid, LoadingOverlay } from "@mantine/core";
+import { useRouter } from "next/router";
+import { ArrowLeft } from "tabler-icons-react";
+
 import DisplayMedia from "@/components/Post/DisplayMedia";
 import MediaDetails from "@/components/Post/MediaDetails";
 import { usePost } from "@/hooks/api";
-
-import { ActionIcon, SimpleGrid, LoadingOverlay, Center } from "@mantine/core";
-import { useRouter } from "next/router";
-import { ArrowLeft } from "tabler-icons-react";
 
 const PostPage = () => {
   const router = useRouter();
@@ -13,7 +13,7 @@ const PostPage = () => {
     <div>
       <LoadingOverlay visible={isLoading} />
       {postQueried && (
-        <>
+        <div>
           <ActionIcon
             onClick={() => router.back()}
             mb="md"
@@ -30,12 +30,10 @@ const PostPage = () => {
               { maxWidth: "md", cols: 1, spacing: "md" },
             ]}
           >
-            <Center>
-              <DisplayMedia post={postQueried} />
-            </Center>
+            <DisplayMedia post={postQueried} />
             <MediaDetails post={postQueried} />
           </SimpleGrid>
-        </>
+        </div>
       )}
     </div>
   );

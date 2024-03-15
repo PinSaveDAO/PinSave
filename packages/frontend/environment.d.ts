@@ -7,6 +7,7 @@ declare global {
       NEXT_PUBLIC_BLOB: string;
       NEXT_PUBLIC_REDIS_URL: string;
       NEXT_PUBLIC_REDIS_TOKEN: string;
+      adminPK: string;
     }
   }
 }

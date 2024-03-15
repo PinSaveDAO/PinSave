@@ -1,16 +1,16 @@
-import { startBerkeleyClient } from '../components/client.js';
-import { getEnvAccount, getAppEnv } from '../components/env.js';
-import { getTokenIdBalance } from '../components/TokenBalances.js';
+import { startBerkeleyClient } from '../components/utilities/client.js';
+import { getEnvAccount, getAppEnv } from '../components/utilities/env.js';
+import { getTokenAddressBalance } from '../components/TokenBalances.js';
 
 startBerkeleyClient();
 
 const { zkApp: zkApp } = getAppEnv();
 const { pubKey: pub } = getEnvAccount();
 
-const tokenBalance = await getTokenIdBalance(pub, zkApp.token.id);
+const tokenBalance = await getTokenAddressBalance(pub, zkApp.token.id);
 
-console.log('PinSave token balance:', tokenBalance / 1_000_000_000n);
+console.log('PinSave token balance:', tokenBalance);
 
-const minaTokenBalance = await getTokenIdBalance(pub);
+const minaTokenBalance = await getTokenAddressBalance(pub);
 
-console.log('Mina token balance:', Number(minaTokenBalance) / 1_000_000_000);
+console.log('Mina token balance:', minaTokenBalance);

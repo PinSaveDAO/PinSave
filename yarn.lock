@@ -1083,17 +1083,17 @@
     viem "^0.3.17"
     wait-on "^7.0.1"
 
-"@tanstack/query-core@5.22.2":
-  version "5.22.2"
-  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-5.22.2.tgz#af67d41b0b4a3e846c2325f32540f39ca0d4788d"
-  integrity sha512-z3PwKFUFACMUqe1eyesCIKg3Jv1mysSrYfrEW5ww5DCDUD4zlpTKBvUDaEjsfZzL3ULrFLDM9yVUxI/fega1Qg==
+"@tanstack/query-core@5.24.1":
+  version "5.24.1"
+  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-5.24.1.tgz#d40928dec22b47df97fb2648e8c499772e8d7eb2"
+  integrity sha512-DZ6Nx9p7BhjkG50ayJ+MKPgff+lMeol7QYXkvuU5jr2ryW/4ok5eanaS9W5eooA4xN0A/GPHdLGOZGzArgf5Cg==
 
-"@tanstack/react-query@5.22.2":
-  version "5.22.2"
-  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-5.22.2.tgz#e5fce278fbdd026fc1d561a4505142b9f93549d7"
-  integrity sha512-TaxJDRzJ8/NWRT4lY2jguKCrNI6MRN+67dELzPjNUlvqzTxGANlMp68l7aC7hG8Bd1uHNxHl7ihv7MT50i/43A==
+"@tanstack/react-query@5.24.1":
+  version "5.24.1"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-5.24.1.tgz#bcb913febe0d813cec1fda7783298d07aa998b20"
+  integrity sha512-4+09JEdO4d6+Gc8Y/g2M/MuxDK5IY0QV8+2wL2304wPKJgJ54cBbULd3nciJ5uvh/as8rrxx6s0mtIwpRuGd1g==
   dependencies:
-    "@tanstack/query-core" "5.22.2"
+    "@tanstack/query-core" "5.24.1"
 
 "@testing-library/cypress@^9.0.0":
   version "9.0.0"
@@ -2814,13 +2814,6 @@ destroy@1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/destroy/-/destroy-1.2.0.tgz#4803735509ad8be552934c67df614f94e66fa015"
   integrity sha512-2sJGJTaXIIaR1w4iJSNoN0hnMY7Gpc/n8D4qSCJw8QqFWXf7cuAgnEHxBpweaVcPevC2l3KpjYCx3NypQQgaJg==
-
-detect-gpu@^5.0.5:
-  version "5.0.37"
-  resolved "https://registry.yarnpkg.com/detect-gpu/-/detect-gpu-5.0.37.tgz#27febe44d478ef4d35cd38007355da795ba075d5"
-  integrity sha512-EraWs84faI4iskB4qvE39bevMIazEvd1RpoyGLOBesRLbiz6eMeJqqRPHjEFClfRByYZzi9IzU35rBXIO76oDw==
-  dependencies:
-    webgl-constants "^1.1.1"
 
 detect-libc@^2.0.2:
   version "2.0.2"
@@ -5339,14 +5332,13 @@ nyc@15.1.0:
     test-exclude "^6.0.0"
     yargs "^15.0.2"
 
-o1js@0.16.2:
-  version "0.16.2"
-  resolved "https://registry.yarnpkg.com/o1js/-/o1js-0.16.2.tgz#46e7bcdcce41a4a01f2b9b884d2dec4a23df1775"
-  integrity sha512-CyQFURc2UzzNpPJcYUdvFqa6I7SjXksDCubgJixWjEoS3R+FOl/yttMwOwopxb3oLLK92MyD2ZM/OEdKqVUyyg==
+o1js@0.17.0:
+  version "0.17.0"
+  resolved "https://registry.yarnpkg.com/o1js/-/o1js-0.17.0.tgz#4c7173f160e60cdb3224a96f4f734d7ad95003e7"
+  integrity sha512-OPQc3jBG2X5z7yI2mcovzRVbd91Q2D/npep14+g0wBdGXpyyAFdaz59YjVlEsPcY1Gmh2L+LCFhVA2fQ+1ogIg==
   dependencies:
     blakejs "1.2.1"
     cachedir "^2.4.0"
-    detect-gpu "^5.0.5"
     isomorphic-fetch "^3.0.0"
     js-sha256 "^0.9.0"
     reflect-metadata "^0.1.13"
@@ -5681,14 +5673,14 @@ pify@^4.0.1:
   resolved "https://registry.yarnpkg.com/pify/-/pify-4.0.1.tgz#4b2cd25c50d598735c50292224fd8c6df41e3231"
   integrity sha512-uB80kBFb/tfd68bVleG9T5GGsGPjJrLAUpR5PZIrhBnIaRTQRjqdJSsIKkOP6OAIFbj7GOrcudc5pNjZ+geV2g==
 
-pin-mina@0.1.34:
-  version "0.1.34"
-  resolved "https://registry.yarnpkg.com/pin-mina/-/pin-mina-0.1.34.tgz#76ca1aa6872a567e03b120603b89756a4956f563"
-  integrity sha512-aM3VJHM+qcjVenA2SUPEsC8Xc7EdGKLzmUwtIsL2kpWYWuH5PLFjVQzSf7kfgTuXefRS94Os+t4vJYjrcWS6dw==
+pin-mina@0.1.41:
+  version "0.1.41"
+  resolved "https://registry.yarnpkg.com/pin-mina/-/pin-mina-0.1.41.tgz#fa1975ed3b2ac1389441d9d6a9f8ae0273e0e0bf"
+  integrity sha512-/9pOhmW1XjnZf177Xo1j4Sy/ijAhFsF+8mQsvl9XEjQlyC7C0nTGErxvX/llu1j6ZpxFZ6/V7EaclaOJPRFwDA==
   dependencies:
     "@vercel/kv" "^1.0.1"
     dotenv "^16.3.1"
-    o1js "0.16.2"
+    o1js "0.17.0"
 
 pinkie-promise@^2.0.0:
   version "2.0.1"
@@ -7199,11 +7191,6 @@ wbuf@^1.1.0, wbuf@^1.7.3:
   integrity sha512-O84QOnr0icsbFGLS0O3bI5FswxzRr8/gHwWkDlQFskhSPryQXvrTMxjxGP4+iWYoauLoBvfDpkrOauZ+0iZpDA==
   dependencies:
     minimalistic-assert "^1.0.0"
-
-webgl-constants@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/webgl-constants/-/webgl-constants-1.1.1.tgz#f9633ee87fea56647a60b9ce735cbdfb891c6855"
-  integrity sha512-LkBXKjU5r9vAW7Gcu3T5u+5cvSvh5WwINdr0C+9jpzVB41cjQAP5ePArDtk/WHYdVj0GefCgM73BA7FlIiNtdg==
 
 webidl-conversions@^3.0.0:
   version "3.0.1"

@@ -1,6 +1,6 @@
 import { kv, createClient } from "@vercel/kv";
 
-export async function getVercelClient() {
+export function getVercelClient() {
   const isDev = process.env.NEXT_PUBLIC_ISDEV ?? "false";
   let client = kv;
   if (isDev === "true") {
