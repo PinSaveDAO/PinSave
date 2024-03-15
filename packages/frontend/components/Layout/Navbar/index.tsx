@@ -69,7 +69,7 @@ const useStyles = createStyles((theme) => ({
     color:
       theme.colorScheme === "dark"
         ? theme.colors.dark[0]
-        : theme.colors.gray[7],
+        : theme.colors[theme.primaryColor][9],
     fontSize: theme.fontSizes.lg,
     fontWeight: 500,
 
@@ -77,7 +77,7 @@ const useStyles = createStyles((theme) => ({
       backgroundColor:
         theme.colorScheme === "dark"
           ? theme.colors.dark[6]
-          : theme.colors.gray[0],
+          : theme.colors.lime[2],
     },
 
     [theme.fn.smallerThan("sm")]: {
@@ -87,13 +87,19 @@ const useStyles = createStyles((theme) => ({
   },
 
   linkActive: {
-    "&, &:hover": {
+    "&": {
       backgroundColor:
         theme.colorScheme === "dark"
           ? theme.fn.rgba(theme.colors[theme.primaryColor][9], 0.25)
-          : theme.colors[theme.primaryColor][0],
+          : theme.colors.lime[1],
       color:
-        theme.colors[theme.primaryColor][theme.colorScheme === "dark" ? 3 : 7],
+        theme.colors[theme.primaryColor][theme.colorScheme === "dark" ? 3 : 9],
+    },
+    "&:hover": {
+      backgroundColor:
+        theme.colorScheme === "dark"
+          ? theme.colors.dark[6]
+          : theme.colors[theme.primaryColor][2],
     },
   },
 }));

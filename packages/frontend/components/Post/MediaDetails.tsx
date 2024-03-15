@@ -115,16 +115,10 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
     fetchMediaDetails();
   }, [post.id, address]);
   return (
-    <Paper
-      shadow="sm"
-      p="md"
-      withBorder
-      style={{
-        width: "99%",
-        borderRadius: "10px",
-      }}
-    >
-      <Title mb="1.4rem">{post.name}</Title>
+    <Paper shadow="sm" p="md" withBorder>
+      <Title mb="1.4rem" my={2}>
+        {post.name}
+      </Title>
       <Paper
         shadow="xs"
         withBorder

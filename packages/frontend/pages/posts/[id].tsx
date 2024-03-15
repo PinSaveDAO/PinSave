@@ -1,4 +1,4 @@
-import { ActionIcon, SimpleGrid, LoadingOverlay, Center } from "@mantine/core";
+import { ActionIcon, SimpleGrid, LoadingOverlay } from "@mantine/core";
 import { useRouter } from "next/router";
 import { ArrowLeft } from "tabler-icons-react";
 
