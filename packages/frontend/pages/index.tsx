@@ -1,4 +1,12 @@
-import { Box, Button, Center, Title, Text, Stack } from "@mantine/core";
+import {
+  Box,
+  Button,
+  Center,
+  Title,
+  Text,
+  Stack,
+  LoadingOverlay,
+} from "@mantine/core";
 import Link from "next/link";
 import type { NextPage } from "next";
 
@@ -54,9 +62,10 @@ const Home: NextPage = () => {
               experience.
             </Text>
             <Text>
-              Upload PinSave Mina post on <Link href="/upload">Upload</Link>
+              Upload PinSave Mina post on{" "}
+              <Link href="https://pinsave.app/upload">Upload</Link>
             </Text>
-            <Text>Loading Posts</Text>
+            <LoadingOverlay visible />
           </Stack>
         </Center>
       )}
