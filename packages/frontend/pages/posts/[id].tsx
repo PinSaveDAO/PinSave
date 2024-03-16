@@ -13,10 +13,7 @@ const PostPage = () => {
   const { data: postQueried, isLoading } = usePost(postNumber);
   return (
     <div>
-      <PageSEO
-        title={`Pin Save ${postNumber} Post`}
-        description={`${postNumber} Pin Save Post`}
-      />
+      <PageSEO title={`Pin Save Post`} description={`Pin Save Post`} />
       <LoadingOverlay visible={isLoading} />
       {postQueried && (
         <div>
