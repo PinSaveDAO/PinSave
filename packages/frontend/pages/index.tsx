@@ -7,6 +7,7 @@ import {
   Stack,
   LoadingOverlay,
 } from "@mantine/core";
+import Link from "next/link";
 import type { NextPage } from "next";
 
 import type { Post } from "@/services/upload";
@@ -60,6 +61,9 @@ const Home: NextPage = () => {
               addition, it aims to introduce more standards into the Mina
               ecosystem related to non fungible tokens to improve developer
               experience.
+            </Text>
+            <Text>
+              Upload PinSave Mina post on <Link href="/upload">Upload</Link>
             </Text>
             <LoadingOverlay visible={isLoading} />
           </Stack>

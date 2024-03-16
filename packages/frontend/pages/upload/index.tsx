@@ -8,7 +8,7 @@ const Upload: NextPage = () => {
     <div>
       <PageSEO
         title="Pin Save Upload Page"
-        description="Upload New Post on Pin Save decentralized Pinterest"
+        description="Upload New Post on Pin Save - decentralized Pinterest. A platform for decentralized content aggregation and image sharing"
       />
       <UploadForm />
     </div>
