@@ -5,12 +5,18 @@ import { ArrowLeft } from "tabler-icons-react";
 import DisplayMedia from "@/components/Post/DisplayMedia";
 import MediaDetails from "@/components/Post/MediaDetails";
 import { usePost } from "@/hooks/api";
+import { PageSEO } from "@/components/SEO";
 
 const PostPage = () => {
   const router = useRouter();
-  const { data: postQueried, isLoading } = usePost(String(router.query.id));
+  const postNumber = String(router.query.id);
+  const { data: postQueried, isLoading } = usePost(postNumber);
   return (
     <div>
+      <PageSEO
+        title={`Pin Save ${postNumber} Post`}
+        description={`${postNumber} Pin Save Post`}
+      />
       <LoadingOverlay visible={isLoading} />
       {postQueried && (
         <div>

@@ -9,9 +9,10 @@ import {
 } from "@mantine/core";
 import type { NextPage } from "next";
 
+import type { Post } from "@/services/upload";
 import PostCard from "@/components/Posts/PostCard";
 import { usePosts } from "@/hooks/api";
-import type { Post } from "@/services/upload";
+import { PageSEO } from "@/components/SEO";
 
 const Home: NextPage = () => {
   const {
@@ -24,6 +25,7 @@ const Home: NextPage = () => {
 
   return (
     <div>
+      <PageSEO />
       {posts?.pages.map((page: any, i: number) => (
         <Box
           mx="auto"
