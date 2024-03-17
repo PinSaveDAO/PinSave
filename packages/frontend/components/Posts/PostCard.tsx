@@ -10,34 +10,35 @@ interface IMyProps {
 
 const PostCard: React.FC<IMyProps> = ({ post }) => {
   return (
-    <Link href={`/posts/${post.id}`}>
-      <Paper
-        component="div"
-        withBorder
-        radius="lg"
-        shadow="md"
-        p="md"
-        sx={{ cursor: "pointer" }}
-      >
-        <Image
-          src={post.cid}
-          alt={post.name}
-          height={200}
-          width={200}
-          sizes="200px"
-          style={{
-            objectFit: "cover",
-            borderRadius: "10px",
-            width: "100%",
-          }}
-          loading="lazy"
-          className="fade-in"
-        />
-        <Text align="center" mt="sm" lineClamp={1}>
-          {post.name}
-        </Text>
-      </Paper>
-    </Link>
+    <Center>
+      <Link href={`/posts/${post.id}`}>
+        <Paper
+          component="div"
+          withBorder
+          radius="lg"
+          shadow="md"
+          p="md"
+          sx={{ cursor: "pointer" }}
+        >
+          <Image
+            src={post.cid}
+            alt={post.name}
+            height={200}
+            width={200}
+            sizes="200px"
+            style={{
+              objectFit: "cover",
+              borderRadius: "10px",
+            }}
+            loading="lazy"
+            className="fade-in"
+          />
+          <Text align="center" mt="sm" lineClamp={1}>
+            {post.name}
+          </Text>
+        </Paper>
+      </Link>
+    </Center>
   );
 };
 
