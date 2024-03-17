@@ -11,7 +11,7 @@ export default async function handler(
     const { id } = req.query;
     const index = Number(id);
 
-    const client = await getVercelClient();
+    const client = getVercelClient();
     const appId = getAppString();
 
     const data = await getVercelMetadata(appId, index, client);

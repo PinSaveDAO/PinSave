@@ -62,8 +62,7 @@ const Home: NextPage = () => {
               experience.
             </Text>
             <Text>
-              Upload PinSave Mina post on{" "}
-              <Link href="https://pinsave.app/upload">Upload</Link>
+              Upload PinSave Mina post on <Link href="/upload">Upload</Link>
             </Text>
             <LoadingOverlay visible />
           </Stack>

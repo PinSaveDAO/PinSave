@@ -11,40 +11,39 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  try {
-    const hostname = host;
-    const { number } = req.query;
-    const pageNumber = Number(number);
+  const hostname = host;
+  const { number } = req.query;
+  const pageNumber = Number(number);
 
-    const client = await getVercelClient();
-    const appId = getAppString();
-    const data = await fetcher(`${hostname}/api/totalInited`);
-    const totalInited = data.totalInited;
-
-    let items = [];
-
-    let upperLimit = perPage * pageNumber;
-    const lowerLimit = upperLimit - perPage;
-    if (totalInited < upperLimit) {
-      upperLimit = totalInited - 1;
-    }
-
-    try {
-      for (let index = lowerLimit; upperLimit >= index; index++) {
-        const data = await getVercelMetadata(appId, index, client);
-        items.push({ ...data });
-      }
-    } catch (err) {
-      res.status(200).json({
-        items: items,
-        totalInited: totalInited,
-        error: "failed to fetch data" + err,
-      });
-    }
-    res
-      .status(200)
-      .json({ items: items, totalSupply: totalInited, page: pageNumber });
-  } catch (e) {
-    res.status(500).json({ error: "failed to fetch data" + e });
+  if (pageNumber < 0) {
+    throw new Error("page number can not be negative");
   }
+
+  const data = await fetcher(`${hostname}/api/totalInited`);
+  const totalInited = data.totalInited;
+
+  let lowerLimit = 0;
+  let upperLimit = perPage > totalInited ? totalInited - 1 : perPage - 1;
+
+  if (pageNumber > 0) {
+    lowerLimit = pageNumber * perPage;
+    upperLimit =
+      lowerLimit + perPage > totalInited
+        ? totalInited - 1
+        : lowerLimit + perPage - 1;
+  }
+
+  const client = getVercelClient();
+  const appId = getAppString();
+
+  let items = [];
+
+  for (let index = lowerLimit; upperLimit >= index; index++) {
+    const data = await getVercelMetadata(appId, index, client);
+    items.push({ ...data });
+  }
+
+  res
+    .status(200)
+    .json({ items: items, totalSupply: totalInited, page: pageNumber });
 }

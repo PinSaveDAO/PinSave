@@ -1,7 +1,7 @@
 import { fetcher } from "@/utils/fetcher";
 
 export const fetchPosts = async ({
-  pageParam = 1,
+  pageParam = 0,
 }: { pageParam?: number } = {}) => {
   try {
     return await fetcher(`/api/pages/${pageParam}`);

@@ -5,18 +5,14 @@ import { PrivateKey, Signature } from "o1js";
 import { fetcher } from "@/utils/fetcher";
 import { host } from "@/utils/host";
 
-type dataIn = {
-  postNumber: string;
-};
-
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   try {
     if (req.method === "POST") {
-      const data: dataIn = req.body;
-      const postNumber = data.postNumber;
+      const data = req.body;
+      const postNumber = String(data.postNumber);
 
       const dataNft = await fetcher(`${host}/api/nft/${postNumber}`);
       const nft = deserializeNFT(dataNft);
