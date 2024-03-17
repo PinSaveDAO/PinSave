@@ -1,5 +1,6 @@
 import { Box, Button, Center, Title } from "@mantine/core";
 import { useEffect, useState } from "react";
+import { InferGetStaticPropsType } from "next";
 import { nftDataIn } from "pin-mina";
 
 import type { Post } from "@/services/upload";
@@ -15,7 +16,7 @@ type dataIn = {
 
 export async function getStaticProps() {
   const res = await fetch("https://pinsave.app/api/pages/0");
-  const posts = await res.json();
+  const posts: dataIn = await res.json();
   return {
     props: {
       posts,
@@ -23,7 +24,9 @@ export async function getStaticProps() {
   };
 }
 
-export default function Home({ ...posts }: dataIn) {
+export default function Home({
+  posts,
+}: InferGetStaticPropsType<typeof getStaticProps>) {
   const data = Array.from(posts.items);
   const {
     data: newPosts,
