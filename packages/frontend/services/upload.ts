@@ -8,7 +8,7 @@ export type PostData = {
 };
 
 export type Post = PostData & {
-  id: number;
+  id: number | string;
 };
 
 export type IndividualPost = Post & {

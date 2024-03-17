@@ -1,15 +1,21 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { getVercelMetadata, getAppString } from "pin-mina";
+import { getVercelMetadata, getAppString, nftDataIn } from "pin-mina";
 
 import { getVercelClient } from "@/services/vercelClient";
 import { fetcher } from "@/utils/fetcher";
 import { host } from "@/utils/host";
 
+type dataOut = {
+  items: nftDataIn[];
+  totalSupply: number;
+  page: number;
+};
+
 const perPage = 6;
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse<dataOut>
 ) {
   const hostname = host;
   const { number } = req.query;
@@ -20,7 +26,7 @@ export default async function handler(
   }
 
   const data = await fetcher(`${hostname}/api/totalInited`);
-  const totalInited = data.totalInited;
+  const totalInited = Number(data.totalInited);
 
   let lowerLimit = 0;
   let upperLimit = perPage > totalInited ? totalInited - 1 : perPage - 1;
