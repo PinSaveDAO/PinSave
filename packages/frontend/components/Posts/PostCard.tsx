@@ -30,7 +30,6 @@ const PostCard: React.FC<IMyProps> = ({ post }) => {
               objectFit: "cover",
               borderRadius: "10px",
             }}
-            loading="lazy"
             className="fade-in"
           />
           <Text align="center" mt="sm" lineClamp={1}>
