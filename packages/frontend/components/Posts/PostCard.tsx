@@ -10,7 +10,7 @@ interface IMyProps {
 
 const PostCard: React.FC<IMyProps> = ({ post }) => {
   return (
-    <Link href={`/posts/${post.id}`} className="fade-in">
+    <Link href={`/posts/${post.id}`}>
       <Paper
         component="div"
         withBorder
@@ -31,6 +31,7 @@ const PostCard: React.FC<IMyProps> = ({ post }) => {
             width: "100%",
           }}
           loading="lazy"
+          className="fade-in"
         />
         <Text align="center" mt="sm" lineClamp={1}>
           {post.name}
