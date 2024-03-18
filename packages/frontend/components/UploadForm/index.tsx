@@ -262,7 +262,7 @@ const UploadForm = () => {
         {() => dropzoneChildren(image)}
       </Dropzone>
       <Group position="center" sx={{ padding: 15 }}>
-        {!address ? (
+        {!address && (
           <Button
             component="a"
             radius="lg"
@@ -271,8 +271,8 @@ const UploadForm = () => {
           >
             Connect Wallet
           </Button>
-        ) : null}
-        {isDataCorrect && address ? (
+        )}
+        {isDataCorrect && address && (
           <Button
             component="a"
             radius="lg"
@@ -283,15 +283,14 @@ const UploadForm = () => {
           >
             Mint Post
           </Button>
-        ) : null}
-
-        {!isDataCorrect && address ? (
+        )}
+        {!isDataCorrect && address && (
           <Text component="a" mt="md">
             Upload Data
           </Text>
-        ) : null}
+        )}
       </Group>
-      {hash ? (
+      {hash && (
         <Center>
           <a
             style={{ color: "#198b6eb9" }}
@@ -300,7 +299,7 @@ const UploadForm = () => {
             hash
           </a>
         </Center>
-      ) : null}
+      )}
     </Paper>
   );
 };

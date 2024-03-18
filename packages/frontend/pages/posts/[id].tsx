@@ -1,5 +1,5 @@
 import type { InferGetStaticPropsType, GetStaticProps } from "next";
-import { ActionIcon, SimpleGrid, LoadingOverlay } from "@mantine/core";
+import { ActionIcon, SimpleGrid } from "@mantine/core";
 import { useRouter } from "next/router";
 import { ArrowLeft } from "tabler-icons-react";
 import { ParsedUrlQuery } from "querystring";
@@ -7,7 +7,6 @@ import { ParsedUrlQuery } from "querystring";
 import DisplayMedia from "@/components/Post/DisplayMedia";
 import MediaDetails from "@/components/Post/MediaDetails";
 import { PageSEO } from "@/components/SEO";
-//import { usePost } from "@/hooks/api";
 
 interface IParams extends ParsedUrlQuery {
   id: string;
@@ -41,8 +40,6 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
 const PostPage = ({ post }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const router = useRouter();
-  //const postNumber = String(router.query.id);
-  //const { data: postQueried, isLoading } = usePost(postNumber);
   return (
     <div>
       <PageSEO title={`Pin Save Post`} description={`Pin Save Post`} />

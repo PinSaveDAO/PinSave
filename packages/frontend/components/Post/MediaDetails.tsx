@@ -1,4 +1,4 @@
-import { Paper, Text, Title, Button } from "@mantine/core";
+import { Paper, Text, Title, Button, Group, TextInput } from "@mantine/core";
 import { MerkleMap, PublicKey, Signature } from "o1js";
 import {
   deserializeJsonToMerkleMap,
@@ -31,6 +31,15 @@ interface CustomWindow extends Window {
 const MediaDetails: React.FC<IMyProps> = ({ post }) => {
   const key = "auroWalletAddress";
   const postNumber = Number(post.id);
+
+  const [newMessage, setNewMessage] = useState<string>();
+
+  let messagesQueried = [
+    {
+      address: "B62qjV6mDV4dJSp2Gu6QdnqEFv9FmRnMpVraC9qjRbBL5mQBLdowmYv",
+      message: "new message",
+    },
+  ];
 
   const [map, setMap] = useState<MerkleMap | undefined>(undefined);
   const [hash, setHash] = useState<string | undefined>(undefined);
@@ -100,10 +109,8 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
     const fetchMediaDetails = async () => {
       try {
         const dataMap = await fetcher("/api/getMap");
-
         const map = deserializeJsonToMerkleMap(dataMap.map);
         setMap(map);
-
         const savedAddress = sessionStorage.getItem(key);
         if (savedAddress && savedAddress !== "undefined") {
           setAddress(savedAddress);
@@ -133,17 +140,12 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
           style={{ color: "#198b6eb9" }}
           href={`https://minascan.io/berkeley/account/${post.owner}`}
         >
-          {post.owner.substring(
-            post.owner.indexOf(":0x") + 1,
-            post.owner.indexOf(":0x") + 8
-          ) +
-            "..." +
-            post.owner.substring(45)}
+          {post.owner.substring(0, 8) + "..." + post.owner.substring(45)}
         </a>
       </p>
-      {address === post.owner && post.isMinted === "1" ? (
+      {address === post.owner && post.isMinted === "1" && (
         <p style={{ fontSize: "small", color: "#0000008d" }}>Minted</p>
-      ) : null}
+      )}
       {hash ? (
         <p style={{ fontSize: "small", color: "#0000008d" }}>
           <a
@@ -157,6 +159,46 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
       {address === post.owner && post.isMinted === "0" && map ? (
         <Button onClick={async () => await mintNFTClient()}>Mint</Button>
       ) : null}
+      {messagesQueried?.map((message: any, i: number) => (
+        <Paper
+          key={i}
+          shadow="xs"
+          mt={4}
+          sx={{ backgroundColor: "#20c7fc1d" }}
+          withBorder
+          px="sm"
+        >
+          <Text mt={3}>
+            <a
+              href={`https://minascan.io/berkeley/account/${message.address}`}
+              style={{ color: "#198b6eb9", fontSize: "smaller" }}
+            >
+              {post.owner.substring(0, 8) + "..." + post.owner.substring(45)}
+            </a>{" "}
+            {message.message}
+          </Text>
+        </Paper>
+      ))}
+      <Group>
+        <TextInput
+          my="lg"
+          onChange={(e) => setNewMessage(e.target.value)}
+          value={newMessage}
+          placeholder="Enter your message"
+          sx={{ maxWidth: "240px" }}
+        />
+      </Group>
+      {address ? (
+        <Button
+          component="a"
+          radius="lg"
+          //onClick={async () => ()}
+        >
+          Send Message
+        </Button>
+      ) : (
+        <Text>Connect Wallet to send messages</Text>
+      )}
     </Paper>
   );
 };
