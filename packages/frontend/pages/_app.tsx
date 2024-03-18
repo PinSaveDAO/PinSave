@@ -5,6 +5,7 @@ import type AppProps from "next/app";
 import { MantineProvider } from "@mantine/core";
 import { NotificationsProvider } from "@mantine/notifications";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Analytics } from "@vercel/analytics/react";
 
 import LayoutApp from "@/components/Layout";
 import { AddressProvider } from "context";
@@ -34,6 +35,7 @@ function MyApp({ Component, pageProps }: NextAppProps) {
           </AddressProvider>
         </NotificationsProvider>
       </QueryClientProvider>
+      <Analytics />
     </MantineProvider>
   );
 }
