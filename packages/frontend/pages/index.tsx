@@ -1,4 +1,4 @@
-import { Box, Button, Center, Title } from "@mantine/core";
+import { Box, Button, Center, Title, Loader } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { InferGetStaticPropsType } from "next";
 import { nftDataIn } from "pin-mina";
@@ -33,6 +33,7 @@ export default function Home({
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
+    isLoading,
   } = usePosts();
   const [fetchedPosts, setFetchedPosts] = useState<Post[]>(data);
 
@@ -64,6 +65,11 @@ export default function Home({
           return <PostCard post={post} key={post.id} />;
         })}
       </Box>
+      {isLoading ? (
+        <Center mt={24}>
+          <Loader color="blue" />
+        </Center>
+      ) : null}
 
       {newPosts && newPosts?.pages?.length > 0 && (
         <Center my={14}>
