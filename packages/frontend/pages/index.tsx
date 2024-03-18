@@ -16,7 +16,8 @@ type dataIn = {
 
 export async function getStaticProps() {
   const res = await fetch("https://pinsave.app/api/pages/0");
-  const posts: dataIn = await res.json();
+  const jsonPosts: dataIn = await res.json();
+  const posts = Array.from(jsonPosts.items);
   return {
     props: {
       posts,
@@ -27,7 +28,6 @@ export async function getStaticProps() {
 export default function Home({
   posts,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
-  const data = Array.from(posts.items);
   const {
     data: newPosts,
     fetchNextPage,
@@ -35,13 +35,12 @@ export default function Home({
     isFetchingNextPage,
     isLoading,
   } = usePosts();
-  const [fetchedPosts, setFetchedPosts] = useState<Post[]>(data);
-
+  const [fetchedPosts, setFetchedPosts] = useState<Post[]>(posts);
   useEffect(() => {
     if (newPosts?.pages) {
       const items = newPosts?.pages;
       const result = Object.keys(items).map((key) => items[Number(key)].items);
-      setFetchedPosts([...data, ...result.flat()]);
+      setFetchedPosts([...posts, ...result.flat()]);
     }
   }, [newPosts]);
   return (
@@ -70,7 +69,6 @@ export default function Home({
           <Loader color="blue" />
         </Center>
       ) : null}
-
       {newPosts && newPosts?.pages?.length > 0 && (
         <Center my={14}>
           <Button
