@@ -111,18 +111,13 @@ interface NavbarProps {
 export function Navbar({ links }: NavbarProps) {
   const { address, setAddress } = useAddressContext();
 
-  const key = "auroWalletAddress";
   const [hasMounted, setHasMounted] = useState(false);
   const [shortAddress, setShortAddress] = useState<string | undefined>();
 
   useEffect(() => {
     setHasMounted(true);
-    const savedAddress = sessionStorage.getItem(key);
-    if (savedAddress) {
-      setAddress(savedAddress);
-      setShortAddress(
-        savedAddress.substring(0, 3) + "..." + savedAddress.slice(-3)
-      );
+    if (address) {
+      setShortAddress(address.substring(0, 3) + "..." + address.slice(-3));
     }
   }, [address]);
 
@@ -153,7 +148,7 @@ export function Navbar({ links }: NavbarProps) {
       <Header height={80} mb={10} className={classes.root}>
         <Container className={classes.header}>
           <Link href="/">
-            {hasMounted ? (
+            {hasMounted && (
               <Image
                 src={iconLeftPath}
                 alt="Pin Save EVM"
@@ -161,7 +156,7 @@ export function Navbar({ links }: NavbarProps) {
                 height={iconHeight}
                 priority
               />
-            ) : null}
+            )}
           </Link>
           <Group spacing={5} className={classes.links}>
             {items}
@@ -171,7 +166,7 @@ export function Navbar({ links }: NavbarProps) {
               variant="filled"
               size="md"
               radius="md"
-              onClick={async () => setAddress(await setMinaAccount(key))}
+              onClick={async () => setAddress(await setMinaAccount())}
             >
               {shortAddress ? shortAddress : "Connect Wallet"}
             </Button>

@@ -52,7 +52,8 @@ export async function getMinaPublicKey() {
   return PublicKey.fromBase58(account[0]);
 }
 
-export async function setMinaAccount(key: string) {
+export async function setMinaAccount() {
+  const key = "auroWalletAddress";
   const account: string = await getMinaAccount();
   sessionStorage.setItem(key, account);
   return account;
