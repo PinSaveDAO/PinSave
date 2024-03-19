@@ -17,14 +17,12 @@ export const AddressContext = createContext<AddressContextType | undefined>(
 
 export const AddressProvider = ({ children }: PropsWithChildren<{}>) => {
   const [address, setAddress] = useState<string>("");
-
   useEffect(() => {
     const savedAddress = sessionStorage.getItem("auroWalletAddress");
     if (savedAddress && savedAddress !== "undefined") {
       setAddress(savedAddress);
     }
   }, []);
-
   return (
     <AddressContext.Provider value={{ address, setAddress }}>
       {children}
@@ -34,10 +32,8 @@ export const AddressProvider = ({ children }: PropsWithChildren<{}>) => {
 
 export const useAddressContext = () => {
   const context = useContext(AddressContext);
-
   if (!context) {
     throw new Error("AddressContext must be used inside the AddressProvider");
   }
-
   return context;
 };

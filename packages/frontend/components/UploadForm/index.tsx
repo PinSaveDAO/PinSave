@@ -11,7 +11,7 @@ import {
   Center,
 } from "@mantine/core";
 import { Dropzone, MIME_TYPES } from "@mantine/dropzone";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ReactPlayer from "react-player";
 import { Upload, Replace } from "tabler-icons-react";
 import { PublicKey, Field, Signature } from "o1js";
@@ -33,6 +33,7 @@ import { setMinaAccount } from "@/hooks/minaWallet";
 import { getVercelClient } from "@/services/vercelClient";
 import { UploadData } from "@/services/upload";
 import { fetcher } from "@/utils/fetcher";
+import { useAddressContext } from "context";
 
 interface CustomWindow extends Window {
   mina?: any;
@@ -96,9 +97,7 @@ export const dropzoneChildren = (image: File | undefined) => {
 };
 
 const UploadForm = () => {
-  const key = "auroWalletAddress";
-  const [address, setAddress] = useState<string | undefined>();
-
+  const { address, setAddress } = useAddressContext();
   const [name, setName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [image, setImage] = useState<File | undefined>();
@@ -185,20 +184,6 @@ const UploadForm = () => {
     return false;
   }
 
-  useEffect(() => {
-    const fetchAddress = async () => {
-      try {
-        const savedAddress = sessionStorage.getItem(key);
-        if (savedAddress && savedAddress !== "undefined") {
-          setAddress(savedAddress);
-        }
-      } catch (error) {
-        console.error("Error fetching media details: ", error);
-      }
-    };
-    fetchAddress();
-  }, []);
-
   return (
     <Paper
       withBorder
@@ -267,7 +252,7 @@ const UploadForm = () => {
             component="a"
             radius="lg"
             mt="md"
-            onClick={async () => setAddress(await setMinaAccount(key))}
+            onClick={async () => setAddress(await setMinaAccount())}
           >
             Connect Wallet
           </Button>

@@ -46,8 +46,7 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
 
   async function mintNFTClient() {
     if (!address) {
-      const connectedAddress = await setMinaAccount();
-      setAddress(connectedAddress);
+      setAddress(await setMinaAccount());
     }
     if (map && address) {
       const zkApp = getAppContract();

@@ -34,10 +34,6 @@ interface CustomWindow extends Window {
 const CommentSection: React.FC<IMyProps> = ({ messagesQueried }) => {
   const { address, setAddress } = useAddressContext();
   const [newMessage, setNewMessage] = useState<string>("");
-  async function connectAddress() {
-    const res = await setMinaAccount();
-    setAddress(res);
-  }
   async function signMessage() {
     const signContent: SignMessageArgs = {
       message: newMessage,
@@ -90,7 +86,7 @@ const CommentSection: React.FC<IMyProps> = ({ messagesQueried }) => {
           component="a"
           radius="lg"
           mt="md"
-          onClick={async () => await connectAddress()}
+          onClick={async () => setAddress(await setMinaAccount())}
         >
           Connect Wallet
         </Button>

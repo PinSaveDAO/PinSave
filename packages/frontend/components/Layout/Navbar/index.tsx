@@ -110,10 +110,8 @@ interface NavbarProps {
 
 export function Navbar({ links }: NavbarProps) {
   const { address, setAddress } = useAddressContext();
-
   const [hasMounted, setHasMounted] = useState(false);
   const [shortAddress, setShortAddress] = useState<string | undefined>();
-
   useEffect(() => {
     setHasMounted(true);
     if (address) {
