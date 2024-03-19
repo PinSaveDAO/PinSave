@@ -3,6 +3,7 @@ import { ActionIcon, SimpleGrid } from "@mantine/core";
 import { useRouter } from "next/router";
 import { ArrowLeft } from "tabler-icons-react";
 import { ParsedUrlQuery } from "querystring";
+import { nftDataIn } from "pin-mina";
 
 import DisplayMedia from "@/components/Post/DisplayMedia";
 import MediaDetails from "@/components/Post/MediaDetails";
@@ -30,7 +31,7 @@ export async function getStaticPaths() {
 export const getStaticProps: GetStaticProps = async (context) => {
   const { id } = context.params as IParams;
   const res = await fetch(`https://pinsave.app/api/posts/${id}`);
-  const post = await res.json();
+  const post: nftDataIn = await res.json();
   return {
     props: {
       post,

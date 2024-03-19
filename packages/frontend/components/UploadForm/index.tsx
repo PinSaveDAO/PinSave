@@ -151,7 +151,7 @@ const UploadForm = () => {
 
       const compile = true;
       const txOptions = createTxOptions(pub);
-      const tx = await createInitNFTTxFromMap(
+      const transactionJSON = await createInitNFTTxFromMap(
         nftHashed,
         zkApp,
         map,
@@ -159,7 +159,6 @@ const UploadForm = () => {
         compile,
         txOptions
       );
-      const transactionJSON = tx.toJSON();
 
       const sendTransactionResult = await window.mina?.sendTransaction({
         transaction: transactionJSON,

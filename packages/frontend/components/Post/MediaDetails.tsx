@@ -20,6 +20,7 @@ import { setMinaAccount } from "@/hooks/minaWallet";
 import { fetcher } from "@/utils/fetcher";
 import { useAddressContext } from "context";
 import CommentSection from "./CommentSection";
+import { useComments } from "@/hooks/api";
 
 interface IMyProps {
   post: IndividualPost;
@@ -27,14 +28,7 @@ interface IMyProps {
 
 const MediaDetails: React.FC<IMyProps> = ({ post }) => {
   const postNumber = Number(post.id);
-
-  let messagesQueried = [
-    {
-      address: "B62qjV6mDV4dJSp2Gu6QdnqEFv9FmRnMpVraC9qjRbBL5mQBLdowmYv",
-      content: "new message",
-    },
-  ];
-
+  const { data } = useComments(postNumber);
   const [map, setMap] = useState<MerkleMap | undefined>(undefined);
   const [hash, setHash] = useState<string | undefined>(undefined);
 
@@ -73,7 +67,7 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
       const pub = PublicKey.fromBase58(address);
       const txOptions = createTxOptions(pub);
 
-      const txMint = await createMintTxFromMap(
+      const transactionJSON = await createMintTxFromMap(
         pub,
         zkApp,
         nft,
@@ -82,8 +76,6 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
         compile,
         txOptions
       );
-
-      const transactionJSON = txMint.toJSON();
 
       const sendTransactionResult = await window.mina?.sendTransaction({
         transaction: transactionJSON,
@@ -142,7 +134,7 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
       {address === post.owner && post.isMinted === "0" && map && (
         <Button onClick={async () => await mintNFTClient()}>Mint</Button>
       )}
-      <CommentSection messagesQueried={messagesQueried} address={address} />
+      <CommentSection messagesQueried={data?.comments} postId={post.id} />
     </Paper>
   );
 };

@@ -5,6 +5,8 @@ import { getTotalInitedLive } from '../components/AppState.js';
 import {
   getMapFromVercelNFTs,
   getVercelMetadata,
+  getVercelCommentsPostLength,
+  getVercelPostComments,
 } from '../components/NFT/vercel.js';
 
 startBerkeleyClient();
@@ -19,3 +21,6 @@ const storedMap = await getMapFromVercelNFTs(appId, array, client);
 
 console.log(storedMap.getRoot().toString());
 console.log(await getVercelMetadata(appId, 4, client));
+
+console.log(await getVercelCommentsPostLength(appId, 2, client));
+console.log(await getVercelPostComments(appId, 2, client));

@@ -1,17 +1,19 @@
-import { Text, Button, TextInput, Group, Paper } from "@mantine/core";
 import { useState } from "react";
+import { Text, Button, TextInput, Group, Paper } from "@mantine/core";
+import { getAppString, setVercelComment, CommentData } from "pin-mina";
 
+import { getVercelClient } from "@/services/vercelClient";
 import { setMinaAccount } from "@/hooks/minaWallet";
 import { useAddressContext } from "context";
 
 type message = {
-  content: string;
-  address: string;
+  data: string;
+  publicKey: string;
 };
 
 interface IMyProps {
   messagesQueried: message[];
-  address: string;
+  postId: string | number;
 }
 
 interface SignedData {
@@ -27,7 +29,7 @@ type SignMessageArgs = {
   message: string;
 };
 
-const CommentSection: React.FC<IMyProps> = ({ messagesQueried }) => {
+const CommentSection: React.FC<IMyProps> = ({ postId, messagesQueried }) => {
   const { address, setAddress } = useAddressContext();
   const [newMessage, setNewMessage] = useState<string>("");
   async function signMessage() {
@@ -36,10 +38,19 @@ const CommentSection: React.FC<IMyProps> = ({ messagesQueried }) => {
     };
     const signResult: SignedData = await window.mina?.signMessage(signContent);
     if (signResult.publicKey === address) {
+      const appId = getAppString();
+      const client = getVercelClient();
+      const comment: CommentData = {
+        publicKey: signResult.publicKey,
+        data: signResult.data,
+        postId: postId,
+      };
+      setVercelComment(appId, comment, client);
+      setNewMessage("");
     }
   }
   return (
-    <>
+    <div>
       {messagesQueried?.map((message: message, i: number) => (
         <Paper
           key={i}
@@ -51,14 +62,14 @@ const CommentSection: React.FC<IMyProps> = ({ messagesQueried }) => {
         >
           <Text mt={3}>
             <a
-              href={`https://minascan.io/berkeley/account/${message.address}`}
+              href={`https://minascan.io/berkeley/account/${message.publicKey}`}
               style={{ color: "#198b6eb9", fontSize: "smaller" }}
             >
-              {message.address.substring(0, 8) +
+              {message.publicKey.substring(0, 8) +
                 "..." +
-                message.address.substring(45)}
+                message.publicKey.substring(45)}
             </a>{" "}
-            {message.content}
+            {message.data}
           </Text>
         </Paper>
       ))}
@@ -85,7 +96,7 @@ const CommentSection: React.FC<IMyProps> = ({ messagesQueried }) => {
           Connect Wallet
         </Button>
       )}
-    </>
+    </div>
   );
 };
 

@@ -64,11 +64,11 @@ export default function Home({
           return <PostCard post={post} key={post.id} />;
         })}
       </Box>
-      {isLoading ? (
+      {isLoading && (
         <Center mt={24}>
           <Loader color="blue" />
         </Center>
-      ) : null}
+      )}
       {newPosts && newPosts?.pages?.length > 0 && (
         <Center my={14}>
           <Button

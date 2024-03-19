@@ -35,6 +35,10 @@ export {
 } from './components/NFT/NFT.js';
 
 export {
+  CommentData,
+  getVercelComment,
+  getVercelPostComments,
+  getVercelCommentsPostLength,
   getVercelMetadata,
   getVercelNFT,
   getMapFromVercelNFTs,
@@ -43,6 +47,7 @@ export {
   setMetadatasToVercel,
   setVercelNFT,
   setNFTsToVercel,
+  setVercelComment,
   mintVercelNFT,
   mintVercelMetadata,
 } from './components/NFT/vercel.js';

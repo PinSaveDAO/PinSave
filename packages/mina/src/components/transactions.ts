@@ -76,7 +76,7 @@ export async function createInitNFTTxFromMap(
     zkAppInstance.initNFT(_NFT, witnessNFT, adminSignature);
   });
   await initMintTx.prove();
-  return initMintTx;
+  return initMintTx.toJSON();
 }
 
 export async function createMintTxFromMap(
@@ -103,7 +103,7 @@ export async function createMintTxFromMap(
     txOptions
   );
   await mintTx.prove();
-  return mintTx;
+  return mintTx.toJSON();
 }
 
 export async function mintNFTwithMap(

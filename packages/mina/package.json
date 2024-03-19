@@ -1,6 +1,6 @@
 {
   "name": "pin-mina",
-  "version": "0.1.41",
+  "version": "0.1.42",
   "description": "pin save - decentralized pinterest sdk with utils on mina",
   "author": "pavel fedotov pfedprog",
   "license": "Apache-2.0",

@@ -1,3 +1,3 @@
 export * from "./posts";
 export * from "./profile";
-export * from "./messages";
+export * from "./comments";
