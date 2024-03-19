@@ -35,10 +35,6 @@ import { UploadData } from "@/services/upload";
 import { fetcher } from "@/utils/fetcher";
 import { useAddressContext } from "context";
 
-interface CustomWindow extends Window {
-  mina?: any;
-}
-
 export const dropzoneChildren = (image: File | undefined) => {
   if (image) {
     let link = URL.createObjectURL(image);
@@ -165,9 +161,7 @@ const UploadForm = () => {
       );
       const transactionJSON = tx.toJSON();
 
-      const sendTransactionResult = await (
-        window as CustomWindow
-      ).mina?.sendTransaction({
+      const sendTransactionResult = await window.mina?.sendTransaction({
         transaction: transactionJSON,
       });
 

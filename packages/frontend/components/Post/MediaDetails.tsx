@@ -25,10 +25,6 @@ interface IMyProps {
   post: IndividualPost;
 }
 
-interface CustomWindow extends Window {
-  mina?: any;
-}
-
 const MediaDetails: React.FC<IMyProps> = ({ post }) => {
   const postNumber = Number(post.id);
 
@@ -89,9 +85,7 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
 
       const transactionJSON = txMint.toJSON();
 
-      const sendTransactionResult = await (
-        window as CustomWindow
-      ).mina?.sendTransaction({
+      const sendTransactionResult = await window.mina?.sendTransaction({
         transaction: transactionJSON,
       });
 

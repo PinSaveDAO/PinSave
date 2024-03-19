@@ -1,25 +1,18 @@
 import { PublicKey } from "o1js";
 
-interface CustomWindow extends Window {
-  mina?: any;
-}
-
 function connectMinaWallet() {
-  if (
-    typeof window !== "undefined" &&
-    typeof (window as CustomWindow).mina !== "undefined"
-  ) {
+  if (typeof window !== "undefined" && typeof window.mina !== "undefined") {
     console.log("Auro Wallet is installed!");
   }
 }
 
 async function getMinaNetwork() {
-  const network = await (window as CustomWindow).mina.requestNetwork();
+  const network = await window.mina.requestNetwork();
   return network;
 }
 
 async function requestMinaAccounts() {
-  const account: string[] = await (window as CustomWindow).mina
+  const account: string[] = await window.mina
     .requestAccounts()
     .catch((err: any) => err);
   return account;
@@ -27,7 +20,7 @@ async function requestMinaAccounts() {
 
 export async function getMinaAccount() {
   connectMinaWallet();
-  let account: string[] = await (window as CustomWindow).mina.getAccounts();
+  let account: string[] = await window.mina.getAccounts();
   if (account.length === 0) {
     account = await requestMinaAccounts();
     if (account.length === undefined) {
@@ -42,7 +35,7 @@ export async function getMinaAccount() {
 
 export async function getMinaPublicKey() {
   connectMinaWallet();
-  let account: string[] = await (window as CustomWindow).mina.getAccounts();
+  let account: string[] = await window.mina.getAccounts();
   if (account.length === 0) {
     account = await requestMinaAccounts();
     if (account.length === 0) {

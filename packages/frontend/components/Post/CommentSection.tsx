@@ -27,10 +27,6 @@ type SignMessageArgs = {
   message: string;
 };
 
-interface CustomWindow extends Window {
-  mina?: any;
-}
-
 const CommentSection: React.FC<IMyProps> = ({ messagesQueried }) => {
   const { address, setAddress } = useAddressContext();
   const [newMessage, setNewMessage] = useState<string>("");
@@ -38,9 +34,7 @@ const CommentSection: React.FC<IMyProps> = ({ messagesQueried }) => {
     const signContent: SignMessageArgs = {
       message: newMessage,
     };
-    const signResult: SignedData = await (
-      window as CustomWindow
-    ).mina?.signMessage(signContent);
+    const signResult: SignedData = await window.mina?.signMessage(signContent);
     if (signResult.publicKey === address) {
     }
   }
