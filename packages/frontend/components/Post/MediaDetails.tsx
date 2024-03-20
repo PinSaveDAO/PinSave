@@ -1,18 +1,16 @@
 import { Paper, Text, Title, Button } from "@mantine/core";
-import { MerkleMap, PublicKey, Signature } from "o1js";
+import { MerkleMap, PublicKey, Signature, fetchAccount } from "o1js";
+import { useEffect, useState } from "react";
 import {
   deserializeJsonToMerkleMap,
-  getAppContract,
+  getAppVars,
   createTxOptions,
   deserializeNFT,
   startBerkeleyClient,
   createMintTxFromMap,
   mintVercelNFT,
-  getAppString,
   mintVercelMetadata,
-  getTotalInitedLive,
 } from "pin-mina";
-import { useEffect, useState } from "react";
 
 import { getVercelClient } from "@/services/vercelClient";
 import type { IndividualPost } from "@/services/upload";
@@ -39,8 +37,7 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
       setAddress(await setMinaAccount());
     }
     if (map && address) {
-      const zkApp = getAppContract();
-      const appId = getAppString();
+      const { appPubString: appId, appContract: appContract } = getAppVars();
 
       const client = getVercelClient();
       startBerkeleyClient();
@@ -49,8 +46,7 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
       const nft = deserializeNFT(dataNft);
 
       const compile = true;
-
-      const totalInited = await getTotalInitedLive(zkApp);
+      await fetchAccount({ publicKey: appId });
 
       const adminSignatureData = await fetch(`/api/mint/`, {
         headers: {
@@ -69,7 +65,7 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
 
       const transactionJSON = await createMintTxFromMap(
         pub,
-        zkApp,
+        appContract,
         nft,
         map,
         adminSignature,
@@ -83,8 +79,8 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
 
       setHash(sendTransactionResult.hash);
 
-      await mintVercelNFT(appId, postNumber, client);
-      await mintVercelMetadata(appId, postNumber, client);
+      console.log(await mintVercelNFT(appId, postNumber, client));
+      console.log(await mintVercelMetadata(appId, postNumber, client));
     }
   }
 

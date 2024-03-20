@@ -24,9 +24,10 @@ export async function setVercelMetadata(
   client: VercelKV
 ) {
   const key: string = `${appId} metadata: ${nftMetadata.id}`;
-  await client.hset(key, {
+  const res: number = await client.hset(key, {
     ...nftMetadata,
   });
+  return res;
 }
 
 export async function mintVercelMetadata(
@@ -35,7 +36,8 @@ export async function mintVercelMetadata(
   client: VercelKV
 ) {
   const key: string = `${appId} metadata: ${nftId}`;
-  await client.hset(key, { isMinted: '1' });
+  const res: number = await client.hset(key, { isMinted: '1' });
+  return res;
 }
 
 export async function setMetadatasToVercel(
@@ -58,7 +60,8 @@ export async function setVercelNFT(appId: string, nft: NFT, client: VercelKV) {
     owner: nft.owner,
     isMinted: nft.isMinted,
   };
-  await client.hset(key, value);
+  const res: number = await client.hset(key, value);
+  return res;
 }
 
 export async function setNFTsToVercel(
@@ -77,7 +80,8 @@ export async function mintVercelNFT(
   client: VercelKV
 ) {
   const key: string = `${appId}: ${nftId}`;
-  await client.hset(key, { isMinted: '1' });
+  const res: number = await client.hset(key, { isMinted: '1' });
+  return res;
 }
 
 export async function getVercelNFT(
@@ -137,7 +141,8 @@ export async function getVercelComment(
   client: VercelKV
 ) {
   const key: string = `${appId} ${postId} comment ${commentId} `;
-  return await client.hgetall(key);
+  const res = await client.hgetall(key);
+  return res;
 }
 
 export async function setVercelComment(
@@ -152,7 +157,8 @@ export async function setVercelComment(
     client
   );
   const key: string = `${appId} ${postId} comment ${commentId} `;
-  await client.hset(key, { ...post, key: commentId });
+  const res: number = await client.hset(key, { ...post, key: commentId });
+  return res;
 }
 
 export async function getVercelPostComments(

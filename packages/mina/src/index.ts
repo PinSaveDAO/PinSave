@@ -2,6 +2,7 @@ export {
   getAppPublic,
   getAppString,
   getAppContract,
+  getAppVars,
 } from './components/utilities/AppEnv.js';
 
 export { startBerkeleyClient } from './components/utilities/client.js';

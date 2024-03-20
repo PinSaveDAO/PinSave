@@ -21,12 +21,11 @@ import {
   createInitNFTTxFromMap,
   createNFT,
   deserializeJsonToMerkleMap,
-  getAppContract,
-  getAppString,
   createTxOptions,
   setVercelNFT,
   setVercelMetadata,
   getTotalInitedLive,
+  getAppVars,
 } from "pin-mina";
 
 import { setMinaAccount } from "@/hooks/minaWallet";
@@ -110,9 +109,8 @@ const UploadForm = () => {
   ) {
     if (description !== "" && name !== "" && address) {
       startBerkeleyClient();
-      const zkApp = getAppContract();
-      const appId = getAppString();
-      const totalInited = await getTotalInitedLive(zkApp);
+      const { appPubString: appId, appContract: appContract } = getAppVars();
+      const totalInited = await getTotalInitedLive(appContract);
       const pub = PublicKey.fromBase58(address);
 
       const client = getVercelClient();
@@ -153,7 +151,7 @@ const UploadForm = () => {
       const txOptions = createTxOptions(pub);
       const transactionJSON = await createInitNFTTxFromMap(
         nftHashed,
-        zkApp,
+        appContract,
         map,
         adminSignature,
         compile,
@@ -166,8 +164,8 @@ const UploadForm = () => {
 
       setHash(sendTransactionResult.hash);
 
-      await setVercelNFT(appId, nftHashed, client);
-      await setVercelMetadata(appId, nftMetadata, client);
+      console.log(await setVercelNFT(appId, nftHashed, client));
+      console.log(await setVercelMetadata(appId, nftMetadata, client));
 
       setImage(undefined);
       setName("");
