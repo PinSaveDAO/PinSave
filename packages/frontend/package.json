@@ -23,6 +23,7 @@
     "@vercel/kv": "^1.0.1",
     "filereader-stream": "^2.0.0",
     "isomorphic-fetch": "^3.0.0",
+    "mina-signer": "^3.0.5",
     "next": "^14.0.1",
     "next-sitemap": "^4.2.3",
     "o1js": "0.17.0",

@@ -26,17 +26,17 @@ const array = generateIntegersArray(totalInited);
 const storedMap = await getMapFromVercelNFTs(appId, array, client);
 
 console.log(storedMap.getRoot().toString());
-console.log(await getVercelNFT(appId, 7, client));
-console.log(await getVercelMetadata(appId, 7, client));
+console.log(await getVercelNFT(appId, 6, client));
+console.log(await getVercelMetadata(appId, 6, client));
 
 /* console.log(await getVercelCommentsPostLength(appId, 2, client));
 console.log(await getVercelPostComments(appId, 2, client)); */
 
 /* const nftMetadata: NFTMetadata = {
-  name: 'New Post',
-  description: 'Recording in OBS',
-  id: Field(7),
-  cid: 'https://rgsd4trlmruj8314.public.blob.vercel-storage.com/Ellipse%202PinSaveCircle-xLGwxkGS31RAfPxVN6v4LadPwGd31B.png',
+  name: 'Beefy',
+  description: 'POAP',
+  id: Field(8),
+  cid: 'https://rgsd4trlmruj8314.public.blob.vercel-storage.com/Group%201-tv26UyO3tiYxWn7XHULUDjSBpZ3biZ.png',
   owner: PublicKey.fromBase58(
     'B62qjV6mDV4dJSp2Gu6QdnqEFv9FmRnMpVraC9qjRbBL5mQBLdowmYv'
   ),
@@ -47,5 +47,4 @@ const nftHashed = createNFT(nftMetadata);
 await setVercelNFT(appId, nftHashed, client);
 await setVercelMetadata(appId, nftMetadata, client);
 
-console.log(await client.keys(`${appId}*`));
- */
+console.log(await client.keys(`${appId}*`)); */

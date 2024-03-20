@@ -22,14 +22,11 @@ import {
   createNFT,
   deserializeJsonToMerkleMap,
   createTxOptions,
-  setVercelNFT,
-  setVercelMetadata,
   getTotalInitedLive,
   getAppVars,
 } from "pin-mina";
 
 import { setMinaAccount } from "@/hooks/minaWallet";
-import { getVercelClient } from "@/services/vercelClient";
 import { UploadData } from "@/services/upload";
 import { fetcher } from "@/utils/fetcher";
 import { useAddressContext } from "context";
@@ -109,12 +106,9 @@ const UploadForm = () => {
   ) {
     if (description !== "" && name !== "" && address) {
       startBerkeleyClient();
-      const { appPubString: appId, appContract: appContract } = getAppVars();
+      const { appContract: appContract } = getAppVars();
       const totalInited = await getTotalInitedLive(appContract);
       const pub = PublicKey.fromBase58(address);
-
-      const client = getVercelClient();
-
       const cid = await UploadData(image);
       const nftMetadata: NFTMetadata = {
         name: name,
@@ -125,11 +119,9 @@ const UploadForm = () => {
         isMinted: "0",
       };
       const nftHashed = createNFT(nftMetadata);
-
       const dataMap = await fetcher("/api/getMap");
       const map = deserializeJsonToMerkleMap(dataMap.map);
-
-      const adminSignatureData = await fetch(`/api/init/`, {
+      const adminSignatureData = await fetch(`/api/init/adminSignature/`, {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
@@ -146,7 +138,6 @@ const UploadForm = () => {
       const adminSignatureJSON = await adminSignatureData.json();
       const adminSignatureBase58 = adminSignatureJSON.adminSignatureBase58;
       const adminSignature = Signature.fromBase58(adminSignatureBase58);
-
       const compile = true;
       const txOptions = createTxOptions(pub);
       const transactionJSON = await createInitNFTTxFromMap(
@@ -157,16 +148,19 @@ const UploadForm = () => {
         compile,
         txOptions
       );
-
       const sendTransactionResult = await window.mina?.sendTransaction({
         transaction: transactionJSON,
       });
-
+      console.log(sendTransactionResult);
       setHash(sendTransactionResult.hash);
-
-      console.log(await setVercelNFT(appId, nftHashed, client));
-      console.log(await setVercelMetadata(appId, nftMetadata, client));
-
+      await fetch(`/api/init/uploadData/`, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        body: JSON.stringify({ nftMetadata: nftMetadata }),
+      });
       setImage(undefined);
       setName("");
       setDescription("");

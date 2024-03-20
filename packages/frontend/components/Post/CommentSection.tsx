@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { Text, Button, TextInput, Group, Paper } from "@mantine/core";
-import { getAppString, setVercelComment, CommentData } from "pin-mina";
 
-import { getVercelClient } from "@/services/vercelClient";
 import { setMinaAccount } from "@/hooks/minaWallet";
 import { useAddressContext } from "context";
 
@@ -38,14 +36,14 @@ const CommentSection: React.FC<IMyProps> = ({ postId, messagesQueried }) => {
     };
     const signResult: SignedData = await window.mina?.signMessage(signContent);
     if (signResult.publicKey === address) {
-      const appId = getAppString();
-      const client = getVercelClient();
-      const comment: CommentData = {
-        publicKey: signResult.publicKey,
-        data: signResult.data,
-        postId: postId,
-      };
-      setVercelComment(appId, comment, client);
+      await fetch(`/api/comments/post/`, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        body: JSON.stringify({ signResult: signResult, postId: postId }),
+      });
       setNewMessage("");
     }
   }

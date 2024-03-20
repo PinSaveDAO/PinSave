@@ -8,11 +8,8 @@ import {
   deserializeNFT,
   startBerkeleyClient,
   createMintTxFromMap,
-  mintVercelNFT,
-  mintVercelMetadata,
 } from "pin-mina";
 
-import { getVercelClient } from "@/services/vercelClient";
 import type { IndividualPost } from "@/services/upload";
 import { setMinaAccount } from "@/hooks/minaWallet";
 import { fetcher } from "@/utils/fetcher";
@@ -26,29 +23,23 @@ interface IMyProps {
 
 const MediaDetails: React.FC<IMyProps> = ({ post }) => {
   const postNumber = Number(post.id);
+  const { address, setAddress } = useAddressContext();
   const { data } = useComments(postNumber);
   const [map, setMap] = useState<MerkleMap | undefined>(undefined);
   const [hash, setHash] = useState<string | undefined>(undefined);
-
-  const { address, setAddress } = useAddressContext();
 
   async function mintNFTClient() {
     if (!address) {
       setAddress(await setMinaAccount());
     }
     if (map && address) {
-      const { appPubString: appId, appContract: appContract } = getAppVars();
-
-      const client = getVercelClient();
       startBerkeleyClient();
-
+      const compile = true;
+      const { appPubString: appId, appContract: appContract } = getAppVars();
       const dataNft = await fetcher(`/api/nft/${postNumber}`);
       const nft = deserializeNFT(dataNft);
-
-      const compile = true;
       await fetchAccount({ publicKey: appId });
-
-      const adminSignatureData = await fetch(`/api/mint/`, {
+      const adminSignatureData = await fetch(`/api/mint/adminSignature/`, {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
@@ -59,10 +50,8 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
       const adminSignatureJSON = await adminSignatureData.json();
       const adminSignatureBase58 = adminSignatureJSON.adminSignatureBase58;
       const adminSignature = Signature.fromBase58(adminSignatureBase58);
-
       const pub = PublicKey.fromBase58(address);
       const txOptions = createTxOptions(pub);
-
       const transactionJSON = await createMintTxFromMap(
         pub,
         appContract,
@@ -72,15 +61,19 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
         compile,
         txOptions
       );
-
       const sendTransactionResult = await window.mina?.sendTransaction({
         transaction: transactionJSON,
       });
-
+      console.log(sendTransactionResult);
       setHash(sendTransactionResult.hash);
-
-      console.log(await mintVercelNFT(appId, postNumber, client));
-      console.log(await mintVercelMetadata(appId, postNumber, client));
+      await fetch(`/api/mint/uploadData/`, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        body: JSON.stringify({ postNumber: postNumber }),
+      });
     }
   }
 
