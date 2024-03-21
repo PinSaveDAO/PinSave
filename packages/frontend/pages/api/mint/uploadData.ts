@@ -3,13 +3,9 @@ import { getAppString, mintVercelNFT, mintVercelMetadata } from "pin-mina";
 
 import { getVercelClient } from "@/services/vercelClient";
 
-type dataOut = {
-  adminSignatureBase58: string;
-};
-
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<dataOut>
+  res: NextApiResponse
 ) {
   if (req.method === "POST") {
     const data = req.body;

@@ -24,6 +24,7 @@ export class MerkleMapContract extends SmartContract {
     'update-total-supply': UInt64,
     'update-inited-amount': Field,
     'init-max-supply': Field,
+    'minted-nft': Field,
   };
   @state(Field) root = State<Field>();
   @state(UInt64) totalSupply = State<UInt64>();
@@ -48,7 +49,7 @@ export class MerkleMapContract extends SmartContract {
   @method public initRoot(
     initState: InitState,
     thisAppSignature: Signature
-  ): void {
+  ): Bool {
     this.checkNotInitialized();
     super.init();
 
@@ -66,6 +67,7 @@ export class MerkleMapContract extends SmartContract {
     this.updateInitedAmount(initState.totalInited);
     this.updateFee(initState.feeAmount);
     this.updateRoot(initState.initialRoot);
+    return Bool(true);
   }
 
   @method public setFee(newFeeAmount: UInt64): Bool {
@@ -115,6 +117,7 @@ export class MerkleMapContract extends SmartContract {
     this.checkInitialized();
     this.verifyAdminItemSignature(item, adminSignature);
     const { key: key } = this.verifyTreeLeaf(item, keyWitness);
+    item.isMinted.assertEquals(0, 'Already Minted');
     item.mint();
 
     const [rootAfter, keyAfter] = keyWitness.computeRootAndKey(item.hash());
@@ -124,6 +127,7 @@ export class MerkleMapContract extends SmartContract {
       address: item.owner,
       amount: UInt64.from(1_000_000_000),
     });
+    this.emitEvent('minted-nft', item.id);
 
     this.updateTotalSupply();
     this.updateRoot(rootAfter);
@@ -179,17 +183,15 @@ export class MerkleMapContract extends SmartContract {
     this.emitEvent('update-fee', newFeeAmount);
   }
 
-  private updateRoot(root: Field) {
-    this.root.set(root);
-    this.emitEvent('update-merkle-root', root);
+  private updateRoot(newRoot: Field) {
+    this.root.set(newRoot);
+    this.emitEvent('update-merkle-root', newRoot);
   }
 
   private verifyTreeLeaf(item: NFT, keyWitness: MerkleMapWitness) {
     const { sender: sender } = this.verifySenderSignature();
     sender.assertEquals(item.owner);
-
     const initialRoot = this.root.getAndRequireEquals();
-
     const [rootBefore, key] = keyWitness.computeRootAndKey(item.hash());
     rootBefore.assertEquals(initialRoot);
     key.assertEquals(item.id);

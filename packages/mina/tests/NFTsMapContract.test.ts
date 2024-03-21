@@ -98,6 +98,23 @@ describe('PinSave NFTs on Local Blockchain', () => {
     );
   });
 
+  it('failed to mint the same NFT ', async () => {
+    try {
+      await mintNFTwithMap(
+        pkAdmin,
+        pkAdmin,
+        nftArray[0],
+        zkAppInstance,
+        map,
+        compile,
+        live
+      );
+    } catch (error) {
+      const data = String(error).substring(0, 21);
+      expect(data).toBe('Error: Already Minted');
+    }
+  });
+
   it('inited NFT', async () => {
     const nft = generateDummyNFTMetadata(3, pubKeyAdmin);
     const nftStruct = createNFT(nft);
