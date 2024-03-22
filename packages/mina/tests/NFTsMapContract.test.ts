@@ -68,7 +68,10 @@ describe('PinSave NFTs on Local Blockchain', () => {
         live
       );
     } catch (error) {
-      expect(String(error)).toBe('Error: Bool.assertFalse(): true != false');
+      const errorString = String(error);
+      expect(errorString.substring(0, 50)).toBe(
+        'Error: Bool.assertFalse(): true != false'
+      );
     }
   });
 
@@ -145,9 +148,8 @@ describe('PinSave NFTs on Local Blockchain', () => {
         live
       );
     } catch (error) {
-      expect(String(error).substring(0, 28)).toBe(
-        'Error: Field.assertEquals():'
-      );
+      const stringError = String(error);
+      expect(stringError.substring(0, 26)).toBe('Error: does not match root');
     }
   });
 
@@ -182,8 +184,9 @@ describe('PinSave NFTs on Local Blockchain', () => {
         live
       );
     } catch (error) {
-      expect(String(error).substring(0, 28)).toBe(
-        'Error: Field.assertEquals():'
+      const stringError = String(error);
+      expect(stringError.substring(0, 35)).toBe(
+        'Error: keyWitness not matches order'
       );
     }
   });
@@ -224,5 +227,26 @@ describe('PinSave NFTs on Local Blockchain', () => {
       map,
       live
     );
+  });
+
+  it('transfer fails', async () => {
+    const nftNew = generateDummyNFTMetadata(4, pubKey3);
+    const nftStruct = createNFT(nftNew);
+    nftStruct.mint();
+
+    try {
+      await transferNFT(
+        pkAdmin,
+        pkAdmin,
+        pubKey2,
+        nftStruct,
+        zkAppInstance,
+        map,
+        live
+      );
+    } catch (error) {
+      const messageError = String(error).substring(0, 28);
+      expect(messageError).toBe('Error: Field.assertEquals():');
+    }
   });
 });

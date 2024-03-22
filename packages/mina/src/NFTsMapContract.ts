@@ -88,21 +88,20 @@ export class MerkleMapContract extends SmartContract {
 
     const initedAmount = this.totalInited.getAndRequireEquals();
     const maxSupply = this.maxSupply.getAndRequireEquals();
-    initedAmount.assertLessThanOrEqual(maxSupply);
+    initedAmount.assertLessThanOrEqual(maxSupply, 'maximum supply reached');
 
     const fee = this.fee.getAndRequireEquals();
     const initialRoot = this.root.getAndRequireEquals();
 
     const [rootBefore, key] = keyWitness.computeRootAndKey(Field(0));
 
-    rootBefore.assertEquals(initialRoot);
-    key.assertEquals(item.id);
-    key.assertEquals(initedAmount);
+    rootBefore.assertEquals(initialRoot, 'does not match root');
+    key.assertEquals(item.id, 'keyWitness not matches nft id');
+    key.assertEquals(initedAmount, 'keyWitness not matches order');
 
     senderUpdate.send({ to: this, amount: fee });
 
-    const [rootAfter, keyAfter] = keyWitness.computeRootAndKey(item.hash());
-    key.assertEquals(keyAfter);
+    const [rootAfter] = keyWitness.computeRootAndKey(item.hash());
 
     this.updateInitedAmount(1);
     this.updateRoot(rootAfter);
@@ -116,12 +115,11 @@ export class MerkleMapContract extends SmartContract {
   ): Bool {
     this.checkInitialized();
     this.verifyAdminItemSignature(item, adminSignature);
-    const { key: key } = this.verifyTreeLeaf(item, keyWitness);
+    this.verifyTreeLeaf(item, keyWitness);
     item.isMinted.assertEquals(0, 'Already Minted');
     item.mint();
 
-    const [rootAfter, keyAfter] = keyWitness.computeRootAndKey(item.hash());
-    key.assertEquals(keyAfter);
+    const [rootAfter] = keyWitness.computeRootAndKey(item.hash());
 
     this.token.mint({
       address: item.owner,
@@ -139,22 +137,19 @@ export class MerkleMapContract extends SmartContract {
     newOwner: PublicKey,
     keyWitness: MerkleMapWitness,
     adminSignature: Signature
-  ): Bool {
+  ): NFT {
     this.checkInitialized();
     this.verifyAdminItemSignature(item, adminSignature);
-    const { key: key, sender: sender } = this.verifyTreeLeaf(item, keyWitness);
+    const { sender: sender } = this.verifyTreeLeaf(item, keyWitness);
     item.changeOwner(newOwner);
-
-    const [rootAfter, keyAfter] = keyWitness.computeRootAndKey(item.hash());
-    key.assertEquals(keyAfter);
-
+    const [rootAfter] = keyWitness.computeRootAndKey(item.hash());
     this.token.send({
       from: sender,
       to: newOwner,
       amount: UInt64.from(1_000_000_000),
     });
     this.updateRoot(rootAfter);
-    return Bool(true);
+    return item;
   }
 
   private initMaxSupply(_maxSupply: Field) {
@@ -193,9 +188,9 @@ export class MerkleMapContract extends SmartContract {
     sender.assertEquals(item.owner);
     const initialRoot = this.root.getAndRequireEquals();
     const [rootBefore, key] = keyWitness.computeRootAndKey(item.hash());
-    rootBefore.assertEquals(initialRoot);
-    key.assertEquals(item.id);
-    return { key: key, sender: sender };
+    rootBefore.assertEquals(initialRoot, 'root not matching');
+    key.assertEquals(item.id, 'key not matching');
+    return { sender: sender };
   }
 
   private verifyAdminSignature() {
