@@ -12,6 +12,7 @@ import {
   Bool,
   AccountUpdate,
   Signature,
+  MerkleMap,
 } from 'o1js';
 
 import { NFT } from './components/NFT/NFT.js';
@@ -46,33 +47,41 @@ export class MerkleMapContract extends SmartContract {
     });
   }
 
-  @method public initRoot(
-    initState: InitState,
-    thisAppSignature: Signature
-  ): Bool {
-    this.checkNotInitialized();
+  init() {
     super.init();
-
-    thisAppSignature.verify(this.address, initState.toFields());
-
     const { sender: sender } = this.verifySenderSignature();
     this.admin.set(sender);
-
+    const emptyMerkleMapRoot = new MerkleMap().getRoot();
+    this.root.set(emptyMerkleMapRoot);
     this.account.tokenSymbol.set('PINSAV');
     this.account.zkappUri.set('https://pinsave.app/uri.json');
+  }
 
-    this.root.getAndRequireEquals();
+  @method public initRoot(
+    initState: InitState,
+    adminSignature: Signature
+  ): Bool {
+    const admin = this.admin.getAndRequireEquals();
+    const isAdmin = adminSignature.verify(admin, initState.toFields());
+    isAdmin.assertEquals(Bool(true), 'initState signature: not admin');
+
+    const root = this.root.getAndRequireEquals();
+    const emptyMerkleMapRoot = new MerkleMap().getRoot();
+    root.assertEquals(emptyMerkleMapRoot, 'root initialized');
+    const maxSupply = this.maxSupply.getAndRequireEquals();
+    maxSupply.assertEquals(Field(0), 'max supply initialized');
+    const initedAmount = this.totalInited.getAndRequireEquals();
+    initedAmount.assertEquals(Field(0), 'initalized amount of nfts');
 
     this.initMaxSupply(initState.maxSupply);
-    this.updateInitedAmount(initState.totalInited);
+    this.updateInitedAmount(Field(0), initState.totalInited);
     this.updateFee(initState.feeAmount);
     this.updateRoot(initState.initialRoot);
     return Bool(true);
   }
 
   @method public setFee(newFeeAmount: UInt64): Bool {
-    this.checkInitialized();
-    this.verifyAdminSignature();
+    this.verifyAdminSender();
     this.updateFee(newFeeAmount);
     return Bool(true);
   }
@@ -82,7 +91,6 @@ export class MerkleMapContract extends SmartContract {
     keyWitness: MerkleMapWitness,
     adminSignature: Signature
   ): Bool {
-    this.checkInitialized();
     this.verifyAdminItemSignature(item, adminSignature);
     const { senderUpdate: senderUpdate } = this.verifySenderSignature();
 
@@ -103,7 +111,7 @@ export class MerkleMapContract extends SmartContract {
 
     const [rootAfter] = keyWitness.computeRootAndKey(item.hash());
 
-    this.updateInitedAmount(1);
+    this.updateInitedAmount(initedAmount, 1);
     this.updateRoot(rootAfter);
     return Bool(true);
   }
@@ -113,7 +121,6 @@ export class MerkleMapContract extends SmartContract {
     keyWitness: MerkleMapWitness,
     adminSignature: Signature
   ): Bool {
-    this.checkInitialized();
     this.verifyAdminItemSignature(item, adminSignature);
     this.verifyTreeLeaf(item, keyWitness);
     item.isMinted.assertEquals(0, 'Already Minted');
@@ -138,7 +145,6 @@ export class MerkleMapContract extends SmartContract {
     keyWitness: MerkleMapWitness,
     adminSignature: Signature
   ): NFT {
-    this.checkInitialized();
     this.verifyAdminItemSignature(item, adminSignature);
     const { sender: sender } = this.verifyTreeLeaf(item, keyWitness);
     item.changeOwner(newOwner);
@@ -153,14 +159,12 @@ export class MerkleMapContract extends SmartContract {
   }
 
   private initMaxSupply(_maxSupply: Field) {
-    this.maxSupply.getAndRequireEquals();
     this.maxSupply.set(_maxSupply);
     this.emitEvent('init-max-supply', _maxSupply);
   }
 
-  private updateInitedAmount(amount: number | Field) {
-    const initedAmount = this.totalInited.getAndRequireEquals();
-    const newTotalInited = initedAmount.add(amount);
+  private updateInitedAmount(initedAmount: Field, dAmount: number | Field) {
+    const newTotalInited = initedAmount.add(dAmount);
     this.totalInited.set(newTotalInited);
     this.emitEvent('update-inited-amount', newTotalInited);
   }
@@ -193,17 +197,19 @@ export class MerkleMapContract extends SmartContract {
     return { sender: sender };
   }
 
-  private verifyAdminSignature() {
+  private verifyAdminSender() {
     const admin = this.admin.getAndRequireEquals();
     const sender = this.sender;
-    sender.assertEquals(admin);
+    const isSenderAdmin = sender.equals(admin);
+    isSenderAdmin.assertTrue('sender not admin');
     const senderUpdate = AccountUpdate.create(admin);
     senderUpdate.requireSignature();
   }
 
   private verifyAdminItemSignature(item: NFT, adminSignature: Signature) {
     const admin = this.admin.getAndRequireEquals();
-    adminSignature.verify(admin, item.toFields());
+    const isAdmin = adminSignature.verify(admin, item.toFields());
+    isAdmin.assertEquals(Bool(true), 'item signature: not admin');
   }
 
   private verifySenderSignature() {
@@ -211,15 +217,5 @@ export class MerkleMapContract extends SmartContract {
     const senderUpdate = AccountUpdate.create(sender);
     senderUpdate.requireSignature();
     return { senderUpdate: senderUpdate, sender: sender };
-  }
-
-  private checkInitialized() {
-    this.account.provedState.requireEquals(this.account.provedState.get());
-    this.account.provedState.get().assertTrue();
-  }
-
-  private checkNotInitialized() {
-    this.account.provedState.requireEquals(this.account.provedState.get());
-    this.account.provedState.get().assertFalse();
   }
 }

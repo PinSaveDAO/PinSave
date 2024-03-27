@@ -8,7 +8,8 @@ import {
 import { createNFT } from '../src/components/NFT/NFT.js';
 import {
   deployApp,
-  initRootWithApp,
+  initAppRoot,
+  initRootWithCompile,
   setFee,
   transferNFT,
   mintNFTwithMap,
@@ -29,8 +30,9 @@ describe('PinSave NFTs on Local Blockchain', () => {
   );
 
   const { privateKey: pkAdmin, publicKey: pubKeyAdmin } = testAccounts[0];
-  const { privateKey: pk2, publicKey: pubKey2 } = testAccounts[1];
-  const { publicKey: pubKey3 } = testAccounts[2];
+  const { privateKey: pkSender, publicKey: senderPub } = testAccounts[1];
+  const { privateKey: pk2, publicKey: pubKey2 } = testAccounts[2];
+  const { publicKey: pubKey3 } = testAccounts[3];
 
   const map = new MerkleMap();
   const zkAppPrivateKey: PrivateKey = PrivateKey.random();
@@ -48,30 +50,30 @@ describe('PinSave NFTs on Local Blockchain', () => {
   });
 
   it('init app root', async () => {
-    await initRootWithApp(
-      zkAppPrivateKey,
+    await initAppRoot(
       pkAdmin,
+      pkSender,
       map,
+      zkAppInstance,
       nftArray.length,
-      compile,
       live
     );
   });
 
   it('failed sucessfully to initialize App root again which already exists', async () => {
     try {
-      await initRootWithApp(
-        zkAppPrivateKey,
+      await initRootWithCompile(
         pkAdmin,
+        pkSender,
         map,
+        zkAppInstance,
         nftArray.length,
+        compile,
         live
       );
     } catch (error) {
       const errorString = String(error);
-      expect(errorString.substring(0, 50)).toBe(
-        'Error: Bool.assertFalse(): true != false'
-      );
+      expect(errorString.substring(0, 23)).toBe('Error: root initialized');
     }
   });
 
@@ -79,9 +81,7 @@ describe('PinSave NFTs on Local Blockchain', () => {
     try {
       await setFee(pk2, zkAppInstance);
     } catch (error) {
-      expect(String(error).substring(0, 28)).toBe(
-        'Error: Field.assertEquals():'
-      );
+      expect(String(error).substring(0, 23)).toBe('Error: sender not admin');
     }
   });
 
@@ -175,7 +175,7 @@ describe('PinSave NFTs on Local Blockchain', () => {
     const nftStructNew = createNFT(nftNew);
     try {
       await initNFT(
-        zkAppPrivateKey,
+        pkAdmin,
         pk2,
         nftStructNew,
         zkAppInstance,

@@ -216,10 +216,11 @@ export async function transferNFT(
   merkleMap.set(nftId, _NFT.hash());
 }
 
-export async function initRootWithApp(
-  zkAppPK: PrivateKey,
+export async function initRootWithCompile(
+  adminPK: PrivateKey,
   pk: PrivateKey,
   merkleMap: MerkleMap,
+  zkAppInstance: MerkleMapContract,
   totalInited: number,
   compile: boolean = false,
   live: boolean = true
@@ -227,32 +228,25 @@ export async function initRootWithApp(
   if (compile) {
     await MerkleMapContract.compile();
   }
-  const zkAppPub: PublicKey = zkAppPK.toPublicKey();
-  const zkAppInstance: MerkleMapContract = new MerkleMapContract(zkAppPub);
-  await initAppRoot(zkAppPK, pk, zkAppInstance, merkleMap, totalInited, live);
+  await initAppRoot(adminPK, pk, merkleMap, zkAppInstance, totalInited, live);
 }
 
 export async function initAppRoot(
-  zkAppPK: PrivateKey,
   adminPK: PrivateKey,
-  zkAppInstance: MerkleMapContract,
+  userPK: PrivateKey,
   merkleMap: MerkleMap,
+  zkAppInstance: MerkleMapContract,
   totalInited: number,
   live: boolean = false
 ) {
-  const pubKey: PublicKey = adminPK.toPublicKey();
-
+  const userPub: PublicKey = userPK.toPublicKey();
   const initStruct = createInitState(merkleMap, totalInited);
-
-  const thisAppSignature = Signature.create(zkAppPK, initStruct.toFields());
-
-  const txOptions = createTxOptions(pubKey, live);
-
+  const thisAppSignature = Signature.create(adminPK, initStruct.toFields());
+  const txOptions = createTxOptions(userPub, live);
   const init_tx: Mina.Transaction = await Mina.transaction(txOptions, () => {
     zkAppInstance.initRoot(initStruct, thisAppSignature);
   });
-
-  await sendWaitTx(init_tx, [adminPK], live);
+  await sendWaitTx(init_tx, [userPK], live);
 }
 
 export async function deployApp(
