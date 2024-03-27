@@ -4,6 +4,7 @@ import {
   getAppEnv,
   getVercelClient,
 } from '../src/components/utilities/env.js';
+import { getAppVars } from '../src/components/utilities/AppEnv.js';
 import {
   getTokenAddressBalance,
   getMinaBalance,
@@ -12,6 +13,7 @@ import {
 describe('PinSave NFTs on Berkeley', () => {
   startBerkeleyClient();
   const client = getVercelClient();
+  const { appContract, appPubString } = getAppVars();
 
   const { zkApp: zkApp } = getAppEnv();
   const { pubKey: pub } = getEnvAccount();

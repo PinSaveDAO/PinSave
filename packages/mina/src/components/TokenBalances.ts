@@ -4,9 +4,7 @@ export function getMinaBalance(address: PublicKey) {
   let balance: bigint = 0n;
   try {
     balance = Mina.getBalance(address).value.toBigInt();
-  } catch (e) {
-    console.log(`balance of Mina for address ${address.toBase58()} is 0`);
-  }
+  } catch (e) {}
   return balance;
 }
 
@@ -19,10 +17,6 @@ export async function getTokenAddressBalance(
     await fetchAccount({ publicKey: address, tokenId: tokenId });
     const fetchedBalance = Mina.getBalance(address, tokenId).value.toBigInt();
     balance = fetchedBalance / BigInt(1e9);
-  } catch (e) {
-    console.log(
-      `balance of ${tokenId} token for address ${address.toBase58()} is 0`
-    );
-  }
+  } catch (e) {}
   return balance;
 }

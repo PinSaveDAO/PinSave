@@ -24,9 +24,10 @@ export async function setVercelMetadata(
   client: VercelKV
 ) {
   const key: string = `${appId} metadata: ${nftMetadata.id}`;
-  await client.hset(key, {
+  const res: number = await client.hset(key, {
     ...nftMetadata,
   });
+  return res;
 }
 
 export async function mintVercelMetadata(
@@ -35,7 +36,8 @@ export async function mintVercelMetadata(
   client: VercelKV
 ) {
   const key: string = `${appId} metadata: ${nftId}`;
-  await client.hset(key, { isMinted: '1' });
+  const res: number = await client.hset(key, { isMinted: '1' });
+  return res;
 }
 
 export async function setMetadatasToVercel(
@@ -58,7 +60,8 @@ export async function setVercelNFT(appId: string, nft: NFT, client: VercelKV) {
     owner: nft.owner,
     isMinted: nft.isMinted,
   };
-  await client.hset(key, value);
+  const res: number = await client.hset(key, value);
+  return res;
 }
 
 export async function setNFTsToVercel(
@@ -77,7 +80,8 @@ export async function mintVercelNFT(
   client: VercelKV
 ) {
   const key: string = `${appId}: ${nftId}`;
-  await client.hset(key, { isMinted: '1' });
+  const res: number = await client.hset(key, { isMinted: '1' });
+  return res;
 }
 
 export async function getVercelNFT(
@@ -100,7 +104,6 @@ export async function getMapFromVercelNFTs(
 ) {
   const map: MerkleMap = new MerkleMap();
   const arrayLength = nftArray.length;
-
   for (let i = 0; i < arrayLength; i++) {
     const nftId = nftArray[i];
     const data: nftDataIn = await getVercelNFT(appId, nftId, client);
@@ -123,4 +126,67 @@ export async function getMapFromVercelMetadata(
     setStringObjectToMap(data, map);
   }
   return map;
+}
+
+export type CommentData = {
+  publicKey: string;
+  data: string;
+  postId: string | number;
+};
+
+export async function getVercelComment(
+  appId: string,
+  postId: string | number,
+  commentId: string | number,
+  client: VercelKV
+) {
+  const key: string = `${appId} ${postId} comment ${commentId} `;
+  const res = await client.hgetall(key);
+  return res;
+}
+
+export async function setVercelComment(
+  appId: string,
+  post: CommentData,
+  client: VercelKV
+) {
+  const postId = post.postId;
+  const commentId: number = await getVercelCommentsPostLength(
+    appId,
+    postId,
+    client
+  );
+  const key: string = `${appId} ${postId} comment ${commentId} `;
+  const res: number = await client.hset(key, { ...post, key: commentId });
+  return res;
+}
+
+export async function getVercelPostComments(
+  appId: string,
+  postId: string | number,
+  client: VercelKV
+) {
+  const commentId: number = await getVercelCommentsPostLength(
+    appId,
+    postId,
+    client
+  );
+  let output = [];
+  for (let i = 0; i < commentId; i++) {
+    output.push(await getVercelComment(appId, postId, i, client));
+  }
+  return output;
+}
+
+export async function getVercelCommentsPostLength(
+  appId: string,
+  postId: string | number,
+  client: VercelKV
+) {
+  const key: string = `${appId} ${postId} comment*`;
+  const keys = await client.keys(key);
+  if (!keys) {
+    throw new Error('no keys found');
+  }
+  return keys.length;
 }

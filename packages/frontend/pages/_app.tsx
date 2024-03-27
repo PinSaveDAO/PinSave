@@ -1,10 +1,11 @@
 import "@/styles/globals.css";
+
 import type { NextComponentType } from "next";
 import type AppProps from "next/app";
-import NextHead from "next/head";
 import { MantineProvider } from "@mantine/core";
 import { NotificationsProvider } from "@mantine/notifications";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Analytics } from "@vercel/analytics/react";
 
 import LayoutApp from "@/components/Layout";
 import { AddressProvider } from "context";
@@ -18,7 +19,6 @@ type NextAppProps<P = any> = AppProps & {
 
 function MyApp({ Component, pageProps }: NextAppProps) {
   const queryClient = new QueryClient();
-
   return (
     <MantineProvider
       theme={{
@@ -27,9 +27,6 @@ function MyApp({ Component, pageProps }: NextAppProps) {
       }}
     >
       <QueryClientProvider client={queryClient}>
-        <NextHead>
-          <title>Pin Save - decentralized Pinterest</title>
-        </NextHead>
         <NotificationsProvider>
           <AddressProvider>
             <LayoutApp>
@@ -38,6 +35,7 @@ function MyApp({ Component, pageProps }: NextAppProps) {
           </AddressProvider>
         </NotificationsProvider>
       </QueryClientProvider>
+      <Analytics />
     </MantineProvider>
   );
 }

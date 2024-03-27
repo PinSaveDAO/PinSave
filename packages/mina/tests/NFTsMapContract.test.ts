@@ -8,7 +8,8 @@ import {
 import { createNFT } from '../src/components/NFT/NFT.js';
 import {
   deployApp,
-  initRootWithApp,
+  initAppRoot,
+  initRootWithCompile,
   setFee,
   transferNFT,
   mintNFTwithMap,
@@ -29,8 +30,9 @@ describe('PinSave NFTs on Local Blockchain', () => {
   );
 
   const { privateKey: pkAdmin, publicKey: pubKeyAdmin } = testAccounts[0];
-  const { privateKey: pk2, publicKey: pubKey2 } = testAccounts[1];
-  const { publicKey: pubKey3 } = testAccounts[2];
+  const { privateKey: pkSender, publicKey: senderPub } = testAccounts[1];
+  const { privateKey: pk2, publicKey: pubKey2 } = testAccounts[2];
+  const { publicKey: pubKey3 } = testAccounts[3];
 
   const map = new MerkleMap();
   const zkAppPrivateKey: PrivateKey = PrivateKey.random();
@@ -48,27 +50,30 @@ describe('PinSave NFTs on Local Blockchain', () => {
   });
 
   it('init app root', async () => {
-    await initRootWithApp(
-      zkAppPrivateKey,
+    await initAppRoot(
       pkAdmin,
+      pkSender,
       map,
+      zkAppInstance,
       nftArray.length,
-      compile,
       live
     );
   });
 
   it('failed sucessfully to initialize App root again which already exists', async () => {
     try {
-      await initRootWithApp(
-        zkAppPrivateKey,
+      await initRootWithCompile(
         pkAdmin,
+        pkSender,
         map,
+        zkAppInstance,
         nftArray.length,
+        compile,
         live
       );
     } catch (error) {
-      expect(String(error)).toBe('Error: Bool.assertFalse(): true != false');
+      const errorString = String(error);
+      expect(errorString.substring(0, 23)).toBe('Error: root initialized');
     }
   });
 
@@ -76,9 +81,7 @@ describe('PinSave NFTs on Local Blockchain', () => {
     try {
       await setFee(pk2, zkAppInstance);
     } catch (error) {
-      expect(String(error).substring(0, 28)).toBe(
-        'Error: Field.assertEquals():'
-      );
+      expect(String(error).substring(0, 23)).toBe('Error: sender not admin');
     }
   });
 
@@ -96,6 +99,23 @@ describe('PinSave NFTs on Local Blockchain', () => {
       compile,
       live
     );
+  });
+
+  it('failed to mint the same NFT ', async () => {
+    try {
+      await mintNFTwithMap(
+        pkAdmin,
+        pkAdmin,
+        nftArray[0],
+        zkAppInstance,
+        map,
+        compile,
+        live
+      );
+    } catch (error) {
+      const data = String(error).substring(0, 21);
+      expect(data).toBe('Error: Already Minted');
+    }
   });
 
   it('inited NFT', async () => {
@@ -128,9 +148,8 @@ describe('PinSave NFTs on Local Blockchain', () => {
         live
       );
     } catch (error) {
-      expect(String(error).substring(0, 28)).toBe(
-        'Error: Field.assertEquals():'
-      );
+      const stringError = String(error);
+      expect(stringError.substring(0, 26)).toBe('Error: does not match root');
     }
   });
 
@@ -156,7 +175,7 @@ describe('PinSave NFTs on Local Blockchain', () => {
     const nftStructNew = createNFT(nftNew);
     try {
       await initNFT(
-        zkAppPrivateKey,
+        pkAdmin,
         pk2,
         nftStructNew,
         zkAppInstance,
@@ -165,8 +184,9 @@ describe('PinSave NFTs on Local Blockchain', () => {
         live
       );
     } catch (error) {
-      expect(String(error).substring(0, 28)).toBe(
-        'Error: Field.assertEquals():'
+      const stringError = String(error);
+      expect(stringError.substring(0, 35)).toBe(
+        'Error: keyWitness not matches order'
       );
     }
   });
@@ -207,5 +227,26 @@ describe('PinSave NFTs on Local Blockchain', () => {
       map,
       live
     );
+  });
+
+  it('transfer fails', async () => {
+    const nftNew = generateDummyNFTMetadata(4, pubKey3);
+    const nftStruct = createNFT(nftNew);
+    nftStruct.mint();
+
+    try {
+      await transferNFT(
+        pkAdmin,
+        pkAdmin,
+        pubKey2,
+        nftStruct,
+        zkAppInstance,
+        map,
+        live
+      );
+    } catch (error) {
+      const messageError = String(error).substring(0, 28);
+      expect(messageError).toBe('Error: Field.assertEquals():');
+    }
   });
 });

@@ -1083,17 +1083,17 @@
     viem "^0.3.17"
     wait-on "^7.0.1"
 
-"@tanstack/query-core@5.24.1":
-  version "5.24.1"
-  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-5.24.1.tgz#d40928dec22b47df97fb2648e8c499772e8d7eb2"
-  integrity sha512-DZ6Nx9p7BhjkG50ayJ+MKPgff+lMeol7QYXkvuU5jr2ryW/4ok5eanaS9W5eooA4xN0A/GPHdLGOZGzArgf5Cg==
+"@tanstack/query-core@5.28.4":
+  version "5.28.4"
+  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-5.28.4.tgz#fa416532f8b33ca8608d40bb9728b60e2e1a38dc"
+  integrity sha512-uQZqOFqLWUvXNIQZ63XdKzg22NtHzgCBUfDmjDHi3BoF+nUYeBNvMi/xFPtFrMhqRzG2Ir4mYaGsWZzmiEjXpA==
 
-"@tanstack/react-query@5.24.1":
-  version "5.24.1"
-  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-5.24.1.tgz#bcb913febe0d813cec1fda7783298d07aa998b20"
-  integrity sha512-4+09JEdO4d6+Gc8Y/g2M/MuxDK5IY0QV8+2wL2304wPKJgJ54cBbULd3nciJ5uvh/as8rrxx6s0mtIwpRuGd1g==
+"@tanstack/react-query@5.28.4":
+  version "5.28.4"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-5.28.4.tgz#32e56ca4fd08513a906fe6323908f0e38ffccbba"
+  integrity sha512-BErcoB/QQG6YwLSUKnaGxF+lSc270RH2w3kMBpG0i4YzDCsFs2pdxPX1WVknQvFk9bNgukMb158hc2Zb4SdwSA==
   dependencies:
-    "@tanstack/query-core" "5.24.1"
+    "@tanstack/query-core" "5.28.4"
 
 "@testing-library/cypress@^9.0.0":
   version "9.0.0"
@@ -1478,6 +1478,13 @@
   integrity sha512-ACj0GhJ4qrQyBshwFgPod6XufVEfKX2wcaihsEvSdLYnY+m+pa13kGt1RXm/yTHKf4TQi/Dy2A8z/y6WUEOmlg==
   dependencies:
     crypto-js "^4.2.0"
+
+"@vercel/analytics@^1.2.2":
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/@vercel/analytics/-/analytics-1.2.2.tgz#715d8f203a170c06ba36b363e03b048c03060d5d"
+  integrity sha512-X0rctVWkQV1e5Y300ehVNqpOfSOufo7ieA5PIdna8yX/U7Vjz0GFsGf4qvAhxV02uQ2CVt7GYcrFfddXXK2Y4A==
+  dependencies:
+    server-only "^0.0.1"
 
 "@vercel/blob@^0.22.1":
   version "0.22.1"
@@ -1954,7 +1961,7 @@ bl@^1.0.0:
     readable-stream "^2.3.5"
     safe-buffer "^5.1.1"
 
-blakejs@1.2.1:
+blakejs@1.2.1, blakejs@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/blakejs/-/blakejs-1.2.1.tgz#5057e4206eadb4a97f7c0b6e197a505042fc3814"
   integrity sha512-QXUSXI3QVc/gJME0dBpXrag1kbzOqCjCX8/b54ntNyW6sjtoqxqRk3LTmXzaJoh71zMsDCjM+47jS7XiwN/+fQ==
@@ -5137,6 +5144,14 @@ mimic-response@^1.0.0:
   resolved "https://registry.yarnpkg.com/mimic-response/-/mimic-response-1.0.1.tgz#4923538878eef42063cb8a3e3b0798781487ab1b"
   integrity sha512-j5EctnkH7amfV/q5Hgmoal1g2QHFJRraOtmx0JpIqkxhBhI/lJSl1nMpQ45hVarwNETOoWEimndZ4QK0RHxuxQ==
 
+mina-signer@^3.0.5:
+  version "3.0.5"
+  resolved "https://registry.yarnpkg.com/mina-signer/-/mina-signer-3.0.5.tgz#c87535c635d259366a3d42172ee4e6e7d1fef60c"
+  integrity sha512-H/Dqp8UZom0U9CXqB68hmH2GZDz1PyGL9eWV8FkJ8zxLNwdmtk9/TJ2RKR/R7OfmfvY5W+F7wKJ8WgzeFjt+Eg==
+  dependencies:
+    blakejs "^1.2.1"
+    js-sha256 "^0.9.0"
+
 minimalistic-assert@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/minimalistic-assert/-/minimalistic-assert-1.0.1.tgz#2e194de044626d4a10e7f7fbc00ce73e83e4d5c7"
@@ -5673,10 +5688,10 @@ pify@^4.0.1:
   resolved "https://registry.yarnpkg.com/pify/-/pify-4.0.1.tgz#4b2cd25c50d598735c50292224fd8c6df41e3231"
   integrity sha512-uB80kBFb/tfd68bVleG9T5GGsGPjJrLAUpR5PZIrhBnIaRTQRjqdJSsIKkOP6OAIFbj7GOrcudc5pNjZ+geV2g==
 
-pin-mina@0.1.41:
-  version "0.1.41"
-  resolved "https://registry.yarnpkg.com/pin-mina/-/pin-mina-0.1.41.tgz#fa1975ed3b2ac1389441d9d6a9f8ae0273e0e0bf"
-  integrity sha512-/9pOhmW1XjnZf177Xo1j4Sy/ijAhFsF+8mQsvl9XEjQlyC7C0nTGErxvX/llu1j6ZpxFZ6/V7EaclaOJPRFwDA==
+pin-mina@0.1.43:
+  version "0.1.43"
+  resolved "https://registry.yarnpkg.com/pin-mina/-/pin-mina-0.1.43.tgz#7170dc83523053a7309548bc3124ac19f9a0ba2c"
+  integrity sha512-HQG41+Ubvsynkg1r47zooKtFYY8wdkVgkmzC1WSthXeP79L9dJHehRHv7kqgYzkKqklFTPDnhWJPevkg5X39XQ==
   dependencies:
     "@vercel/kv" "^1.0.1"
     dotenv "^16.3.1"
@@ -6306,6 +6321,11 @@ serve-static@1.15.0:
     escape-html "~1.0.3"
     parseurl "~1.3.3"
     send "0.18.0"
+
+server-only@^0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/server-only/-/server-only-0.0.1.tgz#0f366bb6afb618c37c9255a314535dc412cd1c9e"
+  integrity sha512-qepMx2JxAa5jjfzxG79yPPq+8BuFToHd1hm7kI+Z4zAq1ftQiP7HcxMhDDItrbtwVeLg/cY2JnKnrcFkmiswNA==
 
 set-blocking@^2.0.0:
   version "2.0.0"

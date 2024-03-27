@@ -1,3 +1,23 @@
 a:link {
   text-decoration: none !important;
 }
+
+.fade-in-text {
+  text-align: center;
+  opacity: 0;
+  animation: fadeIn 1s ease-in-out forwards;
+}
+
+.fade-in {
+  opacity: 0;
+  animation: fadeIn 2s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

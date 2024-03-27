@@ -1,60 +1,75 @@
-import { Box, Button, Center, Title, Text, Stack } from "@mantine/core";
-import type { NextPage } from "next";
+import { Box, Button, Center, Title, Loader } from "@mantine/core";
+import { useEffect, useState } from "react";
+import { InferGetStaticPropsType } from "next";
+import { nftDataIn } from "pin-mina";
 
+import type { Post } from "@/services/upload";
 import PostCard from "@/components/Posts/PostCard";
 import { usePosts } from "@/hooks/api";
-import type { Post } from "@/services/upload";
+import { PageSEO } from "@/components/SEO";
 
-const Home: NextPage = () => {
+type dataIn = {
+  items: nftDataIn[];
+  totalSupply: number;
+  page: number;
+};
+
+export async function getStaticProps() {
+  const res = await fetch("https://pinsave.app/api/pages/0");
+  const jsonPosts: dataIn = await res.json();
+  const posts = Array.from(jsonPosts.items);
+  return {
+    props: {
+      posts,
+    },
+  };
+}
+
+export default function Home({
+  posts,
+}: InferGetStaticPropsType<typeof getStaticProps>) {
   const {
-    data: posts,
-    isFetching: isLoading,
+    data: newPosts,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
+    isLoading,
   } = usePosts();
-
+  const [fetchedPosts, setFetchedPosts] = useState<Post[]>(posts);
+  useEffect(() => {
+    if (newPosts?.pages) {
+      const items = newPosts?.pages;
+      const result = Object.keys(items).map((key) => items[Number(key)].items);
+      setFetchedPosts([...posts, ...result.flat()]);
+    }
+  }, [newPosts]);
   return (
     <div>
-      {posts?.pages.map((page: any, i: number) => (
-        <Box
-          mx="auto"
-          sx={{
-            maxWidth: 1500,
-            gap: 20,
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(220px, 5fr))",
-            gridTemplateRows: "masonry",
-          }}
-          key={i}
-        >
-          {page.items?.map((post: Post) => {
-            return <PostCard post={post} key={post.id} />;
-          })}
-        </Box>
-      ))}
-
-      {!posts && isLoading && (
-        <Center>
-          <Stack
-            sx={{
-              maxWidth: 700,
-            }}
-          >
-            <Title order={1}>PinSave Home Page</Title>
-            <Text>
-              Pin Save is a decentralized social media which consists of
-              decentralized posts enabled by Mina blockchain and o1js. The speed
-              of interacting with media and content should be greatly enhanced
-              by storing metadata off-chain enabled by Mina merkle trees. In
-              addition, it aims to introduce more standards into the Mina
-              ecosystem related to non fungible tokens to improve developer
-              experience.
-            </Text>
-          </Stack>
+      <PageSEO />
+      <Title order={1} className="fade-in-text">
+        PinSave Home Page
+      </Title>
+      <Box
+        mx="auto"
+        mt={20}
+        sx={{
+          maxWidth: 1500,
+          gap: 20,
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fill, minmax(220px, 5fr))",
+          gridTemplateRows: "masonry",
+        }}
+      >
+        {fetchedPosts?.map((post: Post) => {
+          return <PostCard post={post} key={post.id} />;
+        })}
+      </Box>
+      {isLoading && (
+        <Center mt={24}>
+          <Loader color="blue" />
         </Center>
       )}
-      {posts && posts.pages.length > 0 && (
+      {newPosts && newPosts?.pages?.length > 0 && (
         <Center my={14}>
           <Button
             mx="auto"
@@ -71,6 +86,4 @@ const Home: NextPage = () => {
       )}
     </div>
   );
-};
-
-export default Home;
+}

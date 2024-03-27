@@ -11,7 +11,7 @@ import {
   Center,
 } from "@mantine/core";
 import { Dropzone, MIME_TYPES } from "@mantine/dropzone";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ReactPlayer from "react-player";
 import { Upload, Replace } from "tabler-icons-react";
 import { PublicKey, Field, Signature } from "o1js";
@@ -21,22 +21,15 @@ import {
   createInitNFTTxFromMap,
   createNFT,
   deserializeJsonToMerkleMap,
-  getAppContract,
-  getAppString,
   createTxOptions,
-  setVercelNFT,
-  setVercelMetadata,
   getTotalInitedLive,
+  getAppVars,
 } from "pin-mina";
 
 import { setMinaAccount } from "@/hooks/minaWallet";
-import { getVercelClient } from "@/services/vercelClient";
 import { UploadData } from "@/services/upload";
 import { fetcher } from "@/utils/fetcher";
-
-interface CustomWindow extends Window {
-  mina?: any;
-}
+import { useAddressContext } from "context";
 
 export const dropzoneChildren = (image: File | undefined) => {
   if (image) {
@@ -96,9 +89,7 @@ export const dropzoneChildren = (image: File | undefined) => {
 };
 
 const UploadForm = () => {
-  const key = "auroWalletAddress";
-  const [address, setAddress] = useState<string | undefined>();
-
+  const { address, setAddress } = useAddressContext();
   const [name, setName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [image, setImage] = useState<File | undefined>();
@@ -115,13 +106,9 @@ const UploadForm = () => {
   ) {
     if (description !== "" && name !== "" && address) {
       startBerkeleyClient();
-      const zkApp = getAppContract();
-      const appId = getAppString();
-      const totalInited = await getTotalInitedLive(zkApp);
+      const { appContract: appContract } = getAppVars();
+      const totalInited = await getTotalInitedLive(appContract);
       const pub = PublicKey.fromBase58(address);
-
-      const client = getVercelClient();
-
       const cid = await UploadData(image);
       const nftMetadata: NFTMetadata = {
         name: name,
@@ -132,11 +119,9 @@ const UploadForm = () => {
         isMinted: "0",
       };
       const nftHashed = createNFT(nftMetadata);
-
       const dataMap = await fetcher("/api/getMap");
       const map = deserializeJsonToMerkleMap(dataMap.map);
-
-      const adminSignatureData = await fetch(`/api/init/`, {
+      const adminSignatureData = await fetch(`/api/init/adminSignature/`, {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
@@ -153,30 +138,29 @@ const UploadForm = () => {
       const adminSignatureJSON = await adminSignatureData.json();
       const adminSignatureBase58 = adminSignatureJSON.adminSignatureBase58;
       const adminSignature = Signature.fromBase58(adminSignatureBase58);
-
       const compile = true;
       const txOptions = createTxOptions(pub);
-      const tx = await createInitNFTTxFromMap(
+      const transactionJSON = await createInitNFTTxFromMap(
         nftHashed,
-        zkApp,
+        appContract,
         map,
         adminSignature,
         compile,
         txOptions
       );
-      const transactionJSON = tx.toJSON();
-
-      const sendTransactionResult = await (
-        window as CustomWindow
-      ).mina?.sendTransaction({
+      const sendTransactionResult = await window.mina?.sendTransaction({
         transaction: transactionJSON,
       });
-
+      console.log(sendTransactionResult);
       setHash(sendTransactionResult.hash);
-
-      await setVercelNFT(appId, nftHashed, client);
-      await setVercelMetadata(appId, nftMetadata, client);
-
+      await fetch(`/api/init/uploadData/`, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        body: JSON.stringify({ nftMetadata: nftMetadata }),
+      });
       setImage(undefined);
       setName("");
       setDescription("");
@@ -184,20 +168,6 @@ const UploadForm = () => {
     }
     return false;
   }
-
-  useEffect(() => {
-    const fetchAddress = async () => {
-      try {
-        const savedAddress = sessionStorage.getItem(key);
-        if (savedAddress && savedAddress !== "undefined") {
-          setAddress(savedAddress);
-        }
-      } catch (error) {
-        console.error("Error fetching media details: ", error);
-      }
-    };
-    fetchAddress();
-  }, []);
 
   return (
     <Paper
@@ -262,17 +232,17 @@ const UploadForm = () => {
         {() => dropzoneChildren(image)}
       </Dropzone>
       <Group position="center" sx={{ padding: 15 }}>
-        {!address ? (
+        {!address && (
           <Button
             component="a"
             radius="lg"
             mt="md"
-            onClick={async () => setAddress(await setMinaAccount(key))}
+            onClick={async () => setAddress(await setMinaAccount())}
           >
             Connect Wallet
           </Button>
-        ) : null}
-        {isDataCorrect && address ? (
+        )}
+        {isDataCorrect && address && (
           <Button
             component="a"
             radius="lg"
@@ -283,15 +253,14 @@ const UploadForm = () => {
           >
             Mint Post
           </Button>
-        ) : null}
-
-        {!isDataCorrect && address ? (
+        )}
+        {!isDataCorrect && address && (
           <Text component="a" mt="md">
             Upload Data
           </Text>
-        ) : null}
+        )}
       </Group>
-      {hash ? (
+      {hash && (
         <Center>
           <a
             style={{ color: "#198b6eb9" }}
@@ -300,7 +269,7 @@ const UploadForm = () => {
             hash
           </a>
         </Center>
-      ) : null}
+      )}
     </Paper>
   );
 };

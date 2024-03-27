@@ -2,6 +2,7 @@ export {
   getAppPublic,
   getAppString,
   getAppContract,
+  getAppVars,
 } from './components/utilities/AppEnv.js';
 
 export { startBerkeleyClient } from './components/utilities/client.js';
@@ -35,6 +36,10 @@ export {
 } from './components/NFT/NFT.js';
 
 export {
+  CommentData,
+  getVercelComment,
+  getVercelPostComments,
+  getVercelCommentsPostLength,
   getVercelMetadata,
   getVercelNFT,
   getMapFromVercelNFTs,
@@ -43,6 +48,7 @@ export {
   setMetadatasToVercel,
   setVercelNFT,
   setNFTsToVercel,
+  setVercelComment,
   mintVercelNFT,
   mintVercelMetadata,
 } from './components/NFT/vercel.js';

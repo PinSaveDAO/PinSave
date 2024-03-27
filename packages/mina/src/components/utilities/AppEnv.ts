@@ -19,3 +19,9 @@ export function getAppContract() {
   const zkApp: MerkleMapContract = new MerkleMapContract(zkAppAddress);
   return zkApp;
 }
+
+export function getAppVars() {
+  const appPubString = getAppString();
+  const appContract = getAppContract();
+  return { appPubString: appPubString, appContract: appContract };
+}

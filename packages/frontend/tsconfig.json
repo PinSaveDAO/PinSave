@@ -20,9 +20,15 @@
       "@/utils/*": ["utils/*"],
       "@/services/*": ["services/*"],
       "@/styles/*": ["styles/*"],
-      "@/hooks/*": ["hooks/*"],
+      "@/hooks/*": ["hooks/*"]
     }
   },
-  "include": ["next-env.d.ts", "environment.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": [
+    "next-env.d.ts",
+    "environment.d.ts",
+    "global.d.ts",
+    "**/*.ts",
+    "**/*.tsx"
+  ],
   "exclude": ["node_modules"]
 }
