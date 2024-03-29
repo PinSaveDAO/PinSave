@@ -2,41 +2,6 @@ import { Field, MerkleMap, UInt64, PublicKey, fetchAccount } from 'o1js';
 
 import { MerkleMapContract } from '../NFTsMapContract.js';
 
-async function logAppStates(
-  zkAppInstance: MerkleMapContract,
-  live: boolean = true
-) {
-  const {
-    treeRoot: treeRoot,
-    totalSupply: totalSupply,
-    totalInited: totalInited,
-    maxSupply: maxSupply,
-  } = await getAppState(zkAppInstance, live);
-
-  console.log('max supply', maxSupply.toBigInt());
-  console.log('totalSupply state:', totalSupply.toBigInt());
-  console.log('totalInited state:', totalInited.toBigInt());
-  console.log('treeRoot state:', treeRoot.toString());
-}
-
-export async function compareLogStates(
-  zkAppInstance: MerkleMapContract,
-  map: MerkleMap,
-  live: boolean = true
-) {
-  const localMapRoot: string = map.getRoot().toString();
-  await logAppStates(zkAppInstance, live);
-  console.log('compare to local map:', localMapRoot);
-}
-
-export async function logAppStatesContract(
-  zkAppAddress: PublicKey,
-  live: boolean = true
-) {
-  const zkAppInstance: MerkleMapContract = new MerkleMapContract(zkAppAddress);
-  await logAppStates(zkAppInstance, live);
-}
-
 export async function getAppState(
   zkAppInstance: MerkleMapContract,
   live: boolean = true
