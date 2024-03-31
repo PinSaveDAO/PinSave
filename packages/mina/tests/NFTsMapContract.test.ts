@@ -246,7 +246,7 @@ describe('PinSave NFTs on Local Blockchain', () => {
       );
     } catch (error) {
       const messageError = String(error).substring(0, 28);
-      expect(messageError).toBe('Error: Field.assertEquals():');
+      expect(messageError).toBe('Error: sender not item owner');
     }
   });
 });
