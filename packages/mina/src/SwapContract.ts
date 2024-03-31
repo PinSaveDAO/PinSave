@@ -175,13 +175,13 @@ export class SwapContract extends SmartContract {
     const { sender } = this.verifyTreeLeaf(item, localKeyWitness);
     const contract: MerkleMapContract = new MerkleMapContract(item.contract);
     item.askNFTId.assertEquals(askedNFT.id, 'nft ids do not match');
-    const itemIn = contract.transfer(
+    const NFTin: NFT = contract.transfer(
       askedNFT,
       item.owner,
       nftKeyWitness,
       adminSignature
     );
-    itemIn.hash().assertEquals(askedNFT.hash(), 'nfts do not match');
+    NFTin.hash().assertEquals(askedNFT.hash(), 'nfts do not match');
     item.changeOwner(sender);
     const itemHash: Field = item.hash();
     const [rootAfter] = localKeyWitness.computeRootAndKey(itemHash);
@@ -234,14 +234,14 @@ export class SwapContract extends SmartContract {
     this.verifyAdminItemSignature(item, localAdminSignature);
     this.verifyTreeLeaf(item, localKeyWitness);
     const contract: MerkleMapContract = new MerkleMapContract(item.contract);
-    const itemIn: NFT = contract.transfer(
+    const NFTin: NFT = contract.transfer(
       item.nft,
       this.address,
       nftKeyWitness,
       adminSignature
     );
     item.nft.changeOwner(this.address);
-    itemIn.hash().assertEquals(item.nft.hash(), 'nfts do not match');
+    NFTin.hash().assertEquals(item.nft.hash(), 'nfts do not match');
     const itemHash = item.hash();
     const [rootAfter] = localKeyWitness.computeRootAndKey(itemHash);
     this.updateRoot(rootAfter);

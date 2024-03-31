@@ -1,4 +1,4 @@
-import { PublicKey, Mina, Field, fetchAccount } from 'o1js';
+import { PublicKey, Mina, Field, fetchAccount, UInt64 } from 'o1js';
 
 export function getMinaBalance(address: PublicKey) {
   let balance: bigint = 0n;
@@ -15,7 +15,10 @@ export async function getTokenAddressBalance(
   let balance: bigint = 0n;
   try {
     await fetchAccount({ publicKey: address, tokenId: tokenId });
-    const fetchedBalance = Mina.getBalance(address, tokenId).value.toBigInt();
+    const fetchedBalance: bigint = Mina.getBalance(
+      address,
+      tokenId
+    ).value.toBigInt();
     balance = fetchedBalance / BigInt(1e9);
   } catch (e) {}
   return balance;

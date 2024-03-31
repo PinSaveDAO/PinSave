@@ -16,7 +16,7 @@ import { initNFTtoMap, mintNFTtoMap } from './NFT/merkleMap.js';
 import { NFT } from './NFT/NFT.js';
 import { getTokenAddressBalance } from './TokenBalances.js';
 import { MerkleMapContract } from '../NFTsMapContract.js';
-import { createInitState } from './NFT/InitState.js';
+import { InitState, createInitState } from './NFT/InitState.js';
 
 export async function setFee(
   deployerPk: PrivateKey,
@@ -45,12 +45,9 @@ export async function initNFT(
   }
   const pubKey: PublicKey = senderPK.toPublicKey();
   const nftId: Field = _NFT.id;
-
   const witnessNFT: MerkleMapWitness = merkleMap.getWitness(nftId);
-
-  const txOptions = createTxOptions(pubKey, live);
-  const adminSignature = Signature.create(adminPK, _NFT.toFields());
-
+  const txOptions: TxOptions = createTxOptions(pubKey, live);
+  const adminSignature: Signature = Signature.create(adminPK, _NFT.toFields());
   const initMintTx: Mina.Transaction = await Mina.transaction(txOptions, () => {
     zkAppInstance.initNFT(_NFT, witnessNFT, adminSignature);
   });
@@ -71,7 +68,6 @@ export async function createInitNFTTxFromMap(
   }
   const nftId: Field = _NFT.id;
   const witnessNFT: MerkleMapWitness = merkleMap.getWitness(nftId);
-
   const initMintTx: Mina.Transaction = await Mina.transaction(txOptions, () => {
     zkAppInstance.initNFT(_NFT, witnessNFT, adminSignature);
   });
@@ -93,8 +89,7 @@ export async function createMintTxFromMap(
   }
   const nftId: Field = _NFT.id;
   const witnessNFT: MerkleMapWitness = merkleMap.getWitness(nftId);
-
-  const mintTx = await createMintTx(
+  const mintTx: Mina.Transaction = await createMintTx(
     pubKey,
     zkAppInstance,
     _NFT,
@@ -134,10 +129,9 @@ export async function mintNFT(
     await MerkleMapContract.compile();
   }
   const pubKey: PublicKey = pk.toPublicKey();
-  const txOptions = createTxOptions(pubKey, live);
+  const txOptions: TxOptions = createTxOptions(pubKey, live);
   const adminSignature = Signature.create(adminPK, _NFT.toFields());
-
-  const mint_tx = await createMintTx(
+  const mint_tx: Mina.Transaction = await createMintTx(
     pubKey,
     zkAppInstance,
     _NFT,
@@ -145,7 +139,6 @@ export async function mintNFT(
     adminSignature,
     txOptions
   );
-
   await sendWaitTx(mint_tx, [pk], live);
 }
 
@@ -157,13 +150,11 @@ export async function createMintTx(
   adminSignature: Signature,
   txOptions: TxOptions
 ) {
-  const recipientBalance = await getTokenAddressBalance(
+  const recipientBalance: bigint = await getTokenAddressBalance(
     pubKey,
     zkAppInstance.token.id
   );
-
   let mint_tx: Mina.Transaction;
-
   if (recipientBalance > 0n) {
     mint_tx = await Mina.transaction(txOptions, () => {
       zkAppInstance.mintNFT(_NFT, merkleMapWitness, adminSignature);
@@ -189,14 +180,11 @@ export async function transferNFT(
   const pubKey: PublicKey = pk.toPublicKey();
   const nftId: Field = _NFT.id;
   const witnessNFT: MerkleMapWitness = merkleMap.getWitness(nftId);
-
-  const recipientBalance = await getTokenAddressBalance(
+  const recipientBalance: bigint = await getTokenAddressBalance(
     recipient,
     zkAppInstance.token.id
   );
-
   const adminSignature = Signature.create(adminPK, _NFT.toFields());
-
   let nft_transfer_tx: Mina.Transaction;
   if (recipientBalance > 0n) {
     nft_transfer_tx = await Mina.transaction(pubKey, () => {
@@ -208,11 +196,8 @@ export async function transferNFT(
       zkAppInstance.transfer(_NFT, recipient, witnessNFT, adminSignature);
     });
   }
-
   await sendWaitTx(nft_transfer_tx, [pk], live);
-
   _NFT.changeOwner(recipient);
-
   merkleMap.set(nftId, _NFT.hash());
 }
 
@@ -240,9 +225,12 @@ export async function initAppRoot(
   live: boolean = false
 ) {
   const userPub: PublicKey = userPK.toPublicKey();
-  const initStruct = createInitState(merkleMap, totalInited);
-  const thisAppSignature = Signature.create(adminPK, initStruct.toFields());
-  const txOptions = createTxOptions(userPub, live);
+  const initStruct: InitState = createInitState(merkleMap, totalInited);
+  const thisAppSignature: Signature = Signature.create(
+    adminPK,
+    initStruct.toFields()
+  );
+  const txOptions: TxOptions = createTxOptions(userPub, live);
   const init_tx: Mina.Transaction = await Mina.transaction(txOptions, () => {
     zkAppInstance.initRoot(initStruct, thisAppSignature);
   });
@@ -256,18 +244,13 @@ export async function deployApp(
   live: boolean = true
 ) {
   let verificationKey: VerificationKey | undefined;
-
   if (proofsEnabled) {
     ({ verificationKey } = await MerkleMapContract.compile());
-    console.log('compiled');
   }
   const zkAppAddress: PublicKey = zkAppPrivateKey.toPublicKey();
   const zkAppInstance: MerkleMapContract = new MerkleMapContract(zkAppAddress);
-
   const pubKey: PublicKey = senderPK.toPublicKey();
-
-  const deployTxnOptions = createTxOptions(pubKey, live);
-
+  const deployTxnOptions: TxOptions = createTxOptions(pubKey, live);
   const deployTx: Mina.Transaction = await Mina.transaction(
     deployTxnOptions,
     () => {
@@ -275,7 +258,7 @@ export async function deployApp(
       zkAppInstance.deploy({ verificationKey, zkappKey: zkAppPrivateKey });
     }
   );
-  const txStatus = await sendWaitTx(deployTx, [senderPK], live);
+  const txStatus: TxStatus = await sendWaitTx(deployTx, [senderPK], live);
   return txStatus;
 }
 
@@ -286,11 +269,9 @@ export async function sendWaitTx(
 ) {
   tx.sign(pks);
   await tx.prove();
-
   let pendingTx: PendingTransaction = await tx.send();
   if (live) {
     console.log(`Got pending transaction with hash ${pendingTx.hash}`);
-
     if (pendingTx.status === 'pending') {
       try {
         const transaction = await pendingTx.safeWait();
@@ -310,7 +291,7 @@ export function createTxOptions(
   live: boolean = true,
   fee: number = 8e7
 ) {
-  const txOptions: { sender: PublicKey; fee?: number } = {
+  const txOptions: TxOptions = {
     sender: pubKey,
   };
   if (live) {
@@ -323,3 +304,5 @@ export type TxOptions = {
   sender: PublicKey;
   fee?: number | undefined;
 };
+
+export type TxStatus = 'included' | 'rejected' | undefined;

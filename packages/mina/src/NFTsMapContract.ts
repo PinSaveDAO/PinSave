@@ -189,7 +189,7 @@ export class MerkleMapContract extends SmartContract {
   private verifyAdminSignature() {
     const admin: PublicKey = this.admin.getAndRequireEquals();
     const sender: PublicKey = this.sender;
-    const isAdmin = sender.equals(admin);
+    const isAdmin: Bool = sender.equals(admin);
     isAdmin.assertEquals(true, 'sender not admin');
     const senderUpdate: AccountUpdate = AccountUpdate.create(admin);
     senderUpdate.requireSignature();
