@@ -9,10 +9,11 @@ import {
   getTokenAddressBalance,
   getMinaBalance,
 } from '../src/components/TokenBalances.js';
+import { VercelKV } from '@vercel/kv';
 
 describe('PinSave NFTs on Berkeley', () => {
   startBerkeleyClient();
-  const client = getVercelClient();
+  const client: VercelKV = getVercelClient();
   const { appContract, appPubString } = getAppVars();
 
   const { zkApp: zkApp } = getAppEnv();

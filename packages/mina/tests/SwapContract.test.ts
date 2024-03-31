@@ -4,10 +4,10 @@ import { startLocalBlockchainClient } from '../src/components/utilities/client.j
 import { SwapContract } from '../src/SwapContract.js';
 import { deploySwapApp } from '../src/components/transactionsSwap.js';
 
-const proofsEnabled = false;
-const enforceTransactionLimits = true;
+const proofsEnabled: boolean = false;
+const enforceTransactionLimits: boolean = true;
 
-const live = false;
+const live: boolean = false;
 
 describe('PinSave NFTs on Local Blockchain', () => {
   const testAccounts = startLocalBlockchainClient(
@@ -20,14 +20,14 @@ describe('PinSave NFTs on Local Blockchain', () => {
   const { privateKey: pk2, publicKey: pubKey2 } = testAccounts[2];
   const { publicKey: pubKey3 } = testAccounts[3];
 
-  const map = new MerkleMap();
+  const map: MerkleMap = new MerkleMap();
   const zkAppPrivateKey: PrivateKey = PrivateKey.random();
 
   const zkAppInstance: SwapContract = new SwapContract(
     zkAppPrivateKey.toPublicKey()
   );
 
-  const compile = false;
+  const compile: boolean = false;
 
   it('deploys app', async () => {
     deploySwapApp(pkAdmin, zkAppPrivateKey, proofsEnabled, live);

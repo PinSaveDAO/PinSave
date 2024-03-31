@@ -8,9 +8,8 @@ export function generateDummyCollectionMap(
   map: MerkleMap,
   totalNumber: number = 2
 ) {
-  const nftArray: NFT[] = [];
-  const nftMetadataArray: NFTMetadata[] = [];
-
+  let nftArray: NFT[] = [];
+  let nftMetadataArray: NFTMetadata[] = [];
   for (let i = 0; i <= totalNumber; i++) {
     // Generate NFT metadata
     const nftMetadata: NFTMetadata = generateDummyNFTMetadata(i, pubKey);
