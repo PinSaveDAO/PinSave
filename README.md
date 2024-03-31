@@ -31,13 +31,15 @@ Pin Save is a decentralized image, video sharing and content aggregation platfor
 
 - Mina App State API
 
-- Decentralized feed of NFTs with decentralized storage on IPFS with NFTPort, Estuary and Nft.storage:
+- Decentralized feed of NFTs:
 
 ![decentralized feed](https://github.com/Pfed-prog/Dspyt-NFTs-EVM/blob/master/assets/feed.png)
 
 - Image posting:
 
 ![Upload](https://github.com/Pfed-prog/Dspyt-NFTs-EVM/blob/master/assets/upload.png)
+
+- Comments verified with Auro Wallet
 
 ## Setup
 

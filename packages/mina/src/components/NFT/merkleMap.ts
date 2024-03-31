@@ -12,12 +12,12 @@ export function stringObjectToNFTMetadata(data: nftDataIn) {
     owner: PublicKey.fromBase58(data.owner),
     isMinted: data.isMinted,
   };
-  const nft = createNFT(nftMetadata);
+  const nft: NFT = createNFT(nftMetadata);
   return nft;
 }
 
 export function setStringObjectToMap(data: nftDataIn, map: MerkleMap) {
-  const nftObject = stringObjectToNFTMetadata(data);
+  const nftObject: NFT = stringObjectToNFTMetadata(data);
   map.set(nftObject.id, nftObject.hash());
 }
 
@@ -33,7 +33,7 @@ export function storeNFTMap(nftMetadata: NFTMetadata, map: MerkleMap) {
 
 export function initNFTtoMap(_NFT: NFT, map: MerkleMap) {
   const nftId: Field = _NFT.id;
-  const currentValue = map.get(nftId).toString();
+  const currentValue: string = map.get(nftId).toString();
   if (currentValue !== '0') {
     throw new Error('value already initialized');
   }
@@ -42,13 +42,12 @@ export function initNFTtoMap(_NFT: NFT, map: MerkleMap) {
 
 export function mintNFTtoMap(_NFT: NFT, map: MerkleMap) {
   const nftId: Field = _NFT.id;
-  const currentValue = map.get(nftId);
-
-  const beforeMint = _NFT.hash();
+  const currentValue: Field = map.get(nftId);
+  const beforeMint: Field = _NFT.hash();
   if (!currentValue.equals(beforeMint)) {
     throw new Error('value not initialized');
   }
   _NFT.mint();
-  const afterMint = _NFT.hash();
+  const afterMint: Field = _NFT.hash();
   map.set(nftId, afterMint);
 }

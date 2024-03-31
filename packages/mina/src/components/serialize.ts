@@ -33,13 +33,11 @@ export function deserializeJsonToMerkleMap(serializedJson: string): MerkleMap {
 export function serializeMerkleTreeToJson(merkleTree: MerkleTree): string {
   const serializedData: { [index: number]: string } = {};
   const leafCount: bigint = merkleTree.leafCount;
-
   // Iterate through the Merkle Tree to convert each key-value pair to JSON
   for (let index = 0; index < leafCount; index++) {
     const value: string = merkleTree.getNode(0, BigInt(index)).toString();
     serializedData[index] = value;
   }
-
   return JSON.stringify(serializedData);
 }
 
@@ -63,11 +61,12 @@ export function deserializeJsonToMerkleTree(
 
   const leafCount: number = Object.keys(deserializedData).length;
 
-  const height = Math.log2(Number(leafCount)) + 1;
+  const height: number = Math.log2(Number(leafCount)) + 1;
 
   const merkleTree: MerkleTree = new MerkleTree(height);
 
-  const defaultValue = getZerosMerkleTree(height)[height - 1].toString();
+  const defaultValue: string =
+    getZerosMerkleTree(height)[height - 1].toString();
 
   for (let index = 0; index < leafCount; index++) {
     let iterValue = deserializedData[index];
@@ -89,7 +88,7 @@ export function deserializeJsonToMerkleTreeFull(
 
   const merkleTree: MerkleTree = new MerkleTree(height);
 
-  let currentIndex = 0;
+  let currentIndex: number = 0;
 
   for (let level = 0; level < height; level++) {
     const maxLeaf: number = 2 ** level;

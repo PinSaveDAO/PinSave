@@ -15,13 +15,19 @@ Discord ID: fedotov_am
 ## How to build
 
 ```sh
-yarn build
+npm i
 ```
 
 ## How to run tests
 
 ```sh
-yarn test
+npm test
+```
+
+## How to run coverage tests
+
+```sh
+npm run coverage
 ```
 
 ## Further Links

@@ -27,12 +27,12 @@ export class MerkleMapContract extends SmartContract {
     'init-max-supply': Field,
     'minted-nft': Field,
   };
+  @state(PublicKey) admin = State<PublicKey>();
   @state(Field) root = State<Field>();
-  @state(UInt64) totalSupply = State<UInt64>();
   @state(Field) totalInited = State<Field>();
   @state(Field) maxSupply = State<Field>();
   @state(UInt64) fee = State<UInt64>();
-  @state(PublicKey) admin = State<PublicKey>();
+  @state(UInt64) totalSupply = State<UInt64>();
 
   deploy(args?: DeployArgs) {
     super.deploy(args);
@@ -51,7 +51,7 @@ export class MerkleMapContract extends SmartContract {
     super.init();
     const { sender: sender } = this.verifySenderSignature();
     this.admin.set(sender);
-    const emptyMerkleMapRoot = new MerkleMap().getRoot();
+    const emptyMerkleMapRoot: Field = new MerkleMap().getRoot();
     this.root.set(emptyMerkleMapRoot);
     this.account.tokenSymbol.set('PINSAV');
     this.account.zkappUri.set('https://pinsave.app/uri.json');
@@ -61,18 +61,16 @@ export class MerkleMapContract extends SmartContract {
     initState: InitState,
     adminSignature: Signature
   ): Bool {
-    const admin = this.admin.getAndRequireEquals();
-    const isAdmin = adminSignature.verify(admin, initState.toFields());
-    isAdmin.assertEquals(Bool(true), 'initState signature: not admin');
-
-    const root = this.root.getAndRequireEquals();
-    const emptyMerkleMapRoot = new MerkleMap().getRoot();
+    const admin: PublicKey = this.admin.getAndRequireEquals();
+    const isAdmin: Bool = adminSignature.verify(admin, initState.toFields());
+    isAdmin.assertEquals(true, 'initState signature: not admin');
+    const root: Field = this.root.getAndRequireEquals();
+    const emptyMerkleMapRoot: Field = new MerkleMap().getRoot();
     root.assertEquals(emptyMerkleMapRoot, 'root initialized');
-    const maxSupply = this.maxSupply.getAndRequireEquals();
-    maxSupply.assertEquals(Field(0), 'max supply initialized');
-    const initedAmount = this.totalInited.getAndRequireEquals();
-    initedAmount.assertEquals(Field(0), 'initalized amount of nfts');
-
+    const maxSupply: Field = this.maxSupply.getAndRequireEquals();
+    maxSupply.assertEquals(0, 'max supply initialized');
+    const initedAmount: Field = this.totalInited.getAndRequireEquals();
+    initedAmount.assertEquals(0, 'initalized amount of nfts');
     this.initMaxSupply(initState.maxSupply);
     this.updateInitedAmount(Field(0), initState.totalInited);
     this.updateFee(initState.feeAmount);
@@ -81,7 +79,7 @@ export class MerkleMapContract extends SmartContract {
   }
 
   @method public setFee(newFeeAmount: UInt64): Bool {
-    this.verifyAdminSender();
+    this.verifyAdminSignature();
     this.updateFee(newFeeAmount);
     return Bool(true);
   }
@@ -93,24 +91,17 @@ export class MerkleMapContract extends SmartContract {
   ): Bool {
     this.verifyAdminItemSignature(item, adminSignature);
     const { senderUpdate: senderUpdate } = this.verifySenderSignature();
-
-    const initedAmount = this.totalInited.getAndRequireEquals();
-    const maxSupply = this.maxSupply.getAndRequireEquals();
+    const initedAmount: Field = this.totalInited.getAndRequireEquals();
+    const maxSupply: Field = this.maxSupply.getAndRequireEquals();
     initedAmount.assertLessThanOrEqual(maxSupply, 'maximum supply reached');
-
-    const fee = this.fee.getAndRequireEquals();
-    const initialRoot = this.root.getAndRequireEquals();
-
+    const fee: UInt64 = this.fee.getAndRequireEquals();
+    const initialRoot: Field = this.root.getAndRequireEquals();
     const [rootBefore, key] = keyWitness.computeRootAndKey(Field(0));
-
     rootBefore.assertEquals(initialRoot, 'does not match root');
     key.assertEquals(item.id, 'keyWitness not matches nft id');
     key.assertEquals(initedAmount, 'keyWitness not matches order');
-
     senderUpdate.send({ to: this, amount: fee });
-
     const [rootAfter] = keyWitness.computeRootAndKey(item.hash());
-
     this.updateInitedAmount(initedAmount, 1);
     this.updateRoot(rootAfter);
     return Bool(true);
@@ -125,15 +116,12 @@ export class MerkleMapContract extends SmartContract {
     this.verifyTreeLeaf(item, keyWitness);
     item.isMinted.assertEquals(0, 'Already Minted');
     item.mint();
-
     const [rootAfter] = keyWitness.computeRootAndKey(item.hash());
-
     this.token.mint({
       address: item.owner,
       amount: UInt64.from(1_000_000_000),
     });
     this.emitEvent('minted-nft', item.id);
-
     this.updateTotalSupply();
     this.updateRoot(rootAfter);
     return Bool(true);
@@ -164,14 +152,14 @@ export class MerkleMapContract extends SmartContract {
   }
 
   private updateInitedAmount(initedAmount: Field, dAmount: number | Field) {
-    const newTotalInited = initedAmount.add(dAmount);
+    const newTotalInited: Field = initedAmount.add(dAmount);
     this.totalInited.set(newTotalInited);
     this.emitEvent('update-inited-amount', newTotalInited);
   }
 
   private updateTotalSupply() {
-    const liquidity = this.totalSupply.getAndRequireEquals();
-    const newTotalSupply = liquidity.add(1);
+    const liquidity: UInt64 = this.totalSupply.getAndRequireEquals();
+    const newTotalSupply: UInt64 = liquidity.add(1);
     this.totalSupply.set(newTotalSupply);
     this.emitEvent('update-total-supply', newTotalSupply);
   }
@@ -189,32 +177,33 @@ export class MerkleMapContract extends SmartContract {
 
   private verifyTreeLeaf(item: NFT, keyWitness: MerkleMapWitness) {
     const { sender: sender } = this.verifySenderSignature();
-    sender.assertEquals(item.owner);
-    const initialRoot = this.root.getAndRequireEquals();
+    const isItemOwner: Bool = sender.equals(item.owner);
+    isItemOwner.assertEquals(true, 'sender not item owner');
+    const initialRoot: Field = this.root.getAndRequireEquals();
     const [rootBefore, key] = keyWitness.computeRootAndKey(item.hash());
     rootBefore.assertEquals(initialRoot, 'root not matching');
     key.assertEquals(item.id, 'key not matching');
     return { sender: sender };
   }
 
-  private verifyAdminSender() {
-    const admin = this.admin.getAndRequireEquals();
-    const sender = this.sender;
-    const isSenderAdmin = sender.equals(admin);
-    isSenderAdmin.assertTrue('sender not admin');
-    const senderUpdate = AccountUpdate.create(admin);
+  private verifyAdminSignature() {
+    const admin: PublicKey = this.admin.getAndRequireEquals();
+    const sender: PublicKey = this.sender;
+    const isAdmin: Bool = sender.equals(admin);
+    isAdmin.assertEquals(true, 'sender not admin');
+    const senderUpdate: AccountUpdate = AccountUpdate.create(admin);
     senderUpdate.requireSignature();
   }
 
   private verifyAdminItemSignature(item: NFT, adminSignature: Signature) {
-    const admin = this.admin.getAndRequireEquals();
-    const isAdmin = adminSignature.verify(admin, item.toFields());
+    const admin: PublicKey = this.admin.getAndRequireEquals();
+    const isAdmin: Bool = adminSignature.verify(admin, item.toFields());
     isAdmin.assertEquals(Bool(true), 'item signature: not admin');
   }
 
   private verifySenderSignature() {
-    const sender = this.sender;
-    const senderUpdate = AccountUpdate.create(sender);
+    const sender: PublicKey = this.sender;
+    const senderUpdate: AccountUpdate = AccountUpdate.create(sender);
     senderUpdate.requireSignature();
     return { senderUpdate: senderUpdate, sender: sender };
   }

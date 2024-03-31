@@ -18,17 +18,14 @@ export function createInitState(
   maxSupply: number = 255
 ) {
   const rootBefore: Field = merkleMap.getRoot();
-  const totalInitedField = Field(totalInited);
-  const feeAmountU64 = UInt64.from(feeAmount);
-  const maxSupplyField = Field(maxSupply);
-  const initStruct: InitState = {
+  const totalInitedField: Field = Field(totalInited);
+  const feeAmountU64: UInt64 = UInt64.from(feeAmount);
+  const maxSupplyField: Field = Field(maxSupply);
+  const initStruct: InitState = new InitState({
     initialRoot: rootBefore,
     totalInited: totalInitedField,
     feeAmount: feeAmountU64,
     maxSupply: maxSupplyField,
-    toFields: function (): Field[] {
-      return InitState.toFields(this);
-    },
-  };
+  });
   return initStruct;
 }
