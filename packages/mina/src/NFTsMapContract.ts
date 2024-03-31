@@ -67,7 +67,7 @@ export class MerkleMapContract extends SmartContract {
     const root: Field = this.root.getAndRequireEquals();
     const emptyMerkleMapRoot: Field = new MerkleMap().getRoot();
     root.assertEquals(emptyMerkleMapRoot, 'root initialized');
-    const maxSupply = this.maxSupply.getAndRequireEquals();
+    const maxSupply: Field = this.maxSupply.getAndRequireEquals();
     maxSupply.assertEquals(0, 'max supply initialized');
     const initedAmount: Field = this.totalInited.getAndRequireEquals();
     initedAmount.assertEquals(0, 'initalized amount of nfts');

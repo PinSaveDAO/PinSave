@@ -1,4 +1,4 @@
-import { PublicKey, Mina, Field, fetchAccount, SmartContract } from 'o1js';
+import { PublicKey, Mina, Field, fetchAccount } from 'o1js';
 
 export function getMinaBalance(address: PublicKey) {
   let balance: bigint = 0n;

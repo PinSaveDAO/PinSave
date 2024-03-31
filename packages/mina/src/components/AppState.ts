@@ -1,4 +1,4 @@
-import { Field, MerkleMap, UInt64, PublicKey, fetchAccount } from 'o1js';
+import { Field, UInt64, fetchAccount } from 'o1js';
 
 import { MerkleMapContract } from '../NFTsMapContract.js';
 
