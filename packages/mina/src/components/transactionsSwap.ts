@@ -7,6 +7,7 @@ import {
   PendingTransaction,
 } from 'o1js';
 
+import { createTxOptions } from './transactions.js';
 import { SwapContract } from '../SwapContract.js';
 
 export async function deploySwapApp(
@@ -45,7 +46,6 @@ export async function sendWaitTx(
   let pendingTx: PendingTransaction = await tx.send();
   if (live) {
     console.log(`Got pending transaction with hash ${pendingTx.hash}`);
-
     if (pendingTx.status === 'pending') {
       try {
         const transaction = await pendingTx.safeWait();
@@ -59,22 +59,3 @@ export async function sendWaitTx(
     }
   }
 }
-
-export function createTxOptions(
-  pubKey: PublicKey,
-  live: boolean = true,
-  fee: number = 8e7
-) {
-  const txOptions: { sender: PublicKey; fee?: number } = {
-    sender: pubKey,
-  };
-  if (live) {
-    txOptions.fee = fee;
-  }
-  return txOptions;
-}
-
-export type TxOptions = {
-  sender: PublicKey;
-  fee?: number | undefined;
-};

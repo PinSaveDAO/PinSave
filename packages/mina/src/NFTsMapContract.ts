@@ -20,12 +20,14 @@ import { InitState } from './components/NFT/InitState.js';
 
 export class MerkleMapContract extends SmartContract {
   events = {
-    'update-merkle-root': Field,
-    'update-fee': UInt64,
-    'update-total-supply': UInt64,
-    'update-inited-amount': Field,
-    'init-max-supply': Field,
+    'updated-merkle-root': Field,
+    'updated-fee': UInt64,
+    'updated-total-supply': UInt64,
+    'updated-inited-amount': Field,
+    'inited-max-supply': Field,
+    'inited-nft': Field,
     'minted-nft': Field,
+    'transferred-nft': Field,
   };
   @state(PublicKey) admin = State<PublicKey>();
   @state(Field) root = State<Field>();
@@ -101,7 +103,9 @@ export class MerkleMapContract extends SmartContract {
     key.assertEquals(item.id, 'keyWitness not matches nft id');
     key.assertEquals(initedAmount, 'keyWitness not matches order');
     senderUpdate.send({ to: this, amount: fee });
-    const [rootAfter] = keyWitness.computeRootAndKey(item.hash());
+    const itemHash: Field = item.hash();
+    const [rootAfter] = keyWitness.computeRootAndKey(itemHash);
+    this.emitEvent('inited-nft', itemHash);
     this.updateInitedAmount(initedAmount, 1);
     this.updateRoot(rootAfter);
     return Bool(true);
@@ -122,7 +126,7 @@ export class MerkleMapContract extends SmartContract {
       amount: UInt64.from(1_000_000_000),
     });
     this.emitEvent('minted-nft', item.id);
-    this.updateTotalSupply();
+    this.incrementTotalSupply();
     this.updateRoot(rootAfter);
     return Bool(true);
   }
@@ -132,47 +136,49 @@ export class MerkleMapContract extends SmartContract {
     newOwner: PublicKey,
     keyWitness: MerkleMapWitness,
     adminSignature: Signature
-  ): NFT {
+  ): Field {
     this.verifyAdminItemSignature(item, adminSignature);
     const { sender: sender } = this.verifyTreeLeaf(item, keyWitness);
     item.changeOwner(newOwner);
-    const [rootAfter] = keyWitness.computeRootAndKey(item.hash());
+    const itemHash: Field = item.hash();
+    const [rootAfter] = keyWitness.computeRootAndKey(itemHash);
     this.token.send({
       from: sender,
       to: newOwner,
       amount: UInt64.from(1_000_000_000),
     });
+    this.emitEvent('transferred-nft', itemHash);
     this.updateRoot(rootAfter);
-    return item;
+    return itemHash;
   }
 
   private initMaxSupply(_maxSupply: Field) {
     this.maxSupply.set(_maxSupply);
-    this.emitEvent('init-max-supply', _maxSupply);
+    this.emitEvent('inited-max-supply', _maxSupply);
   }
 
   private updateInitedAmount(initedAmount: Field, dAmount: number | Field) {
     const newTotalInited: Field = initedAmount.add(dAmount);
     this.totalInited.set(newTotalInited);
-    this.emitEvent('update-inited-amount', newTotalInited);
+    this.emitEvent('updated-inited-amount', newTotalInited);
   }
 
-  private updateTotalSupply() {
+  private incrementTotalSupply() {
     const liquidity: UInt64 = this.totalSupply.getAndRequireEquals();
     const newTotalSupply: UInt64 = liquidity.add(1);
     this.totalSupply.set(newTotalSupply);
-    this.emitEvent('update-total-supply', newTotalSupply);
+    this.emitEvent('updated-total-supply', newTotalSupply);
   }
 
   private updateFee(newFeeAmount: UInt64) {
     this.fee.getAndRequireEquals();
     this.fee.set(newFeeAmount);
-    this.emitEvent('update-fee', newFeeAmount);
+    this.emitEvent('updated-fee', newFeeAmount);
   }
 
   private updateRoot(newRoot: Field) {
     this.root.set(newRoot);
-    this.emitEvent('update-merkle-root', newRoot);
+    this.emitEvent('updated-merkle-root', newRoot);
   }
 
   private verifyTreeLeaf(item: NFT, keyWitness: MerkleMapWitness) {

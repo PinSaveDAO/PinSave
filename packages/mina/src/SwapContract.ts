@@ -71,10 +71,26 @@ export class InitSwapState extends Struct({
   }
 }
 
+export class supplyNFTforMina extends Struct({
+  item: NFTforMina,
+  localKeyWitness: MerkleMapWitness,
+  localAdminSignature: Signature,
+  nftKeyWitness: MerkleMapWitness,
+  adminSignature: Signature,
+}) {}
+
+export class supplyNFTforNFT extends Struct({
+  item: NFTforNFT,
+  localKeyWitness: MerkleMapWitness,
+  localAdminSignature: Signature,
+  nftKeyWitness: MerkleMapWitness,
+  adminSignature: Signature,
+}) {}
+
 export class SwapContract extends SmartContract {
   events = {
-    'update-merkle-root': Field,
-    'update-fee': UInt64,
+    'updated-merkle-root': Field,
+    'updated-fee': UInt64,
     'supplied-nft': Field,
     'sold-nft': Field,
     'withdrawn-nft': Field,
@@ -121,37 +137,13 @@ export class SwapContract extends SmartContract {
     return Bool(true);
   }
 
-  @method public supplyNFTMina(
-    item: NFTforMina,
-    localKeyWitness: MerkleMapWitness,
-    localAdminSignature: Signature,
-    nftKeyWitness: MerkleMapWitness,
-    adminSignature: Signature
-  ): Field {
-    const itemHash: Field = this.supplyNFT(
-      item,
-      localKeyWitness,
-      localAdminSignature,
-      nftKeyWitness,
-      adminSignature
-    );
+  @method public supplyNFTMina(supplyNFT: supplyNFTforMina): Field {
+    const itemHash: Field = this.supplyNFT(supplyNFT);
     return itemHash;
   }
 
-  @method public supplyNFTforNFT(
-    item: NFTforNFT,
-    localKeyWitness: MerkleMapWitness,
-    localAdminSignature: Signature,
-    nftKeyWitness: MerkleMapWitness,
-    adminSignature: Signature
-  ): Field {
-    const itemHash: Field = this.supplyNFT(
-      item,
-      localKeyWitness,
-      localAdminSignature,
-      nftKeyWitness,
-      adminSignature
-    );
+  @method public supplyNFTforNFT(supplyNFT: supplyNFTforNFT): Field {
+    const itemHash: Field = this.supplyNFT(supplyNFT);
     return itemHash;
   }
 
@@ -185,13 +177,13 @@ export class SwapContract extends SmartContract {
     const { sender } = this.verifyTreeLeaf(item, localKeyWitness);
     const contract: MerkleMapContract = new MerkleMapContract(item.contract);
     item.askNFTId.assertEquals(askedNFT.id, 'nft ids do not match');
-    const NFTin: NFT = contract.transfer(
+    const NFTHashIn: Field = contract.transfer(
       askedNFT,
       item.owner,
       nftKeyWitness,
       adminSignature
     );
-    NFTin.hash().assertEquals(askedNFT.hash(), 'nfts do not match');
+    NFTHashIn.assertEquals(askedNFT.hash(), 'nfts do not match');
     item.isCompleted.assertFalse('order is already completed');
     item.changeOwner(sender);
     item.complete();
@@ -236,26 +228,25 @@ export class SwapContract extends SmartContract {
     return itemHash;
   }
 
-  private supplyNFT(
-    item: NFTforMina | NFTforNFT,
-    localKeyWitness: MerkleMapWitness,
-    localAdminSignature: Signature,
-    nftKeyWitness: MerkleMapWitness,
-    adminSignature: Signature
-  ): Field {
-    this.verifyAdminItemSignature(item, localAdminSignature);
-    this.verifyTreeLeaf(item, localKeyWitness);
-    const contract: MerkleMapContract = new MerkleMapContract(item.contract);
-    const NFTin: NFT = contract.transfer(
-      item.nft,
-      this.address,
-      nftKeyWitness,
-      adminSignature
+  private supplyNFT(supplyNFT: supplyNFTforMina | supplyNFTforNFT): Field {
+    this.verifyAdminItemSignature(
+      supplyNFT.item,
+      supplyNFT.localAdminSignature
     );
-    item.nft.changeOwner(this.address);
-    NFTin.hash().assertEquals(item.nft.hash(), 'nfts do not match');
-    const itemHash = item.hash();
-    const [rootAfter] = localKeyWitness.computeRootAndKey(itemHash);
+    this.verifyTreeLeaf(supplyNFT.item, supplyNFT.localKeyWitness);
+    const contract: MerkleMapContract = new MerkleMapContract(
+      supplyNFT.item.contract
+    );
+    const NFTHashIn: Field = contract.transfer(
+      supplyNFT.item.nft,
+      this.address,
+      supplyNFT.nftKeyWitness,
+      supplyNFT.adminSignature
+    );
+    supplyNFT.item.nft.changeOwner(this.address);
+    NFTHashIn.assertEquals(supplyNFT.item.nft.hash(), 'nfts do not match');
+    const itemHash = supplyNFT.item.hash();
+    const [rootAfter] = supplyNFT.localKeyWitness.computeRootAndKey(itemHash);
     this.updateRoot(rootAfter);
     this.emitEvent('supplied-nft', itemHash);
     return itemHash;
@@ -271,14 +262,14 @@ export class SwapContract extends SmartContract {
     this.verifyAdminItemSignature(item, localAdminSignature);
     const { sender: sender } = this.verifyTreeLeaf(item, localKeyWitness);
     const contract: MerkleMapContract = new MerkleMapContract(item.contract);
-    const itemIn: NFT = contract.transfer(
+    const NFTHashIn: Field = contract.transfer(
       item.nft,
       sender,
       nftKeyWitness,
       adminSignature
     );
     item.nft.changeOwner(sender);
-    itemIn.hash().assertEquals(item.nft.hash(), 'nfts do not match');
+    NFTHashIn.assertEquals(item.nft.hash(), 'nfts do not match');
     const itemHash = item.hash();
     const [rootAfter] = localKeyWitness.computeRootAndKey(itemHash);
     this.updateRoot(rootAfter);
@@ -289,12 +280,12 @@ export class SwapContract extends SmartContract {
   private updateFee(newFeeAmount: UInt64) {
     this.fee.getAndRequireEquals();
     this.fee.set(newFeeAmount);
-    this.emitEvent('update-fee', newFeeAmount);
+    this.emitEvent('updated-fee', newFeeAmount);
   }
 
   private updateRoot(newRoot: Field) {
     this.root.set(newRoot);
-    this.emitEvent('update-merkle-root', newRoot);
+    this.emitEvent('updated-merkle-root', newRoot);
   }
 
   private verifyTreeLeaf(
