@@ -18,7 +18,7 @@ import {
 } from 'o1js';
 
 import { NFT } from './components/NFT/NFT.js';
-import { MerkleMapContract } from './NFTsMapContract.js';
+import { NFTContract } from './NFTsMapContract.js';
 
 export class NFTforMina extends Struct({
   nft: NFT,
@@ -175,7 +175,7 @@ export class SwapContract extends SmartContract {
   ): Field {
     this.verifyAdminItemSignature(item, localAdminSignature);
     const { sender } = this.verifyTreeLeaf(item, localKeyWitness);
-    const contract: MerkleMapContract = new MerkleMapContract(item.contract);
+    const contract: NFTContract = new NFTContract(item.contract);
     item.askNFTId.assertEquals(askedNFT.id, 'nft ids do not match');
     const NFTHashIn: Field = contract.transfer(
       askedNFT,
@@ -234,9 +234,7 @@ export class SwapContract extends SmartContract {
       supplyNFT.localAdminSignature
     );
     this.verifyTreeLeaf(supplyNFT.item, supplyNFT.localKeyWitness);
-    const contract: MerkleMapContract = new MerkleMapContract(
-      supplyNFT.item.contract
-    );
+    const contract: NFTContract = new NFTContract(supplyNFT.item.contract);
     const NFTHashIn: Field = contract.transfer(
       supplyNFT.item.nft,
       this.address,
@@ -261,7 +259,7 @@ export class SwapContract extends SmartContract {
   ): Field {
     this.verifyAdminItemSignature(item, localAdminSignature);
     const { sender: sender } = this.verifyTreeLeaf(item, localKeyWitness);
-    const contract: MerkleMapContract = new MerkleMapContract(item.contract);
+    const contract: NFTContract = new NFTContract(item.contract);
     const NFTHashIn: Field = contract.transfer(
       item.nft,
       sender,

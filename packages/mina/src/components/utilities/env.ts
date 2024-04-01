@@ -3,7 +3,7 @@ import { createClient } from '@vercel/kv';
 import dotenv from 'dotenv';
 dotenv.config();
 
-import { MerkleMapContract } from '../../NFTsMapContract.js';
+import { NFTContract } from '../../NFTsMapContract.js';
 
 export function getEnvAccount() {
   const adminPK: PrivateKey = PrivateKey.fromBase58(
@@ -19,7 +19,7 @@ export function getAppEnv() {
   );
   const zkAppAddress: PublicKey = zkAppPK.toPublicKey();
   const appId: string = zkAppAddress.toBase58();
-  const zkApp: MerkleMapContract = new MerkleMapContract(zkAppAddress);
+  const zkApp: NFTContract = new NFTContract(zkAppAddress);
   return {
     zkAppPK: zkAppPK,
     zkAppAddress: zkAppAddress,

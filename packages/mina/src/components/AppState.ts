@@ -1,9 +1,9 @@
 import { Field, UInt64, fetchAccount } from 'o1js';
 
-import { MerkleMapContract } from '../NFTsMapContract.js';
+import { NFTContract } from '../NFTsMapContract.js';
 
 export async function getAppState(
-  zkAppInstance: MerkleMapContract,
+  zkAppInstance: NFTContract,
   live: boolean = true
 ) {
   if (live) {
@@ -22,7 +22,7 @@ export async function getAppState(
 }
 
 export async function getTotalInitedLive(
-  zkAppInstance: MerkleMapContract
+  zkAppInstance: NFTContract
 ): Promise<number> {
   await fetchAccount({ publicKey: zkAppInstance.address });
   const totalSupplyField: Field = zkAppInstance.totalInited.get();
@@ -31,7 +31,7 @@ export async function getTotalInitedLive(
 }
 
 export async function getTotalSupplyLive(
-  zkAppInstance: MerkleMapContract
+  zkAppInstance: NFTContract
 ): Promise<number> {
   await fetchAccount({ publicKey: zkAppInstance.address });
   const totalSupply64: UInt64 = zkAppInstance.totalSupply.get();
@@ -39,9 +39,7 @@ export async function getTotalSupplyLive(
   return totalSupply;
 }
 
-export async function getTreeRoot(
-  zkAppInstance: MerkleMapContract
-): Promise<Field> {
+export async function getTreeRoot(zkAppInstance: NFTContract): Promise<Field> {
   await fetchAccount({ publicKey: zkAppInstance.address });
   const treeRoot: Field = zkAppInstance.root.get();
   return treeRoot;

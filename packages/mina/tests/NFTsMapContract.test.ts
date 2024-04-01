@@ -15,7 +15,7 @@ import {
   mintNFTwithMap,
   initNFT,
 } from '../src/components/transactions.js';
-import { MerkleMapContract } from '../src/NFTsMapContract.js';
+import { NFTContract } from '../src/NFTsMapContract.js';
 import { getMinaBalance } from '../src/index.js';
 
 const proofsEnabled = false;
@@ -37,7 +37,7 @@ describe('PinSave NFTs on Local Blockchain', () => {
   const map = new MerkleMap();
   const zkAppPrivateKey: PrivateKey = PrivateKey.random();
 
-  const zkAppInstance: MerkleMapContract = new MerkleMapContract(
+  const zkAppInstance: NFTContract = new NFTContract(
     zkAppPrivateKey.toPublicKey()
   );
 

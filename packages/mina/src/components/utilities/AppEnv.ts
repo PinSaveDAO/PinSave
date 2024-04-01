@@ -1,6 +1,6 @@
 import { PublicKey } from 'o1js';
 
-import { MerkleMapContract } from '../../NFTsMapContract.js';
+import { NFTContract } from '../../NFTsMapContract.js';
 
 export function getAppString() {
   const appPubString: string =
@@ -16,7 +16,7 @@ export function getAppPublic() {
 
 export function getAppContract() {
   const zkAppAddress = getAppPublic();
-  const zkApp: MerkleMapContract = new MerkleMapContract(zkAppAddress);
+  const zkApp: NFTContract = new NFTContract(zkAppAddress);
   return zkApp;
 }
 

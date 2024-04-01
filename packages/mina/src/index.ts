@@ -72,4 +72,4 @@ export {
   mintNFT,
 } from './components/transactions.js';
 
-export { MerkleMapContract } from './NFTsMapContract.js';
+export { NFTContract } from './NFTsMapContract.js';

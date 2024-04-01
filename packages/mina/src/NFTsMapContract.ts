@@ -18,7 +18,7 @@ import {
 import { NFT } from './components/NFT/NFT.js';
 import { InitState } from './components/NFT/InitState.js';
 
-export class MerkleMapContract extends SmartContract {
+export class NFTContract extends SmartContract {
   events = {
     'updated-merkle-root': Field,
     'updated-fee': UInt64,
