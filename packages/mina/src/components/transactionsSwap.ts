@@ -42,14 +42,12 @@ export async function sendWaitTx(
 ) {
   tx.sign(pks);
   await tx.prove();
-
   let pendingTx: PendingTransaction = await tx.send();
   if (live) {
     console.log(`Got pending transaction with hash ${pendingTx.hash}`);
     if (pendingTx.status === 'pending') {
       try {
         const transaction = await pendingTx.safeWait();
-        console.log(transaction.status);
         return transaction.status;
       } catch (error) {
         throw new Error('tx not successful');

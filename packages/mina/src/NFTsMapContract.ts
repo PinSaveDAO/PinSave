@@ -136,9 +136,9 @@ export class NFTContract extends SmartContract {
     newOwner: PublicKey,
     keyWitness: MerkleMapWitness,
     adminSignature: Signature
-  ): Field {
+  ): Bool {
     this.verifyAdminItemSignature(item, adminSignature);
-    const { sender: sender } = this.verifyTreeLeaf(item, keyWitness);
+    const sender: PublicKey = this.verifyTreeLeaf(item, keyWitness);
     item.changeOwner(newOwner);
     const itemHash: Field = item.hash();
     const [rootAfter] = keyWitness.computeRootAndKey(itemHash);
@@ -149,39 +149,42 @@ export class NFTContract extends SmartContract {
     });
     this.emitEvent('transferred-nft', itemHash);
     this.updateRoot(rootAfter);
-    return itemHash;
+    return Bool(true);
   }
 
-  private initMaxSupply(_maxSupply: Field) {
+  private initMaxSupply(_maxSupply: Field): void {
     this.maxSupply.set(_maxSupply);
     this.emitEvent('inited-max-supply', _maxSupply);
   }
 
-  private updateInitedAmount(initedAmount: Field, dAmount: number | Field) {
+  private updateInitedAmount(
+    initedAmount: Field,
+    dAmount: number | Field
+  ): void {
     const newTotalInited: Field = initedAmount.add(dAmount);
     this.totalInited.set(newTotalInited);
     this.emitEvent('updated-inited-amount', newTotalInited);
   }
 
-  private incrementTotalSupply() {
+  private incrementTotalSupply(): void {
     const liquidity: UInt64 = this.totalSupply.getAndRequireEquals();
     const newTotalSupply: UInt64 = liquidity.add(1);
     this.totalSupply.set(newTotalSupply);
     this.emitEvent('updated-total-supply', newTotalSupply);
   }
 
-  private updateFee(newFeeAmount: UInt64) {
+  private updateFee(newFeeAmount: UInt64): void {
     this.fee.getAndRequireEquals();
     this.fee.set(newFeeAmount);
     this.emitEvent('updated-fee', newFeeAmount);
   }
 
-  private updateRoot(newRoot: Field) {
+  private updateRoot(newRoot: Field): void {
     this.root.set(newRoot);
     this.emitEvent('updated-merkle-root', newRoot);
   }
 
-  private verifyTreeLeaf(item: NFT, keyWitness: MerkleMapWitness) {
+  private verifyTreeLeaf(item: NFT, keyWitness: MerkleMapWitness): PublicKey {
     const { sender: sender } = this.verifySenderSignature();
     const isItemOwner: Bool = sender.equals(item.owner);
     isItemOwner.assertEquals(true, 'sender not item owner');
@@ -189,10 +192,10 @@ export class NFTContract extends SmartContract {
     const [rootBefore, key] = keyWitness.computeRootAndKey(item.hash());
     rootBefore.assertEquals(initialRoot, 'root not matching');
     key.assertEquals(item.id, 'key not matching');
-    return { sender: sender };
+    return sender;
   }
 
-  private verifyAdminSignature() {
+  private verifyAdminSignature(): void {
     const admin: PublicKey = this.admin.getAndRequireEquals();
     const sender: PublicKey = this.sender;
     const isAdmin: Bool = sender.equals(admin);
@@ -201,7 +204,7 @@ export class NFTContract extends SmartContract {
     senderUpdate.requireSignature();
   }
 
-  private verifyAdminItemSignature(item: NFT, adminSignature: Signature) {
+  private verifyAdminItemSignature(item: NFT, adminSignature: Signature): void {
     const admin: PublicKey = this.admin.getAndRequireEquals();
     const isAdmin: Bool = adminSignature.verify(admin, item.toFields());
     isAdmin.assertEquals(Bool(true), 'item signature: not admin');

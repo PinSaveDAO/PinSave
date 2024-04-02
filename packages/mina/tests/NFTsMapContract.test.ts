@@ -18,10 +18,10 @@ import {
 import { NFTContract } from '../src/NFTsMapContract.js';
 import { getMinaBalance } from '../src/index.js';
 
-const proofsEnabled = false;
-const enforceTransactionLimits = true;
+const proofsEnabled: boolean = false;
+const enforceTransactionLimits: boolean = true;
 
-const live = false;
+const live: boolean = false;
 
 describe('PinSave NFTs on Local Blockchain', () => {
   const testAccounts = startLocalBlockchainClient(
@@ -34,7 +34,7 @@ describe('PinSave NFTs on Local Blockchain', () => {
   const { privateKey: pk2, publicKey: pubKey2 } = testAccounts[2];
   const { publicKey: pubKey3 } = testAccounts[3];
 
-  const map = new MerkleMap();
+  const map: MerkleMap = new MerkleMap();
   const zkAppPrivateKey: PrivateKey = PrivateKey.random();
 
   const zkAppInstance: NFTContract = new NFTContract(
@@ -43,7 +43,7 @@ describe('PinSave NFTs on Local Blockchain', () => {
 
   const { nftArray: nftArray } = generateDummyCollectionMap(pubKeyAdmin, map);
 
-  const compile = false;
+  const compile: boolean = false;
 
   it('deploys app', async () => {
     await deployApp(pkAdmin, zkAppPrivateKey, proofsEnabled, live);
