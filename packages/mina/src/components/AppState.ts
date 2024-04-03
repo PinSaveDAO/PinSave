@@ -40,7 +40,7 @@ export async function getTotalSupplyLive(
 ): Promise<number> {
   await fetchAccount({ publicKey: zkAppInstance.address });
   const totalSupply64: UInt64 = zkAppInstance.totalSupply.get();
-  const totalSupply = Number(totalSupply64);
+  const totalSupply: number = Number(totalSupply64);
   return totalSupply;
 }
 

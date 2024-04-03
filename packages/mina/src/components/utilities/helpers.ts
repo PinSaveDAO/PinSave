@@ -1,5 +1,5 @@
 export function generateIntegersArray(n: number): number[] {
-  let integersArray = [];
+  let integersArray: number[] = [];
   for (let i = 0; i < n; i++) {
     integersArray.push(i);
   }

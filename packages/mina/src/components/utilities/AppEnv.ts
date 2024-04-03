@@ -9,13 +9,13 @@ export function getAppString(): string {
 }
 
 export function getAppPublic(): PublicKey {
-  const appPubString = getAppString();
+  const appPubString: string = getAppString();
   const appPubKey: PublicKey = PublicKey.fromBase58(appPubString);
   return appPubKey;
 }
 
 export function getAppContract(): NFTContract {
-  const zkAppAddress = getAppPublic();
+  const zkAppAddress: PublicKey = getAppPublic();
   const zkApp: NFTContract = new NFTContract(zkAppAddress);
   return zkApp;
 }
@@ -24,7 +24,7 @@ export function getAppVars(): {
   appPubString: string;
   appContract: NFTContract;
 } {
-  const appPubString = getAppString();
-  const appContract = getAppContract();
+  const appPubString: string = getAppString();
+  const appContract: NFTContract = getAppContract();
   return { appPubString: appPubString, appContract: appContract };
 }

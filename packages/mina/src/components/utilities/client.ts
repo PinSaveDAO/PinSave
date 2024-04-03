@@ -18,8 +18,10 @@ export function startLocalBlockchainClient(
     proofsEnabled: proofsEnabled,
     enforceTransactionLimits: enforceTransactionLimits,
   });
-
   Mina.setActiveInstance(Local);
-  const accounts = Local.testAccounts;
+  const accounts: {
+    publicKey: PublicKey;
+    privateKey: PrivateKey;
+  }[] = Local.testAccounts;
   return accounts;
 }

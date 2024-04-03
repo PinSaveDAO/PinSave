@@ -1,8 +1,11 @@
 import { Field, MerkleMap, MerkleTree, Poseidon } from 'o1js';
 
+type Data = {
+  [key: number]: string;
+};
+
 export function serializeMerkleMapToJson(merkleMap: MerkleMap): string {
-  const serializedData: { [key: number]: string } = {};
-  // Iterate through the Merkle Map to convert each key-value pair to JSON
+  const serializedData: Data = {};
   for (let i = 0; i < 256; i++) {
     const key: Field = Field(i);
     const value: string = merkleMap.get(key).toString();
@@ -13,14 +16,12 @@ export function serializeMerkleMapToJson(merkleMap: MerkleMap): string {
 
 export function deserializeJsonToMerkleMap(serializedJson: string): MerkleMap {
   const deserializedMerkleMap: MerkleMap = new MerkleMap();
-  const deserializedData: { [key: string]: string } =
-    JSON.parse(serializedJson); // Parse the serialized JSON into an object
-  // Iterate through the deserialized data and add key-value pairs to the Merkle Map
+  const deserializedData: Data = JSON.parse(serializedJson);
   for (let i = 0; i < 256; i++) {
     let data = deserializedData[i];
     if (data !== '0') {
       const key: Field = Field(i);
-      const value: Field = Field(data); // Assuming the JSON contains string representations of the original values
+      const value: Field = Field(data);
       deserializedMerkleMap.set(key, value);
     }
   }
@@ -28,9 +29,8 @@ export function deserializeJsonToMerkleMap(serializedJson: string): MerkleMap {
 }
 
 export function serializeMerkleTreeToJson(merkleTree: MerkleTree): string {
-  const serializedData: { [index: number]: string } = {};
+  const serializedData: Data = {};
   const leafCount: bigint = merkleTree.leafCount;
-  // Iterate through the Merkle Tree to convert each key-value pair to JSON
   for (let index = 0; index < leafCount; index++) {
     const value: string = merkleTree.getNode(0, BigInt(index)).toString();
     serializedData[index] = value;
@@ -53,15 +53,14 @@ export function getZerosMerkleTree(height: number): Field[] {
 export function deserializeJsonToMerkleTree(
   serializedJson: string
 ): MerkleTree {
-  const deserializedData: { [index: number]: string } =
-    JSON.parse(serializedJson);
+  const deserializedData: Data = JSON.parse(serializedJson);
   const leafCount: number = Object.keys(deserializedData).length;
   const height: number = Math.log2(Number(leafCount)) + 1;
   const merkleTree: MerkleTree = new MerkleTree(height);
   const defaultValue: string =
     getZerosMerkleTree(height)[height - 1].toString();
   for (let index = 0; index < leafCount; index++) {
-    let iterValue = deserializedData[index];
+    let iterValue: string = deserializedData[index];
     if (defaultValue === iterValue) {
       merkleTree.setLeaf(BigInt(index), Field(iterValue));
     }
@@ -72,16 +71,14 @@ export function deserializeJsonToMerkleTree(
 export function deserializeJsonToMerkleTreeFull(
   serializedJson: string
 ): MerkleTree {
-  const serializedData: { [key: number]: string[] } =
-    JSON.parse(serializedJson);
-  const height = Object.keys(serializedData).length;
+  const serializedData: Data = JSON.parse(serializedJson);
+  const height: number = Object.keys(serializedData).length;
   const merkleTree: MerkleTree = new MerkleTree(height);
   let currentIndex: number = 0;
   for (let level = 0; level < height; level++) {
     const maxLeaf: number = 2 ** level;
     for (let index = 0; index < maxLeaf; index++) {
-      let value = Field(serializedData[level][index]);
-      console.log(value.toBigInt());
+      let value: Field = Field(serializedData[level][index]);
       merkleTree.setLeaf(BigInt(index), value);
       currentIndex++;
     }

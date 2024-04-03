@@ -1,6 +1,6 @@
 import type { InferGetStaticPropsType, GetStaticProps } from "next";
+import Link from "next/link";
 import { ActionIcon, SimpleGrid } from "@mantine/core";
-import { useRouter } from "next/router";
 import { ArrowLeft } from "tabler-icons-react";
 import { ParsedUrlQuery } from "querystring";
 import { nftDataIn } from "pin-mina";
@@ -14,9 +14,9 @@ interface IParams extends ParsedUrlQuery {
 }
 
 export async function getStaticPaths() {
-  const res = await fetch("https://pinsave.app/api/totalInited");
-  const totalInitedJson = await res.json();
-  const totalInited = totalInitedJson.totalInited;
+  const res: Response = await fetch("https://pinsave.app/api/totalInited");
+  const totalInitedJson: { totalInited: number } = await res.json();
+  const totalInited: number = totalInitedJson.totalInited;
   const paths = Array.from({ length: totalInited }, (_, index) => ({
     params: {
       id: String(index),
@@ -30,7 +30,7 @@ export async function getStaticPaths() {
 
 export const getStaticProps: GetStaticProps = async (context) => {
   const { id } = context.params as IParams;
-  const res = await fetch(`https://pinsave.app/api/posts/${id}`);
+  const res: Response = await fetch(`https://pinsave.app/api/posts/${id}`);
   const post: nftDataIn = await res.json();
   return {
     props: {
@@ -40,21 +40,29 @@ export const getStaticProps: GetStaticProps = async (context) => {
 };
 
 const PostPage = ({ post }: InferGetStaticPropsType<typeof getStaticProps>) => {
-  const router = useRouter();
+  const id: number = Number(post.id);
+  let prevId: number = 0;
+  if (id !== 0) {
+    prevId = id - 1;
+  }
   return (
     <div>
-      <PageSEO title={`Pin Save Post`} description={`Pin Save Post`} />
+      <PageSEO
+        title={`Pin Save Post ${post.id}`}
+        description={`Pin Save Post ${post.id}`}
+      />
       <div>
-        <ActionIcon
-          onClick={() => router.back()}
-          mb="md"
-          color="teal"
-          size="xl"
-          radius="xl"
-          variant="filled"
-        >
-          <ArrowLeft />
-        </ActionIcon>
+        <Link href={`/posts/${prevId}`}>
+          <ActionIcon
+            mb="md"
+            color="teal"
+            size="xl"
+            radius="xl"
+            variant="filled"
+          >
+            <ArrowLeft />
+          </ActionIcon>
+        </Link>
         <SimpleGrid
           breakpoints={[
             { minWidth: "md", cols: 2, spacing: "lg" },

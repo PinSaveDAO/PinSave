@@ -4,6 +4,7 @@ import { getVercelMetadata, getAppString, nftDataIn } from "pin-mina";
 import { getVercelClient } from "@/services/vercelClient";
 import { fetcher } from "@/utils/fetcher";
 import { host } from "@/utils/host";
+import { VercelKV } from "@vercel/kv";
 
 type dataOut = {
   items: nftDataIn[];
@@ -17,20 +18,20 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<dataOut>
 ) {
-  const hostname = host;
+  const hostname: "http://localhost:3000" | "https://pinsave.app" = host;
   const { number } = req.query;
-  const pageNumber = Number(number);
-
+  const pageNumber: number = Number(number);
   if (pageNumber < 0) {
     throw new Error("page number can not be negative");
   }
+  const data: { totalInited: number } = await fetcher(
+    `${hostname}/api/totalInited`
+  );
+  const totalInited: number = data.totalInited;
 
-  const data = await fetcher(`${hostname}/api/totalInited`);
-  const totalInited = Number(data.totalInited);
-
-  let lowerLimit = 0;
-  let upperLimit = perPage > totalInited ? totalInited - 1 : perPage - 1;
-
+  let lowerLimit: number = 0;
+  let upperLimit: number =
+    perPage > totalInited ? totalInited - 1 : perPage - 1;
   if (pageNumber > 0) {
     lowerLimit = pageNumber * perPage;
     upperLimit =
@@ -39,13 +40,13 @@ export default async function handler(
         : lowerLimit + perPage - 1;
   }
 
-  const client = getVercelClient();
-  const appId = getAppString();
+  const client: VercelKV = getVercelClient();
+  const appId: string = getAppString();
 
-  let items = [];
+  let items: nftDataIn[] = [];
 
   for (let index = lowerLimit; upperLimit >= index; index++) {
-    const data = await getVercelMetadata(appId, index, client);
+    const data: nftDataIn = await getVercelMetadata(appId, index, client);
     items.push({ ...data });
   }
 
