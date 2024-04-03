@@ -1,4 +1,4 @@
-export function generateIntegersArray(n: number) {
+export function generateIntegersArray(n: number): number[] {
   let integersArray = [];
   for (let i = 0; i < n; i++) {
     integersArray.push(i);
@@ -6,6 +6,6 @@ export function generateIntegersArray(n: number) {
   return integersArray;
 }
 
-export function generateIntegersArrayIncluding(n: number) {
+export function generateIntegersArrayIncluding(n: number): number[] {
   return generateIntegersArray(n + 1);
 }

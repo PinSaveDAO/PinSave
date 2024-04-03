@@ -5,7 +5,12 @@ import { NFTContract } from '../NFTsMapContract.js';
 export async function getAppState(
   zkAppInstance: NFTContract,
   live: boolean = true
-) {
+): Promise<{
+  treeRoot: Field;
+  totalSupply: UInt64;
+  totalInited: Field;
+  maxSupply: Field;
+}> {
   if (live) {
     await fetchAccount({ publicKey: zkAppInstance.address });
   }

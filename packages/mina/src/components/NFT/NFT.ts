@@ -43,11 +43,9 @@ export function createNFT(nftMetadata: NFTMetadata): NFT {
   if (nftMetadata.description.length > 128) {
     throw new Error('circuit string should be equal or below 128');
   }
-
   if (nftMetadata.isMinted !== '0' && nftMetadata.isMinted !== '1') {
     throw new Error('not allowed value for isMinted');
   }
-
   const newNFT: NFT = {
     name: Poseidon.hash(CircuitString.fromString(nftMetadata.name).toFields()),
     description: Poseidon.hash(

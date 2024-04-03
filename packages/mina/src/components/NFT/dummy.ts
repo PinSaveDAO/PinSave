@@ -7,15 +7,15 @@ export function generateDummyCollectionMap(
   pubKey: PublicKey,
   map: MerkleMap,
   totalNumber: number = 2
-) {
+): {
+  nftArray: NFT[];
+  nftMetadata: NFTMetadata[];
+} {
   let nftArray: NFT[] = [];
   let nftMetadataArray: NFTMetadata[] = [];
   for (let i = 0; i <= totalNumber; i++) {
-    // Generate NFT metadata
     const nftMetadata: NFTMetadata = generateDummyNFTMetadata(i, pubKey);
-    // Store NFT in the Merkle map
     const nft: NFT = storeNFTMap(nftMetadata, map);
-    // Add the NFT and its metadata to the arrays
     nftArray.push(nft);
     nftMetadataArray.push(nftMetadata);
   }
@@ -25,7 +25,11 @@ export function generateDummyCollectionMap(
   };
 }
 
-export function generateDummyCollectionWithMap(pubKey: PublicKey) {
+export function generateDummyCollectionWithMap(pubKey: PublicKey): {
+  nftArray: NFT[];
+  nftMetadata: NFTMetadata[];
+  map: MerkleMap;
+} {
   const map: MerkleMap = new MerkleMap();
   const nftArray = generateDummyCollectionMap(pubKey, map);
   return { map: map, ...nftArray };
@@ -47,8 +51,14 @@ export function generateDummyNFTMetadata(
   return nftMetadata;
 }
 
-export function generateDummyNFT(id: number, pubKey: PublicKey) {
+export function generateDummyNFT(
+  id: number,
+  pubKey: PublicKey
+): {
+  nftArray: NFT;
+  nftMetadata: NFTMetadata;
+} {
   const nftMetadata: NFTMetadata = generateDummyNFTMetadata(id, pubKey);
-  const nftHashed: NFT = createNFT(nftMetadata);
-  return { nftHashed: nftHashed, nftMetadata: nftMetadata };
+  const nftArray: NFT = createNFT(nftMetadata);
+  return { nftArray: nftArray, nftMetadata: nftMetadata };
 }

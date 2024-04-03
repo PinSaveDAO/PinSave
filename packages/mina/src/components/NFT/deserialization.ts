@@ -11,7 +11,7 @@ export type nftDataIn = {
   isMinted: string;
 };
 
-export function deserializeNFT(data: nftDataIn) {
+export function deserializeNFT(data: nftDataIn): NFT {
   const dataOut: NFT = {
     name: Field(data.name),
     description: Field(data.description),

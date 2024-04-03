@@ -1,11 +1,14 @@
 import { PublicKey, PrivateKey } from 'o1js';
-import { createClient } from '@vercel/kv';
+import { VercelKV, createClient } from '@vercel/kv';
 import dotenv from 'dotenv';
 dotenv.config();
 
 import { NFTContract } from '../../NFTsMapContract.js';
 
-export function getEnvAccount() {
+export function getEnvAccount(): {
+  pubKey: PublicKey;
+  adminPK: PrivateKey;
+} {
   const adminPK: PrivateKey = PrivateKey.fromBase58(
     process.env.deployerKey as string
   );
@@ -13,7 +16,12 @@ export function getEnvAccount() {
   return { pubKey: pubKey, adminPK: adminPK };
 }
 
-export function getAppEnv() {
+export function getAppEnv(): {
+  zkAppPK: PrivateKey;
+  zkAppAddress: PublicKey;
+  appId: string;
+  zkApp: NFTContract;
+} {
   const zkAppPK: PrivateKey = PrivateKey.fromBase58(
     process.env.zkAppPrivateKey as string
   );
@@ -28,7 +36,7 @@ export function getAppEnv() {
   };
 }
 
-export function getVercelClient() {
+export function getVercelClient(): VercelKV {
   const client = createClient({
     url: process.env.KV_REST_API_URL as string,
     token: process.env.KV_REST_API_TOKEN as string,
