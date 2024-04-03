@@ -17,6 +17,15 @@ export type NFTMetadata = {
   isMinted: string;
 };
 
+export type NFTReduced = {
+  name: Field;
+  description: Field;
+  id: Field;
+  cid: Field;
+  owner: PublicKey;
+  isMinted: Field;
+};
+
 export class NFT extends Struct({
   name: Field,
   description: Field,

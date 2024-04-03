@@ -243,7 +243,7 @@ export class SwapContract extends SmartContract {
     );
     NFTresponse.assertEquals(true, 'nfts not transferred');
     supplyNFT.item.nft.changeOwner(this.address);
-    const itemHash = supplyNFT.item.hash();
+    const itemHash: Field = supplyNFT.item.hash();
     const [rootAfter] = supplyNFT.localKeyWitness.computeRootAndKey(itemHash);
     this.updateRoot(rootAfter);
     this.emitEvent('supplied-nft', itemHash);
@@ -268,7 +268,7 @@ export class SwapContract extends SmartContract {
     );
     NFTresponse.assertEquals(true, 'nfts not transferred');
     item.nft.changeOwner(sender);
-    const itemHash = item.hash();
+    const itemHash: Field = item.hash();
     const [rootAfter] = localKeyWitness.computeRootAndKey(itemHash);
     this.updateRoot(rootAfter);
     this.emitEvent('withdrawn-nft', itemHash);
@@ -318,7 +318,10 @@ export class SwapContract extends SmartContract {
     adminSignature.verify(admin, item.toFields());
   }
 
-  private verifySenderSignature() {
+  private verifySenderSignature(): {
+    senderUpdate: AccountUpdate;
+    sender: PublicKey;
+  } {
     const sender: PublicKey = this.sender;
     const senderUpdate: AccountUpdate = AccountUpdate.create(sender);
     senderUpdate.requireSignature();

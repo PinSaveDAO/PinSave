@@ -214,7 +214,10 @@ export class NFTContract extends SmartContract {
     isAdmin.assertEquals(Bool(true), 'item signature: not admin');
   }
 
-  private verifySenderSignature() {
+  private verifySenderSignature(): {
+    senderUpdate: AccountUpdate;
+    sender: PublicKey;
+  } {
     const sender: PublicKey = this.sender;
     const senderUpdate: AccountUpdate = AccountUpdate.create(sender);
     senderUpdate.requireSignature();

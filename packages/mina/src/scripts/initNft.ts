@@ -30,13 +30,13 @@ const totalInited = await getTotalInitedLive(zkApp);
 const array = generateIntegersArrayIncluding(totalInited);
 const storedMap = await getMapFromVercelNFTs(appId, array, client);
 
-const { nftHashed: nftHashed, nftMetadata: nftMetadata } = generateDummyNFT(
+const { nftArray: nftArray, nftMetadata: nftMetadata } = generateDummyNFT(
   totalInited,
   userPub
 );
 
 const compile = true;
 
-await initNFT(adminPk, userPK, nftHashed, zkApp, storedMap, compile);
-await setVercelNFT(appId, nftHashed, client);
+await initNFT(adminPk, userPK, nftArray, zkApp, storedMap, compile);
+await setVercelNFT(appId, nftArray, client);
 await setVercelMetadata(appId, nftMetadata, client);
