@@ -75,6 +75,10 @@ export class NFTContract extends SmartContract {
     initedAmount.assertEquals(0, 'initalized amount of nfts');
     this.initMaxSupply(initState.maxSupply);
     this.updateInitedAmount(Field(0), initState.totalInited);
+    initState.maxSupply.assertGreaterThanOrEqual(
+      initState.totalInited,
+      'max supply reached'
+    );
     this.updateFee(initState.feeAmount);
     this.updateRoot(initState.initialRoot);
     return Bool(true);
@@ -95,7 +99,7 @@ export class NFTContract extends SmartContract {
     const { senderUpdate: senderUpdate } = this.verifySenderSignature();
     const initedAmount: Field = this.totalInited.getAndRequireEquals();
     const maxSupply: Field = this.maxSupply.getAndRequireEquals();
-    initedAmount.assertLessThanOrEqual(maxSupply, 'maximum supply reached');
+    maxSupply.assertGreaterThan(initedAmount, 'maximum supply reached');
     const fee: UInt64 = this.fee.getAndRequireEquals();
     const initialRoot: Field = this.root.getAndRequireEquals();
     const [rootBefore, key] = keyWitness.computeRootAndKey(Field(0));

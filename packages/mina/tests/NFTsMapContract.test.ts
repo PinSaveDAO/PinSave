@@ -43,10 +43,34 @@ describe('PinSave NFTs on Local Blockchain', () => {
 
   const { nftArray: nftArray } = generateDummyCollectionMap(pubKeyAdmin, map);
 
+  const map256: MerkleMap = new MerkleMap();
+
+  const { nftArray: nftArray256 } = generateDummyCollectionMap(
+    pubKeyAdmin,
+    map256,
+    256
+  );
+
   const compile: boolean = false;
 
   it('deploys app', async () => {
     await deployApp(pkAdmin, zkAppPrivateKey, proofsEnabled, live);
+  });
+
+  it('init app root: over max supply', async () => {
+    try {
+      await initAppRoot(
+        pkAdmin,
+        pkSender,
+        map256,
+        zkAppInstance,
+        nftArray256.length,
+        live
+      );
+    } catch (error) {
+      const errorString = String(error);
+      expect(errorString.substring(0, 25)).toBe('Error: max supply reached');
+    }
   });
 
   it('init app root', async () => {
