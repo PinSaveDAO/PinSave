@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { PrivateKey, Signature, Field, PublicKey } from "o1js";
-import { NFTMetadata, createNFT } from "pin-mina";
+import { NFTMetadata, createNFT, NFT } from "pin-mina";
 
 type dataIn = {
   name: string;
@@ -28,10 +28,13 @@ export default async function handler(
       owner: PublicKey.fromBase58(data.owner),
       isMinted: "0",
     };
-    const nftHashed = createNFT(nftMetadata);
-    const adminPK = PrivateKey.fromBase58(process.env.adminPK);
-    const adminSignature = Signature.create(adminPK, nftHashed.toFields());
-    const adminSignatureBase58 = adminSignature.toBase58();
+    const nftHashed: NFT = createNFT(nftMetadata);
+    const adminPK: PrivateKey = PrivateKey.fromBase58(process.env.adminPK);
+    const adminSignature: Signature = Signature.create(
+      adminPK,
+      nftHashed.toFields()
+    );
+    const adminSignatureBase58: string = adminSignature.toBase58();
     res.status(200).json({ adminSignatureBase58 });
   }
 }

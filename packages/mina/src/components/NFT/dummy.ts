@@ -31,7 +31,10 @@ export function generateDummyCollectionWithMap(pubKey: PublicKey): {
   map: MerkleMap;
 } {
   const map: MerkleMap = new MerkleMap();
-  const nftArray = generateDummyCollectionMap(pubKey, map);
+  const nftArray: {
+    nftArray: NFT[];
+    nftMetadata: NFTMetadata[];
+  } = generateDummyCollectionMap(pubKey, map);
   return { map: map, ...nftArray };
 }
 
@@ -39,7 +42,7 @@ export function generateDummyNFTMetadata(
   id: number,
   pubKey: PublicKey
 ): NFTMetadata {
-  const nftMetadata = {
+  const nftMetadata: NFTMetadata = {
     name: 'DSPYT - into CodeVerse',
     description:
       'Join our community to explore the latest trends in data science, share insights on blockchain technology, and participate in DAO',
