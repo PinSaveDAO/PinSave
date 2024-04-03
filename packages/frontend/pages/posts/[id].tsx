@@ -15,8 +15,8 @@ interface IParams extends ParsedUrlQuery {
 
 export async function getStaticPaths() {
   const res: Response = await fetch("https://pinsave.app/api/totalInited");
-  const totalInitedJson: { totalInited: number } = await res.json();
-  const totalInited: number = totalInitedJson.totalInited;
+  const totalInitedObject: { totalInited: number } = await res.json();
+  const totalInited: number = Number(totalInitedObject.totalInited);
   const paths = Array.from({ length: totalInited }, (_, index) => ({
     params: {
       id: String(index),
@@ -29,19 +29,34 @@ export async function getStaticPaths() {
 }
 
 export const getStaticProps: GetStaticProps = async (context) => {
-  const { id } = context.params as IParams;
+  const { id: id } = context.params as IParams;
   const res: Response = await fetch(`https://pinsave.app/api/posts/${id}`);
   const post: nftDataIn = await res.json();
+
+  const responseTotalPosts: Response = await fetch(
+    "https://pinsave.app/api/totalInited"
+  );
+  const totalInitedObject: { totalInited: number } =
+    await responseTotalPosts.json();
+  const totalInited: number = Number(totalInitedObject.totalInited);
+  let lastPostId: number = 0;
+  if (totalInited > 0) {
+    lastPostId = totalInited - 1;
+  }
   return {
     props: {
       post,
+      lastPostId,
     },
   };
 };
 
-const PostPage = ({ post }: InferGetStaticPropsType<typeof getStaticProps>) => {
+const PostPage = ({
+  post,
+  lastPostId,
+}: InferGetStaticPropsType<typeof getStaticProps>) => {
   const id: number = Number(post.id);
-  let prevId: number = 0;
+  let prevId: number = lastPostId;
   if (id !== 0) {
     prevId = id - 1;
   }
