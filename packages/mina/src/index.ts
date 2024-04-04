@@ -16,7 +16,7 @@ export {
   getTotalSupplyLive,
   getTotalInitedLive,
   getAppState,
-  getTreeRoot,
+  getTreeRootString,
 } from './components/AppState.js';
 
 export { nftDataIn, deserializeNFT } from './components/NFT/deserialization.js';

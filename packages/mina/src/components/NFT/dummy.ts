@@ -6,14 +6,14 @@ import { NFT, NFTMetadata, createNFT } from './NFT.js';
 export function generateDummyCollectionMap(
   pubKey: PublicKey,
   map: MerkleMap,
-  totalNumber: number = 2
+  totalNumber: number = 3
 ): {
   nftArray: NFT[];
   nftMetadata: NFTMetadata[];
 } {
   let nftArray: NFT[] = [];
   let nftMetadataArray: NFTMetadata[] = [];
-  for (let i = 0; i <= totalNumber; i++) {
+  for (let i = 0; i < totalNumber; i++) {
     const nftMetadata: NFTMetadata = generateDummyNFTMetadata(i, pubKey);
     const nft: NFT = storeNFTMap(nftMetadata, map);
     nftArray.push(nft);
@@ -25,7 +25,10 @@ export function generateDummyCollectionMap(
   };
 }
 
-export function generateDummyCollectionWithMap(pubKey: PublicKey): {
+export function generateDummyCollectionWithMap(
+  pubKey: PublicKey,
+  totalNumber: number = 3
+): {
   nftArray: NFT[];
   nftMetadata: NFTMetadata[];
   map: MerkleMap;
@@ -34,7 +37,7 @@ export function generateDummyCollectionWithMap(pubKey: PublicKey): {
   const nftArray: {
     nftArray: NFT[];
     nftMetadata: NFTMetadata[];
-  } = generateDummyCollectionMap(pubKey, map);
+  } = generateDummyCollectionMap(pubKey, map, totalNumber);
   return { map: map, ...nftArray };
 }
 

@@ -6,10 +6,10 @@ import { deployApp } from '../components/transactions.js';
 
 startBerkeleyClient();
 
-const proofsEnabled = true;
-const live = true;
+const proofsEnabled: boolean = true;
+const live: boolean = true;
 
-const { adminPK: adminPK, pubKey: pubKey } = getEnvAccount();
+const { adminPK: adminPK, adminPubKey: pubKey } = getEnvAccount();
 
 const zkAppPrivateKey: PrivateKey = PrivateKey.random();
 

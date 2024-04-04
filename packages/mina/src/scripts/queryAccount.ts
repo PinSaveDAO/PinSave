@@ -5,7 +5,7 @@ import { getTokenAddressBalance } from '../components/TokenBalances.js';
 startBerkeleyClient();
 
 const { zkApp: zkApp } = getAppEnv();
-const { pubKey: pub } = getEnvAccount();
+const { adminPubKey: pub } = getEnvAccount();
 
 const tokenBalance = await getTokenAddressBalance(pub, zkApp.token.id);
 

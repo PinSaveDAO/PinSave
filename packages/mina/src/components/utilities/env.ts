@@ -6,14 +6,14 @@ dotenv.config();
 import { NFTContract } from '../../NFTsMapContract.js';
 
 export function getEnvAccount(): {
-  pubKey: PublicKey;
+  adminPubKey: PublicKey;
   adminPK: PrivateKey;
 } {
   const adminPK: PrivateKey = PrivateKey.fromBase58(
     process.env.deployerKey as string
   );
   const pubKey: PublicKey = adminPK.toPublicKey();
-  return { pubKey: pubKey, adminPK: adminPK };
+  return { adminPubKey: pubKey, adminPK: adminPK };
 }
 
 export function getAppEnv(): {

@@ -20,7 +20,7 @@ startBerkeleyClient();
 const client = getVercelClient();
 
 const { appId: appId, zkApp: zkApp } = getAppEnv();
-const { pubKey: adminPub, adminPK: adminPk } = getEnvAccount();
+const { adminPK: adminPk } = getEnvAccount();
 
 const userPK: PrivateKey = PrivateKey.fromBase58(process.env.userpk as string);
 
