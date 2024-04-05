@@ -1,12 +1,16 @@
+import type { VercelKV } from '@vercel/kv';
 import { MerkleMap } from 'o1js';
-import { VercelKV } from '@vercel/kv';
 
-import { nftDataIn, deserializeNFT } from './deserialization.js';
+import { NFTSerializedData, deserializeNFT } from './deserialization.js';
 import { setHashedObjectToMap, setStringObjectToMap } from './merkleMap.js';
 import { NFT, NFTMetadata, NFTReduced } from './NFT.js';
 
-export type nftDataInAA = nftDataIn & { attemptId: string | number };
-export type nftDataInPending = nftDataInAA & { txId: string | number };
+export type NFTSerializedDataAA = NFTSerializedData & {
+  attemptId: string | number;
+};
+export type NFTSerializedDataPending = NFTSerializedDataAA & {
+  txId: string | number;
+};
 export type NFTReducedAA = NFTReduced & { attemptId: string | number };
 export type NFTReducedPending = NFTReducedAA & { txId: string | number };
 
@@ -14,9 +18,9 @@ export async function getVercelMetadata(
   appId: string,
   nftId: number | string,
   client: VercelKV
-): Promise<nftDataIn> {
+): Promise<NFTSerializedData> {
   const key: string = `${appId} metadata ${nftId}`;
-  const nftMetadata: nftDataIn | null = await client.hgetall(key);
+  const nftMetadata: NFTSerializedData | null = await client.hgetall(key);
   if (nftMetadata) {
     return nftMetadata;
   }
@@ -28,9 +32,9 @@ export async function getVercelMetadataAA(
   nftId: number | string,
   attemptId: number | string,
   client: VercelKV
-): Promise<nftDataInAA> {
+): Promise<NFTSerializedDataAA> {
   const key: string = `${appId} metadata AA ${nftId} ${attemptId}`;
-  const nftMetadata: nftDataInAA | null = await client.hgetall(key);
+  const nftMetadata: NFTSerializedDataAA | null = await client.hgetall(key);
   if (nftMetadata) {
     return nftMetadata;
   }
@@ -42,9 +46,11 @@ export async function getVercelMetadataPending(
   nftId: number | string,
   attemptId: number | string,
   client: VercelKV
-): Promise<nftDataInPending> {
+): Promise<NFTSerializedDataPending> {
   const key: string = `${appId} metadata pending ${nftId} ${attemptId}`;
-  const nftMetadata: nftDataInPending | null = await client.hgetall(key);
+  const nftMetadata: NFTSerializedDataPending | null = await client.hgetall(
+    key
+  );
   if (nftMetadata) {
     return nftMetadata;
   }
@@ -57,6 +63,10 @@ export async function setVercelMetadata(
   client: VercelKV
 ): Promise<number> {
   const key: string = `${appId} metadata ${nftMetadata.id}`;
+  const nftMetadataIdFetched: string | null = await client.hget(key, 'id');
+  if (nftMetadataIdFetched) {
+    throw Error('nft metadata already exists');
+  }
   const res: number = await client.hset(key, {
     ...nftMetadata,
   });
@@ -70,6 +80,10 @@ export async function setVercelMetadataAA(
   client: VercelKV
 ): Promise<number> {
   const key: string = `${appId} metadata AA ${nftMetadata.id} ${attemptId}`;
+  const nftMetadataIdFetched: string | null = await client.hget(key, 'id');
+  if (nftMetadataIdFetched) {
+    throw Error('nft metadata AA already exists');
+  }
   const res: number = await client.hset(key, {
     ...nftMetadata,
     attemptId: attemptId,
@@ -85,6 +99,10 @@ export async function setVercelMetadataPending(
   client: VercelKV
 ): Promise<number> {
   const key: string = `${appId} metadata pending ${nftMetadata.id} ${attemptId}`;
+  const nftMetadataIdFetched: string | null = await client.hget(key, 'id');
+  if (nftMetadataIdFetched) {
+    throw Error('nft metadata pending already exists');
+  }
   const res: number = await client.hset(key, {
     ...nftMetadata,
     attemptId: attemptId,
@@ -110,6 +128,10 @@ export async function mintVercelMetadata(
   client: VercelKV
 ): Promise<number> {
   const key: string = `${appId} metadata ${nftId}`;
+  const nftMetadataIdFetched: string | null = await client.hget(key, 'id');
+  if (nftMetadataIdFetched) {
+    throw Error('mint nft metadata already exists');
+  }
   const res: number = await client.hset(key, { isMinted: '1' });
   return res;
 }
@@ -121,6 +143,10 @@ export async function mintVercelMetadataAA(
   client: VercelKV
 ): Promise<number> {
   const key: string = `${appId} metadata AA ${nftId} ${attemptId}`;
+  const nftMetadataIdFetched: string | null = await client.hget(key, 'id');
+  if (nftMetadataIdFetched) {
+    throw Error('mint metadata AA already exists');
+  }
   const res: number = await client.hset(key, {
     isMinted: '1',
     attemptId: attemptId,
@@ -136,6 +162,10 @@ export async function mintVercelMetadataPending(
   client: VercelKV
 ): Promise<number> {
   const key: string = `${appId} metadata pending ${nftId} ${attemptId}`;
+  const nftMetadataIdFetched: string | null = await client.hget(key, 'id');
+  if (nftMetadataIdFetched) {
+    throw Error('mint metadata pending already exists');
+  }
   const res: number = await client.hset(key, {
     isMinted: '1',
     attemptId: attemptId,
@@ -148,9 +178,9 @@ export async function getVercelNFT(
   appId: string,
   nftId: number | string,
   client: VercelKV
-): Promise<nftDataIn> {
+): Promise<NFTSerializedData> {
   const key: string = `${appId} nft ${nftId}`;
-  const nft: nftDataIn | null = await client.hgetall(key);
+  const nft: NFTSerializedData | null = await client.hgetall(key);
   if (nft) {
     return nft;
   }
@@ -162,9 +192,9 @@ export async function getVercelNFTAA(
   nftId: number | string,
   attemptId: number | string,
   client: VercelKV
-): Promise<nftDataInAA> {
+): Promise<NFTSerializedDataAA> {
   const key: string = `${appId} nft AA ${nftId} ${attemptId}`;
-  const nft: nftDataInAA | null = await client.hgetall(key);
+  const nft: NFTSerializedDataAA | null = await client.hgetall(key);
   if (nft) {
     return nft;
   }
@@ -176,9 +206,9 @@ export async function getVercelNFTPending(
   nftId: number | string,
   attemptId: number | string,
   client: VercelKV
-): Promise<nftDataInAA> {
+): Promise<NFTSerializedDataAA> {
   const key: string = `${appId} nft pending ${nftId} ${attemptId}`;
-  const nft: nftDataInAA | null = await client.hgetall(key);
+  const nft: NFTSerializedDataAA | null = await client.hgetall(key);
   if (nft) {
     return nft;
   }
@@ -191,6 +221,10 @@ export async function setVercelNFT(
   client: VercelKV
 ): Promise<number> {
   const key: string = `${appId} nft ${nft.id}`;
+  const nftIdFetched: string | null = await client.hget(key, 'id');
+  if (nftIdFetched) {
+    throw Error('nft already exists');
+  }
   const value: NFTReduced = {
     name: nft.name,
     description: nft.description,
@@ -210,6 +244,10 @@ export async function setVercelNFTAA(
   client: VercelKV
 ): Promise<number> {
   const key: string = `${appId} nft AA ${nft.id} ${attemptId}`;
+  const nftIdFetched: string | null = await client.hget(key, 'id');
+  if (nftIdFetched) {
+    throw Error('nft AA already exists');
+  }
   const value: NFTReducedAA = {
     name: nft.name,
     description: nft.description,
@@ -231,6 +269,10 @@ export async function setVercelNFTPending(
   client: VercelKV
 ): Promise<number> {
   const key: string = `${appId} nft pending ${nft.id} ${attemptId}`;
+  const nftIdFetched: string | null = await client.hget(key, 'id');
+  if (nftIdFetched) {
+    throw Error('nft pending already exists');
+  }
   const value: NFTReducedPending = {
     name: nft.name,
     description: nft.description,
@@ -262,6 +304,10 @@ export async function mintVercelNFT(
   client: VercelKV
 ): Promise<number> {
   const key: string = `${appId} nft ${nftId}`;
+  const nftIdFetched: string | null = await client.hget(key, 'id');
+  if (nftIdFetched) {
+    throw Error('mint nft already exists');
+  }
   const res: number = await client.hset(key, { isMinted: '1' });
   return res;
 }
@@ -273,6 +319,10 @@ export async function mintVercelNFTAA(
   client: VercelKV
 ): Promise<number> {
   const key: string = `${appId} nft AA ${nftId} ${attemptId}`;
+  const nftIdFetched: string | null = await client.hget(key, 'id');
+  if (nftIdFetched) {
+    throw Error('mint nft AA already exists');
+  }
   const res: number = await client.hset(key, {
     isMinted: '1',
     attemptId: attemptId,
@@ -288,6 +338,10 @@ export async function mintVercelNFTPending(
   client: VercelKV
 ): Promise<number> {
   const key: string = `${appId} nft pending ${nftId} ${attemptId}`;
+  const nftIdFetched: string | null = await client.hget(key, 'id');
+  if (nftIdFetched) {
+    throw Error('mint nft pending already exists');
+  }
   const res: number = await client.hset(key, {
     isMinted: '1',
     attemptId: attemptId,
@@ -305,7 +359,7 @@ export async function getMapFromVercelNFTs(
   const arrayLength: number = nftArray.length;
   for (let i = 0; i < arrayLength; i++) {
     const nftId: number = nftArray[i];
-    const data: nftDataIn = await getVercelNFT(appId, nftId, client);
+    const data: NFTSerializedData = await getVercelNFT(appId, nftId, client);
     const dataOut: NFT = deserializeNFT(data);
     setHashedObjectToMap(dataOut, map);
   }
@@ -321,7 +375,11 @@ export async function getMapFromVercelMetadata(
   const arrayLength: number = nftArray.length;
   for (let i = 0; i < arrayLength; i++) {
     const nftId: number = nftArray[i];
-    const data: nftDataIn = await getVercelMetadata(appId, nftId, client);
+    const data: NFTSerializedData = await getVercelMetadata(
+      appId,
+      nftId,
+      client
+    );
     setStringObjectToMap(data, map);
   }
   return map;

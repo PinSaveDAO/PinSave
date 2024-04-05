@@ -19,7 +19,16 @@ export {
   getTreeRootString,
 } from './components/AppState.js';
 
-export { nftDataIn, deserializeNFT } from './components/NFT/deserialization.js';
+export {
+  NFTSerializedData,
+  NFTMetadataAA,
+  NFTAA,
+  deserializeNFT,
+  deserializeMetadata,
+  createNFTFromStrings,
+  deserializeNFTAA,
+  deserializeNFTMetadataAA,
+} from './components/NFT/deserialization.js';
 
 export {
   stringObjectToNFTMetadata,
@@ -37,8 +46,8 @@ export {
 
 export {
   CommentData,
-  nftDataInAA,
-  nftDataInPending,
+  NFTSerializedDataAA,
+  NFTSerializedDataPending,
   NFTReducedAA,
   NFTReducedPending,
   getVercelComment,
@@ -80,6 +89,7 @@ export {
 } from './components/TokenBalances.js';
 
 export {
+  TxOptions,
   createMintTxFromMap,
   createMintTx,
   createTxOptions,

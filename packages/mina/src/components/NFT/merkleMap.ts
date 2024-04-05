@@ -1,9 +1,9 @@
 import { Field, PublicKey, MerkleMap } from 'o1js';
 
 import { NFT, NFTMetadata, createNFT } from './NFT.js';
-import { nftDataIn } from './deserialization.js';
+import { NFTSerializedData } from './deserialization.js';
 
-export function stringObjectToNFTMetadata(data: nftDataIn): NFT {
+export function stringObjectToNFTMetadata(data: NFTSerializedData): NFT {
   const nftMetadata: NFTMetadata = {
     name: data.name,
     description: data.description,
@@ -16,7 +16,10 @@ export function stringObjectToNFTMetadata(data: nftDataIn): NFT {
   return nft;
 }
 
-export function setStringObjectToMap(data: nftDataIn, map: MerkleMap): boolean {
+export function setStringObjectToMap(
+  data: NFTSerializedData,
+  map: MerkleMap
+): boolean {
   const nftObject: NFT = stringObjectToNFTMetadata(data);
   map.set(nftObject.id, nftObject.hash());
   return true;

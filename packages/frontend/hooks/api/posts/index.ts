@@ -12,7 +12,7 @@ export const usePosts = () => {
     getNextPageParam: (lastPage: any, pages: any) => {
       if (
         lastPage.items &&
-        lastPage.items.at(-1).id < lastPage.totalSupply - 1
+        lastPage.items.at(-1)?.id < lastPage.totalSupply - 1
       ) {
         return pages.length;
       }

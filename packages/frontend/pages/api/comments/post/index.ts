@@ -1,5 +1,7 @@
-import { getAppString, setVercelComment, CommentData } from "pin-mina";
 import type { NextApiRequest, NextApiResponse } from "next";
+import type { VercelKV } from "@vercel/kv";
+
+import { getAppString, setVercelComment, CommentData } from "pin-mina";
 import Client from "mina-signer";
 
 import { getVercelClient } from "@/services/vercelClient";
@@ -15,15 +17,15 @@ interface SignedData {
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse<string>
 ) {
   if (req.method === "POST") {
     const signResult: SignedData = req.body.signResult;
     const postId: number | string = req.body.postId;
-    const appId = getAppString();
-    const client = getVercelClient();
-    const minaClient = new Client({ network: "testnet" });
-    const isTrue = minaClient.verifyMessage(signResult);
+    const appId: string = getAppString();
+    const client: VercelKV = getVercelClient();
+    const minaClient: Client = new Client({ network: "testnet" });
+    const isTrue: boolean = minaClient.verifyMessage(signResult);
     if (isTrue) {
       const data: CommentData = {
         publicKey: signResult.publicKey,
@@ -31,7 +33,7 @@ export default async function handler(
         postId: postId,
       };
       setVercelComment(appId, data, client);
-      res.status(200);
+      res.status(200).json("comment sent");
     }
     res.status(401).json("failed verification");
   }

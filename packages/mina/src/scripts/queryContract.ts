@@ -11,6 +11,6 @@ console.log('app public key', zkAppAddress.toBase58());
 
 console.log('contract: mina balance', getMinaBalance(zkAppAddress));
 
-const totalInited: number = await getTotalInitedLive(zkApp);
+const totalInited: number = await getTotalInitedLive(zkApp, true);
 
 console.log('contract: total inited', totalInited);

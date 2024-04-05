@@ -1,5 +1,5 @@
 export const fetcher = async (input: RequestInfo, params = {}) => {
-  const response = await fetch(input, {
+  const response: Response = await fetch(input, {
     mode: "cors",
     credentials: "same-origin",
     headers: {
@@ -14,6 +14,5 @@ export const fetcher = async (input: RequestInfo, params = {}) => {
     throw new Error(response.statusText);
   }
   const data = await response.json();
-
   return data;
 };

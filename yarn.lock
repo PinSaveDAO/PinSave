@@ -5688,10 +5688,10 @@ pify@^4.0.1:
   resolved "https://registry.yarnpkg.com/pify/-/pify-4.0.1.tgz#4b2cd25c50d598735c50292224fd8c6df41e3231"
   integrity sha512-uB80kBFb/tfd68bVleG9T5GGsGPjJrLAUpR5PZIrhBnIaRTQRjqdJSsIKkOP6OAIFbj7GOrcudc5pNjZ+geV2g==
 
-pin-mina@0.1.43:
-  version "0.1.43"
-  resolved "https://registry.yarnpkg.com/pin-mina/-/pin-mina-0.1.43.tgz#7170dc83523053a7309548bc3124ac19f9a0ba2c"
-  integrity sha512-HQG41+Ubvsynkg1r47zooKtFYY8wdkVgkmzC1WSthXeP79L9dJHehRHv7kqgYzkKqklFTPDnhWJPevkg5X39XQ==
+pin-mina@0.1.47:
+  version "0.1.47"
+  resolved "https://registry.yarnpkg.com/pin-mina/-/pin-mina-0.1.47.tgz#715d87e0cab377060a0f5906ba7b045e6eae597e"
+  integrity sha512-x8m7n18wozBfCsjWhbEEEayONUl482Se2C3n7RkwyH1HMnjIiPIDkcQSEWFk3VO/dZdr7CQsUlNtqw4Jo9tNBA==
   dependencies:
     "@vercel/kv" "^1.0.1"
     dotenv "^16.3.1"

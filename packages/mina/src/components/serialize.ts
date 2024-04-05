@@ -18,7 +18,7 @@ export function deserializeJsonToMerkleMap(serializedJson: string): MerkleMap {
   const deserializedMerkleMap: MerkleMap = new MerkleMap();
   const deserializedData: Data = JSON.parse(serializedJson);
   for (let i = 0; i < 256; i++) {
-    let data = deserializedData[i];
+    let data: string = deserializedData[i];
     if (data !== '0') {
       const key: Field = Field(i);
       const value: Field = Field(data);

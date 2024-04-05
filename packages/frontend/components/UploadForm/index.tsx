@@ -14,7 +14,7 @@ import { Dropzone, MIME_TYPES } from "@mantine/dropzone";
 import { useState } from "react";
 import ReactPlayer from "react-player";
 import { Upload, Replace } from "tabler-icons-react";
-import { PublicKey, Field, Signature } from "o1js";
+import { PublicKey, Field, Signature, MerkleMap } from "o1js";
 import {
   startBerkeleyClient,
   NFTMetadata,
@@ -24,6 +24,8 @@ import {
   createTxOptions,
   getTotalInitedLive,
   getAppVars,
+  NFT,
+  TxOptions,
 } from "pin-mina";
 
 import { setMinaAccount } from "@/hooks/minaWallet";
@@ -93,7 +95,6 @@ const UploadForm = () => {
   const [name, setName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [image, setImage] = useState<File | undefined>();
-  //const [postReceiver, setPostReceiver] = useState<string | undefined>();
   const [hash, setHash] = useState<string | undefined>(undefined);
 
   const isDataCorrect =
@@ -107,9 +108,9 @@ const UploadForm = () => {
     if (description !== "" && name !== "" && address) {
       startBerkeleyClient();
       const { appContract: appContract } = getAppVars();
-      const totalInited = await getTotalInitedLive(appContract);
-      const pub = PublicKey.fromBase58(address);
-      const cid = await UploadData(image);
+      const totalInited: number = await getTotalInitedLive(appContract, true);
+      const pub: PublicKey = PublicKey.fromBase58(address);
+      const cid: string = await UploadData(image);
       const nftMetadata: NFTMetadata = {
         name: name,
         description: description,
@@ -118,29 +119,39 @@ const UploadForm = () => {
         owner: pub,
         isMinted: "0",
       };
-      const nftHashed = createNFT(nftMetadata);
-      const dataMap = await fetcher("/api/getMap");
-      const map = deserializeJsonToMerkleMap(dataMap.map);
-      const adminSignatureData = await fetch(`/api/init/adminSignature/`, {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        method: "POST",
-        body: JSON.stringify({
-          name: name,
-          description: description,
-          id: totalInited,
-          cid: cid,
-          owner: address,
-        }),
-      });
-      const adminSignatureJSON = await adminSignatureData.json();
-      const adminSignatureBase58 = adminSignatureJSON.adminSignatureBase58;
-      const adminSignature = Signature.fromBase58(adminSignatureBase58);
-      const compile = true;
-      const txOptions = createTxOptions(pub);
-      const transactionJSON = await createInitNFTTxFromMap(
+      const nftHashed: NFT = createNFT(nftMetadata);
+      const dataMap: { map: string } = await fetcher("/api/getMap");
+      const map: MerkleMap = deserializeJsonToMerkleMap(dataMap.map);
+      const adminSignatureData: Response = await fetch(
+        `/api/init/adminSignature/`,
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          method: "POST",
+          body: JSON.stringify({
+            name: name,
+            description: description,
+            id: totalInited,
+            cid: cid,
+            owner: address,
+            isMinted: "0",
+          }),
+        }
+      );
+      const adminSignatureJSON: {
+        adminSignatureBase58: string;
+        attemptId: string | number;
+      } = await adminSignatureData.json();
+      const adminSignatureBase58: string =
+        adminSignatureJSON.adminSignatureBase58;
+      const adminSignature: Signature =
+        Signature.fromBase58(adminSignatureBase58);
+      const attemptId: string | number = adminSignatureJSON.attemptId;
+      const compile: boolean = true;
+      const txOptions: TxOptions = createTxOptions(pub);
+      const transactionJSON: string = await createInitNFTTxFromMap(
         nftHashed,
         appContract,
         map,
@@ -152,18 +163,31 @@ const UploadForm = () => {
         transaction: transactionJSON,
       });
       console.log(sendTransactionResult);
-      setHash(sendTransactionResult.hash);
-      await fetch(`/api/init/uploadData/`, {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        method: "POST",
-        body: JSON.stringify({ nftMetadata: nftMetadata }),
-      });
+      const hash = sendTransactionResult.hash;
+      setHash(hash);
+      const uploadDataResponse: Response = await fetch(
+        `/api/init/uploadData/`,
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          method: "POST",
+          body: JSON.stringify({
+            nftMetadata: nftMetadata,
+            attemptId: attemptId,
+          }),
+        }
+      );
+      const uploadDataJSON: { response: boolean } =
+        await uploadDataResponse.json();
+      const uploadedData: boolean = uploadDataJSON.response;
       setImage(undefined);
       setName("");
       setDescription("");
+      if (uploadedData === true) {
+        console.log("uploaded data");
+      }
       return true;
     }
     return false;
@@ -207,13 +231,6 @@ const UploadForm = () => {
         label="Description"
         placeholder="Describe your post here"
       />
-      {/* <Textarea
-        my="lg"
-        onChange={(e) => setPostReceiver(e.target.value)}
-        value={postReceiver}
-        label="Post Receiver"
-        placeholder="Enter Address You Want To Receive The NFT"
-      /> */}
       <Dropzone
         mt="md"
         onReject={(files) => console.log("rejected files", files)}

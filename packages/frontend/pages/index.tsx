@@ -1,23 +1,24 @@
 import { Box, Button, Center, Title, Loader } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { InferGetStaticPropsType } from "next";
-import { nftDataIn } from "pin-mina";
+import { NFTSerializedData } from "pin-mina";
 
 import type { Post } from "@/services/upload";
 import PostCard from "@/components/Posts/PostCard";
 import { usePosts } from "@/hooks/api";
 import { PageSEO } from "@/components/SEO";
+import { host } from "@/utils/host";
 
 type dataIn = {
-  items: nftDataIn[];
+  items: NFTSerializedData[];
   totalSupply: number;
   page: number;
 };
 
 export async function getStaticProps() {
-  const res = await fetch("https://pinsave.app/api/pages/0");
+  const res: Response = await fetch(`${host}/api/pages/0`);
   const jsonPosts: dataIn = await res.json();
-  const posts = Array.from(jsonPosts.items);
+  const posts: NFTSerializedData[] = Array.from(jsonPosts.items);
   return {
     props: {
       posts,
