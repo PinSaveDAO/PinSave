@@ -28,13 +28,16 @@ export default async function handler(
 ) {
   if (req.method === "POST") {
     const nftMetadataPosted: NFTMetadata = req.body.nftMetadata;
+    console.log(nftMetadataPosted);
     const attemptId: string = req.body.attemptId;
+    console.log(attemptId);
+    const txId: string = req.body.txId;
+    console.log(txId);
     const nftMetadataAAPosted: NFTMetadataAA = {
       ...nftMetadataPosted,
       attemptId: attemptId,
     };
 
-    const txId: string = req.body.txId;
     const appId: string = getAppString();
     const client: VercelKV = getVercelClient();
 

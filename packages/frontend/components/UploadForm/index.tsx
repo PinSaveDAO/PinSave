@@ -165,6 +165,7 @@ const UploadForm = () => {
       console.log(sendTransactionResult);
       const hash = sendTransactionResult.hash;
       setHash(hash);
+
       const uploadDataResponse: Response = await fetch(
         `/api/init/uploadData/`,
         {
@@ -176,6 +177,7 @@ const UploadForm = () => {
           body: JSON.stringify({
             nftMetadata: nftMetadata,
             attemptId: attemptId,
+            txId: hash,
           }),
         }
       );

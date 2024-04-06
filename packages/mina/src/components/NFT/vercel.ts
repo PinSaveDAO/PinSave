@@ -215,6 +215,16 @@ export async function getVercelNFTPending(
   throw Error('nft not fetched');
 }
 
+export async function getVercelNFTPendingAllId(
+  appId: string,
+  nftId: number | string,
+  client: VercelKV
+): Promise<string[]> {
+  const key: string = `${appId} nft pending ${nftId}*`;
+  const keys: string[] = await client.keys(key);
+  return keys;
+}
+
 export async function setVercelNFT(
   appId: string,
   nft: NFT,

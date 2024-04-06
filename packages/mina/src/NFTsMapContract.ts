@@ -26,7 +26,11 @@ export class NFTContract extends SmartContract {
     'updated-inited-amount': Field,
     'inited-max-supply': Field,
     'inited-nft': Field,
+    'inited-nft-name': Field,
+    'inited-nft-description': Field,
     'minted-nft': Field,
+    'minted-nft-name': Field,
+    'minted-nft-description': Field,
     'transferred-nft': Field,
   };
   @state(PublicKey) admin = State<PublicKey>();
@@ -110,6 +114,8 @@ export class NFTContract extends SmartContract {
     const itemHash: Field = item.hash();
     const [rootAfter] = keyWitness.computeRootAndKey(itemHash);
     this.emitEvent('inited-nft', itemHash);
+    this.emitEvent('inited-nft-name', item.name);
+    this.emitEvent('inited-nft-description', item.description);
     this.updateInitedAmount(initedAmount, 1);
     this.updateRoot(rootAfter);
     return Bool(true);
@@ -130,6 +136,8 @@ export class NFTContract extends SmartContract {
       amount: UInt64.from(1_000_000_000),
     });
     this.emitEvent('minted-nft', item.id);
+    this.emitEvent('minted-nft-name', item.name);
+    this.emitEvent('minted-nft-description', item.description);
     this.incrementTotalSupply();
     this.updateRoot(rootAfter);
     return Bool(true);
