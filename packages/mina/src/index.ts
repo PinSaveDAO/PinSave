@@ -49,8 +49,10 @@ export {
   NFTSerializedDataPending,
   NFTReducedAA,
   getVercelMetadata,
+  getVercelMetadataAllKeys,
   getVercelMetadataAA,
   getVercelNFT,
+  getVercelNFTAllKeys,
   getVercelNFTAA,
   setVercelMetadata,
   setVercelMetadataAA,
@@ -72,7 +74,9 @@ export {
   setVercelNFTPending,
   mintVercelNFTPending,
   mintVercelMetadataPending,
+  getVercelMetadataPendingAll,
   getVercelMetadataPendingAllId,
+  getVercelNFTPendingAll,
   getVercelNFTPendingAllId,
 } from './components/Vercel/VercelPending.js';
 

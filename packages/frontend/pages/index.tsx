@@ -1,6 +1,6 @@
+import type { InferGetStaticPropsType } from "next";
 import { Box, Button, Center, Title, Loader } from "@mantine/core";
 import { useEffect, useState } from "react";
-import { InferGetStaticPropsType } from "next";
 import { NFTSerializedData } from "pin-mina";
 
 import type { Post } from "@/services/upload";

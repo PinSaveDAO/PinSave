@@ -20,7 +20,7 @@ const client: VercelKV = getVercelClient();
 const { adminPubKey: adminPubKey, adminPK: adminPK } = getEnvAccount();
 const { appId: appId, zkApp: zkApp } = getAppEnv();
 
-const arrayLength: number = 3;
+const arrayLength: number = 1;
 
 const {
   map: merkleMap,

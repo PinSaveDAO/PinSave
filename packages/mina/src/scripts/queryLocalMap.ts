@@ -24,6 +24,7 @@ import {
   NFTSerializedData,
 } from '../components/NFT/deserialization.js';
 import { NFT, NFTMetadata } from '../components/NFT/NFT.js';
+import { getVercelMetadataPendingAllId } from '../components/Vercel/VercelPending.js';
 
 startBerkeleyClient();
 const client: VercelKV = getVercelClient();
@@ -32,11 +33,17 @@ const { appId: appId, zkApp: zkApp } = getAppEnv();
 const totalInited: number = await getTotalInitedLive(zkApp, true);
 const array: number[] = generateIntegersArray(totalInited);
 
-const keys = await getVercelNFTAAAllId(appId, totalInited - 1, client);
+const keysAA = await getVercelNFTAAAllId(appId, totalInited - 1, client);
+const keysPending = await getVercelMetadataPendingAllId(
+  appId,
+  totalInited - 1,
+  client
+);
 
-console.log(keys);
+console.log(keysPending);
+console.log(keysAA);
 
-if (keys.length === 1) {
+/* if (keys.length === 1) {
   console.log(keys[0]);
   console.log(keys[0].split(' '));
 
@@ -73,7 +80,7 @@ if (keys.length === 1) {
   });
   setVercelMetadata(appId, nftMetadata, client);
   setVercelNFT(appId, nft, client);
-}
+} */
 
 const storedMap: MerkleMap = await getMapFromVercelNFTs(appId, array, client);
 const storedMapRoot: string = storedMap.getRoot().toString();

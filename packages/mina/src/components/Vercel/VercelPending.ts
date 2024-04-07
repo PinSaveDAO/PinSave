@@ -125,6 +125,24 @@ export async function mintVercelNFTPending(
   return res;
 }
 
+export async function getVercelMetadataPendingAll(
+  appId: string,
+  client: VercelKV
+): Promise<string[]> {
+  const key: string = `${appId} metadata pending*`;
+  const keys: string[] = await client.keys(key);
+  return keys;
+}
+
+export async function getVercelNFTPendingAll(
+  appId: string,
+  client: VercelKV
+): Promise<string[]> {
+  const key: string = `${appId} nft pending*`;
+  const keys: string[] = await client.keys(key);
+  return keys;
+}
+
 export async function getVercelMetadataPendingAllId(
   appId: string,
   nftId: number | string,

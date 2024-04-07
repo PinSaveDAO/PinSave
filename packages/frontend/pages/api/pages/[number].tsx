@@ -24,7 +24,7 @@ export default async function handler(
     throw new Error("page number can not be negative");
   }
   const data: { totalInited: number } = await fetcher(
-    `${host}/api/totalInited`
+    `${host}/api/totalSynchronized`
   );
   const totalInited: number = data.totalInited;
 

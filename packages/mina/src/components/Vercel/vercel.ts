@@ -24,6 +24,15 @@ export async function getVercelMetadata(
   throw Error('nft metadata not fetched');
 }
 
+export async function getVercelMetadataAllKeys(
+  appId: string,
+  client: VercelKV
+): Promise<string[]> {
+  const key: string = `${appId} metadata:*`;
+  const keys: string[] = await client.keys(key);
+  return keys;
+}
+
 export async function getVercelMetadataAA(
   appId: string,
   nftId: number | string,
@@ -120,12 +129,21 @@ export async function getVercelNFT(
   nftId: number | string,
   client: VercelKV
 ): Promise<NFTSerializedData> {
-  const key: string = `${appId} nft ${nftId}`;
+  const key: string = `${appId} nft: ${nftId}`;
   const nft: NFTSerializedData | null = await client.hgetall(key);
   if (nft) {
     return nft;
   }
   throw Error('nft not fetched');
+}
+
+export async function getVercelNFTAllKeys(
+  appId: string,
+  client: VercelKV
+): Promise<string[]> {
+  const key: string = `${appId} nft:*`;
+  const keys: string[] = await client.keys(key);
+  return keys;
 }
 
 export async function getVercelNFTAA(
@@ -157,7 +175,7 @@ export async function setVercelNFT(
   nft: NFT,
   client: VercelKV
 ): Promise<number> {
-  const key: string = `${appId} nft ${nft.id}`;
+  const key: string = `${appId} nft: ${nft.id}`;
   const nftIdFetched: string | null = await client.hget(key, 'id');
   if (nftIdFetched) {
     throw Error('nft already exists');
