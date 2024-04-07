@@ -9,22 +9,20 @@ import {
   getTreeRootString,
 } from '../components/AppState.js';
 import {
-  getVercelMetadata,
-  getVercelNFT,
-  getVercelNFTAA,
   getVercelNFTAAAllId,
-  getVercelMetadataAA,
   setVercelMetadata,
-  NFTSerializedDataAA,
   setVercelNFT,
+  getVercelNFTAllKeys,
 } from '../components/Vercel/vercel.js';
 import { getMapFromVercelNFTs } from '../components/Vercel/VercelMap.js';
+import { deserializeMetadata } from '../components/NFT/deserialization.js';
+import { NFT } from '../components/NFT/NFT.js';
 import {
-  NFTMetadataAA,
-  NFTSerializedData,
-} from '../components/NFT/deserialization.js';
-import { NFT, NFTMetadata } from '../components/NFT/NFT.js';
-import { getVercelMetadataPendingAllId } from '../components/Vercel/VercelPending.js';
+  getVercelMetadataPendingAllId,
+  getVercelMetadataPending,
+  getVercelNFTPending,
+  getVercelNFTPendingAllId,
+} from '../components/Vercel/VercelPending.js';
 
 startBerkeleyClient();
 const client: VercelKV = getVercelClient();
@@ -43,62 +41,74 @@ const keysPending = await getVercelMetadataPendingAllId(
 console.log(keysPending);
 console.log(keysAA);
 
-/* if (keys.length === 1) {
-  console.log(keys[0]);
-  console.log(keys[0].split(' '));
+const nftSynced: string[] = await getVercelNFTAllKeys(appId, client);
 
-  const nftId = keys[0].split(' ')[3];
-  const attemptId = keys[0].split(' ')[4];
-
-  const nftMetadataAA: NFTSerializedDataAA = await getVercelMetadataAA(
+if (totalInited > nftSynced.length) {
+  if (totalInited !== nftSynced.length + 1) {
+    throw new Error('unexpected');
+  }
+  const nftId: number = nftSynced.length;
+  const metadataKeys: string[] = await getVercelMetadataPendingAllId(
     appId,
     nftId,
-    attemptId,
     client
   );
-  const nftMetadata: NFTMetadata = {
-    name: nftMetadataAA.name,
-    description: nftMetadataAA.description,
-    id: Field(nftMetadataAA.id),
-    cid: nftMetadataAA.cid,
-    owner: PublicKey.fromBase58(nftMetadataAA.owner),
-    isMinted: nftMetadataAA.isMinted,
-  };
-  const nftAA: NFTSerializedDataAA = await getVercelNFTAA(
+  const nftKeys: string[] = await getVercelNFTPendingAllId(
     appId,
     nftId,
-    attemptId,
     client
   );
-  const nft: NFT = new NFT({
-    name: Field(nftAA.name),
-    description: Field(nftAA.description),
-    id: Field(nftAA.id),
-    cid: Field(nftAA.cid),
-    owner: PublicKey.fromBase58(nftMetadataAA.owner),
-    isMinted: Field(nftMetadataAA.isMinted),
-  });
-  setVercelMetadata(appId, nftMetadata, client);
-  setVercelNFT(appId, nft, client);
-} */
+
+  if (metadataKeys.length !== nftKeys.length) {
+    throw new Error('db length not matches');
+  }
+
+  const events = await fetchEvents({ publicKey: appId });
+  const lastEventEvents = events.at(-1)?.events;
+
+  let nftInited;
+  if (lastEventEvents) {
+    for (let res of lastEventEvents) {
+      if (res.data[0] === '1') {
+        nftInited = res.data[1];
+      }
+    }
+  }
+
+  let subbedAttemptId;
+  let subbedNFT;
+  for (let key of metadataKeys) {
+    const attemptId = key.split(' ')[4];
+    let nftPending = await getVercelNFTPending(appId, nftId, attemptId, client);
+    let nft: NFT = new NFT({
+      name: Field(nftPending.name),
+      description: Field(nftPending.description),
+      id: Field(nftPending.id),
+      cid: Field(nftPending.cid),
+      owner: PublicKey.fromBase58(nftPending.owner),
+      isMinted: Field(nftPending.isMinted),
+    });
+    if (nftInited === nft.hash().toString()) {
+      subbedAttemptId = attemptId;
+      subbedNFT = nft;
+    }
+  }
+
+  if (subbedAttemptId && subbedNFT) {
+    let nftPending = await getVercelMetadataPending(
+      appId,
+      nftId,
+      subbedAttemptId,
+      client
+    );
+
+    let subbedMetadata = deserializeMetadata(nftPending);
+    setVercelMetadata(appId, subbedMetadata, client);
+    setVercelNFT(appId, subbedNFT, client);
+  }
+}
 
 const storedMap: MerkleMap = await getMapFromVercelNFTs(appId, array, client);
 const storedMapRoot: string = storedMap.getRoot().toString();
 const treeRoot: string = await getTreeRootString(zkApp);
 console.log(storedMapRoot === treeRoot, 'db matches on-chain root');
-
-/* console.log(await getVercelNFT(appId, 0, client));
-console.log(await getVercelMetadata(appId, 0, client)); */
-
-//console.log(await getVercelNFTPendingAllId(appId, 3, client));
-
-//console.log(await client.keys(`*`));
-
-/* const events = await fetchEvents({ publicKey: appId });
-
-console.log(events.length);
-
-for (let event of events) {
-  console.log(event.events);
-}
- */

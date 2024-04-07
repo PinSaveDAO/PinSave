@@ -68,7 +68,6 @@ export default async function handler(
       ...nftMetadataPosted,
       attemptId: attemptId,
     };
-    console.log(nftMetadataAAPosted);
 
     const appId: string = getAppString();
     const client: VercelKV = getVercelClient();
@@ -78,7 +77,6 @@ export default async function handler(
       ...nftHashed,
       attemptId: attemptId,
     };
-    console.log(nftHashedAA);
 
     const nftMetadataStringsAAdb: NFTSerializedDataAA =
       await getVercelMetadataAA(
@@ -91,7 +89,6 @@ export default async function handler(
       nftMetadataStringsAAdb,
       attemptId
     );
-    console.log(nftMetadataAAdb);
 
     const nftStringsAAdb: NFTSerializedDataAA = await getVercelNFTAA(
       appId,
@@ -100,7 +97,6 @@ export default async function handler(
       client
     );
     const nftAAdb: NFTAA = deserializeNFTAA(nftStringsAAdb, attemptId);
-    console.log(nftAAdb);
 
     const nftMatches = nftDataMatches(nftHashedAA, nftAAdb);
     console.log(nftMatches);

@@ -64,6 +64,7 @@ export {
   mintVercelNFTAA,
   mintVercelMetadata,
   mintVercelMetadataAA,
+  deleteVercelKey,
 } from './components/Vercel/vercel.js';
 
 export {

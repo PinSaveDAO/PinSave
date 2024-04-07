@@ -271,3 +271,11 @@ export async function deleteVercelDataExceptAppId(
   }
   return allKeys;
 }
+
+export async function deleteVercelKey(key: string, client: VercelKV) {
+  await client.del(key);
+}
+
+export async function getVercelKey(key: string, client: VercelKV) {
+  return await client.hgetall(key);
+}
