@@ -1,9 +1,9 @@
+import type { NextApiRequest, NextApiResponse } from "next";
 import {
   startBerkeleyClient,
   getAppContract,
   getTotalSupplyLive,
 } from "pin-mina";
-import type { NextApiRequest, NextApiResponse } from "next";
 
 type DataOut = {
   totalSupply: number;

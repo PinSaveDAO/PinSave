@@ -1,9 +1,13 @@
 import { Mina, PublicKey, PrivateKey } from 'o1js';
 
 export function startBerkeleyClient(
-  endpoint: string = 'https://mina-berkeley-graphql.aurowallet.com/graphql'
+  endpoint: string = 'https://mina-berkeley-graphql.aurowallet.com/graphql',
+  archive: string = 'https://archive.berkeley.minaexplorer.com/'
 ): void {
-  const Berkeley = Mina.Network(endpoint);
+  const Berkeley = Mina.Network({
+    mina: endpoint,
+    archive: archive,
+  });
   Mina.setActiveInstance(Berkeley);
 }
 

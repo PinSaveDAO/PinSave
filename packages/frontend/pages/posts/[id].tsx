@@ -8,13 +8,14 @@ import { NFTSerializedData } from "pin-mina";
 import DisplayMedia from "@/components/Post/DisplayMedia";
 import MediaDetails from "@/components/Post/MediaDetails";
 import { PageSEO } from "@/components/SEO";
+import { host } from "@/utils/host";
 
 interface IParams extends ParsedUrlQuery {
   id: string;
 }
 
 export async function getStaticPaths() {
-  const res: Response = await fetch("https://pinsave.app/api/totalInited");
+  const res: Response = await fetch(`${host}/api/totalInited`);
   const totalInitedObject: { totalInited: number } = await res.json();
   const totalInited: number = Number(totalInitedObject.totalInited);
   const paths = Array.from({ length: totalInited }, (_, index) => ({
@@ -30,12 +31,10 @@ export async function getStaticPaths() {
 
 export const getStaticProps: GetStaticProps = async (context) => {
   const { id: id } = context.params as IParams;
-  const res: Response = await fetch(`https://pinsave.app/api/posts/${id}`);
+  const res: Response = await fetch(`${host}/api/posts/${id}`);
   const post: NFTSerializedData = await res.json();
 
-  const responseTotalPosts: Response = await fetch(
-    "https://pinsave.app/api/totalInited"
-  );
+  const responseTotalPosts: Response = await fetch(`${host}/api/totalInited`);
   const totalInitedObject: { totalInited: number } =
     await responseTotalPosts.json();
   const totalInited: number = Number(totalInitedObject.totalInited);

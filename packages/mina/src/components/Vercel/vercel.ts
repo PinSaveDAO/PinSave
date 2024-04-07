@@ -1,9 +1,7 @@
 import type { VercelKV } from '@vercel/kv';
-import { MerkleMap } from 'o1js';
 
-import { NFTSerializedData, deserializeNFT } from './deserialization.js';
-import { setHashedObjectToMap, setStringObjectToMap } from './merkleMap.js';
-import { NFT, NFTMetadata, NFTReduced } from './NFT.js';
+import { NFTSerializedData } from '../NFT/deserialization.js';
+import { NFT, NFTMetadata, NFTReduced } from '../NFT/NFT.js';
 
 export type NFTSerializedDataAA = NFTSerializedData & {
   attemptId: string | number;
@@ -12,14 +10,13 @@ export type NFTSerializedDataPending = NFTSerializedDataAA & {
   txId: string | number;
 };
 export type NFTReducedAA = NFTReduced & { attemptId: string | number };
-export type NFTReducedPending = NFTReducedAA & { txId: string | number };
 
 export async function getVercelMetadata(
   appId: string,
   nftId: number | string,
   client: VercelKV
 ): Promise<NFTSerializedData> {
-  const key: string = `${appId} metadata ${nftId}`;
+  const key: string = `${appId} metadata: ${nftId}`;
   const nftMetadata: NFTSerializedData | null = await client.hgetall(key);
   if (nftMetadata) {
     return nftMetadata;
@@ -41,28 +38,12 @@ export async function getVercelMetadataAA(
   throw Error('nft metadata AA not fetched');
 }
 
-export async function getVercelMetadataPending(
-  appId: string,
-  nftId: number | string,
-  attemptId: number | string,
-  client: VercelKV
-): Promise<NFTSerializedDataPending> {
-  const key: string = `${appId} metadata pending ${nftId} ${attemptId}`;
-  const nftMetadata: NFTSerializedDataPending | null = await client.hgetall(
-    key
-  );
-  if (nftMetadata) {
-    return nftMetadata;
-  }
-  throw Error('nft metadata AA not fetched');
-}
-
 export async function setVercelMetadata(
   appId: string,
   nftMetadata: NFTMetadata,
   client: VercelKV
 ): Promise<number> {
-  const key: string = `${appId} metadata ${nftMetadata.id}`;
+  const key: string = `${appId} metadata: ${nftMetadata.id}`;
   const nftMetadataIdFetched: string | null = await client.hget(key, 'id');
   if (nftMetadataIdFetched) {
     throw Error('nft metadata already exists');
@@ -87,26 +68,6 @@ export async function setVercelMetadataAA(
   const res: number = await client.hset(key, {
     ...nftMetadata,
     attemptId: attemptId,
-  });
-  return res;
-}
-
-export async function setVercelMetadataPending(
-  appId: string,
-  nftMetadata: NFTMetadata,
-  attemptId: number | string,
-  txId: number | string,
-  client: VercelKV
-): Promise<number> {
-  const key: string = `${appId} metadata pending ${nftMetadata.id} ${attemptId}`;
-  const nftMetadataIdFetched: string | null = await client.hget(key, 'id');
-  if (nftMetadataIdFetched) {
-    throw Error('nft metadata pending already exists');
-  }
-  const res: number = await client.hset(key, {
-    ...nftMetadata,
-    attemptId: attemptId,
-    txId: txId,
   });
   return res;
 }
@@ -154,26 +115,6 @@ export async function mintVercelMetadataAA(
   return res;
 }
 
-export async function mintVercelMetadataPending(
-  appId: string,
-  nftId: string | number,
-  attemptId: number | string,
-  txId: number | string,
-  client: VercelKV
-): Promise<number> {
-  const key: string = `${appId} metadata pending ${nftId} ${attemptId}`;
-  const nftMetadataIdFetched: string | null = await client.hget(key, 'id');
-  if (nftMetadataIdFetched) {
-    throw Error('mint metadata pending already exists');
-  }
-  const res: number = await client.hset(key, {
-    isMinted: '1',
-    attemptId: attemptId,
-    txId: txId,
-  });
-  return res;
-}
-
 export async function getVercelNFT(
   appId: string,
   nftId: number | string,
@@ -201,26 +142,12 @@ export async function getVercelNFTAA(
   throw Error('nft not fetched');
 }
 
-export async function getVercelNFTPending(
-  appId: string,
-  nftId: number | string,
-  attemptId: number | string,
-  client: VercelKV
-): Promise<NFTSerializedDataAA> {
-  const key: string = `${appId} nft pending ${nftId} ${attemptId}`;
-  const nft: NFTSerializedDataAA | null = await client.hgetall(key);
-  if (nft) {
-    return nft;
-  }
-  throw Error('nft not fetched');
-}
-
-export async function getVercelNFTPendingAllId(
+export async function getVercelNFTAAAllId(
   appId: string,
   nftId: number | string,
   client: VercelKV
 ): Promise<string[]> {
-  const key: string = `${appId} nft pending ${nftId}*`;
+  const key: string = `${appId} nft AA ${nftId}*`;
   const keys: string[] = await client.keys(key);
   return keys;
 }
@@ -271,32 +198,6 @@ export async function setVercelNFTAA(
   return res;
 }
 
-export async function setVercelNFTPending(
-  appId: string,
-  nft: NFT,
-  attemptId: number | string,
-  txId: number | string,
-  client: VercelKV
-): Promise<number> {
-  const key: string = `${appId} nft pending ${nft.id} ${attemptId}`;
-  const nftIdFetched: string | null = await client.hget(key, 'id');
-  if (nftIdFetched) {
-    throw Error('nft pending already exists');
-  }
-  const value: NFTReducedPending = {
-    name: nft.name,
-    description: nft.description,
-    id: nft.id,
-    cid: nft.cid,
-    owner: nft.owner,
-    isMinted: nft.isMinted,
-    attemptId: attemptId,
-    txId: txId,
-  };
-  const res: number = await client.hset(key, value);
-  return res;
-}
-
 export async function setNFTsToVercel(
   appId: string,
   nftArray: NFT[],
@@ -338,127 +239,6 @@ export async function mintVercelNFTAA(
     attemptId: attemptId,
   });
   return res;
-}
-
-export async function mintVercelNFTPending(
-  appId: string,
-  nftId: string | number,
-  attemptId: number | string,
-  txId: number | string,
-  client: VercelKV
-): Promise<number> {
-  const key: string = `${appId} nft pending ${nftId} ${attemptId}`;
-  const nftIdFetched: string | null = await client.hget(key, 'id');
-  if (nftIdFetched) {
-    throw Error('mint nft pending already exists');
-  }
-  const res: number = await client.hset(key, {
-    isMinted: '1',
-    attemptId: attemptId,
-    txId: txId,
-  });
-  return res;
-}
-
-export async function getMapFromVercelNFTs(
-  appId: string,
-  nftArray: number[],
-  client: VercelKV
-): Promise<MerkleMap> {
-  const map: MerkleMap = new MerkleMap();
-  const arrayLength: number = nftArray.length;
-  for (let i = 0; i < arrayLength; i++) {
-    const nftId: number = nftArray[i];
-    const data: NFTSerializedData = await getVercelNFT(appId, nftId, client);
-    const dataOut: NFT = deserializeNFT(data);
-    setHashedObjectToMap(dataOut, map);
-  }
-  return map;
-}
-
-export async function getMapFromVercelMetadata(
-  appId: string,
-  nftArray: number[],
-  client: VercelKV
-): Promise<MerkleMap> {
-  const map: MerkleMap = new MerkleMap();
-  const arrayLength: number = nftArray.length;
-  for (let i = 0; i < arrayLength; i++) {
-    const nftId: number = nftArray[i];
-    const data: NFTSerializedData = await getVercelMetadata(
-      appId,
-      nftId,
-      client
-    );
-    setStringObjectToMap(data, map);
-  }
-  return map;
-}
-
-export type CommentData = {
-  publicKey: string;
-  data: string;
-  postId: string | number;
-};
-
-export async function getVercelComment(
-  appId: string,
-  postId: string | number,
-  commentId: string | number,
-  client: VercelKV
-): Promise<CommentData> {
-  const key: string = `${appId} ${postId} comment ${commentId} `;
-  const comment: CommentData | null = await client.hgetall(key);
-  if (comment) {
-    return comment;
-  }
-  throw Error('comment not fetched');
-}
-
-export async function setVercelComment(
-  appId: string,
-  post: CommentData,
-  client: VercelKV
-): Promise<number> {
-  const postId: string | number = post.postId;
-  const commentId: number = await getVercelCommentsPostLength(
-    appId,
-    postId,
-    client
-  );
-  const key: string = `${appId} ${postId} comment ${commentId} `;
-  const res: number = await client.hset(key, { ...post, key: commentId });
-  return res;
-}
-
-export async function getVercelPostComments(
-  appId: string,
-  postId: string | number,
-  client: VercelKV
-): Promise<CommentData[]> {
-  const commentId: number = await getVercelCommentsPostLength(
-    appId,
-    postId,
-    client
-  );
-  let output: CommentData[] = [];
-  for (let i = 0; i < commentId; i++) {
-    output.push(await getVercelComment(appId, postId, i, client));
-  }
-  return output;
-}
-
-export async function getVercelCommentsPostLength(
-  appId: string,
-  postId: string | number,
-  client: VercelKV
-): Promise<number> {
-  const key: string = `${appId} ${postId} comment*`;
-  const keys: string[] = await client.keys(key);
-  if (!keys) {
-    throw new Error('no keys found');
-  }
-  return keys.length;
 }
 
 export async function deleteVercelDataExceptAppId(

@@ -4,7 +4,7 @@ import { NFTContract } from '../../NFTsMapContract.js';
 
 export function getAppString(): string {
   const appPubString: string =
-    'B62qqH1gbadGSB25kCWQgPz822NQDCKKV1ZWfbYvViWatHrJWs39VUw';
+    'B62qnU4ZnDCaFgBiq7FCYehnxWLKmeLQcfSJBuPb7fKH1mJ2qQkaLEf';
   return appPubString;
 }
 

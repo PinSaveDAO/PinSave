@@ -45,38 +45,49 @@ export {
 } from './components/NFT/NFT.js';
 
 export {
-  CommentData,
   NFTSerializedDataAA,
   NFTSerializedDataPending,
   NFTReducedAA,
-  NFTReducedPending,
-  getVercelComment,
-  getVercelPostComments,
-  getVercelCommentsPostLength,
   getVercelMetadata,
   getVercelMetadataAA,
-  getVercelMetadataPending,
   getVercelNFT,
   getVercelNFTAA,
-  getVercelNFTPending,
-  getMapFromVercelNFTs,
-  getMapFromVercelMetadata,
   setVercelMetadata,
   setVercelMetadataAA,
-  setVercelMetadataPending,
   setMetadatasToVercel,
   setVercelNFT,
   setVercelNFTAA,
-  setVercelNFTPending,
   setNFTsToVercel,
-  setVercelComment,
   mintVercelNFT,
   mintVercelNFTAA,
-  mintVercelNFTPending,
   mintVercelMetadata,
   mintVercelMetadataAA,
+} from './components/Vercel/vercel.js';
+
+export {
+  NFTReducedPending,
+  getVercelMetadataPending,
+  getVercelNFTPending,
+  setVercelMetadataPending,
+  setVercelNFTPending,
+  mintVercelNFTPending,
   mintVercelMetadataPending,
-} from './components/NFT/vercel.js';
+  getVercelMetadataPendingAllId,
+  getVercelNFTPendingAllId,
+} from './components/Vercel/VercelPending.js';
+
+export {
+  CommentData,
+  getVercelComment,
+  getVercelPostComments,
+  getVercelCommentsPostLength,
+  setVercelComment,
+} from './components/Vercel/VercelComments.js';
+
+export {
+  getMapFromVercelNFTs,
+  getMapFromVercelMetadata,
+} from './components/Vercel/VercelMap.js';
 
 export {
   serializeMerkleMapToJson,

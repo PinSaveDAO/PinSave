@@ -20,18 +20,19 @@ import { InitState } from './components/NFT/InitState.js';
 
 export class NFTContract extends SmartContract {
   events = {
-    'updated-merkle-root': Field,
-    'updated-fee': UInt64,
-    'updated-total-supply': UInt64,
-    'updated-inited-amount': Field,
     'inited-max-supply': Field,
     'inited-nft': Field,
-    'inited-nft-name': Field,
     'inited-nft-description': Field,
+    'inited-nft-name': Field,
     'minted-nft': Field,
-    'minted-nft-name': Field,
     'minted-nft-description': Field,
+    'minted-nft-name': Field,
     'transferred-nft': Field,
+    'updated-fee': UInt64,
+    'updated-inited-amount': Field,
+    'updated-merkle-key': Field,
+    'updated-merkle-root': Field,
+    'updated-total-supply': UInt64,
   };
   @state(PublicKey) admin = State<PublicKey>();
   @state(Field) root = State<Field>();
@@ -116,6 +117,7 @@ export class NFTContract extends SmartContract {
     this.emitEvent('inited-nft', itemHash);
     this.emitEvent('inited-nft-name', item.name);
     this.emitEvent('inited-nft-description', item.description);
+    this.emitEvent('updated-merkle-key', item.id);
     this.updateInitedAmount(initedAmount, 1);
     this.updateRoot(rootAfter);
     return Bool(true);
@@ -135,9 +137,10 @@ export class NFTContract extends SmartContract {
       address: item.owner,
       amount: UInt64.from(1_000_000_000),
     });
-    this.emitEvent('minted-nft', item.id);
+    this.emitEvent('minted-nft', item.hash());
     this.emitEvent('minted-nft-name', item.name);
     this.emitEvent('minted-nft-description', item.description);
+    this.emitEvent('updated-merkle-key', item.id);
     this.incrementTotalSupply();
     this.updateRoot(rootAfter);
     return Bool(true);
@@ -160,6 +163,7 @@ export class NFTContract extends SmartContract {
       amount: UInt64.from(1_000_000_000),
     });
     this.emitEvent('transferred-nft', itemHash);
+    this.emitEvent('updated-merkle-key', item.id);
     this.updateRoot(rootAfter);
     return Bool(true);
   }

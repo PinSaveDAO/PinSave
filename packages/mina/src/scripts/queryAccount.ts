@@ -7,10 +7,10 @@ startBerkeleyClient();
 const { zkApp: zkApp } = getAppEnv();
 const { adminPubKey: pub } = getEnvAccount();
 
-const tokenBalance = await getTokenAddressBalance(pub, zkApp.token.id);
+const tokenBalance: bigint = await getTokenAddressBalance(pub, zkApp.token.id);
 
 console.log('PinSave token balance:', tokenBalance);
 
-const minaTokenBalance = await getTokenAddressBalance(pub);
+const minaTokenBalance: bigint = await getTokenAddressBalance(pub);
 
 console.log('Mina token balance:', minaTokenBalance);

@@ -1,3 +1,4 @@
+import type { NextApiRequest, NextApiResponse } from "next";
 import {
   startBerkeleyClient,
   getAppString,
@@ -5,7 +6,6 @@ import {
   serializeMerkleMapToJson,
   generateIntegersArray,
 } from "pin-mina";
-import type { NextApiRequest, NextApiResponse } from "next";
 import { MerkleMap } from "o1js";
 import { VercelKV } from "@vercel/kv";
 

@@ -5,7 +5,7 @@ import { generateDummyCollectionWithMap } from '../components/NFT/dummy.js';
 import {
   setNFTsToVercel,
   setMetadatasToVercel,
-} from '../components/NFT/vercel.js';
+} from '../components/Vercel/vercel.js';
 import { startBerkeleyClient } from '../components/utilities/client.js';
 import {
   getEnvAccount,
