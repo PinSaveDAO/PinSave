@@ -1,24 +1,53 @@
 import type { InferGetStaticPropsType } from "next";
+import type { VercelKV } from "@vercel/kv";
 import { Box, Button, Center, Title, Loader } from "@mantine/core";
 import { useEffect, useState } from "react";
-import { NFTSerializedData } from "pin-mina";
+import {
+  NFTSerializedData,
+  getAppString,
+  getVercelNFTAllKeys,
+  getVercelMetadataAllKeys,
+  getVercelMetadata,
+} from "pin-mina";
 
 import type { Post } from "@/services/upload";
 import PostCard from "@/components/Posts/PostCard";
 import { usePosts } from "@/hooks/api";
 import { PageSEO } from "@/components/SEO";
-import { host } from "@/utils/host";
+import { getVercelClient } from "@/services/vercelClient";
 
-type dataIn = {
-  items: NFTSerializedData[];
-  totalSupply: number;
-  page: number;
-};
+const perPage = 6;
 
 export async function getStaticProps() {
-  const res: Response = await fetch(`${host}/api/pages/0`);
-  const jsonPosts: dataIn = await res.json();
-  const posts: NFTSerializedData[] = Array.from(jsonPosts.items);
+  const client: VercelKV = getVercelClient();
+  const appId: string = getAppString();
+
+  const nftSynced: string[] = await getVercelNFTAllKeys(appId, client);
+  const nftMetadataSynced: string[] = await getVercelMetadataAllKeys(
+    appId,
+    client
+  );
+  if (nftSynced.length !== nftMetadataSynced.length) {
+    throw new Error("db not synced");
+  }
+
+  const totalInited: number = nftSynced.length;
+
+  let lowerLimit: number = 0;
+  let upperLimit: number =
+    perPage > totalInited ? totalInited - 1 : perPage - 1;
+
+  let items: NFTSerializedData[] = [];
+
+  for (let index = lowerLimit; upperLimit >= index; index++) {
+    const data: NFTSerializedData = await getVercelMetadata(
+      appId,
+      index,
+      client
+    );
+    items.push({ ...data });
+  }
+  const posts: NFTSerializedData[] = Array.from(items);
   return {
     props: {
       posts,

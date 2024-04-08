@@ -1,10 +1,14 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { getVercelMetadata, getAppString, NFTSerializedData } from "pin-mina";
+import type { VercelKV } from "@vercel/kv";
+import {
+  getVercelMetadata,
+  getAppString,
+  NFTSerializedData,
+  getVercelNFTAllKeys,
+  getVercelMetadataAllKeys,
+} from "pin-mina";
 
 import { getVercelClient } from "@/services/vercelClient";
-import { fetcher } from "@/utils/fetcher";
-import { host } from "@/utils/host";
-import { VercelKV } from "@vercel/kv";
 
 type dataOut = {
   items: NFTSerializedData[];
@@ -23,10 +27,19 @@ export default async function handler(
   if (pageNumber < 0) {
     throw new Error("page number can not be negative");
   }
-  const data: { totalInited: number } = await fetcher(
-    `${host}/api/totalSynchronized`
+  const client: VercelKV = getVercelClient();
+  const appId: string = getAppString();
+
+  const nftSynced: string[] = await getVercelNFTAllKeys(appId, client);
+  const nftMetadataSynced: string[] = await getVercelMetadataAllKeys(
+    appId,
+    client
   );
-  const totalInited: number = data.totalInited;
+  if (nftSynced.length !== nftMetadataSynced.length) {
+    throw new Error("db not synced");
+  }
+
+  const totalInited: number = nftSynced.length;
 
   let lowerLimit: number = 0;
   let upperLimit: number =
@@ -38,9 +51,6 @@ export default async function handler(
         ? totalInited - 1
         : lowerLimit + perPage - 1;
   }
-
-  const client: VercelKV = getVercelClient();
-  const appId: string = getAppString();
 
   let items: NFTSerializedData[] = [];
 

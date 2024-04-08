@@ -1,23 +1,39 @@
 import type { InferGetStaticPropsType, GetStaticProps } from "next";
+import type { VercelKV } from "@vercel/kv";
 import Link from "next/link";
 import { ActionIcon, SimpleGrid } from "@mantine/core";
 import { ArrowLeft } from "tabler-icons-react";
 import { ParsedUrlQuery } from "querystring";
-import { NFTSerializedData } from "pin-mina";
+import {
+  NFTSerializedData,
+  getAppString,
+  getVercelNFTAllKeys,
+  getVercelMetadataAllKeys,
+  getVercelMetadata,
+} from "pin-mina";
 
 import DisplayMedia from "@/components/Post/DisplayMedia";
 import MediaDetails from "@/components/Post/MediaDetails";
 import { PageSEO } from "@/components/SEO";
-import { host } from "@/utils/host";
+import { getVercelClient } from "@/services/vercelClient";
 
 interface IParams extends ParsedUrlQuery {
   id: string;
 }
 
 export async function getStaticPaths() {
-  const res: Response = await fetch(`${host}/api/totalInited`);
-  const totalInitedObject: { totalInited: number } = await res.json();
-  const totalInited: number = Number(totalInitedObject.totalInited);
+  const client: VercelKV = getVercelClient();
+  const appId: string = getAppString();
+  const nftSynced: string[] = await getVercelNFTAllKeys(appId, client);
+  const nftMetadataSynced: string[] = await getVercelMetadataAllKeys(
+    appId,
+    client
+  );
+  if (nftSynced.length !== nftMetadataSynced.length) {
+    throw new Error("db not synced");
+  }
+
+  const totalInited: number = nftSynced.length;
   const paths = Array.from({ length: totalInited }, (_, index) => ({
     params: {
       id: String(index),
@@ -31,13 +47,19 @@ export async function getStaticPaths() {
 
 export const getStaticProps: GetStaticProps = async (context) => {
   const { id: id } = context.params as IParams;
-  const res: Response = await fetch(`${host}/api/posts/${id}`);
-  const post: NFTSerializedData = await res.json();
+  const client: VercelKV = getVercelClient();
+  const appId: string = getAppString();
+  const post: NFTSerializedData = await getVercelMetadata(appId, id, client);
 
-  const responseTotalPosts: Response = await fetch(`${host}/api/totalInited`);
-  const totalInitedObject: { totalInited: number } =
-    await responseTotalPosts.json();
-  const totalInited: number = Number(totalInitedObject.totalInited);
+  const nftSynced: string[] = await getVercelNFTAllKeys(appId, client);
+  const nftMetadataSynced: string[] = await getVercelMetadataAllKeys(
+    appId,
+    client
+  );
+  if (nftSynced.length !== nftMetadataSynced.length) {
+    throw new Error("db not synced");
+  }
+  const totalInited: number = nftSynced.length;
   let lastPostId: number = 0;
   if (totalInited > 0) {
     lastPostId = totalInited - 1;
