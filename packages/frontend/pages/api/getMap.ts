@@ -23,12 +23,11 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<DataOut>
 ) {
-  const hostname: "http://localhost:3000" | "https://pinsave.app" = host;
   startBerkeleyClient();
   const client: VercelKV = getVercelClient();
   const appId: string = getAppString();
   const data: { totalInited: number } = await fetcher(
-    `${hostname}/api/totalInited`
+    `${host}/api/totalInited`
   );
   const totalInited: number = data.totalInited;
   const array: number[] = generateIntegersArray(totalInited);

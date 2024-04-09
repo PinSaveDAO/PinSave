@@ -24,10 +24,12 @@ export default async function handler(
   res: NextApiResponse<dataOut>
 ) {
   if (req.method === "POST") {
+    const client: VercelKV = getVercelClient();
+
     const data: NFTSerializedData = req.body;
     const nftMetadata: NFTMetadata = deserializeMetadata(data);
     const appId: string = getAppString();
-    const client: VercelKV = getVercelClient();
+
     const nftHashed: NFT = createNFT(nftMetadata);
     const adminPK: PrivateKey = PrivateKey.fromBase58(process.env.adminPK);
     const adminSignature: Signature = Signature.create(
@@ -36,8 +38,21 @@ export default async function handler(
     );
     const adminSignatureBase58: string = adminSignature.toBase58();
     const attemptId: number = Math.random();
-    setVercelMetadataAA(appId, nftMetadata, attemptId, client);
-    setVercelNFTAA(appId, nftHashed, attemptId, client);
+
+    const metadataResponse: number = await setVercelMetadataAA(
+      appId,
+      nftMetadata,
+      attemptId,
+      client
+    );
+    const nftResponse: number = await setVercelNFTAA(
+      appId,
+      nftHashed,
+      attemptId,
+      client
+    );
+    console.log(metadataResponse);
+    console.log(nftResponse);
     res.status(200).json({ adminSignatureBase58, attemptId });
   }
 }

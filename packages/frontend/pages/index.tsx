@@ -16,7 +16,7 @@ import { usePosts } from "@/hooks/api";
 import { PageSEO } from "@/components/SEO";
 import { getVercelClient } from "@/services/vercelClient";
 
-const perPage = 6;
+const perPage: number = 6;
 
 export async function getStaticProps() {
   const client: VercelKV = getVercelClient();

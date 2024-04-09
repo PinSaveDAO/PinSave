@@ -13,10 +13,14 @@ import {
   setVercelMetadata,
   setVercelNFT,
   getVercelNFTAllKeys,
+  getVercelNFTAA,
 } from '../components/Vercel/vercel.js';
 import { getMapFromVercelNFTs } from '../components/Vercel/VercelMap.js';
-import { deserializeMetadata } from '../components/NFT/deserialization.js';
-import { NFT } from '../components/NFT/NFT.js';
+import {
+  deserializeMetadata,
+  deserializeNFT,
+} from '../components/NFT/deserialization.js';
+import { NFT, NFTMetadata, createNFT } from '../components/NFT/NFT.js';
 import {
   getVercelMetadataPendingAllId,
   getVercelMetadataPending,
@@ -31,19 +35,19 @@ const { appId: appId, zkApp: zkApp } = getAppEnv();
 const totalInited: number = await getTotalInitedLive(zkApp, true);
 const array: number[] = generateIntegersArray(totalInited);
 
-const keysAA = await getVercelNFTAAAllId(appId, totalInited - 1, client);
+const keysNftAA = await getVercelNFTAAAllId(appId, totalInited - 1, client);
 const keysPending = await getVercelMetadataPendingAllId(
   appId,
   totalInited - 1,
   client
 );
 
+console.log(keysNftAA);
 console.log(keysPending);
-console.log(keysAA);
 
 const nftSynced: string[] = await getVercelNFTAllKeys(appId, client);
 
-if (totalInited > nftSynced.length) {
+/* if (totalInited > nftSynced.length) {
   if (totalInited !== nftSynced.length + 1) {
     throw new Error('unexpected');
   }
@@ -103,10 +107,10 @@ if (totalInited > nftSynced.length) {
     );
 
     let subbedMetadata = deserializeMetadata(nftPending);
-    setVercelMetadata(appId, subbedMetadata, client);
-    setVercelNFT(appId, subbedNFT, client);
+    await setVercelMetadata(appId, subbedMetadata, client);
+    await setVercelNFT(appId, subbedNFT, client);
   }
-}
+} */
 
 const storedMap: MerkleMap = await getMapFromVercelNFTs(appId, array, client);
 const storedMapRoot: string = storedMap.getRoot().toString();

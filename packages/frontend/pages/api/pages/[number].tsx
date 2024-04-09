@@ -9,6 +9,8 @@ import {
 } from "pin-mina";
 
 import { getVercelClient } from "@/services/vercelClient";
+import { fetcher } from "@/utils/fetcher";
+import { host } from "@/utils/host";
 
 type dataOut = {
   items: NFTSerializedData[];
@@ -16,7 +18,7 @@ type dataOut = {
   page: number;
 };
 
-const perPage = 6;
+const perPage: number = 6;
 
 export default async function handler(
   req: NextApiRequest,
@@ -35,10 +37,17 @@ export default async function handler(
     appId,
     client
   );
+
   if (nftSynced.length !== nftMetadataSynced.length) {
     throw new Error("db not synced");
   }
 
+  const data: { totalInited: number } = await fetcher(
+    `${host}/api/totalInited`
+  );
+  if (data.totalInited !== nftMetadataSynced.length) {
+    console.log("main db not synced yet");
+  }
   const totalInited: number = nftSynced.length;
 
   let lowerLimit: number = 0;

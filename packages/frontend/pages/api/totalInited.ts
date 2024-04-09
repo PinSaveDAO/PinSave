@@ -1,7 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import type { VercelKV } from "@vercel/kv";
 import { fetchEvents, Field, PublicKey } from "o1js";
-
 import {
   startBerkeleyClient,
   getTotalInitedLive,
@@ -78,7 +77,7 @@ export default async function handler(
         attemptId,
         client
       );
-      let nft: NFT = new NFT({
+      const nft: NFT = new NFT({
         name: Field(nftPending.name),
         description: Field(nftPending.description),
         id: Field(nftPending.id),
@@ -93,14 +92,14 @@ export default async function handler(
     }
 
     if (subbedAttemptId && subbedNFT) {
-      let nftPending = await getVercelMetadataPending(
+      const nftPending = await getVercelMetadataPending(
         appId,
         nftId,
         subbedAttemptId,
         client
       );
 
-      let subbedMetadata = deserializeMetadata(nftPending);
+      const subbedMetadata = deserializeMetadata(nftPending);
       setVercelMetadata(appId, subbedMetadata, client);
       setVercelNFT(appId, subbedNFT, client);
     }
