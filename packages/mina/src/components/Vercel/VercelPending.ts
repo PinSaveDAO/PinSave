@@ -1,11 +1,11 @@
 import type { VercelKV } from '@vercel/kv';
 
 import { NFT, NFTMetadata } from '../NFT/NFT.js';
-import {
-  NFTSerializedDataAA,
-  NFTSerializedDataPending,
-  NFTReducedAA,
-} from './vercel.js';
+import { NFTSerializedDataAA, NFTReducedAA } from './VercelAA.js';
+
+export type NFTSerializedDataPending = NFTSerializedDataAA & {
+  txId: string | number;
+};
 
 export type NFTReducedPending = NFTReducedAA & { txId: string | number };
 
@@ -143,7 +143,7 @@ export async function getVercelNFTPendingAll(
   return keys;
 }
 
-export async function getVercelMetadataPendingAllId(
+export async function getVercelMetadataPendingAllKeys(
   appId: string,
   nftId: number | string,
   client: VercelKV
@@ -153,7 +153,7 @@ export async function getVercelMetadataPendingAllId(
   return keys;
 }
 
-export async function getVercelNFTPendingAllId(
+export async function getVercelNFTPendingAllKeys(
   appId: string,
   nftId: number | string,
   client: VercelKV

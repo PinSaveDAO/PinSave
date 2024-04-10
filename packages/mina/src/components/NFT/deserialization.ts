@@ -1,7 +1,7 @@
 import { Field, PublicKey, Poseidon, CircuitString } from 'o1js';
 
 import { NFT, NFTMetadata, NFTReduced } from './NFT.js';
-import { NFTSerializedDataAA } from '../Vercel/vercel.js';
+import { NFTSerializedDataAA } from '../Vercel/VercelAA.js';
 
 export type NFTSerializedData = {
   name: string;

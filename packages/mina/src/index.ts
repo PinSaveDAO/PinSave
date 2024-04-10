@@ -44,31 +44,37 @@ export {
   createNFTWithMapWitness,
 } from './components/NFT/NFT.js';
 
+export { validateTreeInited } from './components/Vercel/validateTree.js';
+
 export {
-  NFTSerializedDataAA,
-  NFTSerializedDataPending,
-  NFTReducedAA,
-  getVercelMetadata,
-  getVercelMetadataAllKeys,
-  getVercelMetadataAA,
   getVercelNFT,
   getVercelNFTAllKeys,
-  getVercelNFTAA,
+  getVercelMetadata,
+  getVercelMetadataAllKeys,
   setVercelMetadata,
-  setVercelMetadataAA,
   setMetadatasToVercel,
   setVercelNFT,
-  setVercelNFTAA,
   setNFTsToVercel,
   mintVercelNFT,
-  mintVercelNFTAA,
   mintVercelMetadata,
-  mintVercelMetadataAA,
   deleteVercelKey,
 } from './components/Vercel/vercel.js';
 
 export {
+  NFTReducedAA,
+  NFTSerializedDataAA,
+  getVercelNFTAA,
+  getVercelMetadataAA,
+  getVercelMetadataAAAllKeys,
+  setVercelMetadataAA,
+  setVercelNFTAA,
+  mintVercelNFTAA,
+  mintVercelMetadataAA,
+} from './components/Vercel/VercelAA.js';
+
+export {
   NFTReducedPending,
+  NFTSerializedDataPending,
   getVercelMetadataPending,
   getVercelNFTPending,
   setVercelMetadataPending,
@@ -76,9 +82,9 @@ export {
   mintVercelNFTPending,
   mintVercelMetadataPending,
   getVercelMetadataPendingAll,
-  getVercelMetadataPendingAllId,
+  getVercelMetadataPendingAllKeys,
   getVercelNFTPendingAll,
-  getVercelNFTPendingAllId,
+  getVercelNFTPendingAllKeys,
 } from './components/Vercel/VercelPending.js';
 
 export {

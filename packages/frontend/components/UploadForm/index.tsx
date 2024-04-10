@@ -35,7 +35,7 @@ import { useAddressContext } from "context";
 
 export const dropzoneChildren = (image: File | undefined) => {
   if (image) {
-    let link = URL.createObjectURL(image);
+    const link: string = URL.createObjectURL(image);
     return (
       <Group
         position="center"
