@@ -1,6 +1,5 @@
 import {
   Field,
-  SmartContract,
   state,
   State,
   method,
@@ -13,12 +12,13 @@ import {
   AccountUpdate,
   Signature,
   MerkleMap,
+  TokenContract,
 } from 'o1js';
 
 import { NFT } from './components/NFT/NFT.js';
 import { InitState } from './components/NFT/InitState.js';
 
-export class NFTContract extends SmartContract {
+export class NFTContract extends TokenContract {
   events = {
     'inited-max-supply': Field,
     'inited-nft': Field,
@@ -133,7 +133,7 @@ export class NFTContract extends SmartContract {
     item.isMinted.assertEquals(0, 'Already Minted');
     item.mint();
     const [rootAfter] = keyWitness.computeRootAndKey(item.hash());
-    this.token.mint({
+    this.internal.mint({
       address: item.owner,
       amount: UInt64.from(1_000_000_000),
     });
@@ -146,7 +146,7 @@ export class NFTContract extends SmartContract {
     return Bool(true);
   }
 
-  @method public transfer(
+  @method public transferNFT(
     item: NFT,
     newOwner: PublicKey,
     keyWitness: MerkleMapWitness,
@@ -157,7 +157,7 @@ export class NFTContract extends SmartContract {
     item.changeOwner(newOwner);
     const itemHash: Field = item.hash();
     const [rootAfter] = keyWitness.computeRootAndKey(itemHash);
-    this.token.send({
+    this.internal.send({
       from: sender,
       to: newOwner,
       amount: UInt64.from(1_000_000_000),
@@ -235,4 +235,8 @@ export class NFTContract extends SmartContract {
     senderUpdate.requireSignature();
     return { senderUpdate: senderUpdate, sender: sender };
   }
+
+  @method approveBase() {}
+
+  @method transfer() {}
 }

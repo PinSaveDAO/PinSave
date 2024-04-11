@@ -177,7 +177,7 @@ export class SwapContract extends SmartContract {
     const { sender } = this.verifyTreeLeaf(item, localKeyWitness);
     const contract: NFTContract = new NFTContract(item.contract);
     item.askNFTId.assertEquals(askedNFT.id, 'nft ids do not match');
-    const NFTresponse: Bool = contract.transfer(
+    const NFTresponse: Bool = contract.transferNFT(
       askedNFT,
       item.owner,
       nftKeyWitness,
@@ -235,7 +235,7 @@ export class SwapContract extends SmartContract {
     );
     this.verifyTreeLeaf(supplyNFT.item, supplyNFT.localKeyWitness);
     const contract: NFTContract = new NFTContract(supplyNFT.item.contract);
-    const NFTresponse: Bool = contract.transfer(
+    const NFTresponse: Bool = contract.transferNFT(
       supplyNFT.item.nft,
       this.address,
       supplyNFT.nftKeyWitness,
@@ -260,7 +260,7 @@ export class SwapContract extends SmartContract {
     this.verifyAdminItemSignature(item, localAdminSignature);
     const { sender: sender } = this.verifyTreeLeaf(item, localKeyWitness);
     const contract: NFTContract = new NFTContract(item.contract);
-    const NFTresponse: Bool = contract.transfer(
+    const NFTresponse: Bool = contract.transferNFT(
       item.nft,
       sender,
       nftKeyWitness,

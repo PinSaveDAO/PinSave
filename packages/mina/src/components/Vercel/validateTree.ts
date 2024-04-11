@@ -11,10 +11,10 @@ import {
   getVercelNFTAllKeys,
 } from '../Vercel/vercel.js';
 import {
-  getVercelMetadataPendingAllKeys,
+  getVercelMetadataPendingIdAllKeys,
   getVercelMetadataPending,
   getVercelNFTPending,
-  getVercelNFTPendingAllKeys,
+  getVercelNFTPendingIdAllKeys,
 } from '../Vercel/VercelPending.js';
 import {
   getVercelMetadataAA,
@@ -38,12 +38,9 @@ export async function validateTreeInited(client: VercelKV): Promise<boolean> {
     }
 
     const nftId: number = nftSynced.length;
-    const metadataPendingKeys: string[] = await getVercelMetadataPendingAllKeys(
-      appId,
-      nftId,
-      client
-    );
-    const nftPendingKeys: string[] = await getVercelNFTPendingAllKeys(
+    const metadataPendingKeys: string[] =
+      await getVercelMetadataPendingIdAllKeys(appId, nftId, client);
+    const nftPendingKeys: string[] = await getVercelNFTPendingIdAllKeys(
       appId,
       nftId,
       client

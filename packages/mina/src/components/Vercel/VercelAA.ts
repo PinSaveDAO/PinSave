@@ -20,7 +20,7 @@ export async function getVercelNFTAA(
   if (nft) {
     return nft;
   }
-  throw Error('nft not fetched');
+  throw Error('nft AA not fetched');
 }
 
 export async function getVercelMetadataAA(
@@ -34,7 +34,7 @@ export async function getVercelMetadataAA(
   if (nftMetadata) {
     return nftMetadata;
   }
-  throw Error('nft metadata AA not fetched');
+  throw Error('metadata AA not fetched');
 }
 
 export async function setVercelNFTAA(
@@ -74,42 +74,6 @@ export async function setVercelMetadataAA(
   }
   const res: number = await client.hset(key, {
     ...nftMetadata,
-    attemptId: attemptId,
-  });
-  return res;
-}
-
-export async function mintVercelNFTAA(
-  appId: string,
-  nftId: string | number,
-  attemptId: number | string,
-  client: VercelKV
-): Promise<number> {
-  const key: string = `${appId} nft AA ${nftId} ${attemptId}`;
-  const nftIdFetched: string | null = await client.hget(key, 'id');
-  if (nftIdFetched) {
-    throw Error('mint nft AA already exists');
-  }
-  const res: number = await client.hset(key, {
-    isMinted: '1',
-    attemptId: attemptId,
-  });
-  return res;
-}
-
-export async function mintVercelMetadataAA(
-  appId: string,
-  nftId: string | number,
-  attemptId: number | string,
-  client: VercelKV
-): Promise<number> {
-  const key: string = `${appId} metadata AA ${nftId} ${attemptId}`;
-  const nftMetadataIdFetched: string | null = await client.hget(key, 'id');
-  if (nftMetadataIdFetched) {
-    throw Error('mint metadata AA already exists');
-  }
-  const res: number = await client.hset(key, {
-    isMinted: '1',
     attemptId: attemptId,
   });
   return res;

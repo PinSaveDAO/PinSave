@@ -22,7 +22,7 @@ export async function getVercelMetadataPending(
   if (nftMetadata) {
     return nftMetadata;
   }
-  throw Error('nft metadata AA not fetched');
+  throw Error('metadata pending not fetched');
 }
 
 export async function getVercelNFTPending(
@@ -36,7 +36,7 @@ export async function getVercelNFTPending(
   if (nft) {
     return nft;
   }
-  throw Error('nft not fetched');
+  throw Error('nft pending not fetched');
 }
 
 export async function setVercelMetadataPending(
@@ -49,30 +49,10 @@ export async function setVercelMetadataPending(
   const key: string = `${appId} metadata pending ${nftMetadata.id} ${attemptId}`;
   const nftMetadataIdFetched: string | null = await client.hget(key, 'id');
   if (nftMetadataIdFetched) {
-    throw Error('nft metadata pending already exists');
+    throw Error('metadata pending already exists');
   }
   const res: number = await client.hset(key, {
     ...nftMetadata,
-    attemptId: attemptId,
-    txId: txId,
-  });
-  return res;
-}
-
-export async function mintVercelMetadataPending(
-  appId: string,
-  nftId: string | number,
-  attemptId: number | string,
-  txId: number | string,
-  client: VercelKV
-): Promise<number> {
-  const key: string = `${appId} metadata pending ${nftId} ${attemptId}`;
-  const nftMetadataIdFetched: string | null = await client.hget(key, 'id');
-  if (nftMetadataIdFetched) {
-    throw Error('mint metadata pending already exists');
-  }
-  const res: number = await client.hset(key, {
-    isMinted: '1',
     attemptId: attemptId,
     txId: txId,
   });
@@ -105,26 +85,6 @@ export async function setVercelNFTPending(
   return res;
 }
 
-export async function mintVercelNFTPending(
-  appId: string,
-  nftId: string | number,
-  attemptId: number | string,
-  txId: number | string,
-  client: VercelKV
-): Promise<number> {
-  const key: string = `${appId} nft pending ${nftId} ${attemptId}`;
-  const nftIdFetched: string | null = await client.hget(key, 'id');
-  if (nftIdFetched) {
-    throw Error('mint nft pending already exists');
-  }
-  const res: number = await client.hset(key, {
-    isMinted: '1',
-    attemptId: attemptId,
-    txId: txId,
-  });
-  return res;
-}
-
 export async function getVercelMetadataPendingAll(
   appId: string,
   client: VercelKV
@@ -134,7 +94,7 @@ export async function getVercelMetadataPendingAll(
   return keys;
 }
 
-export async function getVercelNFTPendingAll(
+export async function getVercelNFTPendingAllKeys(
   appId: string,
   client: VercelKV
 ): Promise<string[]> {
@@ -143,7 +103,7 @@ export async function getVercelNFTPendingAll(
   return keys;
 }
 
-export async function getVercelMetadataPendingAllKeys(
+export async function getVercelMetadataPendingIdAllKeys(
   appId: string,
   nftId: number | string,
   client: VercelKV
@@ -153,7 +113,7 @@ export async function getVercelMetadataPendingAllKeys(
   return keys;
 }
 
-export async function getVercelNFTPendingAllKeys(
+export async function getVercelNFTPendingIdAllKeys(
   appId: string,
   nftId: number | string,
   client: VercelKV

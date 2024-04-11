@@ -169,7 +169,7 @@ export async function createMintTx(
 ): Promise<Transaction> {
   const recipientBalance: bigint = await getTokenAddressBalance(
     pubKey,
-    zkAppInstance.token.id
+    zkAppInstance.deriveTokenId()
   );
   let mint_tx: Transaction;
   if (recipientBalance > 0n) {
@@ -199,18 +199,18 @@ export async function transferNFT(
   const witnessNFT: MerkleMapWitness = merkleMap.getWitness(nftId);
   const recipientBalance: bigint = await getTokenAddressBalance(
     recipient,
-    zkAppInstance.token.id
+    zkAppInstance.deriveTokenId()
   );
   const adminSignature = Signature.create(adminPK, _NFT.toFields());
   let nft_transfer_tx: Transaction;
   if (recipientBalance > 0n) {
     nft_transfer_tx = await Mina.transaction(pubKey, () => {
-      zkAppInstance.transfer(_NFT, recipient, witnessNFT, adminSignature);
+      zkAppInstance.transferNFT(_NFT, recipient, witnessNFT, adminSignature);
     });
   } else {
     nft_transfer_tx = await Mina.transaction(pubKey, () => {
       AccountUpdate.fundNewAccount(pubKey);
-      zkAppInstance.transfer(_NFT, recipient, witnessNFT, adminSignature);
+      zkAppInstance.transferNFT(_NFT, recipient, witnessNFT, adminSignature);
     });
   }
   const txStatus: TxStatus = await sendWaitTx(nft_transfer_tx, [pk], live);
