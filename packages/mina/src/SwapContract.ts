@@ -30,7 +30,7 @@ export class NFTforMina extends Struct({
   changeOwner(newOwner: PublicKey) {
     this.owner = newOwner;
   }
-  complete() {
+  completeTransaction() {
     this.isCompleted = Bool(true);
   }
   toFields(): Field[] {
@@ -51,7 +51,7 @@ export class NFTforNFT extends Struct({
   changeOwner(newOwner: PublicKey) {
     this.owner = newOwner;
   }
-  complete() {
+  completeTransaction() {
     this.isCompleted = Bool(true);
   }
   toFields(): Field[] {
@@ -89,10 +89,10 @@ export class supplyNFTforNFT extends Struct({
 
 export class SwapContract extends SmartContract {
   events = {
-    'updated-merkle-root': Field,
-    'updated-fee': UInt64,
-    'supplied-nft': Field,
     'sold-nft': Field,
+    'supplied-nft': Field,
+    'updated-fee': UInt64,
+    'updated-merkle-root': Field,
     'withdrawn-nft': Field,
   };
   @state(PublicKey) admin = State<PublicKey>();
@@ -155,9 +155,9 @@ export class SwapContract extends SmartContract {
     this.verifyAdminItemSignature(item, localAdminSignature);
     const { senderUpdate, sender } = this.verifyTreeLeaf(item, localKeyWitness);
     senderUpdate.send({ to: sender, amount: item.askAmount });
-    item.isCompleted.assertFalse('order is already completed');
+    item.isCompleted.assertEquals(false, 'order is already completed');
     item.changeOwner(sender);
-    item.complete();
+    item.completeTransaction();
     const itemHash: Field = item.hash();
     const [rootAfter] = localKeyWitness.computeRootAndKey(itemHash);
     this.updateRoot(rootAfter);
@@ -186,7 +186,7 @@ export class SwapContract extends SmartContract {
     NFTresponse.assertEquals(true, 'nfts not transferred');
     item.isCompleted.assertFalse('order is already completed');
     item.changeOwner(sender);
-    item.complete();
+    item.completeTransaction();
     const itemHash: Field = item.hash();
     const [rootAfter] = localKeyWitness.computeRootAndKey(itemHash);
     this.updateRoot(rootAfter);

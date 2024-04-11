@@ -22,11 +22,7 @@ export class NFTContract extends TokenContract {
   events = {
     'inited-max-supply': Field,
     'inited-nft': Field,
-    'inited-nft-description': Field,
-    'inited-nft-name': Field,
     'minted-nft': Field,
-    'minted-nft-description': Field,
-    'minted-nft-name': Field,
     'transferred-nft': Field,
     'updated-fee': UInt64,
     'updated-inited-amount': Field,
@@ -115,8 +111,6 @@ export class NFTContract extends TokenContract {
     const itemHash: Field = item.hash();
     const [rootAfter] = keyWitness.computeRootAndKey(itemHash);
     this.emitEvent('inited-nft', itemHash);
-    this.emitEvent('inited-nft-name', item.name);
-    this.emitEvent('inited-nft-description', item.description);
     this.emitEvent('updated-merkle-key', item.id);
     this.updateInitedAmount(initedAmount, 1);
     this.updateRoot(rootAfter);
@@ -138,8 +132,6 @@ export class NFTContract extends TokenContract {
       amount: UInt64.from(1_000_000_000),
     });
     this.emitEvent('minted-nft', item.hash());
-    this.emitEvent('minted-nft-name', item.name);
-    this.emitEvent('minted-nft-description', item.description);
     this.emitEvent('updated-merkle-key', item.id);
     this.incrementTotalSupply();
     this.updateRoot(rootAfter);
