@@ -12,13 +12,13 @@ import {
 } from 'o1js';
 
 import { createTxOptions } from './transactions.js';
-import { SwapContract } from '../SwapContract.js';
+import { SwapContract, supplyNFTforMina } from '../SwapContract.js';
 import { TxOptions, TxStatus } from './transactions.js';
 import { InitSwapState, createInitSwapState } from './Swap/InitSwap.js';
 
 export async function deploySwapContract(
   senderPK: PrivateKey,
-  zkAppPrivateKey: PrivateKey,
+  swapContractPrivateKey: PrivateKey,
   proofsEnabled: boolean = true,
   live: boolean = true
 ) {
@@ -26,15 +26,18 @@ export async function deploySwapContract(
   if (proofsEnabled) {
     ({ verificationKey } = await SwapContract.compile());
   }
-  const zkAppAddress: PublicKey = zkAppPrivateKey.toPublicKey();
+  const zkAppAddress: PublicKey = swapContractPrivateKey.toPublicKey();
   const zkAppInstance: SwapContract = new SwapContract(zkAppAddress);
-  const pubKey: PublicKey = senderPK.toPublicKey();
-  const deployTxnOptions = createTxOptions(pubKey, live);
+  const senderPub: PublicKey = senderPK.toPublicKey();
+  const deployTxnOptions = createTxOptions(senderPub, live);
   const deployTx: Mina.Transaction = await Mina.transaction(
     deployTxnOptions,
     () => {
-      AccountUpdate.fundNewAccount(pubKey);
-      zkAppInstance.deploy({ verificationKey, zkappKey: zkAppPrivateKey });
+      AccountUpdate.fundNewAccount(senderPub);
+      zkAppInstance.deploy({
+        verificationKey,
+        zkappKey: swapContractPrivateKey,
+      });
     }
   );
   const txStatus = await sendWaitTx(deployTx, [senderPK], live);
@@ -43,36 +46,51 @@ export async function deploySwapContract(
 
 export async function initSwapContractRoot(
   adminPK: PrivateKey,
-  userPK: PrivateKey,
+  senderPK: PrivateKey,
   merkleMap: MerkleMap,
   zkAppInstance: SwapContract,
   live: boolean = false
 ): Promise<TxStatus> {
-  const userPub: PublicKey = userPK.toPublicKey();
-  const InitSwapStateStruct: InitSwapState = createInitSwapState(merkleMap);
-  const AdminSignature: Signature = Signature.create(
+  const senderPub: PublicKey = senderPK.toPublicKey();
+  const initSwapStateStruct: InitSwapState = createInitSwapState(merkleMap);
+  const adminSignature: Signature = Signature.create(
     adminPK,
-    InitSwapStateStruct.toFields()
+    initSwapStateStruct.toFields()
   );
-  const txOptions: TxOptions = createTxOptions(userPub, live);
-  const init_tx: Transaction = await Mina.transaction(txOptions, () => {
-    zkAppInstance.initRoot(InitSwapStateStruct, AdminSignature);
+  const txOptions: TxOptions = createTxOptions(senderPub, live);
+  const initTx: Transaction = await Mina.transaction(txOptions, () => {
+    zkAppInstance.initRoot(initSwapStateStruct, adminSignature);
   });
-  const txStatus: TxStatus = await sendWaitTx(init_tx, [userPK], live);
+  const txStatus: TxStatus = await sendWaitTx(initTx, [senderPK], live);
   return txStatus;
 }
 
 export async function setSwapContractFee(
-  adminPk: PrivateKey,
-  contract: SwapContract,
+  adminPK: PrivateKey,
+  swapContract: SwapContract,
   fee: UInt64 = UInt64.one,
   live: boolean = false
 ): Promise<TxStatus> {
-  const deployerAddress: PublicKey = adminPk.toPublicKey();
+  const deployerAddress: PublicKey = adminPK.toPublicKey();
   const txn: Transaction = await Mina.transaction(deployerAddress, () => {
-    contract.setFee(fee);
+    swapContract.setFee(fee);
   });
-  const txStatus: TxStatus = await sendWaitTx(txn, [adminPk], live);
+  const txStatus: TxStatus = await sendWaitTx(txn, [adminPK], live);
+  return txStatus;
+}
+
+export async function supplyNFTMinaSwapContract(
+  adminPK: PrivateKey,
+  supplyNFTforMina: supplyNFTforMina,
+  swapContract: SwapContract,
+  live: boolean = false
+): Promise<TxStatus> {
+  const deployerAddress: PublicKey = adminPK.toPublicKey();
+
+  const txn: Transaction = await Mina.transaction(deployerAddress, () => {
+    swapContract.supplyNFTMina(supplyNFTforMina);
+  });
+  const txStatus: TxStatus = await sendWaitTx(txn, [adminPK], live);
   return txStatus;
 }
 

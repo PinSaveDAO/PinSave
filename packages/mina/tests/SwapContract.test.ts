@@ -6,7 +6,14 @@ import {
   deploySwapContract,
   initSwapContractRoot,
   setSwapContractFee,
+  supplyNFTMinaSwapContract,
 } from '../src/components/transactionsSwap.js';
+import {
+  deployNFTContract,
+  initNFTContractRoot,
+} from '../src/components/transactions.js';
+import { NFTContract } from '../src/NFTsMapContract.js';
+import { generateDummyCollectionWithMap } from '../src/components/NFT/dummy.js';
 
 const proofsEnabled: boolean = false;
 const enforceTransactionLimits: boolean = true;
@@ -19,23 +26,38 @@ describe('PinSave NFTs on Local Blockchain', () => {
     enforceTransactionLimits
   );
 
-  const { privateKey: pkAdmin, publicKey: pubKeyAdmin } = testAccounts[0];
-  const { privateKey: pkSender, publicKey: senderPub } = testAccounts[1];
-  const { privateKey: pk2, publicKey: pubKey2 } = testAccounts[2];
+  const { privateKey: pkSwapAdmin, publicKey: pubSwapAdmin } = testAccounts[0];
+  const { privateKey: pkNFTAdmin, publicKey: pubNFTAdmin } = testAccounts[1];
+  const { privateKey: pkSender, publicKey: senderPub } = testAccounts[2];
+  const { privateKey: pk2, publicKey: pubKey2 } = testAccounts[3];
 
-  const map: MerkleMap = new MerkleMap();
+  const swapContractMap: MerkleMap = new MerkleMap();
 
   const swapContractPrivateKey: PrivateKey = PrivateKey.random();
   const swapContractPublicKey: PublicKey = swapContractPrivateKey.toPublicKey();
   const swapContract: SwapContract = new SwapContract(swapContractPublicKey);
 
-  it('deploys nft contract ', async () => {
-    await setSwapContractFee(pkAdmin, swapContract);
+  const nftContractPrivateKey: PrivateKey = PrivateKey.random();
+  const nftContractPub: PublicKey = nftContractPrivateKey.toPublicKey();
+  const nftContract: NFTContract = new NFTContract(nftContractPub);
+
+  const { nftArray: nftArray, map: nftContractMap } =
+    generateDummyCollectionWithMap(pubNFTAdmin);
+
+  it('deploys nft contract', async () => {
+    await deployNFTContract(pkNFTAdmin, nftContractPrivateKey);
+    await initNFTContractRoot(
+      pkNFTAdmin,
+      pkNFTAdmin,
+      nftContractMap,
+      nftContract,
+      nftArray.length
+    );
   });
 
   it('deploys swap contract', async () => {
     await deploySwapContract(
-      pkAdmin,
+      pkSwapAdmin,
       swapContractPrivateKey,
       proofsEnabled,
       live
@@ -43,12 +65,24 @@ describe('PinSave NFTs on Local Blockchain', () => {
   });
 
   it('inits swap contract', async () => {
-    await initSwapContractRoot(pkAdmin, pkSender, map, swapContract, live);
+    await initSwapContractRoot(
+      pkSwapAdmin,
+      pkSender,
+      swapContractMap,
+      swapContract,
+      live
+    );
   });
 
   it('fails to init app root: it already exists', async () => {
     try {
-      await initSwapContractRoot(pkAdmin, pkSender, map, swapContract, live);
+      await initSwapContractRoot(
+        pkSwapAdmin,
+        pkSender,
+        swapContractMap,
+        swapContract,
+        live
+      );
     } catch (error) {
       const errorString = String(error);
       expect(errorString.substring(0, 23)).toBe('Error: root initialized');
@@ -64,6 +98,10 @@ describe('PinSave NFTs on Local Blockchain', () => {
   });
 
   it('updated fee', async () => {
-    await setSwapContractFee(pkAdmin, swapContract);
+    await setSwapContractFee(pkSwapAdmin, swapContract);
+  });
+
+  it('supplies nft for mina', async () => {
+    //await supplyNFTMinaSwapContract(pkNFTAdmin, )
   });
 });

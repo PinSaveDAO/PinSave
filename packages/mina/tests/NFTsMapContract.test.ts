@@ -8,7 +8,7 @@ import {
 import { NFT, NFTMetadata, createNFT } from '../src/components/NFT/NFT.js';
 import {
   deployNFTContract,
-  initAppRoot,
+  initNFTContractRoot,
   initRootWithCompile,
   setNFTContractFee,
   transferNFT,
@@ -43,7 +43,6 @@ describe('PinSave NFTs on Local Blockchain', () => {
   const { nftArray: nftArray } = generateDummyCollectionMap(pubKeyAdmin, map);
 
   const map256: MerkleMap = new MerkleMap();
-
   const { nftArray: nftArray256 } = generateDummyCollectionMap(
     pubKeyAdmin,
     map256,
@@ -63,7 +62,7 @@ describe('PinSave NFTs on Local Blockchain', () => {
 
   it('fails to init app root: over max supply', async () => {
     try {
-      await initAppRoot(
+      await initNFTContractRoot(
         pkAdmin,
         pkSender,
         map256,
@@ -78,7 +77,7 @@ describe('PinSave NFTs on Local Blockchain', () => {
   });
 
   it('inits app root', async () => {
-    await initAppRoot(
+    await initNFTContractRoot(
       pkAdmin,
       pkSender,
       map,

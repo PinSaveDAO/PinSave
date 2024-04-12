@@ -118,9 +118,11 @@ export class SwapContract extends SmartContract {
   ): Bool {
     const admin: PublicKey = this.admin.getAndRequireEquals();
     thisContractAdminSignature.verify(admin, initSwapState.toFields());
+
     const root: Field = this.root.getAndRequireEquals();
     const emptyMerkleMapRoot: Field = new MerkleMap().getRoot();
     root.assertEquals(emptyMerkleMapRoot, 'root initialized');
+
     this.updateFee(initSwapState.feeAmount);
     this.updateRoot(initSwapState.initialRoot);
     return Bool(true);
@@ -149,12 +151,16 @@ export class SwapContract extends SmartContract {
   ): Field {
     this.verifyAdminSignatureNFTSaleStruct(item, localAdminSignature);
     const { senderUpdate, sender } = this.verifyTreeLeaf(item, localKeyWitness);
+
     senderUpdate.send({ to: sender, amount: item.askAmount });
+
     item.isCompleted.assertEquals(false, 'order is already completed');
     item.changeOwner(sender);
     item.completeTransaction();
+
     const itemHash: Field = item.hash();
     const [rootAfter] = localKeyWitness.computeRootAndKey(itemHash);
+
     this.updateRoot(rootAfter);
     this.emitEvent('sold-nft', itemHash);
     return itemHash;
@@ -229,6 +235,7 @@ export class SwapContract extends SmartContract {
       supplyNFT.localAdminSignature
     );
     this.verifyTreeLeaf(supplyNFT.item, supplyNFT.localKeyWitness);
+
     const contract: NFTContract = new NFTContract(supplyNFT.item.contract);
     const NFTresponse: Bool = contract.transferNFT(
       supplyNFT.item.nft,
@@ -237,12 +244,12 @@ export class SwapContract extends SmartContract {
       supplyNFT.adminSignature
     );
     NFTresponse.assertEquals(true, 'nfts not transferred');
+
     supplyNFT.item.nft.changeOwner(this.address);
     const itemHash: Field = supplyNFT.item.hash();
     const [rootAfter] = supplyNFT.localKeyWitness.computeRootAndKey(itemHash);
 
     this.emitEvent('supplied-nft', itemHash);
-
     this.updateRoot(rootAfter);
     return itemHash;
   }
@@ -256,6 +263,7 @@ export class SwapContract extends SmartContract {
   ): Field {
     this.verifyAdminSignatureNFTSaleStruct(item, localAdminSignature);
     const { sender: sender } = this.verifyTreeLeaf(item, localKeyWitness);
+
     const contract: NFTContract = new NFTContract(item.contract);
     const NFTresponse: Bool = contract.transferNFT(
       item.nft,
@@ -264,12 +272,12 @@ export class SwapContract extends SmartContract {
       adminSignature
     );
     NFTresponse.assertEquals(true, 'nfts not transferred');
+
     item.nft.changeOwner(sender);
     const itemHash: Field = item.hash();
     const [rootAfter] = localKeyWitness.computeRootAndKey(itemHash);
 
     this.emitEvent('withdrawn-nft', itemHash);
-
     this.updateRoot(rootAfter);
     return itemHash;
   }
