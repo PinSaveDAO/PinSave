@@ -19,17 +19,17 @@ import { getTokenAddressBalance } from './TokenBalances.js';
 import { NFTContract } from '../NFTsMapContract.js';
 import { InitState, createInitState } from './NFT/InitState.js';
 
-export async function setFee(
-  deployerPk: PrivateKey,
+export async function setNFTContractFee(
+  adminPk: PrivateKey,
   contract: NFTContract,
   fee: UInt64 = UInt64.one,
   live: boolean = false
 ): Promise<TxStatus> {
-  const deployerAddress: PublicKey = deployerPk.toPublicKey();
+  const deployerAddress: PublicKey = adminPk.toPublicKey();
   const txn: Transaction = await Mina.transaction(deployerAddress, () => {
     contract.setFee(fee);
   });
-  const txStatus: TxStatus = await sendWaitTx(txn, [deployerPk], live);
+  const txStatus: TxStatus = await sendWaitTx(txn, [adminPk], live);
   return txStatus;
 }
 

@@ -55,10 +55,13 @@ export {
   setMetadatasToVercel,
   setVercelNFT,
   setNFTsToVercel,
-  mintVercelNFT,
-  mintVercelMetadata,
   deleteVercelKey,
 } from './components/Vercel/vercel.js';
+
+export {
+  mintVercelNFT,
+  mintVercelMetadata,
+} from './components/Vercel/VercelMint.js';
 
 export {
   NFTReducedAA,
@@ -68,9 +71,13 @@ export {
   getVercelMetadataAAAllKeys,
   setVercelMetadataAA,
   setVercelNFTAA,
-  mintVercelNFTAA,
-  mintVercelMetadataAA,
 } from './components/Vercel/VercelAA.js';
+
+export {
+  mintVercelAA,
+  getMintVercelAA,
+  getMintVercelAAAllKeys,
+} from './components/Vercel/VercelAAMint.js';
 
 export {
   NFTReducedPending,
@@ -79,11 +86,7 @@ export {
   getVercelNFTPending,
   setVercelMetadataPending,
   setVercelNFTPending,
-  mintVercelNFTPending,
-  mintVercelMetadataPending,
   getVercelMetadataPendingAll,
-  getVercelMetadataPendingAllKeys,
-  getVercelNFTPendingAll,
   getVercelNFTPendingAllKeys,
 } from './components/Vercel/VercelPending.js';
 

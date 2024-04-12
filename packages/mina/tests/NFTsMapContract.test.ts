@@ -10,7 +10,7 @@ import {
   deployApp,
   initAppRoot,
   initRootWithCompile,
-  setFee,
+  setNFTContractFee,
   transferNFT,
   mintNFTwithMap,
   initNFT,
@@ -57,7 +57,7 @@ describe('PinSave NFTs on Local Blockchain', () => {
     await deployApp(pkAdmin, zkAppPrivateKey, proofsEnabled, live);
   });
 
-  it('init app root: over max supply', async () => {
+  it('fails to init app root: over max supply', async () => {
     try {
       await initAppRoot(
         pkAdmin,
@@ -73,7 +73,7 @@ describe('PinSave NFTs on Local Blockchain', () => {
     }
   });
 
-  it('init app root', async () => {
+  it('inits app root', async () => {
     await initAppRoot(
       pkAdmin,
       pkSender,
@@ -84,7 +84,7 @@ describe('PinSave NFTs on Local Blockchain', () => {
     );
   });
 
-  it('failed sucessfully to initialize App root again which already exists', async () => {
+  it('fails to init app root: it already exists', async () => {
     try {
       await initRootWithCompile(
         pkAdmin,
@@ -101,16 +101,16 @@ describe('PinSave NFTs on Local Blockchain', () => {
     }
   });
 
-  it('failed sucessfully to initialize fee; not admin', async () => {
+  it('fails to update fee: not admin', async () => {
     try {
-      await setFee(pk2, zkAppInstance);
+      await setNFTContractFee(pk2, zkAppInstance);
     } catch (error) {
       expect(String(error).substring(0, 23)).toBe('Error: sender not admin');
     }
   });
 
-  it('sucessfully initialized fee', async () => {
-    await setFee(pkAdmin, zkAppInstance);
+  it('sucessfully updated fee', async () => {
+    await setNFTContractFee(pkAdmin, zkAppInstance);
   });
 
   it('minted NFT', async () => {
@@ -157,7 +157,7 @@ describe('PinSave NFTs on Local Blockchain', () => {
     );
   });
 
-  it('failed sucessfully to initialize NFT which already exists', async () => {
+  it('failed to initialize NFT: already exists', async () => {
     const nft = generateDummyNFTMetadata(3, pubKeyAdmin);
     const nftStruct = createNFT(nft);
 
@@ -177,7 +177,7 @@ describe('PinSave NFTs on Local Blockchain', () => {
     }
   });
 
-  it('init NFT: not admin user', async () => {
+  it('inits NFT', async () => {
     const balance = getMinaBalance(pubKey2);
     expect(balance).toEqual(1000000000000n);
     const nftNew = generateDummyNFTMetadata(4, pubKey2);
@@ -194,7 +194,7 @@ describe('PinSave NFTs on Local Blockchain', () => {
     );
   });
 
-  it('initializing nft fails successfully. Not correct nft id', async () => {
+  it('fails to init NFT: not correct nft id', async () => {
     const nftNew = generateDummyNFTMetadata(10, pubKey2);
     const nftStructNew = createNFT(nftNew);
     try {
@@ -215,7 +215,7 @@ describe('PinSave NFTs on Local Blockchain', () => {
     }
   });
 
-  it('transfer nft: from admin to new User', async () => {
+  it('transfers nft: from admin to a new user', async () => {
     const nft = generateDummyNFTMetadata(3, pubKeyAdmin);
     const nftStruct = createNFT(nft);
     await transferNFT(
@@ -229,7 +229,7 @@ describe('PinSave NFTs on Local Blockchain', () => {
     );
   });
 
-  it('Mint and transfer nft: from user to new User', async () => {
+  it('mints and transfers nft: from user to a new user', async () => {
     const nftNew = generateDummyNFTMetadata(4, pubKey2);
     const nftStruct = createNFT(nftNew);
     await mintNFTwithMap(
@@ -253,7 +253,7 @@ describe('PinSave NFTs on Local Blockchain', () => {
     );
   });
 
-  it('transfer fails', async () => {
+  it('transfer fails: not item owner', async () => {
     const nftNew = generateDummyNFTMetadata(4, pubKey3);
     const nftStruct = createNFT(nftNew);
     nftStruct.mint();
