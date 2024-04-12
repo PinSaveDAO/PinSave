@@ -63,20 +63,20 @@ export class NFTforNFT extends Struct({
   }
 }
 
-export class supplyNFTforMina extends Struct({
+export class SupplyNFTforMina extends Struct({
   item: NFTforMina,
-  localKeyWitness: MerkleMapWitness,
-  localAdminSignature: Signature,
+  swapContractKeyWitness: MerkleMapWitness,
+  swapContractAdminSignature: Signature,
   nftKeyWitness: MerkleMapWitness,
-  adminSignature: Signature,
+  nftContractAdminSignature: Signature,
 }) {}
 
-export class supplyNFTforNFT extends Struct({
+export class SupplyNFTforNFT extends Struct({
   item: NFTforNFT,
-  localKeyWitness: MerkleMapWitness,
-  localAdminSignature: Signature,
+  swapContractKeyWitness: MerkleMapWitness,
+  swapContractAdminSignature: Signature,
   nftKeyWitness: MerkleMapWitness,
-  adminSignature: Signature,
+  nftContractAdminSignature: Signature,
 }) {}
 
 export class SwapContract extends SmartContract {
@@ -134,12 +134,12 @@ export class SwapContract extends SmartContract {
     return Bool(true);
   }
 
-  @method public supplyNFTMina(supplyNFT: supplyNFTforMina): Field {
+  @method public supplyNFTMina(supplyNFT: SupplyNFTforMina): Field {
     const itemHash: Field = this.supplyNFT(supplyNFT);
     return itemHash;
   }
 
-  @method public supplyNFTforNFT(supplyNFT: supplyNFTforNFT): Field {
+  @method public supplyNFTforNFT(supplyNFT: SupplyNFTforNFT): Field {
     const itemHash: Field = this.supplyNFT(supplyNFT);
     return itemHash;
   }
@@ -229,25 +229,26 @@ export class SwapContract extends SmartContract {
     return itemHash;
   }
 
-  private supplyNFT(supplyNFT: supplyNFTforMina | supplyNFTforNFT): Field {
+  private supplyNFT(supplyNFT: SupplyNFTforMina | SupplyNFTforNFT): Field {
     this.verifyAdminSignatureNFTSaleStruct(
       supplyNFT.item,
-      supplyNFT.localAdminSignature
+      supplyNFT.swapContractAdminSignature
     );
-    this.verifyTreeLeaf(supplyNFT.item, supplyNFT.localKeyWitness);
+    this.verifyTreeLeaf(supplyNFT.item, supplyNFT.swapContractKeyWitness);
 
     const contract: NFTContract = new NFTContract(supplyNFT.item.contract);
     const NFTresponse: Bool = contract.transferNFT(
       supplyNFT.item.nft,
       this.address,
       supplyNFT.nftKeyWitness,
-      supplyNFT.adminSignature
+      supplyNFT.nftContractAdminSignature
     );
     NFTresponse.assertEquals(true, 'nfts not transferred');
 
     supplyNFT.item.nft.changeOwner(this.address);
     const itemHash: Field = supplyNFT.item.hash();
-    const [rootAfter] = supplyNFT.localKeyWitness.computeRootAndKey(itemHash);
+    const [rootAfter] =
+      supplyNFT.swapContractKeyWitness.computeRootAndKey(itemHash);
 
     this.emitEvent('supplied-nft', itemHash);
     this.updateRoot(rootAfter);
