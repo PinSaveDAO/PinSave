@@ -12,8 +12,9 @@ import {
 } from 'o1js';
 
 import { createTxOptions, TxOptions, TxStatus } from './transactions.js';
-import { SwapContract, SupplyNFTforMina } from '../SwapContract.js';
+import { SwapContract } from '../SwapContract.js';
 import { InitSwapState, createInitSwapState } from './Swap/InitSwap.js';
+import { SupplyNFTforMina, SupplyNFTforNFT } from './Swap/SupplyNFT.js';
 
 export async function deploySwapContract(
   senderPK: PrivateKey,
