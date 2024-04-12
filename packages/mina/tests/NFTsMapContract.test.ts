@@ -1,13 +1,13 @@
-import { MerkleMap, PrivateKey } from 'o1js';
+import { MerkleMap, PrivateKey, PublicKey } from 'o1js';
 
 import { startLocalBlockchainClient } from '../src/components/utilities/client.js';
 import {
   generateDummyCollectionMap,
   generateDummyNFTMetadata,
 } from '../src/components/NFT/dummy.js';
-import { createNFT } from '../src/components/NFT/NFT.js';
+import { NFT, NFTMetadata, createNFT } from '../src/components/NFT/NFT.js';
 import {
-  deployApp,
+  deployNFTContract,
   initAppRoot,
   initRootWithCompile,
   setNFTContractFee,
@@ -35,11 +35,10 @@ describe('PinSave NFTs on Local Blockchain', () => {
   const { publicKey: pubKey3 } = testAccounts[3];
 
   const map: MerkleMap = new MerkleMap();
-  const zkAppPrivateKey: PrivateKey = PrivateKey.random();
 
-  const zkAppInstance: NFTContract = new NFTContract(
-    zkAppPrivateKey.toPublicKey()
-  );
+  const nftContractPrivateKey: PrivateKey = PrivateKey.random();
+  const nftContractPub: PublicKey = nftContractPrivateKey.toPublicKey();
+  const nftContract: NFTContract = new NFTContract(nftContractPub);
 
   const { nftArray: nftArray } = generateDummyCollectionMap(pubKeyAdmin, map);
 
@@ -54,7 +53,12 @@ describe('PinSave NFTs on Local Blockchain', () => {
   const compile: boolean = false;
 
   it('deploys app', async () => {
-    await deployApp(pkAdmin, zkAppPrivateKey, proofsEnabled, live);
+    await deployNFTContract(
+      pkAdmin,
+      nftContractPrivateKey,
+      proofsEnabled,
+      live
+    );
   });
 
   it('fails to init app root: over max supply', async () => {
@@ -63,12 +67,12 @@ describe('PinSave NFTs on Local Blockchain', () => {
         pkAdmin,
         pkSender,
         map256,
-        zkAppInstance,
+        nftContract,
         nftArray256.length,
         live
       );
     } catch (error) {
-      const errorString = String(error);
+      const errorString: string = String(error);
       expect(errorString.substring(0, 25)).toBe('Error: max supply reached');
     }
   });
@@ -78,7 +82,7 @@ describe('PinSave NFTs on Local Blockchain', () => {
       pkAdmin,
       pkSender,
       map,
-      zkAppInstance,
+      nftContract,
       nftArray.length,
       live
     );
@@ -90,27 +94,28 @@ describe('PinSave NFTs on Local Blockchain', () => {
         pkAdmin,
         pkSender,
         map,
-        zkAppInstance,
+        nftContract,
         nftArray.length,
         compile,
         live
       );
     } catch (error) {
-      const errorString = String(error);
+      const errorString: string = String(error);
       expect(errorString.substring(0, 23)).toBe('Error: root initialized');
     }
   });
 
   it('fails to update fee: not admin', async () => {
     try {
-      await setNFTContractFee(pk2, zkAppInstance);
+      await setNFTContractFee(pk2, nftContract);
     } catch (error) {
-      expect(String(error).substring(0, 23)).toBe('Error: sender not admin');
+      const errorString: string = String(error);
+      expect(errorString.substring(0, 23)).toBe('Error: sender not admin');
     }
   });
 
   it('sucessfully updated fee', async () => {
-    await setNFTContractFee(pkAdmin, zkAppInstance);
+    await setNFTContractFee(pkAdmin, nftContract);
   });
 
   it('minted NFT', async () => {
@@ -118,7 +123,7 @@ describe('PinSave NFTs on Local Blockchain', () => {
       pkAdmin,
       pkAdmin,
       nftArray[0],
-      zkAppInstance,
+      nftContract,
       map,
       compile,
       live
@@ -131,78 +136,62 @@ describe('PinSave NFTs on Local Blockchain', () => {
         pkAdmin,
         pkAdmin,
         nftArray[0],
-        zkAppInstance,
+        nftContract,
         map,
         compile,
         live
       );
     } catch (error) {
-      const data = String(error).substring(0, 21);
-      expect(data).toBe('Error: Already Minted');
+      const errorMessage: string = String(error).substring(0, 21);
+      expect(errorMessage).toBe('Error: Already Minted');
     }
   });
 
   it('inited NFT', async () => {
-    const nft = generateDummyNFTMetadata(3, pubKeyAdmin);
-    const nftStruct = createNFT(nft);
+    const nft: NFTMetadata = generateDummyNFTMetadata(3, pubKeyAdmin);
+    const nftStruct: NFT = createNFT(nft);
 
-    await initNFT(
-      pkAdmin,
-      pkAdmin,
-      nftStruct,
-      zkAppInstance,
-      map,
-      compile,
-      live
-    );
+    await initNFT(pkAdmin, pkAdmin, nftStruct, nftContract, map, compile, live);
   });
 
   it('failed to initialize NFT: already exists', async () => {
-    const nft = generateDummyNFTMetadata(3, pubKeyAdmin);
-    const nftStruct = createNFT(nft);
+    const nft: NFTMetadata = generateDummyNFTMetadata(3, pubKeyAdmin);
+    const nftStruct: NFT = createNFT(nft);
 
     try {
       await initNFT(
         pkAdmin,
         pkAdmin,
         nftStruct,
-        zkAppInstance,
+        nftContract,
         map,
         compile,
         live
       );
     } catch (error) {
-      const stringError = String(error);
+      const stringError: string = String(error);
       expect(stringError.substring(0, 26)).toBe('Error: does not match root');
     }
   });
 
   it('inits NFT', async () => {
-    const balance = getMinaBalance(pubKey2);
+    const balance: bigint = getMinaBalance(pubKey2);
     expect(balance).toEqual(1000000000000n);
-    const nftNew = generateDummyNFTMetadata(4, pubKey2);
-    const nftStructNew = createNFT(nftNew);
+    const nftNew: NFTMetadata = generateDummyNFTMetadata(4, pubKey2);
+    const nftStructNew: NFT = createNFT(nftNew);
 
-    await initNFT(
-      pkAdmin,
-      pk2,
-      nftStructNew,
-      zkAppInstance,
-      map,
-      compile,
-      live
-    );
+    await initNFT(pkAdmin, pk2, nftStructNew, nftContract, map, compile, live);
   });
 
   it('fails to init NFT: not correct nft id', async () => {
-    const nftNew = generateDummyNFTMetadata(10, pubKey2);
-    const nftStructNew = createNFT(nftNew);
+    const nftNew: NFTMetadata = generateDummyNFTMetadata(10, pubKey2);
+    const nftStructNew: NFT = createNFT(nftNew);
     try {
       await initNFT(
         pkAdmin,
         pk2,
         nftStructNew,
-        zkAppInstance,
+        nftContract,
         map,
         compile,
         live
@@ -216,46 +205,38 @@ describe('PinSave NFTs on Local Blockchain', () => {
   });
 
   it('transfers nft: from admin to a new user', async () => {
-    const nft = generateDummyNFTMetadata(3, pubKeyAdmin);
-    const nftStruct = createNFT(nft);
+    const nft: NFTMetadata = generateDummyNFTMetadata(3, pubKeyAdmin);
+    const nftStruct: NFT = createNFT(nft);
     await transferNFT(
       pkAdmin,
       pkAdmin,
       pubKey2,
       nftStruct,
-      zkAppInstance,
+      nftContract,
       map,
       live
     );
   });
 
   it('mints and transfers nft: from user to a new user', async () => {
-    const nftNew = generateDummyNFTMetadata(4, pubKey2);
-    const nftStruct = createNFT(nftNew);
+    const nftNew: NFTMetadata = generateDummyNFTMetadata(4, pubKey2);
+    const nftStruct: NFT = createNFT(nftNew);
     await mintNFTwithMap(
       pkAdmin,
       pk2,
       nftStruct,
-      zkAppInstance,
+      nftContract,
       map,
       compile,
       live
     );
 
-    await transferNFT(
-      pkAdmin,
-      pk2,
-      pubKey3,
-      nftStruct,
-      zkAppInstance,
-      map,
-      live
-    );
+    await transferNFT(pkAdmin, pk2, pubKey3, nftStruct, nftContract, map, live);
   });
 
   it('transfer fails: not item owner', async () => {
-    const nftNew = generateDummyNFTMetadata(4, pubKey3);
-    const nftStruct = createNFT(nftNew);
+    const nftNew: NFTMetadata = generateDummyNFTMetadata(4, pubKey3);
+    const nftStruct: NFT = createNFT(nftNew);
     nftStruct.mint();
 
     try {
@@ -264,12 +245,12 @@ describe('PinSave NFTs on Local Blockchain', () => {
         pkAdmin,
         pubKey2,
         nftStruct,
-        zkAppInstance,
+        nftContract,
         map,
         live
       );
     } catch (error) {
-      const messageError = String(error).substring(0, 28);
+      const messageError: string = String(error).substring(0, 28);
       expect(messageError).toBe('Error: sender not item owner');
     }
   });

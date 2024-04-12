@@ -1,4 +1,4 @@
-import { MerkleMap, PrivateKey } from 'o1js';
+import { MerkleMap, PrivateKey, PublicKey } from 'o1js';
 
 import { startLocalBlockchainClient } from '../src/components/utilities/client.js';
 import { SwapContract } from '../src/SwapContract.js';
@@ -22,28 +22,33 @@ describe('PinSave NFTs on Local Blockchain', () => {
   const { privateKey: pkAdmin, publicKey: pubKeyAdmin } = testAccounts[0];
   const { privateKey: pkSender, publicKey: senderPub } = testAccounts[1];
   const { privateKey: pk2, publicKey: pubKey2 } = testAccounts[2];
-  const { publicKey: pubKey3 } = testAccounts[3];
 
   const map: MerkleMap = new MerkleMap();
-  const zkAppPrivateKey: PrivateKey = PrivateKey.random();
 
-  const zkAppInstance: SwapContract = new SwapContract(
-    zkAppPrivateKey.toPublicKey()
-  );
+  const swapContractPrivateKey: PrivateKey = PrivateKey.random();
+  const swapContractPublicKey: PublicKey = swapContractPrivateKey.toPublicKey();
+  const swapContract: SwapContract = new SwapContract(swapContractPublicKey);
 
-  const compile: boolean = false;
+  it('deploys nft contract ', async () => {
+    await setSwapContractFee(pkAdmin, swapContract);
+  });
 
   it('deploys swap contract', async () => {
-    await deploySwapContract(pkAdmin, zkAppPrivateKey, proofsEnabled, live);
+    await deploySwapContract(
+      pkAdmin,
+      swapContractPrivateKey,
+      proofsEnabled,
+      live
+    );
   });
 
   it('inits swap contract', async () => {
-    await initSwapContractRoot(pkAdmin, pkSender, map, zkAppInstance, live);
+    await initSwapContractRoot(pkAdmin, pkSender, map, swapContract, live);
   });
 
   it('fails to init app root: it already exists', async () => {
     try {
-      await initSwapContractRoot(pkAdmin, pkSender, map, zkAppInstance, live);
+      await initSwapContractRoot(pkAdmin, pkSender, map, swapContract, live);
     } catch (error) {
       const errorString = String(error);
       expect(errorString.substring(0, 23)).toBe('Error: root initialized');
@@ -52,13 +57,13 @@ describe('PinSave NFTs on Local Blockchain', () => {
 
   it('fails to initialize fee: not admin', async () => {
     try {
-      await setSwapContractFee(pk2, zkAppInstance);
+      await setSwapContractFee(pk2, swapContract);
     } catch (error) {
       expect(String(error).substring(0, 23)).toBe('Error: sender not admin');
     }
   });
 
-  it('sucessfully updated fee', async () => {
-    await setSwapContractFee(pkAdmin, zkAppInstance);
+  it('updated fee', async () => {
+    await setSwapContractFee(pkAdmin, swapContract);
   });
 });

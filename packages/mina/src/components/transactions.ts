@@ -266,7 +266,7 @@ export async function initAppRoot(
   return txStatus;
 }
 
-export async function deployApp(
+export async function deployNFTContract(
   senderPK: PrivateKey,
   zkAppPrivateKey: PrivateKey,
   proofsEnabled: boolean = true,
