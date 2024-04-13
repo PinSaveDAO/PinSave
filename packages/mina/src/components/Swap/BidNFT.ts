@@ -5,7 +5,7 @@ import { NFT } from '../NFT/NFT';
 export class NFTforMina extends Struct({
   nft: NFT,
   owner: PublicKey,
-  contract: PublicKey,
+  nftContractAddress: PublicKey,
   askAmount: UInt64,
   isCompleted: Bool,
 }) {
@@ -26,7 +26,7 @@ export class NFTforMina extends Struct({
 export class NFTforNFT extends Struct({
   nft: NFT,
   owner: PublicKey,
-  contract: PublicKey,
+  nftContractAddress: PublicKey,
   askNFTId: Field,
   isCompleted: Bool,
 }) {

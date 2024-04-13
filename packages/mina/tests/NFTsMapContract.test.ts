@@ -233,7 +233,7 @@ describe('PinSave NFTs on Local Blockchain', () => {
     await transferNFT(pkAdmin, pk2, pubKey3, nftStruct, nftContract, map, live);
   });
 
-  it('transfer fails: not item owner', async () => {
+  it('transfer fails: not nft owner', async () => {
     const nftNew: NFTMetadata = generateDummyNFTMetadata(4, pubKey3);
     const nftStruct: NFT = createNFT(nftNew);
     nftStruct.mint();
@@ -249,8 +249,8 @@ describe('PinSave NFTs on Local Blockchain', () => {
         live
       );
     } catch (error) {
-      const messageError: string = String(error).substring(0, 28);
-      expect(messageError).toBe('Error: sender not item owner');
+      const messageError: string = String(error).substring(0, 27);
+      expect(messageError).toBe('Error: sender not nft owner');
     }
   });
 });

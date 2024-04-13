@@ -92,11 +92,11 @@ export class NFTContract extends TokenContract {
   }
 
   @method public initNFT(
-    item: NFT,
+    nft: NFT,
     keyWitness: MerkleMapWitness,
     adminSignature: Signature
   ): Bool {
-    this.verifyAdminItemSignature(item, adminSignature);
+    this.verifyAdminNFTSignature(nft, adminSignature);
     const { senderUpdate: senderUpdate } = this.verifySenderSignature();
     const initedAmount: Field = this.totalInited.getAndRequireEquals();
     const maxSupply: Field = this.maxSupply.getAndRequireEquals();
@@ -105,57 +105,57 @@ export class NFTContract extends TokenContract {
     const initialRoot: Field = this.root.getAndRequireEquals();
     const [rootBefore, key] = keyWitness.computeRootAndKey(Field(0));
     rootBefore.assertEquals(initialRoot, 'does not match root');
-    key.assertEquals(item.id, 'keyWitness not matches nft id');
+    key.assertEquals(nft.id, 'keyWitness not matches nft id');
     key.assertEquals(initedAmount, 'keyWitness not matches order');
     senderUpdate.send({ to: this, amount: fee });
-    const itemHash: Field = item.hash();
-    const [rootAfter] = keyWitness.computeRootAndKey(itemHash);
-    this.emitEvent('inited-nft', itemHash);
-    this.emitEvent('updated-merkle-key', item.id);
+    const nftHash: Field = nft.hash();
+    const [rootAfter] = keyWitness.computeRootAndKey(nftHash);
+    this.emitEvent('inited-nft', nftHash);
+    this.emitEvent('updated-merkle-key', nft.id);
     this.updateInitedAmount(initedAmount, 1);
     this.updateRoot(rootAfter);
     return Bool(true);
   }
 
   @method public mintNFT(
-    item: NFT,
+    nft: NFT,
     keyWitness: MerkleMapWitness,
     adminSignature: Signature
   ): Bool {
-    this.verifyAdminItemSignature(item, adminSignature);
-    this.verifyTreeLeaf(item, keyWitness);
-    item.isMinted.assertEquals(0, 'Already Minted');
-    item.mint();
-    const [rootAfter] = keyWitness.computeRootAndKey(item.hash());
+    this.verifyAdminNFTSignature(nft, adminSignature);
+    this.verifyTreeLeaf(nft, keyWitness);
+    nft.isMinted.assertEquals(0, 'Already Minted');
+    nft.mint();
+    const [rootAfter] = keyWitness.computeRootAndKey(nft.hash());
     this.internal.mint({
-      address: item.owner,
+      address: nft.owner,
       amount: UInt64.from(1_000_000_000),
     });
-    this.emitEvent('minted-nft', item.hash());
-    this.emitEvent('updated-merkle-key', item.id);
+    this.emitEvent('minted-nft', nft.hash());
+    this.emitEvent('updated-merkle-key', nft.id);
     this.incrementTotalSupply();
     this.updateRoot(rootAfter);
     return Bool(true);
   }
 
   @method public transferNFT(
-    item: NFT,
+    nft: NFT,
     newOwner: PublicKey,
     keyWitness: MerkleMapWitness,
     adminSignature: Signature
   ): Bool {
-    this.verifyAdminItemSignature(item, adminSignature);
-    const sender: PublicKey = this.verifyTreeLeaf(item, keyWitness);
-    item.changeOwner(newOwner);
-    const itemHash: Field = item.hash();
-    const [rootAfter] = keyWitness.computeRootAndKey(itemHash);
+    this.verifyAdminNFTSignature(nft, adminSignature);
+    const sender: PublicKey = this.verifyTreeLeaf(nft, keyWitness);
+    nft.changeOwner(newOwner);
+    const nftHash: Field = nft.hash();
+    const [rootAfter] = keyWitness.computeRootAndKey(nftHash);
     this.internal.send({
       from: sender,
       to: newOwner,
       amount: UInt64.from(1_000_000_000),
     });
-    this.emitEvent('transferred-nft', itemHash);
-    this.emitEvent('updated-merkle-key', item.id);
+    this.emitEvent('transferred-nft', nftHash);
+    this.emitEvent('updated-merkle-key', nft.id);
     this.updateRoot(rootAfter);
     return Bool(true);
   }
@@ -192,14 +192,14 @@ export class NFTContract extends TokenContract {
     this.emitEvent('updated-merkle-root', newRoot);
   }
 
-  private verifyTreeLeaf(item: NFT, keyWitness: MerkleMapWitness): PublicKey {
+  private verifyTreeLeaf(nft: NFT, keyWitness: MerkleMapWitness): PublicKey {
     const { sender: sender } = this.verifySenderSignature();
-    const isItemOwner: Bool = sender.equals(item.owner);
-    isItemOwner.assertEquals(true, 'sender not item owner');
+    const isNFTOwner: Bool = sender.equals(nft.owner);
+    isNFTOwner.assertEquals(true, 'sender not nft owner');
     const initialRoot: Field = this.root.getAndRequireEquals();
-    const [rootBefore, key] = keyWitness.computeRootAndKey(item.hash());
+    const [rootBefore, key] = keyWitness.computeRootAndKey(nft.hash());
     rootBefore.assertEquals(initialRoot, 'root not matching');
-    key.assertEquals(item.id, 'key not matching');
+    key.assertEquals(nft.id, 'key not matching');
     return sender;
   }
 
@@ -212,10 +212,10 @@ export class NFTContract extends TokenContract {
     senderUpdate.requireSignature();
   }
 
-  private verifyAdminItemSignature(item: NFT, adminSignature: Signature): void {
+  private verifyAdminNFTSignature(nft: NFT, adminSignature: Signature): void {
     const admin: PublicKey = this.admin.getAndRequireEquals();
-    const isAdmin: Bool = adminSignature.verify(admin, item.toFields());
-    isAdmin.assertEquals(Bool(true), 'item signature: not admin');
+    const isAdmin: Bool = adminSignature.verify(admin, nft.toFields());
+    isAdmin.assertEquals(Bool(true), 'nft signature: not admin');
   }
 
   private verifySenderSignature(): {
