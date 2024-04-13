@@ -71,8 +71,8 @@ describe('PinSave NFTs on Local Blockchain', () => {
         live
       );
     } catch (error) {
-      const errorString: string = String(error);
-      expect(errorString.substring(0, 25)).toBe('Error: max supply reached');
+      const errorMessage: string = String(error).substring(0, 24);
+      expect(errorMessage).toBe('Error: maxSupply reached');
     }
   });
 
@@ -99,8 +99,8 @@ describe('PinSave NFTs on Local Blockchain', () => {
         live
       );
     } catch (error) {
-      const errorString: string = String(error);
-      expect(errorString.substring(0, 23)).toBe('Error: root initialized');
+      const errorMessage: string = String(error).substring(0, 24);
+      expect(errorMessage).toBe('Error: root: initialized');
     }
   });
 
@@ -108,16 +108,16 @@ describe('PinSave NFTs on Local Blockchain', () => {
     try {
       await setNFTContractFee(pk2, nftContract);
     } catch (error) {
-      const errorString: string = String(error);
-      expect(errorString.substring(0, 23)).toBe('Error: sender not admin');
+      const errorMessage: string = String(error).substring(0, 27);
+      expect(errorMessage).toBe('Error: sender: not an admin');
     }
   });
 
-  it('sucessfully updated fee', async () => {
+  it('updates fee', async () => {
     await setNFTContractFee(pkAdmin, nftContract);
   });
 
-  it('minted NFT', async () => {
+  it('mints NFT', async () => {
     await mintNFTwithMap(
       pkAdmin,
       pkAdmin,
@@ -129,7 +129,7 @@ describe('PinSave NFTs on Local Blockchain', () => {
     );
   });
 
-  it('failed to mint the same NFT ', async () => {
+  it('fails to mint the same NFT ', async () => {
     try {
       await mintNFTwithMap(
         pkAdmin,
@@ -141,19 +141,19 @@ describe('PinSave NFTs on Local Blockchain', () => {
         live
       );
     } catch (error) {
-      const errorMessage: string = String(error).substring(0, 21);
-      expect(errorMessage).toBe('Error: Already Minted');
+      const errorMessage: string = String(error).substring(0, 26);
+      expect(errorMessage).toBe('Error: nft: already minted');
     }
   });
 
-  it('inited NFT', async () => {
+  it('inits NFT', async () => {
     const nft: NFTMetadata = generateDummyNFTMetadata(3, pubKeyAdmin);
     const nftStruct: NFT = createNFT(nft);
 
     await initNFT(pkAdmin, pkAdmin, nftStruct, nftContract, map, compile, live);
   });
 
-  it('failed to initialize NFT: already exists', async () => {
+  it('fails to initialize NFT: already exists', async () => {
     const nft: NFTMetadata = generateDummyNFTMetadata(3, pubKeyAdmin);
     const nftStruct: NFT = createNFT(nft);
 
@@ -168,8 +168,8 @@ describe('PinSave NFTs on Local Blockchain', () => {
         live
       );
     } catch (error) {
-      const stringError: string = String(error);
-      expect(stringError.substring(0, 26)).toBe('Error: does not match root');
+      const errorMessage: string = String(error).substring(0, 26);
+      expect(errorMessage).toBe('Error: roots: do not match');
     }
   });
 
@@ -196,10 +196,8 @@ describe('PinSave NFTs on Local Blockchain', () => {
         live
       );
     } catch (error) {
-      const stringError = String(error);
-      expect(stringError.substring(0, 35)).toBe(
-        'Error: keyWitness not matches order'
-      );
+      const messageError = String(error).substring(0, 32);
+      expect(messageError).toBe('Error: key: not matches order id');
     }
   });
 
@@ -249,8 +247,8 @@ describe('PinSave NFTs on Local Blockchain', () => {
         live
       );
     } catch (error) {
-      const messageError: string = String(error).substring(0, 27);
-      expect(messageError).toBe('Error: sender not nft owner');
+      const messageError: string = String(error).substring(0, 31);
+      expect(messageError).toBe('Error: sender: not an nft owner');
     }
   });
 });

@@ -2,52 +2,52 @@ import { Struct, MerkleMapWitness, Signature } from 'o1js';
 
 import { NFTforMina, NFTforNFT } from './BidNFT';
 
-export class SupplyNFTforMina extends Struct({
+export class NFTforMinaOrder extends Struct({
   nftOrder: NFTforMina,
-  swapContractKeyWitness: MerkleMapWitness,
-  swapContractAdminSignature: Signature,
+  swapContractNFTOrderKeyWitness: MerkleMapWitness,
+  swapContractNFTOrderAdminSignature: Signature,
   nftKeyWitness: MerkleMapWitness,
   nftContractNFTAdminSignature: Signature,
 }) {}
 
-export class SupplyNFTforNFT extends Struct({
+export class NFTforNFTOrder extends Struct({
   nftOrder: NFTforNFT,
-  swapContractKeyWitness: MerkleMapWitness,
-  swapContractAdminSignature: Signature,
+  swapContractNFTOrderKeyWitness: MerkleMapWitness,
+  swapContractNFTOrderAdminSignature: Signature,
   nftKeyWitness: MerkleMapWitness,
   nftContractNFTAdminSignature: Signature,
 }) {}
 
-export function createSupplyNFTforMina(
+export function createNFTforMinaOrder(
   nftOrder: NFTforMina,
-  swapContractKeyWitness: MerkleMapWitness,
-  swapContractAdminSignature: Signature,
+  swapContractNFTOrderKeyWitness: MerkleMapWitness,
+  swapContractNFTOrderAdminSignature: Signature,
   nftKeyWitness: MerkleMapWitness,
   nftContractNFTAdminSignature: Signature
-): SupplyNFTforMina {
-  const supplyNFTforMina = new SupplyNFTforMina({
+): NFTforMinaOrder {
+  const nftforMinaOrder = new NFTforMinaOrder({
     nftOrder: nftOrder,
-    swapContractKeyWitness: swapContractKeyWitness,
-    swapContractAdminSignature: swapContractAdminSignature,
+    swapContractNFTOrderKeyWitness: swapContractNFTOrderKeyWitness,
+    swapContractNFTOrderAdminSignature: swapContractNFTOrderAdminSignature,
     nftKeyWitness: nftKeyWitness,
     nftContractNFTAdminSignature: nftContractNFTAdminSignature,
   });
-  return supplyNFTforMina;
+  return nftforMinaOrder;
 }
 
-export function createSupplyNFTforNFT(
+export function createNFTforNFTOrder(
   nftOrder: NFTforNFT,
   swapContractKeyWitness: MerkleMapWitness,
   swapContractAdminSignature: Signature,
   nftKeyWitness: MerkleMapWitness,
   nftContractNFTAdminSignature: Signature
-): SupplyNFTforNFT {
-  const supplyNFTforNFT = new SupplyNFTforNFT({
+): NFTforNFTOrder {
+  const nftforNFTOrder = new NFTforNFTOrder({
     nftOrder: nftOrder,
-    swapContractKeyWitness: swapContractKeyWitness,
-    swapContractAdminSignature: swapContractAdminSignature,
+    swapContractNFTOrderKeyWitness: swapContractKeyWitness,
+    swapContractNFTOrderAdminSignature: swapContractAdminSignature,
     nftKeyWitness: nftKeyWitness,
     nftContractNFTAdminSignature: nftContractNFTAdminSignature,
   });
-  return supplyNFTforNFT;
+  return nftforNFTOrder;
 }

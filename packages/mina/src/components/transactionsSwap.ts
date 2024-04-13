@@ -14,7 +14,12 @@ import {
 import { createTxOptions, TxOptions, TxStatus } from './transactions.js';
 import { SwapContract } from '../SwapContract.js';
 import { InitSwapState, createInitSwapState } from './Swap/InitSwap.js';
-import { SupplyNFTforMina, SupplyNFTforNFT } from './Swap/SupplyNFT.js';
+import {
+  NFTforMinaOrder,
+  NFTforNFTOrder,
+  createNFTforMinaOrder,
+  createNFTforNFTOrder,
+} from './Swap/SupplyNFT.js';
 
 export async function deploySwapContract(
   senderPK: PrivateKey,
@@ -81,14 +86,14 @@ export async function setSwapContractFee(
 
 export async function supplyNFTMinaSwapContract(
   adminPK: PrivateKey,
-  supplyNFTforMina: SupplyNFTforMina,
+  nftforMinaOrder: NFTforMinaOrder,
   swapContract: SwapContract,
   live: boolean = false
 ): Promise<TxStatus> {
-  const deployerAddress: PublicKey = adminPK.toPublicKey();
-
-  const txn: Transaction = await Mina.transaction(deployerAddress, () => {
-    swapContract.supplyNFTMina(supplyNFTforMina);
+  const senderPub: PublicKey = adminPK.toPublicKey();
+  const txn: Transaction = await Mina.transaction(senderPub, () => {
+    AccountUpdate.fundNewAccount(senderPub);
+    swapContract.supplyNFTMina(nftforMinaOrder);
   });
   const txStatus: TxStatus = await sendWaitTx(txn, [adminPK], live);
   return txStatus;

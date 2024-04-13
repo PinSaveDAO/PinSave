@@ -43,3 +43,37 @@ export class NFTforNFT extends Struct({
     return Poseidon.hash(NFTforNFT.toFields(this));
   }
 }
+
+export function createNFTforMina(
+  nft: NFT,
+  owner: PublicKey,
+  nftContractAddress: PublicKey,
+  askAmount: UInt64,
+  isCompleted: Bool = Bool(false)
+) {
+  const nftforMina: NFTforMina = new NFTforMina({
+    nft: nft,
+    owner: owner,
+    nftContractAddress: nftContractAddress,
+    askAmount: askAmount,
+    isCompleted: isCompleted,
+  });
+  return nftforMina;
+}
+
+export function createNFTforNFT(
+  nft: NFT,
+  owner: PublicKey,
+  nftContractAddress: PublicKey,
+  askNFTId: Field,
+  isCompleted: Bool = Bool(false)
+) {
+  const nftforNFT: NFTforNFT = new NFTforNFT({
+    nft: nft,
+    owner: owner,
+    nftContractAddress: nftContractAddress,
+    askNFTId: askNFTId,
+    isCompleted: isCompleted,
+  });
+  return nftforNFT;
+}

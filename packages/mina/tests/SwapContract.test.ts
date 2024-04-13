@@ -1,19 +1,35 @@
-import { MerkleMap, PrivateKey, PublicKey } from 'o1js';
+import {
+  Field,
+  MerkleMap,
+  MerkleMapWitness,
+  PrivateKey,
+  PublicKey,
+  UInt64,
+  Signature,
+} from 'o1js';
 
+import { generateDummyCollectionWithMap } from '../src/components/NFT/dummy.js';
+import { NFT } from '../src/components/NFT/NFT.js';
+import { NFTforMina, createNFTforMina } from '../src/components/Swap/BidNFT.js';
+import {
+  NFTforMinaOrder,
+  createNFTforMinaOrder,
+  createNFTforNFTOrder,
+} from '../src/components/Swap/SupplyNFT.js';
 import { startLocalBlockchainClient } from '../src/components/utilities/client.js';
-import { SwapContract } from '../src/SwapContract.js';
+import {
+  deployNFTContract,
+  initNFTContractRoot,
+  mintNFTwithMap,
+} from '../src/components/transactions.js';
 import {
   deploySwapContract,
   initSwapContractRoot,
   setSwapContractFee,
   supplyNFTMinaSwapContract,
 } from '../src/components/transactionsSwap.js';
-import {
-  deployNFTContract,
-  initNFTContractRoot,
-} from '../src/components/transactions.js';
 import { NFTContract } from '../src/NFTsMapContract.js';
-import { generateDummyCollectionWithMap } from '../src/components/NFT/dummy.js';
+import { SwapContract } from '../src/SwapContract.js';
 
 const proofsEnabled: boolean = false;
 const enforceTransactionLimits: boolean = true;
@@ -52,6 +68,13 @@ describe('PinSave NFTs on Local Blockchain', () => {
       nftContractMap,
       nftContract,
       nftArray.length
+    );
+    await mintNFTwithMap(
+      pkNFTAdmin,
+      pkNFTAdmin,
+      nftArray[0],
+      nftContract,
+      nftContractMap
     );
   });
 
@@ -93,15 +116,54 @@ describe('PinSave NFTs on Local Blockchain', () => {
     try {
       await setSwapContractFee(pk2, swapContract);
     } catch (error) {
-      expect(String(error).substring(0, 23)).toBe('Error: sender not admin');
+      expect(String(error).substring(0, 27)).toBe(
+        'Error: sender: not an admin'
+      );
     }
   });
 
-  it('updated fee', async () => {
+  it('updates fee', async () => {
     await setSwapContractFee(pkSwapAdmin, swapContract);
   });
 
   it('supplies nft for mina', async () => {
-    //await supplyNFTMinaSwapContract(pkNFTAdmin, )
+    const nft: NFT = nftArray[0];
+    const askAmount: UInt64 = UInt64.from(100);
+    const nftForMinaOrder: NFTforMina = createNFTforMina(
+      nftArray[0],
+      pubNFTAdmin,
+      nftContractPub,
+      askAmount
+    );
+
+    const totalOrdersInited: Field = swapContract.totalOrdersInited.get();
+    const swapContractRoot: Field = swapContract.root.get();
+    expect(swapContractRoot.toString()).toBe(
+      swapContractMap.getRoot().toString()
+    );
+
+    const swapMerkleWitness: MerkleMapWitness =
+      swapContractMap.getWitness(totalOrdersInited);
+
+    const swapContractNFTOrderAdminSignature: Signature = Signature.create(
+      pkSwapAdmin,
+      nftForMinaOrder.toFields()
+    );
+
+    const nftKeyWitness: MerkleMapWitness = nftContractMap.getWitness(nft.id);
+    const nftContractNFTAdminSignature: Signature = Signature.create(
+      pkNFTAdmin,
+      nft.toFields()
+    );
+
+    const nftforMinaOrder: NFTforMinaOrder = createNFTforMinaOrder(
+      nftForMinaOrder,
+      swapMerkleWitness,
+      swapContractNFTOrderAdminSignature,
+      nftKeyWitness,
+      nftContractNFTAdminSignature
+    );
+
+    await supplyNFTMinaSwapContract(pkNFTAdmin, nftforMinaOrder, swapContract);
   });
 });
