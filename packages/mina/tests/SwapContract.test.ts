@@ -23,20 +23,22 @@ import {
   mintNFTwithMap,
 } from '../src/components/transactions.js';
 import {
+  buyNFTSwapContract,
   deploySwapContract,
   initSwapContractRoot,
   setSwapContractFee,
-  supplyNFTMinaSwapContract,
+  supplyNFTforMinaSwapContract,
+  supplyNFTforNFTSwapContract,
 } from '../src/components/transactionsSwap.js';
 import { NFTContract } from '../src/NFTsMapContract.js';
 import { SwapContract } from '../src/SwapContract.js';
 
-const proofsEnabled: boolean = false;
+const proofsEnabled: boolean = true;
 const enforceTransactionLimits: boolean = true;
 
 const live: boolean = false;
 
-describe('PinSave NFTs on Local Blockchain', () => {
+describe('PinSave Swap Contract on Local Blockchain', () => {
   const testAccounts = startLocalBlockchainClient(
     proofsEnabled,
     enforceTransactionLimits
@@ -59,6 +61,8 @@ describe('PinSave NFTs on Local Blockchain', () => {
 
   const { nftArray: nftArray, map: nftContractMap } =
     generateDummyCollectionWithMap(pubNFTAdmin);
+
+  let nftForMinaOrderData: NFTforMinaOrder;
 
   it('deploys nft contract', async () => {
     await deployNFTContract(pkNFTAdmin, nftContractPrivateKey);
@@ -127,19 +131,15 @@ describe('PinSave NFTs on Local Blockchain', () => {
   });
 
   it('supplies nft for mina', async () => {
+    const totalOrdersInited: Field = swapContract.totalOrdersInited.get();
+
     const nft: NFT = nftArray[0];
     const askAmount: UInt64 = UInt64.from(100);
-    const nftForMinaOrder: NFTforMina = createNFTforMina(
-      nftArray[0],
+    const nftForMinaOrder = createNFTforMina(
+      nft,
       pubNFTAdmin,
       nftContractPub,
       askAmount
-    );
-
-    const totalOrdersInited: Field = swapContract.totalOrdersInited.get();
-    const swapContractRoot: Field = swapContract.root.get();
-    expect(swapContractRoot.toString()).toBe(
-      swapContractMap.getRoot().toString()
     );
 
     const swapMerkleWitness: MerkleMapWitness =
@@ -156,7 +156,8 @@ describe('PinSave NFTs on Local Blockchain', () => {
       nft.toFields()
     );
 
-    const nftforMinaOrder: NFTforMinaOrder = createNFTforMinaOrder(
+    nftForMinaOrderData = createNFTforMinaOrder(
+      totalOrdersInited,
       nftForMinaOrder,
       swapMerkleWitness,
       swapContractNFTOrderAdminSignature,
@@ -164,6 +165,45 @@ describe('PinSave NFTs on Local Blockchain', () => {
       nftContractNFTAdminSignature
     );
 
-    await supplyNFTMinaSwapContract(pkNFTAdmin, nftforMinaOrder, swapContract);
+    await supplyNFTforMinaSwapContract(
+      pkNFTAdmin,
+      nftForMinaOrderData,
+      swapContract
+    );
+
+    nft.changeOwner(swapContractPublicKey);
+    nftContractMap.set(nft.id, nft.hash());
+
+    const nftContractRoot: Field = nftContract.root.get();
+    expect(nftContractRoot.toString()).toBe(
+      nftContractMap.getRoot().toString()
+    );
+
+    swapContractMap.set(totalOrdersInited, nftForMinaOrder.hash());
+
+    const swapContractRoot: Field = swapContract.root.get();
+    expect(swapContractRoot.toString()).toBe(
+      swapContractMap.getRoot().toString()
+    );
+  });
+
+  it('buy nft for mina', async () => {
+    const swapMerkleWitness: MerkleMapWitness = swapContractMap.getWitness(
+      nftForMinaOrderData.merkleMapId
+    );
+
+    const swapContractNFTOrderAdminSignature: Signature = Signature.create(
+      pkSwapAdmin,
+      nftForMinaOrderData.nftOrder.toFields()
+    );
+
+    await buyNFTSwapContract(
+      pkSender,
+      nftForMinaOrderData.merkleMapId,
+      nftForMinaOrderData.nftOrder,
+      swapMerkleWitness,
+      swapContractNFTOrderAdminSignature,
+      swapContract
+    );
   });
 });

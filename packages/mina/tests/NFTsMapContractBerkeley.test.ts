@@ -22,7 +22,7 @@ describe('PinSave NFTs on Berkeley', () => {
   it('queries PinSave NFTs balances', async () => {
     const tokenBalance: bigint = await getTokenAddressBalance(
       pub,
-      zkApp.token.id
+      zkApp.deriveTokenId()
     );
     expect(tokenBalance).toBeGreaterThanOrEqual(0n);
   });

@@ -18,7 +18,7 @@ import {
 import { NFTContract } from '../src/NFTsMapContract.js';
 import { getMinaBalance } from '../src/index.js';
 
-const proofsEnabled: boolean = false;
+const proofsEnabled: boolean = true;
 const enforceTransactionLimits: boolean = true;
 
 const live: boolean = false;
