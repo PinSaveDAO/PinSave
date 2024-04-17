@@ -19,13 +19,16 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<string>
 ) {
+  const client: VercelKV = getVercelClient();
+  const minaClient: Client = new Client({ network: "testnet" });
   if (req.method === "POST") {
     const signResult: SignedData = req.body.signResult;
     const postId: number | string = req.body.postId;
+    console.log(signResult);
+    console.log(postId);
     const appId: string = getAppString();
-    const client: VercelKV = getVercelClient();
-    const minaClient: Client = new Client({ network: "testnet" });
     const isTrue: boolean = minaClient.verifyMessage(signResult);
+    console.log(isTrue);
     if (isTrue) {
       const data: CommentData = {
         publicKey: signResult.publicKey,
