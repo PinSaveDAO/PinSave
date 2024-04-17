@@ -24,18 +24,15 @@ export default async function handler(
   if (req.method === "POST") {
     const signResult: SignedData = req.body.signResult;
     const postId: number | string = req.body.postId;
-    console.log(signResult);
-    console.log(postId);
     const appId: string = getAppString();
     const isTrue: boolean = minaClient.verifyMessage(signResult);
-    console.log(isTrue);
     if (isTrue) {
       const data: CommentData = {
         publicKey: signResult.publicKey,
         data: signResult.data,
         postId: postId,
       };
-      setVercelComment(appId, data, client);
+      await setVercelComment(appId, data, client);
       res.status(200).json("comment sent");
     }
     res.status(401).json("failed verification");

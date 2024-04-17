@@ -94,11 +94,11 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
         shadow="xs"
         withBorder
         px="xs"
-        sx={{ backgroundColor: "#82c7fc1d" }}
+        sx={{ backgroundColor: "#20c7fc1d" }}
       >
         <Text my={2}>{post.description}</Text>
       </Paper>
-      <div style={{ fontSize: "small", color: "#0000008d" }}>
+      <Text sx={{ fontSize: "small", color: "#0000008d" }}>
         Owned by:{" "}
         <a
           style={{ color: "#198b6eb9" }}
@@ -106,7 +106,7 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
         >
           {post.owner.substring(0, 8) + "..." + post.owner.substring(45)}
         </a>
-      </div>
+      </Text>
       {address === post.owner && post.isMinted === "1" && (
         <div style={{ fontSize: "small", color: "#0000008d" }}>Minted</div>
       )}

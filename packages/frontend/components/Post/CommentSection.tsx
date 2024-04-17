@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Text, Button, TextInput, Group, Paper } from "@mantine/core";
+import { Text, Button, TextInput, Group, Paper, Center } from "@mantine/core";
 
 import { setMinaAccount } from "@/hooks/minaWallet";
 import { useAddressContext } from "context";
@@ -54,8 +54,8 @@ const CommentSection: React.FC<IMyProps> = ({ postId, messagesQueried }) => {
         <Paper
           key={i}
           shadow="xs"
-          mt={4}
-          sx={{ backgroundColor: "#20c7fc1d" }}
+          mt="sm"
+          sx={{ backgroundColor: "#82c7fc1d" }}
           withBorder
           px="sm"
         >
@@ -67,34 +67,38 @@ const CommentSection: React.FC<IMyProps> = ({ postId, messagesQueried }) => {
               {message.publicKey.substring(0, 8) +
                 "..." +
                 message.publicKey.substring(45)}
-            </a>{" "}
+            </a>
+            {": "}
             {message.data}
           </Text>
         </Paper>
       ))}
-      <Group>
-        <TextInput
-          my="lg"
-          onChange={(e) => setNewMessage(e.target.value)}
-          value={newMessage}
-          placeholder="Enter your message"
-          sx={{ maxWidth: "240px" }}
-        />
-      </Group>
-      {address ? (
-        <Button component="a" radius="lg" onClick={signMessage}>
-          Send Message
-        </Button>
-      ) : (
-        <Button
-          component="a"
-          radius="lg"
-          mt="md"
-          onClick={async () => setAddress(await setMinaAccount())}
-        >
-          Connect Wallet
-        </Button>
-      )}
+      <Center>
+        <Group>
+          <TextInput
+            mt="md"
+            onChange={(e) => setNewMessage(e.target.value)}
+            value={newMessage}
+            placeholder="Enter your message"
+            sx={{ maxWidth: "240px" }}
+          />
+
+          {address ? (
+            <Button component="a" radius="lg" mt="md" onClick={signMessage}>
+              Send Message
+            </Button>
+          ) : (
+            <Button
+              component="a"
+              radius="lg"
+              mt="md"
+              onClick={async () => setAddress(await setMinaAccount())}
+            >
+              Connect Wallet
+            </Button>
+          )}
+        </Group>
+      </Center>
     </div>
   );
 };
