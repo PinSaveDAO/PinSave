@@ -1,7 +1,16 @@
 import { useState } from "react";
-import { Text, Button, TextInput, Group, Paper, Center } from "@mantine/core";
+import {
+  Text,
+  Button,
+  TextInput,
+  Group,
+  Paper,
+  Center,
+  Stack,
+} from "@mantine/core";
 
 import { setMinaAccount } from "@/hooks/minaWallet";
+import { useComments } from "@/hooks/api";
 import { useAddressContext } from "context";
 
 type message = {
@@ -10,7 +19,6 @@ type message = {
 };
 
 interface IMyProps {
-  messagesQueried: message[];
   postId: string | number;
 }
 
@@ -27,8 +35,9 @@ type SignMessageArgs = {
   message: string;
 };
 
-const CommentSection: React.FC<IMyProps> = ({ postId, messagesQueried }) => {
+const CommentSection: React.FC<IMyProps> = ({ postId }) => {
   const { address, setAddress } = useAddressContext();
+  const { data: messagesQueried, isLoading, isFetched } = useComments(postId);
   const [newMessage, setNewMessage] = useState<string>("");
 
   async function signMessage() {
@@ -50,29 +59,45 @@ const CommentSection: React.FC<IMyProps> = ({ postId, messagesQueried }) => {
   }
   return (
     <div>
-      {messagesQueried?.map((message: message, i: number) => (
-        <Paper
-          key={i}
-          shadow="xs"
-          mt="sm"
-          sx={{ backgroundColor: "#82c7fc1d" }}
-          withBorder
-          px="sm"
-        >
-          <Text mt={3}>
-            <a
-              href={`https://minascan.io/berkeley/account/${message.publicKey}`}
-              style={{ color: "#198b6eb9", fontSize: "smaller" }}
+      {!messagesQueried?.comments && isLoading && (
+        <Center>
+          <Stack
+            sx={{
+              maxWidth: 700,
+            }}
+          >
+            <Text>Loading...</Text>
+          </Stack>
+        </Center>
+      )}
+
+      {isFetched ? (
+        <div>
+          {messagesQueried?.comments?.map((message: message, i: number) => (
+            <Paper
+              key={i}
+              shadow="xs"
+              mt={4}
+              sx={{ backgroundColor: "#82c7fc1d" }}
+              withBorder
+              px="lg"
             >
-              {message.publicKey.substring(0, 8) +
-                "..." +
-                message.publicKey.substring(45)}
-            </a>
-            {": "}
-            {message.data}
-          </Text>
-        </Paper>
-      ))}
+              <Text mt={3}>
+                <a
+                  href={`https://minascan.io/berkeley/account/${message.publicKey}`}
+                  style={{ color: "#198b6eb9", fontSize: "smaller" }}
+                >
+                  {message.publicKey.substring(0, 8) +
+                    "..." +
+                    message.publicKey.substring(45)}
+                </a>
+                {": "}
+                {message.data}
+              </Text>
+            </Paper>
+          ))}
+        </div>
+      ) : null}
       <Center>
         <Group>
           <TextInput

@@ -15,7 +15,6 @@ import { setMinaAccount } from "@/hooks/minaWallet";
 import { fetcher } from "@/utils/fetcher";
 import { useAddressContext } from "context";
 import CommentSection from "./CommentSection";
-import { useComments } from "@/hooks/api";
 
 interface IMyProps {
   post: IndividualPost;
@@ -24,7 +23,6 @@ interface IMyProps {
 const MediaDetails: React.FC<IMyProps> = ({ post }) => {
   const postNumber = Number(post.id);
   const { address, setAddress } = useAddressContext();
-  const { data } = useComments(postNumber);
   const [map, setMap] = useState<MerkleMap | undefined>(undefined);
   const [hash, setHash] = useState<string | undefined>(undefined);
 
@@ -87,9 +85,7 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
   }, [post.id, address]);
   return (
     <Paper shadow="sm" p="md" withBorder>
-      <Title mb="1.4rem" my={2}>
-        {post.name}
-      </Title>
+      <Title mb="1.4rem">{post.name}</Title>
       <Paper
         shadow="xs"
         withBorder
@@ -123,7 +119,7 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
       {address === post.owner && post.isMinted === "0" && map && (
         <Button onClick={async () => await mintNFTClient()}>Mint</Button>
       )}
-      <CommentSection messagesQueried={data?.comments} postId={post.id} />
+      <CommentSection postId={post.id} />
     </Paper>
   );
 };
