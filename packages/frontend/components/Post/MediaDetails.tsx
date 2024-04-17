@@ -98,7 +98,7 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
       >
         <Text my={2}>{post.description}</Text>
       </Paper>
-      <p style={{ fontSize: "small", color: "#0000008d" }}>
+      <div style={{ fontSize: "small", color: "#0000008d" }}>
         Owned by:{" "}
         <a
           style={{ color: "#198b6eb9" }}
@@ -106,19 +106,19 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
         >
           {post.owner.substring(0, 8) + "..." + post.owner.substring(45)}
         </a>
-      </p>
+      </div>
       {address === post.owner && post.isMinted === "1" && (
-        <p style={{ fontSize: "small", color: "#0000008d" }}>Minted</p>
+        <div style={{ fontSize: "small", color: "#0000008d" }}>Minted</div>
       )}
       {hash && (
-        <p style={{ fontSize: "small", color: "#0000008d" }}>
+        <div style={{ fontSize: "small", color: "#0000008d" }}>
           <a
             style={{ color: "#198b6eb9" }}
             href={`https://minascan.io/berkeley/tx/${hash}`}
           >
             hash
           </a>
-        </p>
+        </div>
       )}
       {address === post.owner && post.isMinted === "0" && map && (
         <Button onClick={async () => await mintNFTClient()}>Mint</Button>

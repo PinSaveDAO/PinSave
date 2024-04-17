@@ -45,10 +45,10 @@ export async function initNFT(
   if (compile) {
     await NFTContract.compile();
   }
-  const senderPub: PublicKey = pkSender.toPublicKey();
+  const pubSender: PublicKey = pkSender.toPublicKey();
   const nftId: Field = _NFT.id;
   const witnessNFT: MerkleMapWitness = merkleMap.getWitness(nftId);
-  const txOptions: TxOptions = createTxOptions(senderPub, live);
+  const txOptions: TxOptions = createTxOptions(pubSender, live);
   const adminSignature: Signature = Signature.create(pkAdmin, _NFT.toFields());
   const initMintTx: Transaction = await Mina.transaction(txOptions, () => {
     zkAppInstance.initNFT(_NFT, witnessNFT, adminSignature);
@@ -81,7 +81,7 @@ export async function createInitNFTTxFromMap(
 }
 
 export async function createMintTxFromMap(
-  senderPub: PublicKey,
+  pubSender: PublicKey,
   nftContract: NFTContract,
   _NFT: NFT,
   merkleMap: MerkleMap,
@@ -95,7 +95,7 @@ export async function createMintTxFromMap(
   const nftId: Field = _NFT.id;
   const witnessNFT: MerkleMapWitness = merkleMap.getWitness(nftId);
   const mintTx: Transaction = await createMintTx(
-    senderPub,
+    pubSender,
     nftContract,
     _NFT,
     witnessNFT,
@@ -144,11 +144,11 @@ export async function mintNFT(
   if (compile) {
     await NFTContract.compile();
   }
-  const senderPub: PublicKey = pkSender.toPublicKey();
-  const txOptions: TxOptions = createTxOptions(senderPub, live);
+  const pubSender: PublicKey = pkSender.toPublicKey();
+  const txOptions: TxOptions = createTxOptions(pubSender, live);
   const adminSignature: Signature = Signature.create(pkAdmin, _NFT.toFields());
   const mint_tx: Transaction = await createMintTx(
-    senderPub,
+    pubSender,
     nftContract,
     _NFT,
     merkleMapWitness,
@@ -160,7 +160,7 @@ export async function mintNFT(
 }
 
 export async function createMintTx(
-  senderPub: PublicKey,
+  pubSender: PublicKey,
   nftContract: NFTContract,
   _NFT: NFT,
   merkleMapWitness: MerkleMapWitness,
@@ -168,7 +168,7 @@ export async function createMintTx(
   txOptions: TxOptions
 ): Promise<Transaction> {
   const recipientBalance: bigint = await getTokenAddressBalance(
-    senderPub,
+    pubSender,
     nftContract.deriveTokenId()
   );
   let mint_tx: Transaction;
@@ -178,7 +178,7 @@ export async function createMintTx(
     });
   } else {
     mint_tx = await Mina.transaction(txOptions, () => {
-      AccountUpdate.fundNewAccount(senderPub);
+      AccountUpdate.fundNewAccount(pubSender);
       nftContract.mintNFT(_NFT, merkleMapWitness, adminSignature);
     });
   }
@@ -194,7 +194,7 @@ export async function transferNFT(
   merkleMap: MerkleMap,
   live: boolean = true
 ): Promise<boolean> {
-  const senderPub: PublicKey = pkSender.toPublicKey();
+  const pubSender: PublicKey = pkSender.toPublicKey();
   const nftId: Field = _NFT.id;
   const witnessNFT: MerkleMapWitness = merkleMap.getWitness(nftId);
   const recipientBalance: bigint = await getTokenAddressBalance(
@@ -202,22 +202,18 @@ export async function transferNFT(
     zkAppInstance.deriveTokenId()
   );
   const adminSignature: Signature = Signature.create(pkAdmin, _NFT.toFields());
-  let nft_transfer_tx: Transaction;
+  let txNFTTransfer: Transaction;
   if (recipientBalance > 0n) {
-    nft_transfer_tx = await Mina.transaction(senderPub, () => {
+    txNFTTransfer = await Mina.transaction(pubSender, () => {
       zkAppInstance.transferNFT(_NFT, recipient, witnessNFT, adminSignature);
     });
   } else {
-    nft_transfer_tx = await Mina.transaction(senderPub, () => {
-      AccountUpdate.fundNewAccount(senderPub);
+    txNFTTransfer = await Mina.transaction(pubSender, () => {
+      AccountUpdate.fundNewAccount(pubSender);
       zkAppInstance.transferNFT(_NFT, recipient, witnessNFT, adminSignature);
     });
   }
-  const txStatus: TxStatus = await sendWaitTx(
-    nft_transfer_tx,
-    [pkSender],
-    live
-  );
+  const txStatus: TxStatus = await sendWaitTx(txNFTTransfer, [pkSender], live);
   if (!live || txStatus === 'included') {
     _NFT.changeOwner(recipient);
     merkleMap.set(nftId, _NFT.hash());
@@ -256,13 +252,13 @@ export async function initNFTContractRoot(
   totalInited: number,
   live: boolean = false
 ): Promise<TxStatus> {
-  const userPub: PublicKey = pkSender.toPublicKey();
+  const pubSender: PublicKey = pkSender.toPublicKey();
   const initStruct: InitState = createInitState(merkleMap, totalInited);
   const thisAppSignature: Signature = Signature.create(
     pkAdmin,
     initStruct.toFields()
   );
-  const txOptions: TxOptions = createTxOptions(userPub, live);
+  const txOptions: TxOptions = createTxOptions(pubSender, live);
   const init_tx: Transaction = await Mina.transaction(txOptions, () => {
     nftContract.initRoot(initStruct, thisAppSignature);
   });
@@ -272,7 +268,7 @@ export async function initNFTContractRoot(
 
 export async function deployNFTContract(
   pkSender: PrivateKey,
-  nftContractPK: PrivateKey,
+  pkNFTContract: PrivateKey,
   proofsEnabled: boolean = true,
   live: boolean = true
 ): Promise<TxStatus> {
@@ -280,13 +276,13 @@ export async function deployNFTContract(
   if (proofsEnabled) {
     ({ verificationKey } = await NFTContract.compile());
   }
-  const zkAppAddress: PublicKey = nftContractPK.toPublicKey();
+  const zkAppAddress: PublicKey = pkNFTContract.toPublicKey();
   const zkAppInstance: NFTContract = new NFTContract(zkAppAddress);
   const pubKey: PublicKey = pkSender.toPublicKey();
   const deployTxnOptions: TxOptions = createTxOptions(pubKey, live);
   const deployTx: Transaction = await Mina.transaction(deployTxnOptions, () => {
     AccountUpdate.fundNewAccount(pubKey);
-    zkAppInstance.deploy({ verificationKey, zkappKey: nftContractPK });
+    zkAppInstance.deploy({ verificationKey, zkappKey: pkNFTContract });
   });
   const txStatus: TxStatus = await sendWaitTx(deployTx, [pkSender], live);
   return txStatus;
@@ -311,12 +307,12 @@ export async function sendWaitTx(
 }
 
 export function createTxOptions(
-  senderPub: PublicKey,
+  pubSender: PublicKey,
   live: boolean = true,
   fee: number = 8e7
 ): TxOptions {
   const txOptions: TxOptions = {
-    sender: senderPub,
+    sender: pubSender,
   };
   if (live) {
     txOptions.fee = fee;

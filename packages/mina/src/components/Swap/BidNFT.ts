@@ -2,6 +2,22 @@ import { Field, PublicKey, UInt64, Bool, Struct, Poseidon } from 'o1js';
 
 import { NFT } from '../NFT/NFT';
 
+export type NFTforNFTStruct = {
+  nft: NFT;
+  owner: PublicKey;
+  nftContractAddress: PublicKey;
+  askNFTId: Field;
+  isCompleted: Bool;
+};
+
+export type NFTforMinaStruct = {
+  nft: NFT;
+  owner: PublicKey;
+  nftContractAddress: PublicKey;
+  askAmount: UInt64;
+  isCompleted: Bool;
+};
+
 export class NFTforMina extends Struct({
   nft: NFT,
   owner: PublicKey,
@@ -45,35 +61,25 @@ export class NFTforNFT extends Struct({
 }
 
 export function createNFTforMina(
-  nft: NFT,
-  owner: PublicKey,
-  nftContractAddress: PublicKey,
-  askAmount: UInt64,
-  isCompleted: Bool = Bool(false)
-) {
+  nftforMinaStruct: NFTforMinaStruct
+): NFTforMina {
   const nftforMina: NFTforMina = new NFTforMina({
-    nft: nft,
-    owner: owner,
-    nftContractAddress: nftContractAddress,
-    askAmount: askAmount,
-    isCompleted: isCompleted,
+    nft: nftforMinaStruct.nft,
+    owner: nftforMinaStruct.owner,
+    nftContractAddress: nftforMinaStruct.nftContractAddress,
+    askAmount: nftforMinaStruct.askAmount,
+    isCompleted: nftforMinaStruct.isCompleted,
   });
   return nftforMina;
 }
 
-export function createNFTforNFT(
-  nft: NFT,
-  owner: PublicKey,
-  nftContractAddress: PublicKey,
-  askNFTId: Field,
-  isCompleted: Bool = Bool(false)
-) {
+export function createNFTforNFT(nftforNFTStruct: NFTforNFTStruct): NFTforNFT {
   const nftforNFT: NFTforNFT = new NFTforNFT({
-    nft: nft,
-    owner: owner,
-    nftContractAddress: nftContractAddress,
-    askNFTId: askNFTId,
-    isCompleted: isCompleted,
+    nft: nftforNFTStruct.nft,
+    owner: nftforNFTStruct.owner,
+    nftContractAddress: nftforNFTStruct.nftContractAddress,
+    askNFTId: nftforNFTStruct.askNFTId,
+    isCompleted: nftforNFTStruct.isCompleted,
   });
   return nftforNFT;
 }

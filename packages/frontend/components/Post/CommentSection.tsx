@@ -30,6 +30,7 @@ type SignMessageArgs = {
 const CommentSection: React.FC<IMyProps> = ({ postId, messagesQueried }) => {
   const { address, setAddress } = useAddressContext();
   const [newMessage, setNewMessage] = useState<string>("");
+
   async function signMessage() {
     const signContent: SignMessageArgs = {
       message: newMessage,
