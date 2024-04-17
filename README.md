@@ -27,9 +27,20 @@ Pin Save is a decentralized image, video sharing and content aggregation platfor
 
 ## Features
 
+- Mina, first zk-blockhain, smart contracts
+
+  1. NFTContract to mint and transfer nfts
+  2. SwapContract to buy, sell and swap nfts
+
 - Mina Merkle Trees
 
-- Mina App State API
+- NextJS API to obtain adminSignatures
+
+- NextJS API routes save requested data to Vercel Redis Database
+
+  1. Main schema that stores data for a MerkleMap with the same root as on-chain contract.
+  2. Pending schema that tracks submitted transactions and promotes the data to main schema.
+  3. Admin Signed schema that tracks admin signed data.
 
 - Decentralized feed of NFTs:
 
@@ -39,7 +50,7 @@ Pin Save is a decentralized image, video sharing and content aggregation platfor
 
 ![Upload](https://github.com/Pfed-prog/Dspyt-NFTs-EVM/blob/master/assets/upload.png)
 
-- Comments verified with Auro Wallet
+- Comments verified with Auro Wallet:
 
 ## Setup
 
@@ -54,10 +65,6 @@ yarn dev
 
 - [PinSave Figma Resources](https://www.figma.com/community/file/1102944149244783025)
 - [Pin Save on zkok](https://zkok.io/mina/pin-save/)
-- [Pin Save on Dspyt](https://dspyt.com/PinSave)
-
-Some interesting links that we keep returning to include and not limited to:
-
-- [Practical React Query](https://tkdodo.eu/blog/practical-react-query)
-- [next/image](https://nextjs.org/docs/api-reference/next/image)
-- [Next Js ISG](https://nextjs.org/docs/basic-features/data-fetching/incremental-static-regeneration)
+- [Npm Pin Save mina package](https://www.npmjs.com/package/pin-mina)
+- [EthBucharest 2024: Zero Knowledge proofs on Mina, zkPassport and SoulBound NFTs](https://docs.google.com/presentation/d/1OmJJgzk4iFbKexqBw87oU7oh4H9lXlFFh3eas0EF9y8/edit?usp=sharing)
+- [PinSave.app DR](https://ahrefs.com/website-authority-checker/?input=pinsave.app)

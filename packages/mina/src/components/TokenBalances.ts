@@ -1,6 +1,6 @@
-import { PublicKey, Mina, Field, fetchAccount, UInt64 } from 'o1js';
+import { PublicKey, Mina, Field, fetchAccount } from 'o1js';
 
-export function getMinaBalance(address: PublicKey) {
+export function getMinaBalance(address: PublicKey): bigint {
   let balance: bigint = 0n;
   try {
     balance = Mina.getBalance(address).value.toBigInt();
@@ -11,7 +11,7 @@ export function getMinaBalance(address: PublicKey) {
 export async function getTokenAddressBalance(
   address: PublicKey,
   tokenId: Field = Field(1)
-) {
+): Promise<bigint> {
   let balance: bigint = 0n;
   try {
     await fetchAccount({ publicKey: address, tokenId: tokenId });

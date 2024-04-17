@@ -1,48 +1,49 @@
+import { VercelKV } from '@vercel/kv';
+import { fetchAccount } from 'o1js';
+
 import { generateDummyCollectionWithMap } from '../components/NFT/dummy.js';
 import {
-  getMapFromVercelNFTs,
   setNFTsToVercel,
   setMetadatasToVercel,
-} from '../components/NFT/vercel.js';
+} from '../components/Vercel/vercel.js';
 import { startBerkeleyClient } from '../components/utilities/client.js';
 import {
   getEnvAccount,
   getAppEnv,
   getVercelClient,
 } from '../components/utilities/env.js';
-import { generateIntegersArrayIncluding } from '../components/utilities/helpers.js';
-import { initRootWithApp } from '../components/transactions.js';
+import { TxStatus, initRootWithCompile } from '../components/transactions.js';
 
 startBerkeleyClient();
-const client = getVercelClient();
+const client: VercelKV = getVercelClient();
 
-const { pubKey: pubKey, adminPK: adminPK } = getEnvAccount();
-const { appId: appId, zkAppPK: zkAppPK } = getAppEnv();
+const { adminPubKey: adminPubKey, adminPK: adminPK } = getEnvAccount();
+const { appId: appId, zkApp: zkApp } = getAppEnv();
+
+const arrayLength: number = 1;
 
 const {
   map: merkleMap,
   nftArray: nftArray,
   nftMetadata: nftMetadata,
-} = generateDummyCollectionWithMap(pubKey);
+} = generateDummyCollectionWithMap(adminPubKey, arrayLength);
 
-const generateTreeRoot = merkleMap.getRoot().toString();
+const compile: boolean = true;
+const live: boolean = true;
 
-await setNFTsToVercel(appId, nftArray, client);
-await setMetadatasToVercel(appId, nftMetadata, client);
+await fetchAccount({ publicKey: zkApp.address });
 
-const arrayIds = generateIntegersArrayIncluding(2);
-const storedTree = await getMapFromVercelNFTs(appId, arrayIds, client);
-const storedTreeRoot = storedTree.getRoot().toString();
-console.log('matches subbed tree', storedTreeRoot === generateTreeRoot);
-
-const compile = true;
-const live = true;
-
-await initRootWithApp(
-  zkAppPK,
+const txStatus: TxStatus = await initRootWithCompile(
+  adminPK,
   adminPK,
   merkleMap,
-  nftArray.length,
+  zkApp,
+  arrayLength,
   compile,
   live
 );
+
+if (txStatus === 'included') {
+  await setNFTsToVercel(appId, nftArray, client);
+  await setMetadatasToVercel(appId, nftMetadata, client);
+}

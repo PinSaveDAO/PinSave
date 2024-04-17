@@ -1,3 +1,4 @@
+import type { NextApiRequest, NextApiResponse } from "next";
 import {
   startBerkeleyClient,
   getAppString,
@@ -5,7 +6,8 @@ import {
   serializeMerkleMapToJson,
   generateIntegersArray,
 } from "pin-mina";
-import type { NextApiRequest, NextApiResponse } from "next";
+import { MerkleMap } from "o1js";
+import { VercelKV } from "@vercel/kv";
 
 import { getVercelClient } from "@/services/vercelClient";
 import { fetcher } from "@/utils/fetcher";
@@ -21,19 +23,17 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<DataOut>
 ) {
-  const hostname = host;
-
   startBerkeleyClient();
-  const client = getVercelClient();
-  const appId = getAppString();
-
-  const data = await fetcher(`${hostname}/api/totalInited`);
-  const totalInited = Number(data.totalInited);
-  const array = generateIntegersArray(totalInited);
-
-  const storedMap = await getMapFromVercelNFTs(appId, array, client);
-  const mapRoot = storedMap.getRoot().toString();
-  const dataOut = serializeMerkleMapToJson(storedMap);
+  const client: VercelKV = getVercelClient();
+  const appId: string = getAppString();
+  const data: { totalInited: number } = await fetcher(
+    `${host}/api/totalInited`
+  );
+  const totalInited: number = data.totalInited;
+  const array: number[] = generateIntegersArray(totalInited);
+  const storedMap: MerkleMap = await getMapFromVercelNFTs(appId, array, client);
+  const mapRoot: string = storedMap.getRoot().toString();
+  const dataOut: string = serializeMerkleMapToJson(storedMap);
   res
     .status(200)
     .json({ map: dataOut, totalInited: totalInited, root: mapRoot });

@@ -18,7 +18,7 @@ type NextAppProps<P = any> = AppProps & {
 } & Omit<AppProps<P>, "pageProps">;
 
 function MyApp({ Component, pageProps }: NextAppProps) {
-  const queryClient = new QueryClient();
+  const queryClient: QueryClient = new QueryClient();
   return (
     <MantineProvider
       theme={{

@@ -1,6 +1,5 @@
 import {
   Field,
-  SmartContract,
   state,
   State,
   method,
@@ -13,19 +12,23 @@ import {
   AccountUpdate,
   Signature,
   MerkleMap,
+  TokenContract,
 } from 'o1js';
 
 import { NFT } from './components/NFT/NFT.js';
 import { InitState } from './components/NFT/InitState.js';
 
-export class MerkleMapContract extends SmartContract {
+export class NFTContract extends TokenContract {
   events = {
-    'update-merkle-root': Field,
-    'update-fee': UInt64,
-    'update-total-supply': UInt64,
-    'update-inited-amount': Field,
-    'init-max-supply': Field,
+    'inited-max-supply': Field,
+    'inited-nft': Field,
     'minted-nft': Field,
+    'transferred-nft': Field,
+    'updated-fee': UInt64,
+    'updated-inited-amount': Field,
+    'updated-merkle-key': Field,
+    'updated-merkle-root': Field,
+    'updated-total-supply': UInt64,
   };
   @state(PublicKey) admin = State<PublicKey>();
   @state(Field) root = State<Field>();
@@ -63,16 +66,25 @@ export class MerkleMapContract extends SmartContract {
   ): Bool {
     const admin: PublicKey = this.admin.getAndRequireEquals();
     const isAdmin: Bool = adminSignature.verify(admin, initState.toFields());
-    isAdmin.assertEquals(true, 'initState signature: not admin');
+    isAdmin.assertTrue('initState signature: not an admin');
+
     const root: Field = this.root.getAndRequireEquals();
     const emptyMerkleMapRoot: Field = new MerkleMap().getRoot();
-    root.assertEquals(emptyMerkleMapRoot, 'root initialized');
+    root.assertEquals(emptyMerkleMapRoot, 'root: initialized');
+
     const maxSupply: Field = this.maxSupply.getAndRequireEquals();
-    maxSupply.assertEquals(0, 'max supply initialized');
+    maxSupply.assertEquals(0, 'maxSupply: initialized');
+
     const initedAmount: Field = this.totalInited.getAndRequireEquals();
-    initedAmount.assertEquals(0, 'initalized amount of nfts');
+    initedAmount.assertEquals(0, 'nfts: initialized');
+
     this.initMaxSupply(initState.maxSupply);
-    this.updateInitedAmount(Field(0), initState.totalInited);
+    this.initNFTAmount(initState.totalInited);
+    initState.maxSupply.assertGreaterThanOrEqual(
+      initState.totalInited,
+      'maxSupply reached'
+    );
+
     this.updateFee(initState.feeAmount);
     this.updateRoot(initState.initialRoot);
     return Bool(true);
@@ -85,126 +97,160 @@ export class MerkleMapContract extends SmartContract {
   }
 
   @method public initNFT(
-    item: NFT,
+    nft: NFT,
     keyWitness: MerkleMapWitness,
     adminSignature: Signature
   ): Bool {
-    this.verifyAdminItemSignature(item, adminSignature);
+    this.verifyAdminNFTSignature(nft, adminSignature);
     const { senderUpdate: senderUpdate } = this.verifySenderSignature();
+
     const initedAmount: Field = this.totalInited.getAndRequireEquals();
     const maxSupply: Field = this.maxSupply.getAndRequireEquals();
-    initedAmount.assertLessThanOrEqual(maxSupply, 'maximum supply reached');
-    const fee: UInt64 = this.fee.getAndRequireEquals();
+    maxSupply.assertGreaterThan(initedAmount, 'maximum supply reached');
+
     const initialRoot: Field = this.root.getAndRequireEquals();
     const [rootBefore, key] = keyWitness.computeRootAndKey(Field(0));
-    rootBefore.assertEquals(initialRoot, 'does not match root');
-    key.assertEquals(item.id, 'keyWitness not matches nft id');
-    key.assertEquals(initedAmount, 'keyWitness not matches order');
+    rootBefore.assertEquals(initialRoot, 'roots: do not match');
+    key.assertEquals(nft.id, 'key: not matches nft id');
+    key.assertEquals(initedAmount, 'key: not matches order id');
+
+    const fee: UInt64 = this.fee.getAndRequireEquals();
     senderUpdate.send({ to: this, amount: fee });
-    const [rootAfter] = keyWitness.computeRootAndKey(item.hash());
-    this.updateInitedAmount(initedAmount, 1);
+
+    const nftHash: Field = nft.hash();
+    const [rootAfter] = keyWitness.computeRootAndKey(nftHash);
+
+    this.emitEvent('inited-nft', nftHash);
+    this.emitEvent('updated-merkle-key', nft.id);
+
+    this.incrementNFTAmount(initedAmount);
     this.updateRoot(rootAfter);
     return Bool(true);
   }
 
   @method public mintNFT(
-    item: NFT,
+    nft: NFT,
     keyWitness: MerkleMapWitness,
     adminSignature: Signature
   ): Bool {
-    this.verifyAdminItemSignature(item, adminSignature);
-    this.verifyTreeLeaf(item, keyWitness);
-    item.isMinted.assertEquals(0, 'Already Minted');
-    item.mint();
-    const [rootAfter] = keyWitness.computeRootAndKey(item.hash());
-    this.token.mint({
-      address: item.owner,
-      amount: UInt64.from(1_000_000_000),
+    this.verifyAdminNFTSignature(nft, adminSignature);
+    this.verifyTreeLeaf(nft, keyWitness);
+    nft.isMinted.assertEquals(0, 'nft: already minted');
+
+    this.internal.mint({
+      address: nft.owner,
+      amount: 1_000_000_000,
     });
-    this.emitEvent('minted-nft', item.id);
-    this.updateTotalSupply();
+    nft.mint();
+
+    const nftHash: Field = nft.hash();
+    const [rootAfter] = keyWitness.computeRootAndKey(nftHash);
+
+    this.emitEvent('minted-nft', nftHash);
+    this.emitEvent('updated-merkle-key', nft.id);
+
+    this.incrementTotalSupply();
     this.updateRoot(rootAfter);
     return Bool(true);
   }
 
-  @method public transfer(
-    item: NFT,
+  @method public transferNFT(
+    nft: NFT,
     newOwner: PublicKey,
     keyWitness: MerkleMapWitness,
     adminSignature: Signature
-  ): NFT {
-    this.verifyAdminItemSignature(item, adminSignature);
-    const { sender: sender } = this.verifyTreeLeaf(item, keyWitness);
-    item.changeOwner(newOwner);
-    const [rootAfter] = keyWitness.computeRootAndKey(item.hash());
-    this.token.send({
+  ): Bool {
+    this.verifyAdminNFTSignature(nft, adminSignature);
+    const sender: PublicKey = this.verifyTreeLeaf(nft, keyWitness);
+
+    this.internal.send({
       from: sender,
       to: newOwner,
-      amount: UInt64.from(1_000_000_000),
+      amount: 1_000_000_000,
     });
+    nft.changeOwner(newOwner);
+
+    const nftHash: Field = nft.hash();
+    const [rootAfter] = keyWitness.computeRootAndKey(nftHash);
+
+    this.emitEvent('transferred-nft', nftHash);
+    this.emitEvent('updated-merkle-key', nft.id);
     this.updateRoot(rootAfter);
-    return item;
+    return Bool(true);
   }
 
-  private initMaxSupply(_maxSupply: Field) {
+  private initMaxSupply(_maxSupply: Field): void {
     this.maxSupply.set(_maxSupply);
-    this.emitEvent('init-max-supply', _maxSupply);
+    this.emitEvent('inited-max-supply', _maxSupply);
   }
 
-  private updateInitedAmount(initedAmount: Field, dAmount: number | Field) {
-    const newTotalInited: Field = initedAmount.add(dAmount);
-    this.totalInited.set(newTotalInited);
-    this.emitEvent('update-inited-amount', newTotalInited);
+  private initNFTAmount(dAmount: Field): void {
+    this.totalInited.set(dAmount);
+    this.emitEvent('updated-inited-amount', dAmount);
   }
 
-  private updateTotalSupply() {
+  private incrementNFTAmount(totalInited: Field): void {
+    const totalInitedNew: Field = totalInited.add(1);
+    this.totalInited.set(totalInitedNew);
+    this.emitEvent('updated-inited-amount', totalInitedNew);
+  }
+
+  private incrementTotalSupply(): void {
     const liquidity: UInt64 = this.totalSupply.getAndRequireEquals();
     const newTotalSupply: UInt64 = liquidity.add(1);
     this.totalSupply.set(newTotalSupply);
-    this.emitEvent('update-total-supply', newTotalSupply);
+    this.emitEvent('updated-total-supply', newTotalSupply);
   }
 
-  private updateFee(newFeeAmount: UInt64) {
+  private updateFee(newFeeAmount: UInt64): void {
     this.fee.getAndRequireEquals();
     this.fee.set(newFeeAmount);
-    this.emitEvent('update-fee', newFeeAmount);
+    this.emitEvent('updated-fee', newFeeAmount);
   }
 
-  private updateRoot(newRoot: Field) {
+  private updateRoot(newRoot: Field): void {
     this.root.set(newRoot);
-    this.emitEvent('update-merkle-root', newRoot);
+    this.emitEvent('updated-merkle-root', newRoot);
   }
 
-  private verifyTreeLeaf(item: NFT, keyWitness: MerkleMapWitness) {
+  private verifyTreeLeaf(nft: NFT, keyWitness: MerkleMapWitness): PublicKey {
     const { sender: sender } = this.verifySenderSignature();
-    const isItemOwner: Bool = sender.equals(item.owner);
-    isItemOwner.assertEquals(true, 'sender not item owner');
+    const isNFTOwner: Bool = sender.equals(nft.owner);
+    isNFTOwner.assertTrue('sender: not an nft owner');
+
     const initialRoot: Field = this.root.getAndRequireEquals();
-    const [rootBefore, key] = keyWitness.computeRootAndKey(item.hash());
-    rootBefore.assertEquals(initialRoot, 'root not matching');
-    key.assertEquals(item.id, 'key not matching');
-    return { sender: sender };
+    const [rootBefore, key] = keyWitness.computeRootAndKey(nft.hash());
+    rootBefore.assertEquals(initialRoot, 'roots: not matching');
+    key.assertEquals(nft.id, 'key: not matching nft id');
+    return sender;
   }
 
-  private verifyAdminSignature() {
+  private verifyAdminSignature(): void {
     const admin: PublicKey = this.admin.getAndRequireEquals();
     const sender: PublicKey = this.sender;
     const isAdmin: Bool = sender.equals(admin);
-    isAdmin.assertEquals(true, 'sender not admin');
+    isAdmin.assertTrue('sender: not an admin');
     const senderUpdate: AccountUpdate = AccountUpdate.create(admin);
     senderUpdate.requireSignature();
   }
 
-  private verifyAdminItemSignature(item: NFT, adminSignature: Signature) {
+  private verifyAdminNFTSignature(nft: NFT, adminSignature: Signature): void {
     const admin: PublicKey = this.admin.getAndRequireEquals();
-    const isAdmin: Bool = adminSignature.verify(admin, item.toFields());
-    isAdmin.assertEquals(Bool(true), 'item signature: not admin');
+    const isAdmin: Bool = adminSignature.verify(admin, nft.toFields());
+    isAdmin.assertTrue('nft signature: not an admin');
   }
 
-  private verifySenderSignature() {
+  private verifySenderSignature(): {
+    senderUpdate: AccountUpdate;
+    sender: PublicKey;
+  } {
     const sender: PublicKey = this.sender;
     const senderUpdate: AccountUpdate = AccountUpdate.create(sender);
     senderUpdate.requireSignature();
     return { senderUpdate: senderUpdate, sender: sender };
   }
+
+  @method approveBase() {}
+
+  @method transfer() {}
 }

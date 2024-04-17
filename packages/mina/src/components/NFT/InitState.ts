@@ -16,7 +16,7 @@ export function createInitState(
   totalInited: number,
   feeAmount: number = 0,
   maxSupply: number = 255
-) {
+): InitState {
   const rootBefore: Field = merkleMap.getRoot();
   const totalInitedField: Field = Field(totalInited);
   const feeAmountU64: UInt64 = UInt64.from(feeAmount);

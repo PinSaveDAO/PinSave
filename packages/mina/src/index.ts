@@ -16,10 +16,19 @@ export {
   getTotalSupplyLive,
   getTotalInitedLive,
   getAppState,
-  getTreeRoot,
+  getTreeRootString,
 } from './components/AppState.js';
 
-export { nftDataIn, deserializeNFT } from './components/NFT/deserialization.js';
+export {
+  NFTSerializedData,
+  NFTMetadataAA,
+  NFTAA,
+  deserializeNFT,
+  deserializeMetadata,
+  createNFTFromStrings,
+  deserializeNFTAA,
+  deserializeNFTMetadataAA,
+} from './components/NFT/deserialization.js';
 
 export {
   stringObjectToNFTMetadata,
@@ -35,23 +44,64 @@ export {
   createNFTWithMapWitness,
 } from './components/NFT/NFT.js';
 
+export { validateTreeInited } from './components/Vercel/validateTree.js';
+
+export {
+  getVercelNFT,
+  getVercelNFTAllKeys,
+  getVercelMetadata,
+  getVercelMetadataAllKeys,
+  setVercelMetadata,
+  setMetadatasToVercel,
+  setVercelNFT,
+  setNFTsToVercel,
+  deleteVercelKey,
+} from './components/Vercel/vercel.js';
+
+export {
+  mintVercelNFT,
+  mintVercelMetadata,
+} from './components/Vercel/VercelMint.js';
+
+export {
+  NFTReducedAA,
+  NFTSerializedDataAA,
+  getVercelNFTAA,
+  getVercelMetadataAA,
+  getVercelMetadataAAAllKeys,
+  setVercelMetadataAA,
+  setVercelNFTAA,
+} from './components/Vercel/VercelAA.js';
+
+export {
+  mintVercelAA,
+  getMintVercelAA,
+  getMintVercelAAAllKeys,
+} from './components/Vercel/VercelAAMint.js';
+
+export {
+  NFTReducedPending,
+  NFTSerializedDataPending,
+  getVercelMetadataPending,
+  getVercelNFTPending,
+  setVercelMetadataPending,
+  setVercelNFTPending,
+  getVercelMetadataPendingAll,
+  getVercelNFTPendingAllKeys,
+} from './components/Vercel/VercelPending.js';
+
 export {
   CommentData,
   getVercelComment,
   getVercelPostComments,
   getVercelCommentsPostLength,
-  getVercelMetadata,
-  getVercelNFT,
+  setVercelComment,
+} from './components/Vercel/VercelComments.js';
+
+export {
   getMapFromVercelNFTs,
   getMapFromVercelMetadata,
-  setVercelMetadata,
-  setMetadatasToVercel,
-  setVercelNFT,
-  setNFTsToVercel,
-  setVercelComment,
-  mintVercelNFT,
-  mintVercelMetadata,
-} from './components/NFT/vercel.js';
+} from './components/Vercel/VercelMap.js';
 
 export {
   serializeMerkleMapToJson,
@@ -64,6 +114,7 @@ export {
 } from './components/TokenBalances.js';
 
 export {
+  TxOptions,
   createMintTxFromMap,
   createMintTx,
   createTxOptions,
@@ -72,4 +123,4 @@ export {
   mintNFT,
 } from './components/transactions.js';
 
-export { MerkleMapContract } from './NFTsMapContract.js';
+export { NFTContract } from './NFTsMapContract.js';

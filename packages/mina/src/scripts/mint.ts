@@ -1,3 +1,6 @@
+import type { VercelKV } from '@vercel/kv';
+import { MerkleMap } from 'o1js';
+
 import { startBerkeleyClient } from '../components/utilities/client.js';
 import {
   getEnvAccount,
@@ -6,32 +9,36 @@ import {
 } from '../components/utilities/env.js';
 import { generateIntegersArray } from '../components/utilities/helpers.js';
 import { getTotalInitedLive } from '../components/AppState.js';
-import { deserializeNFT } from '../components/NFT/deserialization.js';
 import {
-  getMapFromVercelNFTs,
+  NFTSerializedData,
+  deserializeNFT,
+} from '../components/NFT/deserialization.js';
+import { NFT } from '../components/NFT/NFT.js';
+import {
   getVercelNFT,
   mintVercelNFT,
   mintVercelMetadata,
-} from '../components/NFT/vercel.js';
+} from '../components/Vercel/vercel.js';
+import { getMapFromVercelNFTs } from '../components/Vercel/VercelMap.js';
 import { mintNFTwithMap } from '../components/transactions.js';
 
 startBerkeleyClient();
-const client = getVercelClient();
+const client: VercelKV = getVercelClient();
 
-const nftId = 1;
+const nftId: number = 1;
 
 const { adminPK: adminPK } = getEnvAccount();
 const { appId: appId, zkApp: zkApp } = getAppEnv();
 
-const totalInited = await getTotalInitedLive(zkApp);
-const array = generateIntegersArray(totalInited);
-const storedMap = await getMapFromVercelNFTs(appId, array, client);
+const totalInited: number = await getTotalInitedLive(zkApp);
+const array: number[] = generateIntegersArray(totalInited);
+const storedMap: MerkleMap = await getMapFromVercelNFTs(appId, array, client);
 
-const nft_ = await getVercelNFT(appId, nftId, client);
-const nft = deserializeNFT(nft_);
+const nft_: NFTSerializedData = await getVercelNFT(appId, nftId, client);
+const nft: NFT = deserializeNFT(nft_);
 
-const compile = true;
-const live = true;
+const compile: boolean = true;
+const live: boolean = true;
 
 await mintNFTwithMap(adminPK, adminPK, nft, zkApp, storedMap, compile, live);
 

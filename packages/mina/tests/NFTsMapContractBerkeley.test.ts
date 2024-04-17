@@ -17,15 +17,18 @@ describe('PinSave NFTs on Berkeley', () => {
   const { appContract, appPubString } = getAppVars();
 
   const { zkApp: zkApp } = getAppEnv();
-  const { pubKey: pub } = getEnvAccount();
+  const { adminPubKey: pub } = getEnvAccount();
 
   it('queries PinSave NFTs balances', async () => {
-    const tokenBalance = await getTokenAddressBalance(pub, zkApp.token.id);
+    const tokenBalance: bigint = await getTokenAddressBalance(
+      pub,
+      zkApp.deriveTokenId()
+    );
     expect(tokenBalance).toBeGreaterThanOrEqual(0n);
   });
 
   it('queries Mina balance', async () => {
-    const tokenBalance = getMinaBalance(pub);
+    const tokenBalance: bigint = getMinaBalance(pub);
     expect(tokenBalance).toBeGreaterThanOrEqual(0n);
   });
 });

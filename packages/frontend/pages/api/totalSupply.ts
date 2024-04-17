@@ -1,9 +1,9 @@
+import type { NextApiRequest, NextApiResponse } from "next";
 import {
   startBerkeleyClient,
   getAppContract,
   getTotalSupplyLive,
 } from "pin-mina";
-import type { NextApiRequest, NextApiResponse } from "next";
 
 type DataOut = {
   totalSupply: number;
@@ -15,6 +15,6 @@ export default async function handler(
 ) {
   startBerkeleyClient();
   const zkAppInstance = getAppContract();
-  const totalSupply = await getTotalSupplyLive(zkAppInstance);
+  const totalSupply: number = await getTotalSupplyLive(zkAppInstance);
   res.status(200).json({ totalSupply: totalSupply });
 }

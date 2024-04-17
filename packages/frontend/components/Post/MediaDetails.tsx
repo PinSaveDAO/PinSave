@@ -15,7 +15,6 @@ import { setMinaAccount } from "@/hooks/minaWallet";
 import { fetcher } from "@/utils/fetcher";
 import { useAddressContext } from "context";
 import CommentSection from "./CommentSection";
-import { useComments } from "@/hooks/api";
 
 interface IMyProps {
   post: IndividualPost;
@@ -24,7 +23,6 @@ interface IMyProps {
 const MediaDetails: React.FC<IMyProps> = ({ post }) => {
   const postNumber = Number(post.id);
   const { address, setAddress } = useAddressContext();
-  const { data } = useComments(postNumber);
   const [map, setMap] = useState<MerkleMap | undefined>(undefined);
   const [hash, setHash] = useState<string | undefined>(undefined);
 
@@ -87,18 +85,16 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
   }, [post.id, address]);
   return (
     <Paper shadow="sm" p="md" withBorder>
-      <Title mb="1.4rem" my={2}>
-        {post.name}
-      </Title>
+      <Title mb="1.4rem">{post.name}</Title>
       <Paper
         shadow="xs"
         withBorder
         px="xs"
-        sx={{ backgroundColor: "#82c7fc1d" }}
+        sx={{ backgroundColor: "#20c7fc1d" }}
       >
         <Text my={2}>{post.description}</Text>
       </Paper>
-      <p style={{ fontSize: "small", color: "#0000008d" }}>
+      <Text sx={{ fontSize: "small", color: "#0000008d" }}>
         Owned by:{" "}
         <a
           style={{ color: "#198b6eb9" }}
@@ -106,24 +102,24 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
         >
           {post.owner.substring(0, 8) + "..." + post.owner.substring(45)}
         </a>
-      </p>
+      </Text>
       {address === post.owner && post.isMinted === "1" && (
-        <p style={{ fontSize: "small", color: "#0000008d" }}>Minted</p>
+        <div style={{ fontSize: "small", color: "#0000008d" }}>Minted</div>
       )}
       {hash && (
-        <p style={{ fontSize: "small", color: "#0000008d" }}>
+        <div style={{ fontSize: "small", color: "#0000008d" }}>
           <a
             style={{ color: "#198b6eb9" }}
             href={`https://minascan.io/berkeley/tx/${hash}`}
           >
             hash
           </a>
-        </p>
+        </div>
       )}
       {address === post.owner && post.isMinted === "0" && map && (
         <Button onClick={async () => await mintNFTClient()}>Mint</Button>
       )}
-      <CommentSection messagesQueried={data?.comments} postId={post.id} />
+      <CommentSection postId={post.id} />
     </Paper>
   );
 };
