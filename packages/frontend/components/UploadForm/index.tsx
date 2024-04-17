@@ -244,8 +244,6 @@ const UploadForm = () => {
           MIME_TYPES.jpeg,
           MIME_TYPES.webp,
           MIME_TYPES.svg,
-          MIME_TYPES.gif,
-          MIME_TYPES.mp4,
         ]}
       >
         {() => dropzoneChildren(image)}

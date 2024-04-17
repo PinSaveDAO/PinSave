@@ -18,7 +18,7 @@
 
 </div>
 
-Pin Save is a decentralized image, video sharing and content aggregation platform where users can not only control the content but also the platform itself.
+Pin Save is a decentralized image and content aggregation platform where users can not only control the content but also the platform itself.
 
 1. The decentralized feed reinforces the discovery of content and feedback.
 2. Decentralized Identity, which provides anonymity and data protection.
@@ -27,16 +27,16 @@ Pin Save is a decentralized image, video sharing and content aggregation platfor
 
 ## Features
 
-- Mina, first zk-blockhain, smart contracts
+- Mina, first zk-blockhain, smart contracts.
 
-  1. NFTContract to mint and transfer nfts
-  2. SwapContract to buy, sell and swap nfts
+  1. NFTContract to mint and transfer nfts.
+  2. SwapContract to buy, sell and swap nfts.
 
-- Mina Merkle Trees
+- Mina Merkle Trees.
 
-- NextJS API to obtain adminSignatures
+- NextJS API to obtain adminSignatures.
 
-- NextJS API routes save requested data to Vercel Redis Database
+- NextJS API routes save requested data to Vercel Redis Database.
 
   1. Main schema that stores data for a MerkleMap with the same root as on-chain contract.
   2. Pending schema that tracks submitted transactions and promotes the data to main schema.
@@ -44,13 +44,15 @@ Pin Save is a decentralized image, video sharing and content aggregation platfor
 
 - Decentralized feed of NFTs:
 
-![decentralized feed](https://github.com/Pfed-prog/Dspyt-NFTs-EVM/blob/master/assets/feed.png)
+![Pin Save decentralized feed](https://github.com/Pfed-prog/Dspyt-NFTs-EVM/blob/master/assets/feed.png)
 
 - Image posting:
 
-![Upload](https://github.com/Pfed-prog/Dspyt-NFTs-EVM/blob/master/assets/upload.png)
+![Pin Save Upload](https://github.com/Pfed-prog/Dspyt-NFTs-EVM/blob/master/assets/upload.png)
 
-- Comments verified with Auro Wallet:
+- Decentralized post comments verified with Auro Wallet:
+
+![Pin Save Post](https://github.com/Pfed-prog/Dspyt-NFTs-EVM/blob/master/assets/post.png)
 
 ## Setup
 
