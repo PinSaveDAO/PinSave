@@ -60,7 +60,7 @@ const CommentSection: React.FC<IMyProps> = ({ postId }) => {
   return (
     <div>
       {!messagesQueried?.comments && isLoading && (
-        <Center>
+        <Center mt="md">
           <Stack
             sx={{
               maxWidth: 700,
@@ -71,18 +71,18 @@ const CommentSection: React.FC<IMyProps> = ({ postId }) => {
         </Center>
       )}
 
-      {isFetched ? (
-        <div>
+      {isFetched && (
+        <Text mt="sm">
           {messagesQueried?.comments?.map((message: message, i: number) => (
             <Paper
               key={i}
               shadow="xs"
-              mt={4}
+              mt={3}
               sx={{ backgroundColor: "#82c7fc1d" }}
               withBorder
-              px="lg"
+              px="xs"
             >
-              <Text mt={3}>
+              <Text mt={2} mb={2}>
                 <a
                   href={`https://minascan.io/berkeley/account/${message.publicKey}`}
                   style={{ color: "#198b6eb9", fontSize: "smaller" }}
@@ -96,8 +96,8 @@ const CommentSection: React.FC<IMyProps> = ({ postId }) => {
               </Text>
             </Paper>
           ))}
-        </div>
-      ) : null}
+        </Text>
+      )}
       <Center>
         <Group>
           <TextInput

@@ -1,4 +1,4 @@
-import { Paper, Text, Title, Button } from "@mantine/core";
+import { Paper, Text, Title, Button, Group } from "@mantine/core";
 import { MerkleMap, PublicKey, Signature, fetchAccount } from "o1js";
 import { useEffect, useState } from "react";
 import {
@@ -94,7 +94,7 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
       >
         <Text my={2}>{post.description}</Text>
       </Paper>
-      <Text sx={{ fontSize: "small", color: "#0000008d" }}>
+      <Text px="xs" mt="xs" sx={{ fontSize: "small", color: "#0000008d" }}>
         Owned by:{" "}
         <a
           style={{ color: "#198b6eb9" }}
@@ -103,9 +103,6 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
           {post.owner.substring(0, 8) + "..." + post.owner.substring(45)}
         </a>
       </Text>
-      {address === post.owner && post.isMinted === "1" && (
-        <div style={{ fontSize: "small", color: "#0000008d" }}>Minted</div>
-      )}
       {hash && (
         <div style={{ fontSize: "small", color: "#0000008d" }}>
           <a
@@ -116,9 +113,27 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
           </a>
         </div>
       )}
-      {address === post.owner && post.isMinted === "0" && map && (
-        <Button onClick={async () => await mintNFTClient()}>Mint</Button>
-      )}
+      <Group>
+        {address === post.owner && post.isMinted === "0" && map ? (
+          <Button mt="sm" onClick={async () => await mintNFTClient()}>
+            Mint
+          </Button>
+        ) : (
+          <Button
+            mt="sm"
+            disabled={address !== post.owner || post.isMinted === "1" || !map}
+          >
+            Mint
+          </Button>
+        )}
+        <Button mt="sm" disabled>
+          Supply NFT
+        </Button>
+        <Paper mt="sm">Ask by a holder</Paper>
+        <Button mt="sm" disabled>
+          Purchase
+        </Button>
+      </Group>
       <CommentSection postId={post.id} />
     </Paper>
   );
