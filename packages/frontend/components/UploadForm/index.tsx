@@ -198,15 +198,14 @@ const UploadForm = () => {
   return (
     <Paper
       withBorder
-      shadow="xl"
       p="xl"
+      shadow="xl"
       radius="lg"
-      sx={{ maxWidth: "900px" }}
+      sx={{ maxWidth: "950px" }}
       mx="auto"
     >
       <Title
         order={1}
-        my="lg"
         align="center"
         style={{
           WebkitBackgroundClip: "text",
@@ -231,7 +230,7 @@ const UploadForm = () => {
         onChange={(e) => setDescription(e.target.value)}
         value={description}
         label="Description"
-        placeholder="Describe your post here"
+        placeholder="Provide description to your post here"
       />
       <Dropzone
         mt="md"

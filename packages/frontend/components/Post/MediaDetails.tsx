@@ -23,6 +23,7 @@ interface IMyProps {
 const MediaDetails: React.FC<IMyProps> = ({ post }) => {
   const postNumber = Number(post.id);
   const { address, setAddress } = useAddressContext();
+
   const [map, setMap] = useState<MerkleMap | undefined>(undefined);
   const [hash, setHash] = useState<string | undefined>(undefined);
 
@@ -84,7 +85,7 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
     fetchMediaDetails();
   }, [post.id, address]);
   return (
-    <Paper shadow="sm" p="md" withBorder>
+    <Paper shadow="lg" p="xl" ml="md" mr="md" withBorder>
       <Title mb="1.4rem">{post.name}</Title>
       <Paper
         shadow="xs"
