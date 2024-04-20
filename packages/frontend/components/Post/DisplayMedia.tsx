@@ -11,10 +11,36 @@ interface IMyProps {
 
 const DisplayMedia: React.FC<IMyProps> = ({ post }) => {
   const [hasMounted, setHasMounted] = useState(false);
-  const xlScreen = useMediaQuery("(min-width: 2000px)");
-  const largeScreen = useMediaQuery("(min-width: 700px)");
-  const height = xlScreen ? 1200 : largeScreen ? 600 : 300;
-  const width = xlScreen ? 800 : largeScreen ? 400 : 200;
+  const xxlScreenWidth = useMediaQuery("(min-width: 2000px)");
+  const xlScreenWidth = useMediaQuery("(min-width: 1500px)");
+  const largeScreenWidth = useMediaQuery("(min-width: 1200px)");
+  const mediumScreenWidth = useMediaQuery("(min-width: 700px)");
+  const smallScreenWidth = useMediaQuery("(min-width: 500px)");
+  const width = xxlScreenWidth
+    ? 1000
+    : xlScreenWidth
+    ? 700
+    : largeScreenWidth
+    ? 600
+    : mediumScreenWidth
+    ? 500
+    : smallScreenWidth
+    ? 400
+    : 300;
+  const xlScreenHeight = useMediaQuery("(min-height: 1000px)");
+  const largeScreenHeight = useMediaQuery("(min-height: 800px)");
+  const mediumScreenHeight = useMediaQuery("(min-height: 600px)");
+  const smallScreenHeight = useMediaQuery("(min-height: 400px)");
+
+  const height = xlScreenHeight
+    ? 850
+    : largeScreenHeight
+    ? 650
+    : mediumScreenHeight
+    ? 450
+    : smallScreenHeight
+    ? 325
+    : 250;
   useEffect(() => {
     setHasMounted(true);
   });
@@ -29,6 +55,8 @@ const DisplayMedia: React.FC<IMyProps> = ({ post }) => {
           style={{
             height: "95%",
             borderRadius: "10px",
+            maxHeight: height,
+            maxWidth: width,
           }}
         />
       )}
