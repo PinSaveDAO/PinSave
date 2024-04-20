@@ -6,9 +6,9 @@
 version: 2
 updates:
   - package-ecosystem: "npm" # See documentation for possible values
-    directory: "/packages/hardhat/" # Location of package manifests
+    directory: "/packages/mina/" # Location of package manifests
     schedule:
-      interval: "weekly"
+      interval: "daily"
   - package-ecosystem: "npm" # See documentation for possible values
     directory: "/packages/frontend/" # Location of package manifests
     schedule:
