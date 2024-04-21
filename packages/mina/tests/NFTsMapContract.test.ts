@@ -117,12 +117,13 @@ describe('PinSave NFTs on Local Blockchain', () => {
   });
 
   it('fails to update fee: not admin', async () => {
+    let errorMessage: string = '';
     try {
       await setNFTContractFee(pk2, nftContract);
     } catch (error) {
-      const errorMessage: string = String(error).substring(0, 27);
-      expect(errorMessage).toBe('Error: sender: not an admin');
+      errorMessage = String(error).substring(0, 27);
     }
+    expect(errorMessage).toBe('Error: sender: not an admin');
   });
 
   it('mints NFT', async () => {
@@ -138,6 +139,7 @@ describe('PinSave NFTs on Local Blockchain', () => {
   });
 
   it('fails to mint the same NFT ', async () => {
+    let errorMessage: string = '';
     try {
       await mintNFTwithMap(
         pkAdmin,
@@ -149,9 +151,9 @@ describe('PinSave NFTs on Local Blockchain', () => {
         live
       );
     } catch (error) {
-      const errorMessage: string = String(error).substring(0, 26);
-      expect(errorMessage).toBe('Error: nft: already minted');
+      errorMessage = String(error).substring(0, 26);
     }
+    expect(errorMessage).toBe('Error: nft: already minted');
   });
 
   it('inits NFT', async () => {
@@ -165,6 +167,7 @@ describe('PinSave NFTs on Local Blockchain', () => {
     const nft: NFTMetadata = generateDummyNFTMetadata(3, pubAdmin);
     const nftStruct: NFT = createNFT(nft);
 
+    let errorMessage: string = '';
     try {
       await initNFT(
         pkAdmin,
@@ -176,9 +179,9 @@ describe('PinSave NFTs on Local Blockchain', () => {
         live
       );
     } catch (error) {
-      const errorMessage: string = String(error).substring(0, 26);
-      expect(errorMessage).toBe('Error: roots: do not match');
+      errorMessage = String(error).substring(0, 26);
     }
+    expect(errorMessage).toBe('Error: roots: do not match');
   });
 
   it('inits NFT', async () => {
@@ -193,6 +196,8 @@ describe('PinSave NFTs on Local Blockchain', () => {
   it('fails to init NFT: not correct nft id', async () => {
     const nftNew: NFTMetadata = generateDummyNFTMetadata(10, pubKey2);
     const nftStructNew: NFT = createNFT(nftNew);
+
+    let errorMessage: string = '';
     try {
       await initNFT(
         pkAdmin,
@@ -204,9 +209,9 @@ describe('PinSave NFTs on Local Blockchain', () => {
         live
       );
     } catch (error) {
-      const messageError = String(error).substring(0, 32);
-      expect(messageError).toBe('Error: key: not matches order id');
+      errorMessage = String(error).substring(0, 32);
     }
+    expect(errorMessage).toBe('Error: key: not matches order id');
   });
 
   it('transfers nft: from admin to a new user', async () => {
@@ -244,6 +249,7 @@ describe('PinSave NFTs on Local Blockchain', () => {
     const nftStruct: NFT = createNFT(nftNew);
     nftStruct.mint();
 
+    let errorMessage: string = '';
     try {
       await transferNFT(
         pkAdmin,
@@ -255,8 +261,8 @@ describe('PinSave NFTs on Local Blockchain', () => {
         live
       );
     } catch (error) {
-      const messageError: string = String(error).substring(0, 31);
-      expect(messageError).toBe('Error: sender: not an nft owner');
+      errorMessage = String(error).substring(0, 31);
     }
+    expect(errorMessage).toBe('Error: sender: not an nft owner');
   });
 });
