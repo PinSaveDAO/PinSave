@@ -15,7 +15,6 @@ import {
   MerkleMap,
 } from 'o1js';
 
-import { NFT } from './components/NFT/NFT.js';
 import { NFTforMina, NFTforNFT } from './components/Swap/BidNFT.js';
 import { InitSwapState } from './components/Swap/InitSwap.js';
 import {
@@ -96,8 +95,7 @@ export class SwapContract extends SmartContract {
     swapContractKeyWitness: MerkleMapWitness,
     swapContractAdminSignature: Signature
   ): Field {
-    const { sender: sender, senderUpdate: senderUpdate } =
-      this.verifySenderSignature();
+    const { sender, senderUpdate } = this.verifySenderSignature();
     this.verifyAdminSignatureNFTSaleStruct(
       nftOrder,
       swapContractAdminSignature
@@ -123,7 +121,7 @@ export class SwapContract extends SmartContract {
 
   @method public swapNFT(nftOrderData: NFTforNFTOrder): Field {
     const nftOrder: NFTforNFT = nftOrderData.nftOrder;
-    const { sender: sender } = this.verifySenderSignature();
+    const { sender } = this.verifySenderSignature();
     this.verifyAdminSignatureNFTSaleStruct(
       nftOrder,
       nftOrderData.swapContractNFTOrderAdminSignature
@@ -204,7 +202,7 @@ export class SwapContract extends SmartContract {
 
   private withdrawNFT(nftOrderData: NFTforMinaOrder | NFTforNFTOrder): Field {
     const nftOrder: NFTforNFT | NFTforMina = nftOrderData.nftOrder;
-    const { sender: sender } = this.verifySenderSignature();
+    const { sender } = this.verifySenderSignature();
     this.verifyAdminSignatureNFTSaleStruct(
       nftOrder,
       nftOrderData.swapContractNFTOrderAdminSignature
@@ -268,7 +266,7 @@ export class SwapContract extends SmartContract {
     nftOrder: NFTforMina | NFTforNFT,
     keyWitness: MerkleMapWitness
   ): void {
-    const { sender: sender } = this.verifySenderSignature();
+    const { sender } = this.verifySenderSignature();
     const isNFTOwner: Bool = sender.equals(nftOrder.owner);
     isNFTOwner.assertTrue('sender: not an nft owner');
 

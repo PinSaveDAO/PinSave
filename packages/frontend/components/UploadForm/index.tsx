@@ -42,7 +42,7 @@ export const dropzoneChildren = (image: File | undefined) => {
         spacing="xl"
         style={{ minHeight: 220, pointerEvents: "none" }}
       >
-        {image.type[0] === "i" ? (
+        {image.type.startsWith("i") ? (
           <Image
             src={link}
             alt="uploaded image"
@@ -107,7 +107,7 @@ const UploadForm = () => {
   ) {
     if (description !== "" && name !== "" && address) {
       startBerkeleyClient();
-      const { appContract: appContract } = getAppVars();
+      const { appContract } = getAppVars();
       const totalInited: number = await getTotalInitedLive(appContract, true);
       const pub: PublicKey = PublicKey.fromBase58(address);
       const cid: string = await UploadData(image);

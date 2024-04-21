@@ -17,15 +17,15 @@ import { TxStatus, initRootWithCompile } from '../components/transactions.js';
 startBerkeleyClient();
 const client: VercelKV = getVercelClient();
 
-const { adminPubKey: adminPubKey, adminPK: adminPK } = getEnvAccount();
-const { appId: appId, zkApp: zkApp } = getAppEnv();
+const { adminPubKey, adminPK } = getEnvAccount();
+const { appId, zkApp } = getAppEnv();
 
 const arrayLength: number = 1;
 
 const {
   map: merkleMap,
-  nftArray: nftArray,
-  nftMetadata: nftMetadata,
+  nftArray,
+  nftMetadata,
 } = generateDummyCollectionWithMap(adminPubKey, arrayLength);
 
 const compile: boolean = true;

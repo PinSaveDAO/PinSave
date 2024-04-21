@@ -1,9 +1,8 @@
 import type { VercelKV } from '@vercel/kv';
 import { MerkleMap } from 'o1js';
 
-import { getAppEnv } from '../components/utilities/env.js';
+import { getAppEnv, getVercelClient } from '../components/utilities/env.js';
 import { startBerkeleyClient } from '../components/utilities/client.js';
-import { getVercelClient } from '../components/utilities/env.js';
 import { generateIntegersArray } from '../components/utilities/helpers.js';
 import { getTotalInitedLive } from '../components/AppState.js';
 import { getMapFromVercelNFTs } from '../components/Vercel/VercelMap.js';
@@ -15,7 +14,7 @@ import {
 startBerkeleyClient();
 const client: VercelKV = getVercelClient();
 
-const { appId: appId, zkApp: zkApp } = getAppEnv();
+const { appId, zkApp } = getAppEnv();
 
 const totalInited: number = await getTotalInitedLive(zkApp);
 const array: number[] = generateIntegersArray(totalInited);

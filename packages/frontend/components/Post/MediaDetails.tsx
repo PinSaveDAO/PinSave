@@ -34,7 +34,7 @@ const MediaDetails: React.FC<IMyProps> = ({ post }) => {
     if (map && address) {
       startBerkeleyClient();
       const compile = true;
-      const { appPubString: appId, appContract: appContract } = getAppVars();
+      const { appPubString: appId, appContract } = getAppVars();
       const dataNft = await fetcher(`/api/nft/${postNumber}`);
       const nft = deserializeNFT(dataNft);
       await fetchAccount({ publicKey: appId });
