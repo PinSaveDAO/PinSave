@@ -4,17 +4,19 @@ import {
   MerkleMapWitness,
   PrivateKey,
   PublicKey,
-  UInt64,
   Signature,
 } from 'o1js';
 
 import { generateDummyCollectionWithMap } from '../src/components/NFT/dummy.js';
 import { NFT } from '../src/components/NFT/NFT.js';
-import { NFTforMina, createNFTforMina } from '../src/components/Swap/BidNFT.js';
+import {
+  NFTforMina,
+  NFTforMinaStruct,
+  createNFTforMina,
+} from '../src/components/Swap/BidNFT.js';
 import {
   NFTforMinaOrder,
   createNFTforMinaOrder,
-  createNFTforNFTOrder,
 } from '../src/components/Swap/SupplyNFT.js';
 import { startLocalBlockchainClient } from '../src/components/utilities/client.js';
 import {
@@ -28,7 +30,6 @@ import {
   initSwapContractRoot,
   setSwapContractFee,
   supplyNFTforMinaSwapContract,
-  supplyNFTforNFTSwapContract,
 } from '../src/components/transactionsSwap.js';
 import { NFTContract } from '../src/NFTsMapContract.js';
 import { SwapContract } from '../src/SwapContract.js';
@@ -134,13 +135,17 @@ describe('PinSave Swap Contract on Local Blockchain', () => {
     const totalOrdersInited: Field = swapContract.totalOrdersInited.get();
 
     const nft: NFT = nftArray[0];
-    const askAmount: UInt64 = UInt64.from(100);
-    const nftForMinaOrder = createNFTforMina(
-      nft,
-      pubNFTAdmin,
-      nftContractPub,
-      askAmount
-    );
+    const askAmount: number = 100;
+
+    const nftforMinaStruct: NFTforMinaStruct = {
+      nft: nft,
+      owner: pubNFTAdmin,
+      nftContractAddress: nftContractPub,
+      askAmount: askAmount,
+      isCompleted: false,
+    };
+
+    const nftForMinaOrder: NFTforMina = createNFTforMina(nftforMinaStruct);
 
     const swapMerkleWitness: MerkleMapWitness =
       swapContractMap.getWitness(totalOrdersInited);

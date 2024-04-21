@@ -46,7 +46,7 @@ export async function getStaticPaths() {
 }
 
 export const getStaticProps: GetStaticProps = async (context) => {
-  const { id: id } = context.params as IParams;
+  const { id } = context.params as IParams;
   const client: VercelKV = getVercelClient();
   const appId: string = getAppString();
   const post: NFTSerializedData = await getVercelMetadata(appId, id, client);

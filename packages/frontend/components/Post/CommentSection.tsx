@@ -73,9 +73,9 @@ const CommentSection: React.FC<IMyProps> = ({ postId }) => {
 
       {isFetched && (
         <Text mt="sm">
-          {messagesQueried?.comments?.map((message: message, i: number) => (
+          {messagesQueried?.comments?.map((message: message, idx: number) => (
             <Paper
-              key={i}
+              key={`${message.data.substring(10)}-${idx}`}
               shadow="xs"
               mt={3}
               sx={{ backgroundColor: "#82c7fc1d" }}

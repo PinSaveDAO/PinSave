@@ -1,3 +1,7 @@
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { useState, useEffect } from "react";
 import {
   createStyles,
   Text,
@@ -9,15 +13,10 @@ import {
   Transition,
   Button,
 } from "@mantine/core";
-import { useBooleanToggle } from "@mantine/hooks";
-import { useMediaQuery } from "@mantine/hooks";
-import Image from "next/image";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import { useState, useEffect } from "react";
+import { useBooleanToggle, useMediaQuery } from "@mantine/hooks";
 
-import { setMinaAccount } from "@/hooks/minaWallet";
 import { useAddressContext } from "context";
+import { setMinaAccount } from "@/hooks/minaWallet";
 
 const useStyles = createStyles((theme) => ({
   root: {
@@ -105,7 +104,7 @@ const useStyles = createStyles((theme) => ({
 }));
 
 interface NavbarProps {
-  links: { link: string; label: string }[];
+  readonly links: { link: string; label: string }[];
 }
 
 export function Navbar({ links }: NavbarProps) {
@@ -166,7 +165,7 @@ export function Navbar({ links }: NavbarProps) {
               radius="md"
               onClick={async () => setAddress(await setMinaAccount())}
             >
-              {shortAddress ? shortAddress : "Connect Wallet"}
+              {shortAddress || "Connect Wallet"}
             </Button>
             <Burger
               opened={opened}

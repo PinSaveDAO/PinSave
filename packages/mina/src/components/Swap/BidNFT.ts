@@ -7,15 +7,15 @@ export type NFTforNFTStruct = {
   owner: PublicKey;
   nftContractAddress: PublicKey;
   askNFTId: Field;
-  isCompleted: Bool;
+  isCompleted: boolean;
 };
 
 export type NFTforMinaStruct = {
   nft: NFT;
   owner: PublicKey;
   nftContractAddress: PublicKey;
-  askAmount: UInt64;
-  isCompleted: Bool;
+  askAmount: number;
+  isCompleted: boolean;
 };
 
 export class NFTforMina extends Struct({
@@ -67,8 +67,8 @@ export function createNFTforMina(
     nft: nftforMinaStruct.nft,
     owner: nftforMinaStruct.owner,
     nftContractAddress: nftforMinaStruct.nftContractAddress,
-    askAmount: nftforMinaStruct.askAmount,
-    isCompleted: nftforMinaStruct.isCompleted,
+    askAmount: UInt64.from(nftforMinaStruct.askAmount),
+    isCompleted: Bool(nftforMinaStruct.isCompleted),
   });
   return nftforMina;
 }
@@ -79,7 +79,7 @@ export function createNFTforNFT(nftforNFTStruct: NFTforNFTStruct): NFTforNFT {
     owner: nftforNFTStruct.owner,
     nftContractAddress: nftforNFTStruct.nftContractAddress,
     askNFTId: nftforNFTStruct.askNFTId,
-    isCompleted: nftforNFTStruct.isCompleted,
+    isCompleted: Bool(nftforNFTStruct.isCompleted),
   });
   return nftforNFT;
 }

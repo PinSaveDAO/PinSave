@@ -65,8 +65,8 @@ export async function createInitNFTTxFromMap(
   nftContract: NFTContract,
   merkleMap: MerkleMap,
   adminSignature: Signature,
-  compile: boolean = true,
-  txOptions: TxOptions
+  txOptions: TxOptions,
+  compile: boolean = true
 ): Promise<string> {
   if (compile) {
     await NFTContract.compile();
@@ -86,8 +86,8 @@ export async function createMintTxFromMap(
   _NFT: NFT,
   merkleMap: MerkleMap,
   adminSignature: Signature,
-  compile: boolean = true,
-  txOptions: TxOptions
+  txOptions: TxOptions,
+  compile: boolean = true
 ): Promise<string> {
   if (compile) {
     await NFTContract.compile();

@@ -16,12 +16,7 @@ import {
 import { createTxOptions, TxOptions, TxStatus } from './transactions.js';
 import { SwapContract } from '../SwapContract.js';
 import { InitSwapState, createInitSwapState } from './Swap/InitSwap.js';
-import {
-  NFTforMinaOrder,
-  NFTforNFTOrder,
-  createNFTforMinaOrder,
-  createNFTforNFTOrder,
-} from './Swap/SupplyNFT.js';
+import { NFTforMinaOrder, NFTforNFTOrder } from './Swap/SupplyNFT.js';
 import { NFTforMina } from './Swap/BidNFT.js';
 
 export async function deploySwapContract(

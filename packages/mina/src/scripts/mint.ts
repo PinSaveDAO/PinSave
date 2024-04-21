@@ -14,11 +14,11 @@ import {
   deserializeNFT,
 } from '../components/NFT/deserialization.js';
 import { NFT } from '../components/NFT/NFT.js';
+import { getVercelNFT } from '../components/Vercel/vercel.js';
 import {
-  getVercelNFT,
   mintVercelNFT,
   mintVercelMetadata,
-} from '../components/Vercel/vercel.js';
+} from '../components/Vercel/VercelMint.js';
 import { getMapFromVercelNFTs } from '../components/Vercel/VercelMap.js';
 import { mintNFTwithMap } from '../components/transactions.js';
 
@@ -27,8 +27,8 @@ const client: VercelKV = getVercelClient();
 
 const nftId: number = 1;
 
-const { adminPK: adminPK } = getEnvAccount();
-const { appId: appId, zkApp: zkApp } = getAppEnv();
+const { adminPK } = getEnvAccount();
+const { appId, zkApp } = getAppEnv();
 
 const totalInited: number = await getTotalInitedLive(zkApp);
 const array: number[] = generateIntegersArray(totalInited);

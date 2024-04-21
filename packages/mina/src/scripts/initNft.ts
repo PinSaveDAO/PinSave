@@ -20,8 +20,8 @@ import { initNFT } from '../components/transactions.js';
 startBerkeleyClient();
 const client: VercelKV = getVercelClient();
 
-const { appId: appId, zkApp: zkApp } = getAppEnv();
-const { adminPK: adminPk } = getEnvAccount();
+const { appId, zkApp } = getAppEnv();
+const { adminPK } = getEnvAccount();
 
 const userPK: PrivateKey = PrivateKey.fromBase58(process.env.userpk as string);
 const userPub: PublicKey = userPK.toPublicKey();
@@ -30,13 +30,10 @@ const totalInited: number = await getTotalInitedLive(zkApp);
 const array: number[] = generateIntegersArrayIncluding(totalInited);
 const storedMap: MerkleMap = await getMapFromVercelNFTs(appId, array, client);
 
-const { nftArray: nftArray, nftMetadata: nftMetadata } = generateDummyNFT(
-  totalInited,
-  userPub
-);
+const { nftArray, nftMetadata } = generateDummyNFT(totalInited, userPub);
 
 const compile: boolean = true;
 
-await initNFT(adminPk, userPK, nftArray, zkApp, storedMap, compile);
+await initNFT(adminPK, userPK, nftArray, zkApp, storedMap, compile);
 await setVercelNFT(appId, nftArray, client);
 await setVercelMetadata(appId, nftMetadata, client);

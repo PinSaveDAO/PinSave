@@ -8,7 +8,7 @@ import {
 
 startBerkeleyClient();
 
-const { zkAppAddress: zkAppAddress, zkApp: zkApp } = getAppEnv();
+const { zkAppAddress, zkApp } = getAppEnv();
 
 console.log('app public key', zkAppAddress.toBase58());
 

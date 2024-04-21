@@ -13,7 +13,7 @@ import { validateTreeInited } from '../components/Vercel/validateTree.js';
 
 startBerkeleyClient();
 const client: VercelKV = getVercelClient();
-const { appId: appId, zkApp: zkApp } = getAppEnv();
+const { appId, zkApp } = getAppEnv();
 
 const totalInited: number = await getTotalInitedLive(zkApp, true);
 

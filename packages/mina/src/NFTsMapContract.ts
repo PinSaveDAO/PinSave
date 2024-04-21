@@ -214,7 +214,7 @@ export class NFTContract extends TokenContract {
   }
 
   private verifyTreeLeaf(nft: NFT, keyWitness: MerkleMapWitness): PublicKey {
-    const { sender: sender } = this.verifySenderSignature();
+    const { sender } = this.verifySenderSignature();
     const isNFTOwner: Bool = sender.equals(nft.owner);
     isNFTOwner.assertTrue('sender: not an nft owner');
 
@@ -250,7 +250,11 @@ export class NFTContract extends TokenContract {
     return { senderUpdate: senderUpdate, sender: sender };
   }
 
-  @method approveBase() {}
+  @method approveBase() {
+    return;
+  }
 
-  @method transfer() {}
+  @method transfer() {
+    return;
+  }
 }
