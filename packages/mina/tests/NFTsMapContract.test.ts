@@ -1,4 +1,4 @@
-import { MerkleMap, PrivateKey, PublicKey } from 'o1js';
+import { MerkleMap, PrivateKey, PublicKey, UInt64 } from 'o1js';
 
 import { startLocalBlockchainClient } from '../src/components/utilities/client.js';
 import {
@@ -18,7 +18,7 @@ import {
 import { NFTContract } from '../src/NFTsMapContract.js';
 import { getMinaBalance } from '../src/index.js';
 
-const proofsEnabled: boolean = true;
+const proofsEnabled: boolean = false;
 const enforceTransactionLimits: boolean = true;
 
 const live: boolean = false;
@@ -29,8 +29,8 @@ describe('PinSave NFTs on Local Blockchain', () => {
     enforceTransactionLimits
   );
 
-  const { privateKey: pkAdmin, publicKey: pubKeyAdmin } = testAccounts[0];
-  const { privateKey: pkSender, publicKey: senderPub } = testAccounts[1];
+  const { privateKey: pkAdmin, publicKey: pubAdmin } = testAccounts[0];
+  const { privateKey: pkSender, publicKey: pubSender } = testAccounts[1];
   const { privateKey: pk2, publicKey: pubKey2 } = testAccounts[2];
   const { publicKey: pubKey3 } = testAccounts[3];
 
@@ -40,11 +40,11 @@ describe('PinSave NFTs on Local Blockchain', () => {
   const nftContractPub: PublicKey = nftContractPrivateKey.toPublicKey();
   const nftContract: NFTContract = new NFTContract(nftContractPub);
 
-  const { nftArray: nftArray } = generateDummyCollectionMap(pubKeyAdmin, map);
+  const { nftArray: nftArray } = generateDummyCollectionMap(pubAdmin, map);
 
   const map256: MerkleMap = new MerkleMap();
   const { nftArray: nftArray256 } = generateDummyCollectionMap(
-    pubKeyAdmin,
+    pubAdmin,
     map256,
     256
   );
@@ -58,9 +58,14 @@ describe('PinSave NFTs on Local Blockchain', () => {
       proofsEnabled,
       live
     );
+    expect(nftContract.admin.get().toBase58()).toBe(pubAdmin.toBase58());
+    expect(nftContract.root.get().toString()).toBe(
+      new MerkleMap().getRoot().toString()
+    );
   });
 
   it('fails to init app root: over max supply', async () => {
+    let errorMessage: string = '';
     try {
       await initNFTContractRoot(
         pkAdmin,
@@ -71,9 +76,9 @@ describe('PinSave NFTs on Local Blockchain', () => {
         live
       );
     } catch (error) {
-      const errorMessage: string = String(error).substring(0, 24);
-      expect(errorMessage).toBe('Error: maxSupply reached');
+      errorMessage = String(error).substring(0, 24);
     }
+    expect(errorMessage).toBe('Error: maxSupply reached');
   });
 
   it('inits app root', async () => {
@@ -85,9 +90,11 @@ describe('PinSave NFTs on Local Blockchain', () => {
       nftArray.length,
       live
     );
+    expect(nftContract.root.get().toString()).toBe(map.getRoot().toString());
   });
 
   it('fails to init app root: it already exists', async () => {
+    let errorMessage: string = '';
     try {
       await initRootWithCompile(
         pkAdmin,
@@ -99,9 +106,14 @@ describe('PinSave NFTs on Local Blockchain', () => {
         live
       );
     } catch (error) {
-      const errorMessage: string = String(error).substring(0, 24);
-      expect(errorMessage).toBe('Error: root: initialized');
+      errorMessage = String(error).substring(0, 24);
     }
+    expect(errorMessage).toBe('Error: root: initialized');
+  });
+
+  it('updates fee', async () => {
+    await setNFTContractFee(pkAdmin, nftContract);
+    expect(nftContract.fee.get().toString()).toBe(UInt64.one.toString());
   });
 
   it('fails to update fee: not admin', async () => {
@@ -111,10 +123,6 @@ describe('PinSave NFTs on Local Blockchain', () => {
       const errorMessage: string = String(error).substring(0, 27);
       expect(errorMessage).toBe('Error: sender: not an admin');
     }
-  });
-
-  it('updates fee', async () => {
-    await setNFTContractFee(pkAdmin, nftContract);
   });
 
   it('mints NFT', async () => {
@@ -147,14 +155,14 @@ describe('PinSave NFTs on Local Blockchain', () => {
   });
 
   it('inits NFT', async () => {
-    const nft: NFTMetadata = generateDummyNFTMetadata(3, pubKeyAdmin);
+    const nft: NFTMetadata = generateDummyNFTMetadata(3, pubAdmin);
     const nftStruct: NFT = createNFT(nft);
 
     await initNFT(pkAdmin, pkAdmin, nftStruct, nftContract, map, compile, live);
   });
 
   it('fails to initialize NFT: already exists', async () => {
-    const nft: NFTMetadata = generateDummyNFTMetadata(3, pubKeyAdmin);
+    const nft: NFTMetadata = generateDummyNFTMetadata(3, pubAdmin);
     const nftStruct: NFT = createNFT(nft);
 
     try {
@@ -202,7 +210,7 @@ describe('PinSave NFTs on Local Blockchain', () => {
   });
 
   it('transfers nft: from admin to a new user', async () => {
-    const nft: NFTMetadata = generateDummyNFTMetadata(3, pubKeyAdmin);
+    const nft: NFTMetadata = generateDummyNFTMetadata(3, pubAdmin);
     const nftStruct: NFT = createNFT(nft);
     await transferNFT(
       pkAdmin,
