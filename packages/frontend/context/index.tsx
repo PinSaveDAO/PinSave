@@ -4,6 +4,7 @@ import {
   createContext,
   useContext,
   PropsWithChildren,
+  useMemo,
 } from "react";
 
 type AddressContextType = {
@@ -17,14 +18,21 @@ export const AddressContext = createContext<AddressContextType | undefined>(
 
 export const AddressProvider = ({ children }: PropsWithChildren<{}>) => {
   const [address, setAddress] = useState<string>("");
+
+  const addressProviderValue = useMemo(
+    () => ({ address, setAddress }),
+    [address, setAddress]
+  );
+
   useEffect(() => {
     const savedAddress = sessionStorage.getItem("auroWalletAddress");
     if (savedAddress && savedAddress !== "undefined") {
       setAddress(savedAddress);
     }
   }, []);
+
   return (
-    <AddressContext.Provider value={{ address, setAddress }}>
+    <AddressContext.Provider value={addressProviderValue}>
       {children}
     </AddressContext.Provider>
   );

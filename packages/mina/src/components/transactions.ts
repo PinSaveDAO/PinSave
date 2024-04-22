@@ -322,7 +322,7 @@ export function createTxOptions(
 
 export type TxOptions = {
   sender: PublicKey;
-  fee?: number | undefined;
+  fee?: number;
 };
 
 export type TxStatus = 'included' | 'rejected' | undefined;
