@@ -3541,10 +3541,10 @@ nwsapi@^2.2.0:
   resolved "https://registry.npmjs.org/nwsapi/-/nwsapi-2.2.7.tgz"
   integrity sha512-ub5E4+FBPKwAZx0UwIQOjYWGHTEq5sPqHQNRN8Z9e4A7u3Tj1weLJsL59yH9vmvqEtBHaOmT6cYQKIZOxp35FQ==
 
-o1js@0.17.0:
-  version "0.17.0"
-  resolved "https://registry.npmjs.org/o1js/-/o1js-0.17.0.tgz"
-  integrity sha512-OPQc3jBG2X5z7yI2mcovzRVbd91Q2D/npep14+g0wBdGXpyyAFdaz59YjVlEsPcY1Gmh2L+LCFhVA2fQ+1ogIg==
+o1js@1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/o1js/-/o1js-1.0.1.tgz#ddae7a6bf79a27e2f29a61c3eb2f3683dade6cec"
+  integrity sha512-af+HS1zdJeMwvXvsb4U7PgpuBDTB40ziQHGRQQXOUzOLCA+CyV+ouUDfg7P4DS2ocS0M+M2mQZkuuxXc5ZSM5w==
   dependencies:
     blakejs "1.2.1"
     cachedir "^2.4.0"
