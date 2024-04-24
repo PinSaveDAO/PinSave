@@ -72,8 +72,8 @@ export async function setMetadatasToVercel(
   nftArray: NFTMetadata[],
   client: VercelKV
 ): Promise<boolean> {
-  for (let i = 0; i < nftArray.length; i++) {
-    await setVercelMetadata(appId, nftArray[i], client);
+  for (let nft of nftArray) {
+    await setVercelMetadata(appId, nft, client);
   }
   return true;
 }
@@ -92,8 +92,8 @@ export async function setNFTsToVercel(
   nftArray: NFT[],
   client: VercelKV
 ): Promise<boolean> {
-  for (let i = 0; i < nftArray.length; i++) {
-    await setVercelNFT(appId, nftArray[i], client);
+  for (let nft of nftArray) {
+    await setVercelNFT(appId, nft, client);
   }
   return true;
 }

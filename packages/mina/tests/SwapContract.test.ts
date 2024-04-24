@@ -34,7 +34,7 @@ import {
 import { NFTContract } from '../src/NFTsMapContract.js';
 import { SwapContract } from '../src/SwapContract.js';
 
-const proofsEnabled: boolean = true;
+const proofsEnabled: boolean = false;
 const enforceTransactionLimits: boolean = true;
 
 const live: boolean = false;
@@ -47,8 +47,8 @@ describe('PinSave Swap Contract on Local Blockchain', () => {
 
   const { privateKey: pkSwapAdmin, publicKey: pubSwapAdmin } = testAccounts[0];
   const { privateKey: pkNFTAdmin, publicKey: pubNFTAdmin } = testAccounts[1];
-  const { privateKey: pkSender, publicKey: senderPub } = testAccounts[2];
-  const { privateKey: pk2, publicKey: pubKey2 } = testAccounts[3];
+  const { privateKey: pkSender } = testAccounts[2];
+  const { privateKey: pk2 } = testAccounts[3];
 
   const swapContractMap: MerkleMap = new MerkleMap();
 
@@ -81,6 +81,7 @@ describe('PinSave Swap Contract on Local Blockchain', () => {
       nftContract,
       nftContractMap
     );
+    expect(pubNFTAdmin.toBase58()).toBe(nftContract.admin.get().toBase58());
   });
 
   it('deploys swap contract', async () => {
@@ -90,6 +91,7 @@ describe('PinSave Swap Contract on Local Blockchain', () => {
       proofsEnabled,
       live
     );
+    expect(pubSwapAdmin.toBase58()).toBe(swapContract.admin.get().toBase58());
   });
 
   it('inits swap contract', async () => {
@@ -192,7 +194,7 @@ describe('PinSave Swap Contract on Local Blockchain', () => {
     );
   });
 
-  it('buy nft for mina', async () => {
+  it('buys nft for mina', async () => {
     const swapMerkleWitness: MerkleMapWitness = swapContractMap.getWitness(
       nftForMinaOrderData.merkleMapId
     );

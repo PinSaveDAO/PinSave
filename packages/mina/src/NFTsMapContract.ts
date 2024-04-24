@@ -52,7 +52,7 @@ export class NFTContract extends TokenContract {
 
   init() {
     super.init();
-    const { sender: sender } = this.verifySenderSignature();
+    const { sender } = this.verifySenderSignature();
     this.admin.set(sender);
     const emptyMerkleMapRoot: Field = new MerkleMap().getRoot();
     this.root.set(emptyMerkleMapRoot);
@@ -102,7 +102,7 @@ export class NFTContract extends TokenContract {
     adminSignature: Signature
   ): Bool {
     this.verifyAdminNFTSignature(nft, adminSignature);
-    const { senderUpdate: senderUpdate } = this.verifySenderSignature();
+    const { senderUpdate } = this.verifySenderSignature();
 
     const initedAmount: Field = this.totalInited.getAndRequireEquals();
     const maxSupply: Field = this.maxSupply.getAndRequireEquals();
